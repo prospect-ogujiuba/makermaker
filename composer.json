@@ -1,0 +1,11 @@
+{
+  "description": "TypeRocket Plugin",
+  "name": "maker-maker/makermaker",
+  "require": {
+    "php": ">=7.2"
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {"MakerMaker\\": "app"}
+  }
+}
