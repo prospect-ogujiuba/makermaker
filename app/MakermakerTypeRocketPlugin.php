@@ -20,6 +20,9 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         tr_resource_pages('Status@\MakerMaker\Controllers\StatusController', 'Statuses')
             ->setIcon('dashicons-post-status')
             ->setPosition(5);
+        tr_resource_pages('Service@\MakerMaker\Controllers\ServiceController', 'Services')
+            ->setIcon('dashicons-products')
+            ->setPosition(5);
 
         // Plugin Settings
         $page = $this->pluginSettingsPage([
