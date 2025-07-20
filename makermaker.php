@@ -16,6 +16,19 @@ if(!defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')) {
     define('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH', __DIR__ . '/resources/views');
 }
 
+// Variables
+define('MAKERMAKER_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('MAKERMAKER_PLUGIN_URL', plugin_dir_url(__FILE__));
+
+// Require additional files
+$includes = [
+    'helpers'
+];
+
+foreach ($includes as $include) {
+    require_once MAKERMAKER_PLUGIN_DIR . 'inc/' . $include . '.php';
+}
+
 $__typerocket_plugin_makermaker = null;
 
 function typerocket_plugin_makermaker() {

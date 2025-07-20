@@ -6,7 +6,7 @@ use TypeRocket\Models\Model;
 
 class Status extends Model
 {
-    protected $resource = 'makermaker_statuses';
+    protected $resource = 'b2bcnc_statuses';
 
     protected $fillable = [
         'code',

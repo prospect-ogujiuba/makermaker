@@ -6,7 +6,7 @@ use TypeRocket\Models\Model;
 
 class Service extends Model
 {
-    protected $resource = 'it_services';
+    protected $resource = 'b2bcnc_services';
 
     protected $fillable = [
         'code',

@@ -2,7 +2,7 @@
 
 -- Description: Create IT services table for B2BCNC web application
 -- >>> Up >>>
-CREATE TABLE IF NOT EXISTS `{!!prefix!!}it_services` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}b2bcnc_services` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `code` varchar(50) NOT NULL,
     `name` varchar(100) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `{!!prefix!!}it_services` (
     KEY `idx_deleted` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET={!!charset!!} COLLATE={!!collate!!};
 
-INSERT IGNORE INTO `{!!prefix!!}it_services` (`code`, `name`, `description`, `category`, `base_price`, `requires_quote`, `allows_file_upload`) VALUES
+INSERT IGNORE INTO `{!!prefix!!}b2bcnc_services` (`code`, `name`, `description`, `category`, `base_price`, `requires_quote`, `allows_file_upload`) VALUES
 ('voip_hosting', 'VoIP Phone System - Hosting', 'Cloud-based VoIP phone system hosting and management', 'telecommunications', NULL, 1, 1),
 ('voip_installation', 'VoIP Phone System - Installation', 'On-site VoIP phone system installation and setup', 'telecommunications', NULL, 1, 1),
 ('voip_maintenance', 'VoIP Phone System - Maintenance', 'Ongoing VoIP system maintenance and support', 'telecommunications', NULL, 1, 0),
@@ -37,4 +37,4 @@ INSERT IGNORE INTO `{!!prefix!!}it_services` (`code`, `name`, `description`, `ca
 ('other_it', 'Other IT Services', 'Custom IT services not listed above', 'other', NULL, 1, 1);
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}it_services`;
+DROP TABLE IF EXISTS `{!!prefix!!}b2bcnc_services`;
