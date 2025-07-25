@@ -1,10 +1,10 @@
 <?php
 namespace MakerMaker\Controllers;
 
-use MakerMaker\Models\Service;
+use MakerMaker\Models\Quote;
 use TypeRocket\Controllers\Controller;
 
-class ServiceController extends Controller
+class QuoteController extends Controller
 {
     /**
      * The index page for admin
@@ -41,11 +41,11 @@ class ServiceController extends Controller
     /**
      * The edit page for admin
      *
-     * @param string|Service $service
+     * @param string|Quote $quote
      *
      * @return mixed
      */
-    public function edit(Service $service)
+    public function edit(Quote $quote)
     {
         // TODO: Implement edit() method.
     }
@@ -55,11 +55,11 @@ class ServiceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|Service $service
+     * @param string|Quote $quote
      *
      * @return mixed
      */
-    public function update(Service $service)
+    public function update(Quote $quote)
     {
         // TODO: Implement update() method.
     }
@@ -67,11 +67,11 @@ class ServiceController extends Controller
     /**
      * The show page for admin
      *
-     * @param string|Service $service
+     * @param string|Quote $quote
      *
      * @return mixed
      */
-    public function show(Service $service)
+    public function show(Quote $quote)
     {
         // TODO: Implement show() method.
     }
@@ -79,11 +79,11 @@ class ServiceController extends Controller
     /**
      * The delete page for admin
      *
-     * @param string|Service $service
+     * @param string|Quote $quote
      *
      * @return mixed
      */
-    public function delete(Service $service)
+    public function delete(Quote $quote)
     {
         // TODO: Implement delete() method.
     }
@@ -93,11 +93,11 @@ class ServiceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|Service $service
+     * @param string|Quote $quote
      *
      * @return mixed
      */
-    public function destroy(Service $service)
+    public function destroy(Quote $quote)
     {
         // TODO: Implement destroy() method.
     }

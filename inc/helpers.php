@@ -35,3 +35,8 @@ function renderAdvancedSearchActions($resource)
     <label for="search-toggle" class="button">Toggle Advanced Search</label>
 <?php
 }
+
+add_action('typerocket_user_fields', function($form) {
+    echo $form->text('Job Title');
+    echo $form->gallery('Photo Gallery');
+});

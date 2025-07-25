@@ -1,10 +1,10 @@
 <?php
 namespace MakerMaker\Controllers;
 
-use MakerMaker\Models\Service;
+use MakerMaker\Models\Customer;
 use TypeRocket\Controllers\Controller;
 
-class ServiceController extends Controller
+class CustomerController extends Controller
 {
     /**
      * The index page for admin
@@ -41,11 +41,11 @@ class ServiceController extends Controller
     /**
      * The edit page for admin
      *
-     * @param string|Service $service
+     * @param string|Customer $customer
      *
      * @return mixed
      */
-    public function edit(Service $service)
+    public function edit(Customer $customer)
     {
         // TODO: Implement edit() method.
     }
@@ -55,11 +55,11 @@ class ServiceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|Service $service
+     * @param string|Customer $customer
      *
      * @return mixed
      */
-    public function update(Service $service)
+    public function update(Customer $customer)
     {
         // TODO: Implement update() method.
     }
@@ -67,11 +67,11 @@ class ServiceController extends Controller
     /**
      * The show page for admin
      *
-     * @param string|Service $service
+     * @param string|Customer $customer
      *
      * @return mixed
      */
-    public function show(Service $service)
+    public function show(Customer $customer)
     {
         // TODO: Implement show() method.
     }
@@ -79,11 +79,11 @@ class ServiceController extends Controller
     /**
      * The delete page for admin
      *
-     * @param string|Service $service
+     * @param string|Customer $customer
      *
      * @return mixed
      */
-    public function delete(Service $service)
+    public function delete(Customer $customer)
     {
         // TODO: Implement delete() method.
     }
@@ -93,11 +93,11 @@ class ServiceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|Service $service
+     * @param string|Customer $customer
      *
      * @return mixed
      */
-    public function destroy(Service $service)
+    public function destroy(Customer $customer)
     {
         // TODO: Implement destroy() method.
     }
