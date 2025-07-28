@@ -1,7 +1,9 @@
 <?php
 
+use MakerMaker\Controllers\ServiceController;
 use MakerMaker\Http\Fields\ServiceFields;
 use MakerMaker\Models\Service;
+use MakerMaker\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,8 @@ use MakerMaker\Models\Service;
 |
 */
 
-// tr_route()->get()->match('api/v1/services')->do(['\MakerMaker\Controllers\ServiceController', 'indexRest']);
-
+tr_route()->get()->match('api/v1/services')->do([ServiceController::class, 'indexRest']);
+tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'showRest']);
+tr_route()->post()->match('api/v1/services')->do([ServiceController::class, 'createRest']);
+tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'updateRest']);
+tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'destroyRest']);
