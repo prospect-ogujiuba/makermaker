@@ -4,76 +4,168 @@
 
 use MakerMaker\Models\Service;
 
-// Get the service and related data
-// $service = Service::new()->load([
-//     // 'service_requests'
-// ])->find($form->getModel()->id);
+// Get the service and related data if editing
+$service = Service::new()->find($form->getModel()->id);
 
-echo $form->save($button)->setFields([
-    // Service Information
-    $form->fieldset('Service Details', 'Basic service information', [
+echo $form->open();
+
+// Core Service Information Tab
+$serviceDetails = $form->fieldset('Service Details', 'Essential service information and configuration', [
+    $form->row()
+        ->withColumn(
+            $form->text('Service Code')->setName('code')
+                ->markLabelRequired()
+                ->setHelp('Unique identifier (lowercase letters and underscores only, max 255 chars)')
+                ->setAttribute('maxlength', '255')
+                ->setAttribute('pattern', '^[a-z_]+$')
+                ->setAttribute('placeholder', 'e.g., voip_hosting_premium')
+        )->withColumn(
+            $form->text('Service Name')->setName('name')
+                ->markLabelRequired()
+                ->setHelp('Display name shown to clients (max 100 characters)')
+                ->setAttribute('maxlength', '100')
+                ->setAttribute('placeholder', 'e.g., VoIP Hosting Premium')
+        ),
+    $form->row()
+        ->withColumn(
+            $form->textarea('Description')->setName('description')
+                ->markLabelRequired()
+                ->setHelp('Detailed description of what this service includes')
+                ->setAttribute('rows', '4')
+                ->setAttribute('placeholder', 'Describe the service features, benefits, and what clients can expect...')
+        )
+]);
+
+// Pricing and Visual Configuration Tab
+$pricingPresentation = $form->fieldset('Pricing & Presentation', 'Service pricing and visual configuration', [
+    $form->row()
+        ->withColumn(
+            $form->number('Base Price (CAD)')->setName('base_price')
+                ->markLabelRequired()
+                ->setHelp('Base price in Canadian dollars (use 0.00 for quote-only services)')
+                ->setAttribute('step', '0.01')
+                ->setAttribute('min', '0')
+                ->setAttribute('placeholder', '0.00')
+        )->withColumn(
+            $form->text('Icon')->setName('icon')
+                ->markLabelRequired()
+                ->setHelp('Icon class or identifier (max 100 characters)')
+                ->setAttribute('maxlength', '100')
+                ->setAttribute('placeholder', 'e.g., fas fa-phone, service-icon-voip')
+        ),
+    $form->row()
+        ->withColumn(
+            $form->select('Active Status')->setName('active')
+                ->markLabelRequired()
+                ->setOptions([
+                    '-- Select Status --' => '',
+                    'Active' => 1,
+                    'Inactive' => 0
+                ])
+                ->setHelp('Only active services are available for new requests')
+        )->withColumn()
+]);
+
+// System Information Tab (only show when editing existing service)
+$systemInfo = $form->fieldset(
+    'System Information',
+    'System-generated service details and metadata',
+    [
         $form->row()
             ->withColumn(
-                $form->text('Service Code')->setName('code')
-                    ->setRequired()
-                    ->setHelp('Unique identifier for this service (e.g., voip_hosting)')
-                    ->setAttribute('maxlength', '50')
-                    ->setAttribute('pattern', '^[a-z_]{1,50}$')
-            )->withColumn(
-                $form->text('Service Name')->setName('name')
-                    ->setRequired()
-                    ->setHelp('Display name shown to clients')
-                    ->setAttribute('maxlength', '100')
+                $form->text('Service ID')->setName('id')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setHelp('System-generated unique service identifier')
             ),
         $form->row()
             ->withColumn(
-                $form->select('Category')->setName('category')
-                    ->setRequired()
-                    ->setOptions([
-                        '' => '-- Select Category --',
-                        'telecommunications' => 'Telecommunications',
-                        'security' => 'Security Systems', 
-                        'networking' => 'Networking & Infrastructure',
-                        'infrastructure' => 'Server & Infrastructure',
-                        'support' => 'Support & Maintenance',
-                        'consulting' => 'IT Consulting',
-                        'other' => 'Other Services'
-                    ])
-                    ->setHelp('Service category for organization')
-            )->withColumn(),
-        $form->row()
-            ->withColumn(
-                $form->textarea('Description')->setName('description')
-                    ->setHelp('Detailed description of what this service includes')
-                    ->setAttribute('rows', '4')
+                $form->text('Created Date')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', $service ? date('Y-m-d H:i:s', strtotime($service->created_at)) : 'N/A')
+                    ->setHelp('When this service was first created in the system')
             )
-    ]),
-
-    // Pricing Configuration
-    $form->fieldset('Pricing & Quote Settings', 'Service pricing configuration', [
+            ->withColumn(
+                $form->text('Last Updated')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', $service ? date('Y-m-d H:i:s', strtotime($service->updated_at)) : 'N/A')
+                    ->setHelp('When this service was last modified')
+            ),
         $form->row()
             ->withColumn(
-                $form->number('Base Price (CAD)')->setName('base_price')
-                    ->setHelp('Leave empty if service always requires custom quote')
-                    ->setAttribute('step', '0.01')
-                    ->setAttribute('min', '0')
-            )->withColumn(),
-        $form->row()
-            ->withColumn(
-                $form->toggle('Requires Quote')->setName('requires_quote')
-                    ->setHelp('Check if this service always needs a custom quote')
-            )->withColumn(
-                $form->toggle('Allow File Upload')->setName('allows_file_upload') 
-                    ->setHelp('Check if clients can upload files for this service')
+                $form->text('Soft Delete Status')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', $service && $service->deleted_at ? 'Deleted on ' . date('Y-m-d H:i:s', strtotime($service->deleted_at)) : 'Active')
+                    ->setHelp('Shows if service has been soft deleted')
             )
-    ]),
+    ]
+);
 
-    // Service Configuration
-    $form->fieldset('Service Settings', 'Service availability and configuration', [
+// Service Analytics Tab
+$analytics = $form->fieldset(
+    'Service Analytics',
+    'Performance metrics and usage data',
+    [
         $form->row()
             ->withColumn(
-                $form->toggle('Service is Active')->setName('is_active')
-                    ->setHelp('Only active services will be available for new requests')
-            )->withColumn()
-    ])
-]);
+                $form->text('Total Revenue')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', '$0.00')
+                    ->setHelp('Total revenue generated by this service')
+            )
+            ->withColumn(
+                $form->text('Request Count')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', '0')
+                    ->setHelp('Total number of service requests')
+            ),
+        $form->row()
+            ->withColumn(
+                $form->text('Average Price')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', $service ? '$' . number_format($service->base_price, 2) : '$0.00')
+                    ->setHelp('Current base price for this service')
+            )
+    ]
+);
+
+// Usage Statistics Tab
+$usageStats = $form->fieldset(
+    'Usage Statistics',
+    'Service utilization and performance metrics',
+    [
+        $form->row()
+            ->withColumn(
+                $form->text('Most Recent Request')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', 'No requests yet')
+                    ->setHelp('Date of the most recent service request')
+            )
+            ->withColumn(
+                $form->text('Popular Period')
+                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('value', 'N/A')
+                    ->setHelp('Time period with highest usage')
+            )
+    ]
+);
+
+// Save button
+$save = $form->save($button);
+
+// Create tabs layout
+$tabs = \TypeRocket\Elements\Tabs::new()->setFooter($save)->layoutLeft();
+
+// Add tabs with appropriate dashicons
+$tabs->tab('Service Details', 'admin-tools', [$serviceDetails, $pricingPresentation])->setDescription('Basic service information');
+
+// Only show system info, analytics, and usage tabs when editing existing service
+if ($form->getModel()->id && $form->getModel()->id != '0') {
+    $tabs->tab('System Info', 'admin-generic', $systemInfo)->setDescription('System-generated information');
+    $tabs->tab('Analytics', 'chart-area', $analytics)->setDescription('Performance metrics');
+    $tabs->tab('Usage Stats', 'analytics', $usageStats)->setDescription('Usage statistics');
+}
+
+// Render the tabs
+$tabs->render();
+
+echo $form->close();

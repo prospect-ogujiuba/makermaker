@@ -18,6 +18,20 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     public function init()
     {
 
+        $resources = [
+            'service',
+            // 'customer',
+            // 'portfolio',
+            // 'quote',
+            // 'testimonial',
+        ];
+
+        foreach ($resources as $resource) {
+
+            include MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $resource . '.php';
+        }
+
+
         // Plugin Settings
         $page = $this->pluginSettingsPage([
             'view' => View::new('settings', [
@@ -48,24 +62,20 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         });
 
         // TODO: Add your init code here
-        \TypeRocket\Register\Registry::addCustomResource('client', [
-            'controller' => '\App\Controllers\ClientController',
-        ]);
     }
 
 
     public function routes()
     {
 
-
-        
+        include MAKERMAKER_PLUGIN_DIR . 'inc/routes/public.php';
     }
 
     public function policies()
     {
         // TODO: Add your TypeRocket policies here
         return [
-
+            '\MakerMaker\Models\Service' => '\MakerMaker\Auth\ServicePolicy',
         ];
     }
 
@@ -73,7 +83,9 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         $this->migrateUp();
         System::updateSiteState('flush_rewrite_rules');
-        tr_roles()->updateRolesCapabilities('administrator', ['manage_clients']);
+
+        include MAKERMAKER_PLUGIN_DIR . 'inc/capabilities/capabilities.php';
+
 
         // TODO: Add your plugin activation code here
     }
@@ -82,11 +94,9 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // Migrate `down` only on plugin uninstall
         System::updateSiteState('flush_rewrite_rules');
+        
         // Uncomment the line below if you want to run migrations down on deactivation
-        $this->migrateDown();
-
-        tr_roles()->updateRolesCapabilities('administrator', ['manage_clients'], true);
-
+        // $this->migrateDown();
 
         // TODO: Add your plugin deactivation code here
     }

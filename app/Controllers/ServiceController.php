@@ -1,8 +1,12 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
+use MakerMaker\Http\Fields\ServiceFields;
 use MakerMaker\Models\Service;
+use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
+use MakerMaker\View;
 
 class ServiceController extends Controller
 {
@@ -13,7 +17,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        // TODO: Implement index() method.
+        return View::new('services.index');
     }
 
     /**
@@ -23,7 +27,10 @@ class ServiceController extends Controller
      */
     public function add()
     {
-        // TODO: Implement add() method.
+        $form = tr_form(Service::class)->useErrors()->useOld();
+        $button = 'Create Service';
+
+        return View::new('services.form', compact('form', 'button'));
     }
 
     /**
@@ -33,9 +40,16 @@ class ServiceController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServiceFields $fields, Service $service, Response $response)
     {
-        // TODO: Implement create() method.
+         if (!$service->can('create')) {
+            $response->unauthorized('Unauthorized: Service not created')->abort();
+        }
+
+        $service->save($fields);
+
+        return tr_redirect()->toPage('service', 'index')
+            ->withFlash('Service Created');
     }
 
     /**
@@ -47,7 +61,10 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        // TODO: Implement edit() method.
+        $form = tr_form($service)->useErrors()->useOld();
+        $button = 'Update Service';
+
+        return View::new('services.form', compact('form', 'button'));
     }
 
     /**
@@ -59,9 +76,16 @@ class ServiceController extends Controller
      *
      * @return mixed
      */
-    public function update(Service $service)
+    public function update(Service $service, ServiceFields $fields, Response $response)
     {
-        // TODO: Implement update() method.
+         if (!$service->can('update')) {
+            $response->unauthorized('Unauthorized: Service not updated')->abort();
+        }
+
+        $service->save($fields);
+
+        return tr_redirect()->toPage('service', 'edit', $service->getID())
+            ->withFlash('Service Updated');
     }
 
     /**
@@ -73,7 +97,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        // TODO: Implement show() method.
+        return $service;
     }
 
     /**
@@ -97,8 +121,30 @@ class ServiceController extends Controller
      *
      * @return mixed
      */
-    public function destroy(Service $service)
+    public function destroy(Service $service, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$service->can('destroy')) {
+            $response->unauthorized('Unauthorized: Service not deleted')->abort();
+        }
+
+        $service->delete();
+
+        return $response->warning('Service Deleted');
+    }
+
+    /**
+     * Show REST API representation of a service
+     *
+     * @param Service $service
+     * @return Service
+     */
+    public function showRest(Service $service)
+    {
+        return $service;
+    }
+
+    public function indexRest()
+    {
+        return Service::new()->findAll()->get();
     }
 }
