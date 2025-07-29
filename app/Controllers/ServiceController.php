@@ -42,7 +42,7 @@ class ServiceController extends Controller
      */
     public function create(ServiceFields $fields, Service $service, Response $response)
     {
-         if (!$service->can('create')) {
+        if (!$service->can('create')) {
             $response->unauthorized('Unauthorized: Service not created')->abort();
         }
 
@@ -78,7 +78,7 @@ class ServiceController extends Controller
      */
     public function update(Service $service, ServiceFields $fields, Response $response)
     {
-         if (!$service->can('update')) {
+        if (!$service->can('update')) {
             $response->unauthorized('Unauthorized: Service not updated')->abort();
         }
 
@@ -144,14 +144,8 @@ class ServiceController extends Controller
                 ->findAll()
                 ->get();
 
-            return [
-                'success' => true,
-                'data' => $services,
-                'meta' => [
-                    'total' => count($services),
-                    'timestamp' => date('c')
-                ]
-            ];
+            return
+                $services;
         } catch (\Exception $e) {
             http_response_code(500);
             return [
@@ -178,7 +172,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            
+
             if (!$service) {
                 http_response_code(404);
                 return [
@@ -234,7 +228,7 @@ class ServiceController extends Controller
             }
 
             $service = new Service();
-            
+
             // Check authorization
             if (!$service->can('create')) {
                 http_response_code(403);
@@ -252,7 +246,6 @@ class ServiceController extends Controller
                 'data' => $service,
                 'message' => 'Service created successfully'
             ];
-
         } catch (\Exception $e) {
             http_response_code(500);
             return [
@@ -279,7 +272,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            
+
             if (!$service) {
                 http_response_code(404);
                 return [
@@ -319,7 +312,6 @@ class ServiceController extends Controller
                 'data' => $service,
                 'message' => 'Service updated successfully'
             ];
-
         } catch (\Exception $e) {
             http_response_code(500);
             return [
@@ -346,7 +338,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            
+
             if (!$service) {
                 http_response_code(404);
                 return [
@@ -370,7 +362,6 @@ class ServiceController extends Controller
                 'success' => true,
                 'message' => 'Service deleted successfully'
             ];
-
         } catch (\Exception $e) {
             http_response_code(500);
             return [
@@ -432,7 +423,6 @@ class ServiceController extends Controller
                     'pages' => ceil($total / $limit)
                 ]
             ];
-
         } catch (\Exception $e) {
             http_response_code(500);
             return [
