@@ -68,6 +68,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     public function routes()
     {
 
+        include MAKERMAKER_PLUGIN_DIR . 'inc/routes/api.php';
         include MAKERMAKER_PLUGIN_DIR . 'inc/routes/public.php';
     }
 

@@ -36,7 +36,7 @@ class ServiceFields extends Fields
             'description' => 'required',
             'base_price' => 'required',
             'icon' => 'required',
-            'active' => 'required',
+            'active' => '?required',
         ];
     }
 

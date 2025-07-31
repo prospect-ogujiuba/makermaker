@@ -1,8 +1,6 @@
 <?php
 
-use MakerMaker\Controllers\ServiceController;
-use MakerMaker\Http\Fields\ServiceFields;
-use MakerMaker\Models\Service;
+use MakerMaker\Controllers\Web\ServiceController as WebServiceController;
 use MakerMaker\View;
 
 /*
@@ -15,9 +13,9 @@ use MakerMaker\View;
 | after the typerocket_routes action is fired.
 |
 */
-
-tr_route()->get()->match('api/v1/services')->do([ServiceController::class, 'indexRest']);
-tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'showRest']);
-tr_route()->post()->match('api/v1/services')->do([ServiceController::class, 'createRest']);
-tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'updateRest']);
-tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ServiceController::class, 'destroyRest']);
+// tr_route()->get()->match('services')->do([WebServiceController::class, 'index']);
+// tr_route()->get()->match('services/add')->do([WebServiceController::class, 'add']);
+// tr_route()->post()->match('services')->do([WebServiceController::class, 'create']);
+// tr_route()->get()->match('services/([0-9]+)')->do([WebServiceController::class, 'edit']);
+// tr_route()->put()->match('services/([0-9]+)')->do([WebServiceController::class, 'update']);
+// tr_route()->delete()->match('services/([0-9]+)')->do([WebServiceController::class, 'destroy']);

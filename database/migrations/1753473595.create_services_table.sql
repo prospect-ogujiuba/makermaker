@@ -7,7 +7,7 @@ CREATE OR REPLACE TABLE `{!!prefix!!}b2bcnc_services` (
 	`description` TEXT NOT NULL,
 	`base_price` DECIMAL(10,2) NOT NULL, -- Changed from INT to DECIMAL for currency
 	`icon` VARCHAR(100) NOT NULL,
-	`active` BOOLEAN NOT NULL DEFAULT TRUE, -- Added default value
+	`active` BOOLEAN NULL DEFAULT TRUE, -- Added default value
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Auto-update timestamp
 	`deleted_at` TIMESTAMP NULL, -- Explicitly allow NULL for soft deletes
