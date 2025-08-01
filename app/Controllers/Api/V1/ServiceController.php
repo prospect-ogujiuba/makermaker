@@ -4,20 +4,29 @@ namespace MakerMaker\Controllers\Api\V1;
 
 use MakerMaker\Models\Service;
 use TypeRocket\Controllers\Controller;
+use TypeRocket\Controllers\Traits\LoadsModel;
+use TypeRocket\Exceptions\ModelException;
+use TypeRocket\Http\Request;
+use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 class ServiceController extends Controller
 {
-    public function indexRest()
+    use LoadsModel;
+
+    protected $modelClass = Service::class;
+
+    /**
+     * REST API: Get all services
+     * GET /api/v1/services
+     */
+    public function indexRest(Request $request, Response $response, AuthUser $user)
     {
         try {
             // Check authorization (optional - you may want to allow public access to service listings)
-            $service = Service::new();
-            if (!$service->can('read')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot access services'
-                ];
+            $service = new $this->modelClass;
+            if (!$service->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot access services', 403);
             }
 
             $services = Service::new()
@@ -25,18 +34,12 @@ class ServiceController extends Controller
                 ->findAll()
                 ->get();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'data' => $services,
                 'count' => count($services)
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to fetch services',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to fetch services', 500, $e->getMessage());
         }
     }
 
@@ -44,56 +47,32 @@ class ServiceController extends Controller
      * REST API: Get single service
      * GET /api/v1/services/{id}
      */
-    public function showRest($id = null)
+    public function showRest($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
 
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check if service is soft deleted
             if ($service->deleted_at) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('read')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot access this service'
-                ];
+            if (!$service->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot access this service', 403);
             }
 
-            return [
-                'success' => true,
-                'data' => $service
-            ];
+            return $this->apiSuccess($response, ['data' => $service]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to fetch service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to fetch service', 500, $e->getMessage());
         }
     }
 
@@ -101,79 +80,35 @@ class ServiceController extends Controller
      * REST API: Create new service
      * POST /api/v1/services
      */
-    public function createRest()
+    public function create(Request $request, Response $response, AuthUser $user)
     {
+        /** @var Service $model */
+        $model = new $this->modelClass;
+
         try {
             // Check authorization
-            $service = Service::new();
-            if (!$service->can('create')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot create service'
-                ];
-            }
-
-            // Validate required fields
-            $requiredFields = ['code', 'name', 'description', 'base_price', 'icon', 'active'];
-            $data = [];
-
-            foreach ($requiredFields as $field) {
-                if (!isset($_POST[$field]) || $_POST[$field] === '') {
-                    http_response_code(400);
-                    return [
-                        'success' => false,
-                        'error' => "Field '{$field}' is required"
-                    ];
-                }
-                $data[$field] = $_POST[$field];
-            }
-
-            // Additional validation
-            if (!is_numeric($data['base_price']) || $data['base_price'] < 0) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Base price must be a valid number >= 0'
-                ];
-            }
-
-            if (!in_array($data['active'], ['0', '1', 0, 1])) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Active status must be 0 or 1'
-                ];
-            }
-
-            // Check if code already exists
-            $existingService = Service::new()->where('code', $data['code'])->first();
-            if ($existingService) {
-                http_response_code(409);
-                return [
-                    'success' => false,
-                    'error' => 'Service with this code already exists'
-                ];
+            if (!$model->can('create', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot create service', 403);
             }
 
             // Create service
-            $newService = Service::new();
-            $newService->fill($data);
-            $newService->save();
+            $newService = $model->save($request->fields());
 
-            http_response_code(201);
-            return [
-                'success' => true,
+            if ($newService) {
+                $this->onAction('save', 'create', $newService);
+            }
+
+            do_action('makermaker_api_service_after_create', $this, $newService, $user);
+
+            return $this->apiSuccess($response, [
                 'message' => 'Service created successfully',
                 'data' => $newService
-            ];
+            ], 201);
+        } catch (ModelException $e) {
+            $this->onAction('error', 'create', $e, $model);
+            return $this->apiError($response, 'Failed to create service', 400, $e->getMessage());
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to create service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to create service', 500, $e->getMessage());
         }
     }
 
@@ -181,33 +116,21 @@ class ServiceController extends Controller
      * REST API: Update existing service (full update)
      * PUT /api/v1/services/{id}
      */
-    public function updateRest($id = null)
+    public function update($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('update')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot update service'
-                ];
+            if (!$service->can('update', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
             // Get PUT data (PHP doesn't populate $_POST for PUT requests)
@@ -222,60 +145,45 @@ class ServiceController extends Controller
 
             foreach ($requiredFields as $field) {
                 if (!isset($putData[$field]) || $putData[$field] === '') {
-                    http_response_code(400);
-                    return [
-                        'success' => false,
-                        'error' => "Field '{$field}' is required for full update"
-                    ];
+                    return $this->apiError($response, "Field '{$field}' is required for full update", 400);
                 }
                 $data[$field] = $putData[$field];
             }
 
             // Additional validation
             if (!is_numeric($data['base_price']) || $data['base_price'] < 0) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Base price must be a valid number >= 0'
-                ];
+                return $this->apiError($response, 'Base price must be a valid number >= 0', 400);
             }
 
             if (!in_array($data['active'], ['0', '1', 0, 1])) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Active status must be 0 or 1'
-                ];
+                return $this->apiError($response, 'Active status must be 0 or 1', 400);
             }
 
             // Check if code conflicts with another service
             if ($data['code'] !== $service->code) {
                 $existingService = Service::new()->where('code', $data['code'])->where('id', '!=', $id)->first();
                 if ($existingService) {
-                    http_response_code(409);
-                    return [
-                        'success' => false,
-                        'error' => 'Service with this code already exists'
-                    ];
+                    return $this->apiError($response, 'Service with this code already exists', 409);
                 }
             }
 
-            // Update service
-            $service->fill($data);
-            $service->save();
+            do_action('makermaker_api_service_update', $this, $service, $user);
 
-            return [
-                'success' => true,
+            // Update service
+            $service->update($data);
+            $this->onAction('save', 'update', $service);
+
+            do_action('makermaker_api_service_after_update', $this, $service, $user);
+
+            return $this->apiSuccess($response, [
                 'message' => 'Service updated successfully',
                 'data' => $service
-            ];
+            ]);
+        } catch (ModelException $e) {
+            $this->onAction('error', 'update', $e, $service ?? null);
+            return $this->apiError($response, 'Failed to update service', 400, $e->getMessage());
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to update service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to update service', 500, $e->getMessage());
         }
     }
 
@@ -283,33 +191,21 @@ class ServiceController extends Controller
      * REST API: Partial update existing service
      * PATCH /api/v1/services/{id}
      */
-    public function patchRest($id = null)
+    public function patchRest($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('update')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot update service'
-                ];
+            if (!$service->can('update', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
             // Get PATCH data
@@ -319,11 +215,7 @@ class ServiceController extends Controller
             }
 
             if (empty($patchData)) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'No data provided for update'
-                ];
+                return $this->apiError($response, 'No data provided for update', 400);
             }
 
             // Validate provided fields
@@ -337,19 +229,11 @@ class ServiceController extends Controller
 
                 // Validate specific fields
                 if ($field === 'base_price' && (!is_numeric($value) || $value < 0)) {
-                    http_response_code(400);
-                    return [
-                        'success' => false,
-                        'error' => 'Base price must be a valid number >= 0'
-                    ];
+                    return $this->apiError($response, 'Base price must be a valid number >= 0', 400);
                 }
 
                 if ($field === 'active' && !in_array($value, ['0', '1', 0, 1])) {
-                    http_response_code(400);
-                    return [
-                        'success' => false,
-                        'error' => 'Active status must be 0 or 1'
-                    ];
+                    return $this->apiError($response, 'Active status must be 0 or 1', 400);
                 }
 
                 $data[$field] = $value;
@@ -359,30 +243,27 @@ class ServiceController extends Controller
             if (isset($data['code']) && $data['code'] !== $service->code) {
                 $existingService = Service::new()->where('code', $data['code'])->where('id', '!=', $id)->first();
                 if ($existingService) {
-                    http_response_code(409);
-                    return [
-                        'success' => false,
-                        'error' => 'Service with this code already exists'
-                    ];
+                    return $this->apiError($response, 'Service with this code already exists', 409);
                 }
             }
 
-            // Update only provided fields
-            $service->fill($data);
-            $service->save();
+            do_action('makermaker_api_service_patch', $this, $service, $user);
 
-            return [
-                'success' => true,
+            // Update only provided fields
+            $service->update($data);
+            $this->onAction('save', 'update', $service);
+
+            do_action('makermaker_api_service_after_patch', $this, $service, $user);
+
+            return $this->apiSuccess($response, [
                 'message' => 'Service updated successfully',
                 'data' => $service
-            ];
+            ]);
+        } catch (ModelException $e) {
+            $this->onAction('error', 'update', $e, $service ?? null);
+            return $this->apiError($response, 'Failed to update service', 400, $e->getMessage());
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to update service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to update service', 500, $e->getMessage());
         }
     }
 
@@ -390,49 +271,39 @@ class ServiceController extends Controller
      * REST API: Delete service (soft delete)
      * DELETE /api/v1/services/{id}
      */
-    public function destroyRest($id = null)
+    public function destroyRest($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('destroy')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot delete service'
-                ];
+            if (!$service->can('destroy', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot delete service', 403);
             }
+
+            do_action('makermaker_api_service_destroy', $this, $service, $user);
 
             // Perform soft delete
             $service->delete();
+            $this->onAction('destroy', $service);
 
-            return [
-                'success' => true,
+            do_action('makermaker_api_service_after_destroy', $this, $service, $user);
+
+            return $this->apiSuccess($response, [
                 'message' => 'Service deleted successfully'
-            ];
+            ]);
+        } catch (ModelException $e) {
+            $this->onAction('error', 'destroy', $e, $service ?? null);
+            return $this->apiError($response, 'Failed to delete service', 400, $e->getMessage());
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to delete service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to delete service', 500, $e->getMessage());
         }
     }
 
@@ -440,7 +311,7 @@ class ServiceController extends Controller
      * REST API: Get only active services
      * GET /api/v1/services/active
      */
-    public function activeServicesRest()
+    public function activeServicesRest(Request $request, Response $response, AuthUser $user)
     {
         try {
             $services = Service::new()
@@ -449,18 +320,12 @@ class ServiceController extends Controller
                 ->findAll()
                 ->get();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'data' => $services,
                 'count' => count($services)
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to fetch active services',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to fetch active services', 500, $e->getMessage());
         }
     }
 
@@ -468,7 +333,7 @@ class ServiceController extends Controller
      * REST API: Get only inactive services
      * GET /api/v1/services/inactive
      */
-    public function inactiveServicesRest()
+    public function inactiveServicesRest(Request $request, Response $response, AuthUser $user)
     {
         try {
             $services = Service::new()
@@ -477,18 +342,12 @@ class ServiceController extends Controller
                 ->findAll()
                 ->get();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'data' => $services,
                 'count' => count($services)
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to fetch inactive services',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to fetch inactive services', 500, $e->getMessage());
         }
     }
 
@@ -496,15 +355,11 @@ class ServiceController extends Controller
      * REST API: Search services
      * GET /api/v1/services/search/{query}
      */
-    public function searchRest($query = null)
+    public function searchRest($query = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$query) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Search query is required'
-                ];
+                return $this->apiError($response, 'Search query is required', 400);
             }
 
             $query = urldecode($query);
@@ -518,19 +373,13 @@ class ServiceController extends Controller
                 ->findAll()
                 ->get();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'data' => $services,
                 'count' => count($services),
                 'query' => $query
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to search services',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to search services', 500, $e->getMessage());
         }
     }
 
@@ -538,15 +387,11 @@ class ServiceController extends Controller
      * REST API: Get service by code
      * GET /api/v1/services/code/{code}
      */
-    public function showByCodeRest($code = null)
+    public function showByCodeRest($code = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$code) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service code is required'
-                ];
+                return $this->apiError($response, 'Service code is required', 400);
             }
 
             $service = Service::new()
@@ -555,24 +400,12 @@ class ServiceController extends Controller
                 ->first();
 
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
-            return [
-                'success' => true,
-                'data' => $service
-            ];
+            return $this->apiSuccess($response, ['data' => $service]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to fetch service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to fetch service', 500, $e->getMessage());
         }
     }
 
@@ -580,49 +413,31 @@ class ServiceController extends Controller
      * REST API: Activate service
      * POST /api/v1/services/{id}/activate
      */
-    public function activateRest($id = null)
+    public function activateRest($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
-            if (!$service->can('update')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot update service'
-                ];
+            if (!$service->can('update', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
             $service->active = 1;
             $service->save();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'message' => 'Service activated successfully',
                 'data' => $service
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to activate service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to activate service', 500, $e->getMessage());
         }
     }
 
@@ -630,49 +445,31 @@ class ServiceController extends Controller
      * REST API: Deactivate service
      * POST /api/v1/services/{id}/deactivate
      */
-    public function deactivateRest($id = null)
+    public function deactivateRest($id = null, Request $request, Response $response, AuthUser $user)
     {
         try {
             if (!$id) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Service ID is required'
-                ];
+                return $this->apiError($response, 'Service ID is required', 400);
             }
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                http_response_code(404);
-                return [
-                    'success' => false,
-                    'error' => 'Service not found'
-                ];
+                return $this->apiError($response, 'Service not found', 404);
             }
 
-            if (!$service->can('update')) {
-                http_response_code(403);
-                return [
-                    'success' => false,
-                    'error' => 'Unauthorized: Cannot update service'
-                ];
+            if (!$service->can('update', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
             $service->active = 0;
             $service->save();
 
-            return [
-                'success' => true,
+            return $this->apiSuccess($response, [
                 'message' => 'Service deactivated successfully',
                 'data' => $service
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to deactivate service',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to deactivate service', 500, $e->getMessage());
         }
     }
 
@@ -680,7 +477,7 @@ class ServiceController extends Controller
      * REST API: Bulk operations
      * POST /api/v1/services/bulk
      */
-    public function bulkOperationsRest()
+    public function bulkOperationsRest(Request $request, Response $response, AuthUser $user)
     {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
@@ -689,11 +486,7 @@ class ServiceController extends Controller
             }
 
             if (!isset($data['action']) || !isset($data['service_ids'])) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'Action and service_ids are required'
-                ];
+                return $this->apiError($response, 'Action and service_ids are required', 400);
             }
 
             $action = $data['action'];
@@ -702,11 +495,7 @@ class ServiceController extends Controller
             $errors = [];
 
             if (!is_array($serviceIds)) {
-                http_response_code(400);
-                return [
-                    'success' => false,
-                    'error' => 'service_ids must be an array'
-                ];
+                return $this->apiError($response, 'service_ids must be an array', 400);
             }
 
             foreach ($serviceIds as $id) {
@@ -717,7 +506,7 @@ class ServiceController extends Controller
                         continue;
                     }
 
-                    if (!$service->can('update')) {
+                    if (!$service->can('update', $user)) {
                         $errors[] = "Unauthorized to update service with ID {$id}";
                         continue;
                     }
@@ -754,20 +543,45 @@ class ServiceController extends Controller
                 }
             }
 
-            return [
-                'success' => count($errors) === 0,
+            return $this->apiSuccess($response, [
                 'results' => $results,
                 'errors' => $errors,
                 'processed' => count($results),
                 'failed' => count($errors)
-            ];
+            ]);
         } catch (\Exception $e) {
-            http_response_code(500);
-            return [
-                'success' => false,
-                'error' => 'Failed to perform bulk operation',
-                'message' => $e->getMessage()
-            ];
+            return $this->apiError($response, 'Failed to perform bulk operation', 500, $e->getMessage());
         }
+    }
+
+    /**
+     * Helper method for API success responses
+     */
+    private function apiSuccess(Response $response, array $data, int $status = 200)
+    {
+        $response->setStatus($status);
+        $response->setData('success', true);
+
+        foreach ($data as $key => $value) {
+            $response->setData($key, $value);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Helper method for API error responses
+     */
+    private function apiError(Response $response, string $message, int $status = 400, string $details = null)
+    {
+        $response->setStatus($status);
+        $response->setData('success', false);
+        $response->setData('error', $message);
+
+        if ($details) {
+            $response->setData('message', $details);
+        }
+
+        return $response;
     }
 }

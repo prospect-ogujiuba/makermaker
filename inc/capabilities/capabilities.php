@@ -1,8 +1,11 @@
 <?php
 
 $wp_caps = [
-    'manage_clients',
     'manage_services',
+    'edit_services',
+    'delete_services',
+    'view_services',
+    'publish_services',
 ];
 
 
