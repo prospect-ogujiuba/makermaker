@@ -14,7 +14,6 @@ $serviceDetails = $form->fieldset('Service Details', 'Essential service informat
     $form->row()
         ->withColumn(
             $form->text('Service Code')->setName('code')
-                ->markLabelRequired()
                 ->setHelp('Unique identifier (lowercase letters and underscores only, max 255 chars)')
                 ->setAttribute('maxlength', '255')
                 ->setAttribute('pattern', '^[a-z_]+$')

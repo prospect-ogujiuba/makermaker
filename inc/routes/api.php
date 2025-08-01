@@ -24,6 +24,7 @@ tr_route()->post()->match('api/v1/services')->do([ApiServiceController::class, '
 tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'update']);
 tr_route()->patch()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'patch']);
 tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'destroy']);
+tr_route()->post()->match('api/v1/services/generate-code')->do([ApiServiceController::class, 'generateCode']);
 
 // ================================
 // SOFT DELETE MANAGEMENT

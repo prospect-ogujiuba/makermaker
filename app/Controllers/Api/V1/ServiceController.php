@@ -123,7 +123,12 @@ class ServiceController extends Controller
             // Parse input data
             $inputData = $this->parseRequestData($request);
 
-            // Check for duplicate service code
+            // Auto-generate code if not provided but name is available
+            if (empty($inputData['code']) && !empty($inputData['name'])) {
+                $inputData['code'] = Service::generateCodeFromName($inputData['name']);
+            }
+
+            // Check for duplicate service code (if code was provided or generated)
             if (isset($inputData['code'])) {
                 $existingService = Service::new()->where('code', $inputData['code'])->first();
                 if ($existingService) {
@@ -171,6 +176,11 @@ class ServiceController extends Controller
             // Parse input data
             $inputData = $this->parseRequestData($request);
 
+            // Auto-generate code if not provided but name is being updated
+            if (empty($inputData['code']) && !empty($inputData['name'])) {
+                $inputData['code'] = Service::generateCodeFromName($inputData['name'], $id);
+            }
+
             // Check for duplicate service code (excluding current service)
             if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
                 $existingService = Service::new()
@@ -182,14 +192,12 @@ class ServiceController extends Controller
                 }
             }
 
-
-
             // Use ServiceFields for validation and update
             $fields = new ServiceFields($inputData);
             $controller = new WebServiceController();
             $controller->update($service, $fields, $response);
 
-            $response->setData('service', $fields);
+            $response->setData('service', $service->toArray());
 
             return $response;
         } catch (ModelException $e) {
@@ -257,9 +265,9 @@ class ServiceController extends Controller
 
             do_action('makermaker_api_service_after_patch', $this, $service, $user);
 
+            $response->setMessage('Service updated successfully');
             return $this->apiSuccess($response, [
-                'message' => 'Service updated successfully',
-                'data' => $service->toArray()
+                'service' => $service->toArray()
             ]);
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to patch service', 500, $e->getMessage());
@@ -569,5 +577,36 @@ class ServiceController extends Controller
         }
 
         return $response;
+    }
+
+    /**
+     * REST API: Generate code from name (utility endpoint)
+     * POST /api/v1/services/generate-code
+     */
+    public function generateCode(Request $request, Response $response, ?AuthUser $user = null)
+    {
+        try {
+            $name = $request->input('name');
+            $excludeId = $request->input('exclude_id');
+
+            if (!$name) {
+                return $this->apiError($response, 'Name is required to generate code', 400);
+            }
+
+            $model = new $this->modelClass;
+            if (!$user || !$model->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot generate service code', 403);
+            }
+
+            $generatedCode = Service::generateCodeFromName($name, $excludeId);
+
+            return $this->apiSuccess($response, [
+                'generated_code' => $generatedCode,
+                'name' => $name,
+                'is_unique' => !Service::codeExists($generatedCode, $excludeId)
+            ]);
+        } catch (\Exception $e) {
+            return $this->apiError($response, 'Failed to generate code', 500, $e->getMessage());
+        }
     }
 }
