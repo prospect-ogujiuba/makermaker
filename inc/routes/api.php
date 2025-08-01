@@ -1,6 +1,7 @@
 <?php
 
 use MakerMaker\Controllers\Api\V1\ServiceController as ApiServiceController;
+use TypeRocket\Http\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,18 +14,25 @@ use MakerMaker\Controllers\Api\V1\ServiceController as ApiServiceController;
 |
 */
 
+// Core CRUD operations
+tr_route()->get()->match('api/v1/services')->do([ApiServiceController::class, 'index']);
+tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'show']);
+tr_route()->post()->match('api/v1/services')->do([ApiServiceController::class, 'create']);
+tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'update']);
+tr_route()->patch()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'patch']);
+tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'destroy']);
 
-tr_route()->get()->match('api/v1/services')->do([ApiServiceController::class, 'indexRest']);
-tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'showRest']);
-tr_route()->post()->match('api/v1/services')->do([ApiServiceController::class, 'createRest']);
-tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'updateRest']);
-tr_route()->patch()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'patchRest']);
-tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'destroyRest']);
+// Status filtering endpoints
+tr_route()->get()->match('api/v1/services/active')->do([ApiServiceController::class, 'active']);
+tr_route()->get()->match('api/v1/services/inactive')->do([ApiServiceController::class, 'inactive']);
 
-tr_route()->get()->match('api/v1/services/active')->do([ApiServiceController::class, 'activeServicesRest']);
-tr_route()->get()->match('api/v1/services/inactive')->do([ApiServiceController::class, 'inactiveServicesRest']);
-tr_route()->get()->match('api/v1/services/search/(.+)')->do([ApiServiceController::class, 'searchRest']);
-tr_route()->post()->match('api/v1/services/([0-9]+)/activate')->do([ApiServiceController::class, 'activateRest']);
-tr_route()->post()->match('api/v1/services/([0-9]+)/deactivate')->do([ApiServiceController::class, 'deactivateRest']);
-tr_route()->get()->match('api/v1/services/code/([a-z_]+)')->do([ApiServiceController::class, 'showByCodeRest']);
-tr_route()->post()->match('api/v1/services/bulk')->do([ApiServiceController::class, 'bulkOperationsRest']);
+// Search and lookup endpoints
+tr_route()->get()->match('api/v1/services/search/(.+)')->do([ApiServiceController::class, 'search']);
+tr_route()->get()->match('api/v1/services/code/([a-z_]+)')->do([ApiServiceController::class, 'showByCode']);
+
+// Status management endpoints
+tr_route()->post()->match('api/v1/services/([0-9]+)/activate')->do([ApiServiceController::class, 'activate']);
+tr_route()->post()->match('api/v1/services/([0-9]+)/deactivate')->do([ApiServiceController::class, 'deactivate']);
+
+// Bulk operations endpoint
+tr_route()->post()->match('api/v1/services/bulk')->do([ApiServiceController::class, 'bulk']);

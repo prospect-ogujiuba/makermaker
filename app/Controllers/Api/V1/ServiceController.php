@@ -2,6 +2,8 @@
 
 namespace MakerMaker\Controllers\Api\V1;
 
+use MakerMaker\Controllers\Web\ServiceController as WebServiceController;
+use MakerMaker\Http\Fields\ServiceFields;
 use MakerMaker\Models\Service;
 use TypeRocket\Controllers\Controller;
 use TypeRocket\Controllers\Traits\LoadsModel;
@@ -20,24 +22,27 @@ class ServiceController extends Controller
      * REST API: Get all services
      * GET /api/v1/services
      */
-    public function indexRest(Request $request, Response $response, AuthUser $user)
+    public function index(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
-            // Check authorization (optional - you may want to allow public access to service listings)
+            // For public API, we may not require auth for reading services
+            // But we still check if service reading is allowed
             $service = new $this->modelClass;
-            if (!$service->can('read', $user)) {
+            if ($user && !$service->can('read', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot access services', 403);
             }
 
             $services = Service::new()
-                ->where('deleted_at', null) // Only non-deleted services
+                ->where('deleted_at', null)
                 ->findAll()
                 ->get();
 
-            return $this->apiSuccess($response, [
-                'data' => $services,
-                'count' => count($services)
-            ]);
+            $response->setStatus(200);
+            $response->setMessage('Services fetched successfully');
+            $response->setData('services', $services,);
+            $response->setData('count', count($services));
+
+            return $response;
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to fetch services', 500, $e->getMessage());
         }
@@ -47,7 +52,7 @@ class ServiceController extends Controller
      * REST API: Get single service
      * GET /api/v1/services/{id}
      */
-    public function showRest($id = null, Request $request, Response $response, AuthUser $user)
+    public function show($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$id) {
@@ -56,17 +61,12 @@ class ServiceController extends Controller
 
             $service = Service::new()->findById($id);
 
-            if (!$service) {
+            if (!$service || $service->deleted_at) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
-            // Check if service is soft deleted
-            if ($service->deleted_at) {
-                return $this->apiError($response, 'Service not found', 404);
-            }
-
-            // Check authorization
-            if (!$service->can('read', $user)) {
+            // Check authorization if user is provided
+            if ($user && !$service->can('read', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot access this service', 403);
             }
 
@@ -80,32 +80,35 @@ class ServiceController extends Controller
      * REST API: Create new service
      * POST /api/v1/services
      */
-    public function create(Request $request, Response $response, AuthUser $user)
+    public function create(Request $request, Response $response, ?AuthUser $user = null)
     {
-        /** @var Service $model */
-        $model = new $this->modelClass;
-
         try {
-            // Check authorization
-            if (!$model->can('create', $user)) {
+            $model = new $this->modelClass;
+
+            // Check authorization - creation requires authentication
+            if (!$user || !$model->can('create', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot create service', 403);
             }
 
-            // Create service
-            $newService = $model->save($request->fields());
+            // Parse input data
+            $inputData = $this->parseRequestData($request);
 
-            if ($newService) {
-                $this->onAction('save', 'create', $newService);
+            // Check for duplicate service code
+            if (isset($inputData['code'])) {
+                $existingService = Service::new()->where('code', $inputData['code'])->first();
+                if ($existingService) {
+                    return $this->apiError($response, 'Service with this code already exists', 409);
+                }
             }
 
-            do_action('makermaker_api_service_after_create', $this, $newService, $user);
+            // Use the working code
+            $fields = new ServiceFields($inputData);
+            $controller = new WebServiceController();
+            $controller->create($fields, new Service(), $response);
 
-            return $this->apiSuccess($response, [
-                'message' => 'Service created successfully',
-                'data' => $newService
-            ], 201);
+            return $response;
         } catch (ModelException $e) {
-            $this->onAction('error', 'create', $e, $model);
+            $this->onAction('error', 'create', $e, $model ?? null);
             return $this->apiError($response, 'Failed to create service', 400, $e->getMessage());
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to create service', 500, $e->getMessage());
@@ -116,7 +119,7 @@ class ServiceController extends Controller
      * REST API: Update existing service (full update)
      * PUT /api/v1/services/{id}
      */
-    public function update($id = null, Request $request, Response $response, AuthUser $user)
+    public function update($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$id) {
@@ -124,44 +127,24 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service) {
+            if (!$service || $service->deleted_at) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('update', $user)) {
+            if (!$user || !$service->can('update', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
-            // Get PUT data (PHP doesn't populate $_POST for PUT requests)
-            $putData = json_decode(file_get_contents('php://input'), true);
-            if (!$putData) {
-                parse_str(file_get_contents('php://input'), $putData);
-            }
+            // Parse input data
+            $inputData = $this->parseRequestData($request);
 
-            // Validate required fields for full update
-            $requiredFields = ['code', 'name', 'description', 'base_price', 'icon', 'active'];
-            $data = [];
-
-            foreach ($requiredFields as $field) {
-                if (!isset($putData[$field]) || $putData[$field] === '') {
-                    return $this->apiError($response, "Field '{$field}' is required for full update", 400);
-                }
-                $data[$field] = $putData[$field];
-            }
-
-            // Additional validation
-            if (!is_numeric($data['base_price']) || $data['base_price'] < 0) {
-                return $this->apiError($response, 'Base price must be a valid number >= 0', 400);
-            }
-
-            if (!in_array($data['active'], ['0', '1', 0, 1])) {
-                return $this->apiError($response, 'Active status must be 0 or 1', 400);
-            }
-
-            // Check if code conflicts with another service
-            if ($data['code'] !== $service->code) {
-                $existingService = Service::new()->where('code', $data['code'])->where('id', '!=', $id)->first();
+            // Check for duplicate service code (excluding current service)
+            if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
+                $existingService = Service::new()
+                    ->where('code', $inputData['code'])
+                    ->where('id', '!=', $id)
+                    ->first();
                 if ($existingService) {
                     return $this->apiError($response, 'Service with this code already exists', 409);
                 }
@@ -169,16 +152,14 @@ class ServiceController extends Controller
 
             do_action('makermaker_api_service_update', $this, $service, $user);
 
-            // Update service
-            $service->update($data);
-            $this->onAction('save', 'update', $service);
+            // Use the working validation and update approach
+            $fields = new ServiceFields($inputData);
+            $controller = new WebServiceController();
+            $controller->update($service, $fields, $response);
 
             do_action('makermaker_api_service_after_update', $this, $service, $user);
 
-            return $this->apiSuccess($response, [
-                'message' => 'Service updated successfully',
-                'data' => $service
-            ]);
+            return $response;
         } catch (ModelException $e) {
             $this->onAction('error', 'update', $e, $service ?? null);
             return $this->apiError($response, 'Failed to update service', 400, $e->getMessage());
@@ -191,7 +172,7 @@ class ServiceController extends Controller
      * REST API: Partial update existing service
      * PATCH /api/v1/services/{id}
      */
-    public function patchRest($id = null, Request $request, Response $response, AuthUser $user)
+    public function patch($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$id) {
@@ -199,49 +180,28 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service) {
+            if (!$service || $service->deleted_at) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('update', $user)) {
+            if (!$user || !$service->can('update', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
-            // Get PATCH data
-            $patchData = json_decode(file_get_contents('php://input'), true);
-            if (!$patchData) {
-                parse_str(file_get_contents('php://input'), $patchData);
-            }
+            // Parse input data
+            $inputData = $this->parseRequestData($request);
 
-            if (empty($patchData)) {
+            if (empty($inputData)) {
                 return $this->apiError($response, 'No data provided for update', 400);
             }
 
-            // Validate provided fields
-            $allowedFields = ['code', 'name', 'description', 'base_price', 'icon', 'active'];
-            $data = [];
-
-            foreach ($patchData as $field => $value) {
-                if (!in_array($field, $allowedFields)) {
-                    continue; // Skip unknown fields
-                }
-
-                // Validate specific fields
-                if ($field === 'base_price' && (!is_numeric($value) || $value < 0)) {
-                    return $this->apiError($response, 'Base price must be a valid number >= 0', 400);
-                }
-
-                if ($field === 'active' && !in_array($value, ['0', '1', 0, 1])) {
-                    return $this->apiError($response, 'Active status must be 0 or 1', 400);
-                }
-
-                $data[$field] = $value;
-            }
-
-            // Check if code conflicts with another service
-            if (isset($data['code']) && $data['code'] !== $service->code) {
-                $existingService = Service::new()->where('code', $data['code'])->where('id', '!=', $id)->first();
+            // Check for duplicate service code (excluding current service)
+            if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
+                $existingService = Service::new()
+                    ->where('code', $inputData['code'])
+                    ->where('id', '!=', $id)
+                    ->first();
                 if ($existingService) {
                     return $this->apiError($response, 'Service with this code already exists', 409);
                 }
@@ -249,8 +209,17 @@ class ServiceController extends Controller
 
             do_action('makermaker_api_service_patch', $this, $service, $user);
 
-            // Update only provided fields
-            $service->update($data);
+            // For PATCH, use partial validation and direct update
+            $fields = new ServiceFields($inputData);
+            $fields->setPartialValidation(true);
+
+            // Validate provided fields
+            if (!$fields->isValid()) {
+                return $this->apiError($response, 'Validation failed', 422, $fields->getApiErrors());
+            }
+
+            // Update only provided and validated fields
+            $service->update($fields->getFieldData());
             $this->onAction('save', 'update', $service);
 
             do_action('makermaker_api_service_after_patch', $this, $service, $user);
@@ -271,7 +240,7 @@ class ServiceController extends Controller
      * REST API: Delete service (soft delete)
      * DELETE /api/v1/services/{id}
      */
-    public function destroyRest($id = null, Request $request, Response $response, AuthUser $user)
+    public function destroy($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$id) {
@@ -279,12 +248,12 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service) {
+            if (!$service || $service->deleted_at) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
             // Check authorization
-            if (!$service->can('destroy', $user)) {
+            if (!$user || !$service->can('destroy', $user)) {
                 return $this->apiError($response, 'Unauthorized: Cannot delete service', 403);
             }
 
@@ -311,7 +280,7 @@ class ServiceController extends Controller
      * REST API: Get only active services
      * GET /api/v1/services/active
      */
-    public function activeServicesRest(Request $request, Response $response, AuthUser $user)
+    public function active(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             $services = Service::new()
@@ -333,7 +302,7 @@ class ServiceController extends Controller
      * REST API: Get only inactive services
      * GET /api/v1/services/inactive
      */
-    public function inactiveServicesRest(Request $request, Response $response, AuthUser $user)
+    public function inactive(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             $services = Service::new()
@@ -355,7 +324,7 @@ class ServiceController extends Controller
      * REST API: Search services
      * GET /api/v1/services/search/{query}
      */
-    public function searchRest($query = null, Request $request, Response $response, AuthUser $user)
+    public function search($query = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$query) {
@@ -387,7 +356,7 @@ class ServiceController extends Controller
      * REST API: Get service by code
      * GET /api/v1/services/code/{code}
      */
-    public function showByCodeRest($code = null, Request $request, Response $response, AuthUser $user)
+    public function showByCode($code = null, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$code) {
@@ -413,84 +382,40 @@ class ServiceController extends Controller
      * REST API: Activate service
      * POST /api/v1/services/{id}/activate
      */
-    public function activateRest($id = null, Request $request, Response $response, AuthUser $user)
+    public function activate($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
-        try {
-            if (!$id) {
-                return $this->apiError($response, 'Service ID is required', 400);
-            }
-
-            $service = Service::new()->findById($id);
-            if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
-            }
-
-            if (!$service->can('update', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
-            }
-
-            $service->active = 1;
-            $service->save();
-
-            return $this->apiSuccess($response, [
-                'message' => 'Service activated successfully',
-                'data' => $service
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to activate service', 500, $e->getMessage());
-        }
+        return $this->toggleStatus($id, 1, 'activated', $request, $response, $user);
     }
 
     /**
      * REST API: Deactivate service
      * POST /api/v1/services/{id}/deactivate
      */
-    public function deactivateRest($id = null, Request $request, Response $response, AuthUser $user)
+    public function deactivate($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
-        try {
-            if (!$id) {
-                return $this->apiError($response, 'Service ID is required', 400);
-            }
-
-            $service = Service::new()->findById($id);
-            if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
-            }
-
-            if (!$service->can('update', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
-            }
-
-            $service->active = 0;
-            $service->save();
-
-            return $this->apiSuccess($response, [
-                'message' => 'Service deactivated successfully',
-                'data' => $service
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to deactivate service', 500, $e->getMessage());
-        }
+        return $this->toggleStatus($id, 0, 'deactivated', $request, $response, $user);
     }
 
     /**
      * REST API: Bulk operations
      * POST /api/v1/services/bulk
      */
-    public function bulkOperationsRest(Request $request, Response $response, AuthUser $user)
+    public function bulk(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
-            if (!$data) {
-                parse_str(file_get_contents('php://input'), $data);
+            // Check authorization for bulk operations
+            if (!$user) {
+                return $this->apiError($response, 'Authentication required for bulk operations', 401);
             }
 
-            if (!isset($data['action']) || !isset($data['service_ids'])) {
+            $inputData = $this->parseRequestData($request);
+
+            if (!isset($inputData['action']) || !isset($inputData['service_ids'])) {
                 return $this->apiError($response, 'Action and service_ids are required', 400);
             }
 
-            $action = $data['action'];
-            $serviceIds = $data['service_ids'];
+            $action = $inputData['action'];
+            $serviceIds = $inputData['service_ids'];
             $results = [];
             $errors = [];
 
@@ -501,7 +426,7 @@ class ServiceController extends Controller
             foreach ($serviceIds as $id) {
                 try {
                     $service = Service::new()->findById($id);
-                    if (!$service) {
+                    if (!$service || $service->deleted_at) {
                         $errors[] = "Service with ID {$id} not found";
                         continue;
                     }
@@ -524,13 +449,22 @@ class ServiceController extends Controller
                             $results[] = "Service {$id} deactivated";
                             break;
 
+                        case 'delete':
+                            if (!$service->can('destroy', $user)) {
+                                $errors[] = "Unauthorized to delete service with ID {$id}";
+                                continue 2;
+                            }
+                            $service->delete();
+                            $results[] = "Service {$id} deleted";
+                            break;
+
                         case 'update_pricing':
-                            if (isset($data['new_price'])) {
-                                $service->base_price = $data['new_price'];
+                            if (isset($inputData['new_price']) && is_numeric($inputData['new_price'])) {
+                                $service->base_price = $inputData['new_price'];
                                 $service->save();
-                                $results[] = "Service {$id} price updated to {$data['new_price']}";
+                                $results[] = "Service {$id} price updated to {$inputData['new_price']}";
                             } else {
-                                $errors[] = "new_price required for update_pricing action";
+                                $errors[] = "new_price required and must be numeric for update_pricing action";
                             }
                             break;
 
@@ -555,9 +489,91 @@ class ServiceController extends Controller
     }
 
     /**
+     * Parse request data from various HTTP methods
+     */
+    private function parseRequestData(Request $request): array
+    {
+        // Try to get JSON data first
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        // If not JSON, try form data
+        if (json_last_error() !== JSON_ERROR_NONE || empty($data)) {
+            parse_str($input, $data);
+        }
+
+        // Fallback to request fields
+        if (empty($data)) {
+            $data = $request->getFields();
+        }
+
+        return $data ?: [];
+    }
+
+    /**
+     * Validate PATCH request data
+     */
+    private function validatePatchData(array $data): bool
+    {
+        $allowedFields = ['code', 'name', 'description', 'base_price', 'icon', 'active'];
+
+        foreach ($data as $field => $value) {
+            if (!in_array($field, $allowedFields)) {
+                continue; // Skip unknown fields
+            }
+
+            // Validate specific fields
+            if ($field === 'base_price' && (!is_numeric($value) || $value < 0)) {
+                return false;
+            }
+
+            if ($field === 'active' && !in_array($value, ['0', '1', 0, 1, true, false])) {
+                return false;
+            }
+
+            if ($field === 'code' && !preg_match('/^[a-z_]+$/', $value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Toggle service status (activate/deactivate)
+     */
+    private function toggleStatus($id, int $status, string $action, Request $request, Response $response, ?AuthUser $user = null)
+    {
+        try {
+            if (!$id) {
+                return $this->apiError($response, 'Service ID is required', 400);
+            }
+
+            $service = Service::new()->findById($id);
+            if (!$service || $service->deleted_at) {
+                return $this->apiError($response, 'Service not found', 404);
+            }
+
+            if (!$user || !$service->can('update', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
+            }
+
+            $service->active = $status;
+            $service->save();
+
+            return $this->apiSuccess($response, [
+                'message' => "Service {$action} successfully",
+                'data' => $service
+            ]);
+        } catch (\Exception $e) {
+            return $this->apiError($response, "Failed to {$action} service", 500, $e->getMessage());
+        }
+    }
+
+    /**
      * Helper method for API success responses
      */
-    private function apiSuccess(Response $response, array $data, int $status = 200)
+    private function apiSuccess(Response $response, array $data, int $status = 200): Response
     {
         $response->setStatus($status);
         $response->setData('success', true);
@@ -572,14 +588,18 @@ class ServiceController extends Controller
     /**
      * Helper method for API error responses
      */
-    private function apiError(Response $response, string $message, int $status = 400, string $details = null)
+    private function apiError(Response $response, string $message, int $status = 400, $details = null): Response
     {
         $response->setStatus($status);
         $response->setData('success', false);
         $response->setData('error', $message);
 
         if ($details) {
-            $response->setData('message', $details);
+            if (is_array($details)) {
+                $response->setData('validation_errors', $details);
+            } else {
+                $response->setData('details', $details);
+            }
         }
 
         return $response;
