@@ -58,9 +58,9 @@ $pricingPresentation = $form->fieldset('Pricing & Presentation', 'Service pricin
             $form->select('Active Status')->setName('active')
                 ->markLabelRequired()
                 ->setOptions([
-                    '-- Select Status --' => '',
-                    'Active' => 1,
-                    'Inactive' => 0
+                    '-- Select Status --' => NULL,
+                    'Active' => true,
+                    'Inactive' => false,
                 ])
                 ->setHelp('Only active services are available for new requests')
         )->withColumn()

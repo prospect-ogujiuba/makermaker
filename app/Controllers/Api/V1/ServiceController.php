@@ -6,7 +6,6 @@ use MakerMaker\Controllers\Web\ServiceController as WebServiceController;
 use MakerMaker\Http\Fields\ServiceFields;
 use MakerMaker\Models\Service;
 use TypeRocket\Controllers\Controller;
-use TypeRocket\Controllers\Traits\LoadsModel;
 use TypeRocket\Exceptions\ModelException;
 use TypeRocket\Http\Request;
 use TypeRocket\Http\Response;
@@ -14,42 +13,71 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceController extends Controller
 {
-    use LoadsModel;
-
     protected $modelClass = Service::class;
 
+    // ================================
+    // CORE CRUD OPERATIONS
+    // ================================
+
     /**
-     * REST API: Get all services
+     * REST API: Get all services (excludes soft deleted by default)
      * GET /api/v1/services
      */
     public function index(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
-            // For public API, we may not require auth for reading services
-            // But we still check if service reading is allowed
-            $service = new $this->modelClass;
-            if ($user && !$service->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot access services', 403);
+            // Check authorization for reading services
+            $model = new $this->modelClass;
+            if (!$user || !$model->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot read services', 403);
             }
 
-            $services = Service::new()
-                ->where('deleted_at', null)
-                ->findAll()
-                ->get();
+            // Get query parameters
+            $page = (int) ($request->input('page') ?? 1);
+            $limit = min((int) ($request->input('limit') ?? 50), 100); // Max 100 per page
 
-            $response->setStatus(200);
-            $response->setMessage('Services fetched successfully');
-            $response->setData('services', $services,);
-            $response->setData('count', count($services));
 
-            return $response;
+            // Build query
+            $query = Service::new();
+            // Default behavior excludes deleted (handled by Service model scopes)
+
+            // Apply filters
+            if ($search = $request->input('search')) {
+                $query = $query->where(function ($q) use ($search) {
+                    return $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('code', 'LIKE', "%{$search}%")
+                        ->orWhere('description', 'LIKE', "%{$search}%");
+                });
+            }
+
+            if ($active = $request->input('active')) {
+                $query = $query->where('active', $active === 'true' ? 1 : 0);
+            }
+
+            // Get paginated results
+            $pager = $query->paginate($limit, $page);
+            $services = $pager->getResults();
+
+            // Set response data
+            $response->setMessage('Services retrieved successfully');
+
+            return $this->apiSuccess($response, [
+                'services' => $services->toArray(),
+                'pagination' => [
+                    'current_page' => $pager->getCurrentPage(),
+                    'per_page' => $pager->getNumberPerPage(),
+                    'total' => $pager->getCount(),
+                    'total_pages' => $pager->getNumberOfPages(),
+                    'has_more' => $pager->getCurrentPage() < $pager->getNumberOfPages()
+                ]
+            ]);
         } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to fetch services', 500, $e->getMessage());
+            return $this->apiError($response, 'Failed to retrieve services', 500, $e->getMessage());
         }
     }
 
     /**
-     * REST API: Get single service
+     * REST API: Get single service by ID
      * GET /api/v1/services/{id}
      */
     public function show($id = null, Request $request, Response $response, ?AuthUser $user = null)
@@ -61,18 +89,20 @@ class ServiceController extends Controller
 
             $service = Service::new()->findById($id);
 
-            if (!$service || $service->deleted_at) {
+            if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
-            // Check authorization if user is provided
-            if ($user && !$service->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot access this service', 403);
+            // Check authorization
+            if (!$user || !$service->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot read service', 403);
             }
 
-            return $this->apiSuccess($response, ['data' => $service]);
+            return $this->apiSuccess($response, [
+                'service' => $service->toArray()
+            ]);
         } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to fetch service', 500, $e->getMessage());
+            return $this->apiError($response, 'Failed to retrieve service', 500, $e->getMessage());
         }
     }
 
@@ -106,6 +136,8 @@ class ServiceController extends Controller
             $controller = new WebServiceController();
             $controller->create($fields, new Service(), $response);
 
+            $response->setData('service', $fields);
+
             return $response;
         } catch (ModelException $e) {
             $this->onAction('error', 'create', $e, $model ?? null);
@@ -127,7 +159,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service || $service->deleted_at) {
+            if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
@@ -150,14 +182,14 @@ class ServiceController extends Controller
                 }
             }
 
-            do_action('makermaker_api_service_update', $this, $service, $user);
 
-            // Use the working validation and update approach
+
+            // Use ServiceFields for validation and update
             $fields = new ServiceFields($inputData);
             $controller = new WebServiceController();
             $controller->update($service, $fields, $response);
 
-            do_action('makermaker_api_service_after_update', $this, $service, $user);
+            $response->setData('service', $fields);
 
             return $response;
         } catch (ModelException $e) {
@@ -169,7 +201,7 @@ class ServiceController extends Controller
     }
 
     /**
-     * REST API: Partial update existing service
+     * REST API: Partial update of service
      * PATCH /api/v1/services/{id}
      */
     public function patch($id = null, Request $request, Response $response, ?AuthUser $user = null)
@@ -180,7 +212,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service || $service->deleted_at) {
+            if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
@@ -189,14 +221,14 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
             }
 
-            // Parse input data
+            // Parse and validate PATCH data
             $inputData = $this->parseRequestData($request);
 
-            if (empty($inputData)) {
-                return $this->apiError($response, 'No data provided for update', 400);
+            if (!$this->validatePatchData($inputData)) {
+                return $this->apiError($response, 'Invalid data provided for patch update', 400);
             }
 
-            // Check for duplicate service code (excluding current service)
+            // Check for duplicate code if being updated
             if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
                 $existingService = Service::new()
                     ->where('code', $inputData['code'])
@@ -209,35 +241,33 @@ class ServiceController extends Controller
 
             do_action('makermaker_api_service_patch', $this, $service, $user);
 
-            // For PATCH, use partial validation and direct update
-            $fields = new ServiceFields($inputData);
-            $fields->setPartialValidation(true);
+            // Define allowed fields for PATCH
+            // Get fillable fields from the model
+            $allowedFields = $service->getFillableFields();
 
-            // Validate provided fields
-            if (!$fields->isValid()) {
-                return $this->apiError($response, 'Validation failed', 422, $fields->getApiErrors());
+            // Update only provided fields
+            foreach ($inputData as $field => $value) {
+                if (in_array($field, $allowedFields)) {
+                    $service->$field = $value;
+                }
             }
 
-            // Update only provided and validated fields
-            $service->update($fields->getFieldData());
-            $this->onAction('save', 'update', $service);
+            $service->save();
+            $this->onAction('patch', $service);
 
             do_action('makermaker_api_service_after_patch', $this, $service, $user);
 
             return $this->apiSuccess($response, [
                 'message' => 'Service updated successfully',
-                'data' => $service
+                'data' => $service->toArray()
             ]);
-        } catch (ModelException $e) {
-            $this->onAction('error', 'update', $e, $service ?? null);
-            return $this->apiError($response, 'Failed to update service', 400, $e->getMessage());
         } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to update service', 500, $e->getMessage());
+            return $this->apiError($response, 'Failed to patch service', 500, $e->getMessage());
         }
     }
 
     /**
-     * REST API: Delete service (soft delete)
+     * REST API: Soft delete service
      * DELETE /api/v1/services/{id}
      */
     public function destroy($id = null, Request $request, Response $response, ?AuthUser $user = null)
@@ -248,7 +278,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service || $service->deleted_at) {
+            if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
@@ -257,68 +287,22 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Unauthorized: Cannot delete service', 403);
             }
 
-            do_action('makermaker_api_service_destroy', $this, $service, $user);
-
             // Perform soft delete
-            $service->delete();
+            $service->softDelete();
             $this->onAction('destroy', $service);
 
-            do_action('makermaker_api_service_after_destroy', $this, $service, $user);
-
             return $this->apiSuccess($response, [
-                'message' => 'Service deleted successfully'
+                'message' => 'Service deleted successfully (soft delete)'
             ]);
-        } catch (ModelException $e) {
-            $this->onAction('error', 'destroy', $e, $service ?? null);
-            return $this->apiError($response, 'Failed to delete service', 400, $e->getMessage());
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to delete service', 500, $e->getMessage());
         }
     }
 
-    /**
-     * REST API: Get only active services
-     * GET /api/v1/services/active
-     */
-    public function active(Request $request, Response $response, ?AuthUser $user = null)
-    {
-        try {
-            $services = Service::new()
-                ->where('active', 1)
-                ->where('deleted_at', null)
-                ->findAll()
-                ->get();
 
-            return $this->apiSuccess($response, [
-                'data' => $services,
-                'count' => count($services)
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to fetch active services', 500, $e->getMessage());
-        }
-    }
-
-    /**
-     * REST API: Get only inactive services
-     * GET /api/v1/services/inactive
-     */
-    public function inactive(Request $request, Response $response, ?AuthUser $user = null)
-    {
-        try {
-            $services = Service::new()
-                ->where('active', 0)
-                ->where('deleted_at', null)
-                ->findAll()
-                ->get();
-
-            return $this->apiSuccess($response, [
-                'data' => $services,
-                'count' => count($services)
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to fetch inactive services', 500, $e->getMessage());
-        }
-    }
+    // ================================
+    // SEARCH AND LOOKUP ENDPOINTS
+    // ================================
 
     /**
      * REST API: Search services
@@ -331,20 +315,19 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Search query is required', 400);
             }
 
-            $query = urldecode($query);
+            $model = new $this->modelClass;
+            if (!$user || !$model->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot search services', 403);
+            }
+
             $services = Service::new()
-                ->where('deleted_at', null)
-                ->where(function ($q) use ($query) {
-                    $q->where('name', 'LIKE', '%' . $query . '%')
-                        ->orWhere('code', 'LIKE', '%' . $query . '%')
-                        ->orWhere('description', 'LIKE', '%' . $query . '%');
-                })
-                ->findAll()
+                ->where('name', 'LIKE', "%{$query}%")
+                ->orWhere('code', 'LIKE', "%{$query}%")
+                ->orWhere('description', 'LIKE', "%{$query}%")
                 ->get();
 
             return $this->apiSuccess($response, [
-                'data' => $services,
-                'count' => count($services),
+                'data' => $services->toArray(),
                 'query' => $query
             ]);
         } catch (\Exception $e) {
@@ -363,20 +346,27 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Service code is required', 400);
             }
 
-            $service = Service::new()
-                ->where('code', $code)
-                ->where('deleted_at', null)
-                ->first();
-
+            $service = Service::findByCode($code);
             if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
-            return $this->apiSuccess($response, ['data' => $service]);
+            // Check authorization
+            if (!$user || !$service->can('read', $user)) {
+                return $this->apiError($response, 'Unauthorized: Cannot read service', 403);
+            }
+
+            return $this->apiSuccess($response, [
+                'data' => $service->toArray()
+            ]);
         } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to fetch service', 500, $e->getMessage());
+            return $this->apiError($response, 'Failed to retrieve service by code', 500, $e->getMessage());
         }
     }
+
+    // ================================
+    // STATUS MANAGEMENT ENDPOINTS
+    // ================================
 
     /**
      * REST API: Activate service
@@ -403,36 +393,26 @@ class ServiceController extends Controller
     public function bulk(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
-            // Check authorization for bulk operations
-            if (!$user) {
-                return $this->apiError($response, 'Authentication required for bulk operations', 401);
+            $action = $request->input('action');
+            $ids = $request->input('ids', []);
+
+            if (!$action || !is_array($ids) || empty($ids)) {
+                return $this->apiError($response, 'Action and IDs are required', 400);
             }
 
-            $inputData = $this->parseRequestData($request);
-
-            if (!isset($inputData['action']) || !isset($inputData['service_ids'])) {
-                return $this->apiError($response, 'Action and service_ids are required', 400);
-            }
-
-            $action = $inputData['action'];
-            $serviceIds = $inputData['service_ids'];
             $results = [];
             $errors = [];
 
-            if (!is_array($serviceIds)) {
-                return $this->apiError($response, 'service_ids must be an array', 400);
-            }
-
-            foreach ($serviceIds as $id) {
+            foreach ($ids as $id) {
                 try {
                     $service = Service::new()->findById($id);
-                    if (!$service || $service->deleted_at) {
-                        $errors[] = "Service with ID {$id} not found";
+                    if (!$service) {
+                        $errors[] = "Service {$id} not found";
                         continue;
                     }
 
-                    if (!$service->can('update', $user)) {
-                        $errors[] = "Unauthorized to update service with ID {$id}";
+                    if (!$user || !$service->can('update', $user)) {
+                        $errors[] = "Unauthorized to modify service {$id}";
                         continue;
                     }
 
@@ -442,35 +422,17 @@ class ServiceController extends Controller
                             $service->save();
                             $results[] = "Service {$id} activated";
                             break;
-
                         case 'deactivate':
                             $service->active = 0;
                             $service->save();
                             $results[] = "Service {$id} deactivated";
                             break;
-
                         case 'delete':
-                            if (!$service->can('destroy', $user)) {
-                                $errors[] = "Unauthorized to delete service with ID {$id}";
-                                continue 2;
-                            }
-                            $service->delete();
+                            $service->softDelete();
                             $results[] = "Service {$id} deleted";
                             break;
-
-                        case 'update_pricing':
-                            if (isset($inputData['new_price']) && is_numeric($inputData['new_price'])) {
-                                $service->base_price = $inputData['new_price'];
-                                $service->save();
-                                $results[] = "Service {$id} price updated to {$inputData['new_price']}";
-                            } else {
-                                $errors[] = "new_price required and must be numeric for update_pricing action";
-                            }
-                            break;
-
                         default:
                             $errors[] = "Unknown action: {$action}";
-                            break;
                     }
                 } catch (\Exception $e) {
                     $errors[] = "Error processing service {$id}: " . $e->getMessage();
@@ -478,15 +440,20 @@ class ServiceController extends Controller
             }
 
             return $this->apiSuccess($response, [
+                'message' => 'Bulk operation completed',
                 'results' => $results,
                 'errors' => $errors,
                 'processed' => count($results),
                 'failed' => count($errors)
             ]);
         } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to perform bulk operation', 500, $e->getMessage());
+            return $this->apiError($response, 'Bulk operation failed', 500, $e->getMessage());
         }
     }
+
+    // ================================
+    // HELPER METHODS
+    // ================================
 
     /**
      * Parse request data from various HTTP methods
@@ -550,7 +517,7 @@ class ServiceController extends Controller
             }
 
             $service = Service::new()->findById($id);
-            if (!$service || $service->deleted_at) {
+            if (!$service) {
                 return $this->apiError($response, 'Service not found', 404);
             }
 
@@ -563,7 +530,7 @@ class ServiceController extends Controller
 
             return $this->apiSuccess($response, [
                 'message' => "Service {$action} successfully",
-                'data' => $service
+                'data' => $service->toArray()
             ]);
         } catch (\Exception $e) {
             return $this->apiError($response, "Failed to {$action} service", 500, $e->getMessage());
@@ -576,7 +543,6 @@ class ServiceController extends Controller
     private function apiSuccess(Response $response, array $data, int $status = 200): Response
     {
         $response->setStatus($status);
-        $response->setData('success', true);
 
         foreach ($data as $key => $value) {
             $response->setData($key, $value);
