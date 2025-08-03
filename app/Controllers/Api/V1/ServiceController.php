@@ -23,6 +23,10 @@ class ServiceController extends Controller
      * REST API: Get all services (excludes soft deleted by default)
      * GET /api/v1/services
      */
+    /**
+     * REST API: Get all services (excludes soft deleted by default)
+     * GET /api/v1/services
+     */
     public function index(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
@@ -32,10 +36,11 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Unauthorized: Cannot read services', 403);
             }
 
+
+
             // Get query parameters
             $page = (int) ($request->input('page') ?? 1);
             $limit = min((int) ($request->input('limit') ?? 50), 100); // Max 100 per page
-
 
             // Build query
             $query = Service::new();
@@ -50,8 +55,97 @@ class ServiceController extends Controller
                 });
             }
 
-            if ($active = $request->input('active')) {
-                $query = $query->where('active', $active === 'true' ? 1 : 0);
+            if (($active = $request->input('active')) !== null) {
+                $activeValue = strtolower($active);
+                if (in_array($activeValue, ['true', '1', 'yes'])) {
+                    $query = $query->where('active', '=', 1);
+                } elseif (in_array($activeValue, ['false', '0', 'no'])) {
+                    $query = $query->where('active', '=', 0);
+                }
+                // If invalid value, ignore the filter instead of erroring
+            }
+
+            // Individual field filters
+            if ($name = $request->input('name')) {
+                $query = $query->where('name', 'LIKE', "%{$name}%");
+            }
+
+            if ($code = $request->input('code')) {
+                $query = $query->where('code', 'LIKE', "%{$code}%");
+            }
+
+            if ($description = $request->input('description')) {
+                $query = $query->where('description', 'LIKE', "%{$description}%");
+            }
+
+            // Price filters
+            if ($priceMin = $request->input('price_min')) {
+                if (is_numeric($priceMin)) {
+                    $query = $query->where('base_price', '>=', (float) $priceMin);
+                }
+            }
+
+            if ($priceMax = $request->input('price_max')) {
+                if (is_numeric($priceMax)) {
+                    $query = $query->where('base_price', '<=', (float) $priceMax);
+                }
+            }
+
+            if ($pricingType = $request->input('pricing_type')) {
+                if ($pricingType === 'has_price') {
+                    $query = $query->where('base_price', '>', 0)->where('base_price', '!=', null);
+                } elseif ($pricingType === 'quote_required') {
+                    $query = $query->where(function ($q) {
+                        return $q->where('base_price', '=', 0)->orWhere('base_price', '=', null);
+                    });
+                }
+            }
+
+            // Category filter
+            if ($categoryFilter = $request->input('category_filter')) {
+                $query = $query->where('name', '=', $categoryFilter);
+            }
+
+            // Date filters
+            if ($createdFrom = $request->input('created_from')) {
+                $query = $query->where('created_at', '>=', $createdFrom . ' 00:00:00');
+            }
+
+            if ($createdTo = $request->input('created_to')) {
+                $query = $query->where('created_at', '<=', $createdTo . ' 23:59:59');
+            }
+
+            if ($updatedFrom = $request->input('updated_from')) {
+                $query = $query->where('updated_at', '>=', $updatedFrom . ' 00:00:00');
+            }
+
+            if ($updatedTo = $request->input('updated_to')) {
+                $query = $query->where('updated_at', '<=', $updatedTo . ' 23:59:59');
+            }
+
+            // Service ID filter
+            if ($serviceId = $request->input('service_id')) {
+                if (is_numeric($serviceId)) {
+                    $query = $query->where('id', '=', (int) $serviceId);
+                }
+            }
+
+            // Keywords search
+            if ($keywords = $request->input('keywords')) {
+                $query = $query->where(function ($q) use ($keywords) {
+                    return $q->where('name', 'LIKE', "%{$keywords}%")
+                        ->orWhere('code', 'LIKE', "%{$keywords}%")
+                        ->orWhere('description', 'LIKE', "%{$keywords}%");
+                });
+            }
+
+            // Sorting
+            $sortBy = $request->input('sort_by', 'id');
+            $sortOrder = $request->input('sort_order', 'asc');
+
+            $allowedSortColumns = ['id', 'name', 'code', 'description', 'base_price', 'active', 'created_at', 'updated_at'];
+            if (in_array($sortBy, $allowedSortColumns) && in_array($sortOrder, ['asc', 'desc'])) {
+                $query = $query->orderBy($sortBy, $sortOrder);
             }
 
             // Get paginated results
@@ -295,9 +389,14 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Unauthorized: Cannot delete service', 403);
             }
 
-            // Perform soft delete
-            $service->softDelete();
-            $this->onAction('destroy', $service);
+            // $controller = new WebServiceController();
+            // $controller->destroy($id, $response);
+            $service->forceDelete($id);
+            $service->softDelete($id);
+
+
+
+            // $this->onAction('destroy', $service);
 
             return $this->apiSuccess($response, [
                 'message' => 'Service deleted successfully (soft delete)'

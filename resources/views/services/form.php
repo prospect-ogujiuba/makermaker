@@ -16,7 +16,6 @@ $serviceDetails = $form->fieldset('Service Details', 'Essential service informat
             $form->text('Service Code')->setName('code')
                 ->setHelp('Unique identifier (lowercase letters and underscores only, max 255 chars)')
                 ->setAttribute('maxlength', '255')
-                ->setAttribute('pattern', '^[a-z_]+$')
                 ->setAttribute('placeholder', 'e.g., voip_hosting_premium')
         )->withColumn(
             $form->text('Service Name')->setName('name')
