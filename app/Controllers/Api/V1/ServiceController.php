@@ -3,8 +3,10 @@
 namespace MakerMaker\Controllers\Api\V1;
 
 use MakerMaker\Controllers\Web\ServiceController as WebServiceController;
+use MakerMaker\Controllers\Traits\ApiCrud;
 use MakerMaker\Http\Fields\ServiceFields;
 use MakerMaker\Models\Service;
+use MakerMaker\Helpers\ApiHelpers;
 use TypeRocket\Controllers\Controller;
 use TypeRocket\Exceptions\ModelException;
 use TypeRocket\Http\Request;
@@ -13,16 +15,14 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceController extends Controller
 {
+    use ApiCrud;
+
     protected $modelClass = Service::class;
 
     // ================================
-    // CORE CRUD OPERATIONS
+    // STANDARD CRUD OPERATIONS (using traits)
     // ================================
 
-    /**
-     * REST API: Get all services (excludes soft deleted by default)
-     * GET /api/v1/services
-     */
     /**
      * REST API: Get all services (excludes soft deleted by default)
      * GET /api/v1/services
@@ -176,29 +176,30 @@ class ServiceController extends Controller
      */
     public function show($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
-        try {
-            if (!$id) {
-                return $this->apiError($response, 'Service ID is required', 400);
-            }
-
-            $service = Service::new()->findById($id);
-
-            if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
-            }
-
-            // Check authorization
-            if (!$user || !$service->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot read service', 403);
-            }
-
-            return $this->apiSuccess($response, [
-                'service' => $service->toArray()
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to retrieve service', 500, $e->getMessage());
-        }
+        return $this->showGeneric($id, $request, $response, $user);
     }
+
+    /**
+     * REST API: Search services
+     * GET /api/v1/services/search/{query}
+     */
+    public function search($query = null, Request $request, Response $response, ?AuthUser $user = null)
+    {
+        return $this->searchGeneric($query, $request, $response, $user);
+    }
+
+    /**
+     * REST API: Soft delete service
+     * DELETE /api/v1/services/{id}
+     */
+    public function destroy($id = null, Request $request, Response $response, ?AuthUser $user = null)
+    {
+        return $this->destroyGeneric($id, $request, $response, $user);
+    }
+
+    // ================================
+    // CUSTOM SERVICE-SPECIFIC OPERATIONS
+    // ================================
 
     /**
      * REST API: Create new service
@@ -207,15 +208,21 @@ class ServiceController extends Controller
     public function create(Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
-            $model = new $this->modelClass;
-
-            // Check authorization - creation requires authentication
-            if (!$user || !$model->can('create', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot create service', 403);
+            // Check authorization
+            if ($authResponse = $this->requirePermission($response, $user, 'create', 'service')) {
+                return $authResponse;
             }
 
-            // Parse input data
+            // Parse and validate input data
             $inputData = $this->parseRequestData($request);
+            $validationErrors = $this->validateRequiredFields($inputData, $this->getRequiredFields());
+
+            if (!empty($validationErrors)) {
+                return $this->apiValidationError($response, $validationErrors);
+            }
+
+            // Sanitize input data
+            $inputData = $this->sanitizeData($inputData);
 
             // Auto-generate code if not provided but name is available
             if (empty($inputData['code']) && !empty($inputData['name'])) {
@@ -223,23 +230,19 @@ class ServiceController extends Controller
             }
 
             // Check for duplicate service code (if code was provided or generated)
-            if (isset($inputData['code'])) {
-                $existingService = Service::new()->where('code', $inputData['code'])->first();
-                if ($existingService) {
-                    return $this->apiError($response, 'Service with this code already exists', 409);
-                }
+            if (isset($inputData['code']) && Service::codeExists($inputData['code'])) {
+                return $this->apiError($response, 'Service with this code already exists', 409);
             }
 
-            // Use the working code
+            // Use TypeRocket's existing ServiceFields and WebController for consistency
             $fields = new ServiceFields($inputData);
             $controller = new WebServiceController();
             $controller->create($fields, new Service(), $response);
 
-            $response->setData('service', $fields);
-
-            return $response;
+            return $this->apiCreated($response, [
+                'service' => $fields
+            ], 'Service created successfully');
         } catch (ModelException $e) {
-            $this->onAction('error', 'create', $e, $model ?? null);
             return $this->apiError($response, 'Failed to create service', 400, $e->getMessage());
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to create service', 500, $e->getMessage());
@@ -259,16 +262,17 @@ class ServiceController extends Controller
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
+                return $this->apiNotFound($response, 'Service');
             }
 
             // Check authorization
-            if (!$user || !$service->can('update', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
+            if ($authResponse = $this->requireModelPermission($response, $user, 'update', $service, 'service')) {
+                return $authResponse;
             }
 
-            // Parse input data
+            // Parse and sanitize input data
             $inputData = $this->parseRequestData($request);
+            $inputData = $this->sanitizeData($inputData);
 
             // Auto-generate code if not provided but name is being updated
             if (empty($inputData['code']) && !empty($inputData['name'])) {
@@ -277,25 +281,20 @@ class ServiceController extends Controller
 
             // Check for duplicate service code (excluding current service)
             if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
-                $existingService = Service::new()
-                    ->where('code', $inputData['code'])
-                    ->where('id', '!=', $id)
-                    ->first();
-                if ($existingService) {
+                if (Service::codeExists($inputData['code'], $id)) {
                     return $this->apiError($response, 'Service with this code already exists', 409);
                 }
             }
 
-            // Use ServiceFields for validation and update
+            // Use TypeRocket's existing ServiceFields and WebController
             $fields = new ServiceFields($inputData);
             $controller = new WebServiceController();
             $controller->update($service, $fields, $response);
 
-            $response->setData('service', $service->toArray());
-
-            return $response;
+            return $this->apiUpdated($response, [
+                'service' => $service->toArray()
+            ], 'Service updated successfully');
         } catch (ModelException $e) {
-            $this->onAction('error', 'update', $e, $service ?? null);
             return $this->apiError($response, 'Failed to update service', 400, $e->getMessage());
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to update service', 500, $e->getMessage());
@@ -303,7 +302,7 @@ class ServiceController extends Controller
     }
 
     /**
-     * REST API: Partial update of service
+     * REST API: Partial update service (PATCH)
      * PATCH /api/v1/services/{id}
      */
     public function patch($id = null, Request $request, Response $response, ?AuthUser $user = null)
@@ -315,132 +314,44 @@ class ServiceController extends Controller
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
+                return $this->apiNotFound($response, 'Service');
             }
 
             // Check authorization
-            if (!$user || !$service->can('update', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
+            if ($authResponse = $this->requireModelPermission($response, $user, 'update', $service, 'service')) {
+                return $authResponse;
             }
 
             // Parse and validate PATCH data
             $inputData = $this->parseRequestData($request);
+            $validationErrors = $this->validatePatchData($inputData, $this->getAllowedFields());
 
-            if (!$this->validatePatchData($inputData)) {
-                return $this->apiError($response, 'Invalid data provided for patch update', 400);
+            if (!empty($validationErrors)) {
+                return $this->apiValidationError($response, $validationErrors);
             }
 
-            // Check for duplicate code if being updated
-            if (isset($inputData['code']) && $inputData['code'] !== $service->code) {
-                $existingService = Service::new()
-                    ->where('code', $inputData['code'])
-                    ->where('id', '!=', $id)
-                    ->first();
-                if ($existingService) {
-                    return $this->apiError($response, 'Service with this code already exists', 409);
-                }
-            }
-
-            do_action('makermaker_api_service_patch', $this, $service, $user);
-
-            // Define allowed fields for PATCH
-            // Get fillable fields from the model
-            $allowedFields = $service->getFillableFields();
+            // Sanitize and filter to allowed fields only
+            $inputData = $this->sanitizeData($inputData);
+            $inputData = $this->filterAllowedFields($inputData, $this->getAllowedFields());
 
             // Update only provided fields
             foreach ($inputData as $field => $value) {
-                if (in_array($field, $allowedFields)) {
-                    $service->$field = $value;
-                }
+                $service->$field = $value;
             }
 
             $service->save();
-            $this->onAction('patch', $service);
 
-            do_action('makermaker_api_service_after_patch', $this, $service, $user);
-
-            $response->setMessage('Service updated successfully');
-            return $this->apiSuccess($response, [
+            return $this->apiUpdated($response, [
                 'service' => $service->toArray()
-            ]);
+            ], 'Service updated successfully');
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to patch service', 500, $e->getMessage());
         }
     }
 
-    /**
-     * REST API: Soft delete service
-     * DELETE /api/v1/services/{id}
-     */
-    public function destroy($id = null, Request $request, Response $response, ?AuthUser $user = null)
-    {
-        try {
-            if (!$id) {
-                return $this->apiError($response, 'Service ID is required', 400);
-            }
-
-            $service = Service::new()->findById($id);
-            if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
-            }
-
-            // Check authorization
-            if (!$user || !$service->can('destroy', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot delete service', 403);
-            }
-
-            // $controller = new WebServiceController();
-            // $controller->destroy($id, $response);
-            $service->forceDelete($id);
-            $service->softDelete($id);
-
-
-
-            // $this->onAction('destroy', $service);
-
-            return $this->apiSuccess($response, [
-                'message' => 'Service deleted successfully (soft delete)'
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to delete service', 500, $e->getMessage());
-        }
-    }
-
-
     // ================================
-    // SEARCH AND LOOKUP ENDPOINTS
+    // SERVICE-SPECIFIC LOOKUP ENDPOINTS
     // ================================
-
-    /**
-     * REST API: Search services
-     * GET /api/v1/services/search/{query}
-     */
-    public function search($query = null, Request $request, Response $response, ?AuthUser $user = null)
-    {
-        try {
-            if (!$query) {
-                return $this->apiError($response, 'Search query is required', 400);
-            }
-
-            $model = new $this->modelClass;
-            if (!$user || !$model->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot search services', 403);
-            }
-
-            $services = Service::new()
-                ->where('name', 'LIKE', "%{$query}%")
-                ->orWhere('code', 'LIKE', "%{$query}%")
-                ->orWhere('description', 'LIKE', "%{$query}%")
-                ->get();
-
-            return $this->apiSuccess($response, [
-                'data' => $services->toArray(),
-                'query' => $query
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Failed to search services', 500, $e->getMessage());
-        }
-    }
 
     /**
      * REST API: Get service by code
@@ -455,16 +366,16 @@ class ServiceController extends Controller
 
             $service = Service::findByCode($code);
             if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
+                return $this->apiNotFound($response, 'Service');
             }
 
             // Check authorization
-            if (!$user || !$service->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot read service', 403);
+            if ($authResponse = $this->requireModelPermission($response, $user, 'read', $service, 'service')) {
+                return $authResponse;
             }
 
             return $this->apiSuccess($response, [
-                'data' => $service->toArray()
+                'service' => $service->toArray()
             ]);
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to retrieve service by code', 500, $e->getMessage());
@@ -481,7 +392,7 @@ class ServiceController extends Controller
      */
     public function activate($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
-        return $this->toggleStatus($id, 1, 'activated', $request, $response, $user);
+        return $this->toggleStatus($id, true, 'activate', $request, $response, $user);
     }
 
     /**
@@ -490,133 +401,13 @@ class ServiceController extends Controller
      */
     public function deactivate($id = null, Request $request, Response $response, ?AuthUser $user = null)
     {
-        return $this->toggleStatus($id, 0, 'deactivated', $request, $response, $user);
-    }
-
-    /**
-     * REST API: Bulk operations
-     * POST /api/v1/services/bulk
-     */
-    public function bulk(Request $request, Response $response, ?AuthUser $user = null)
-    {
-        try {
-            $action = $request->input('action');
-            $ids = $request->input('ids', []);
-
-            if (!$action || !is_array($ids) || empty($ids)) {
-                return $this->apiError($response, 'Action and IDs are required', 400);
-            }
-
-            $results = [];
-            $errors = [];
-
-            foreach ($ids as $id) {
-                try {
-                    $service = Service::new()->findById($id);
-                    if (!$service) {
-                        $errors[] = "Service {$id} not found";
-                        continue;
-                    }
-
-                    if (!$user || !$service->can('update', $user)) {
-                        $errors[] = "Unauthorized to modify service {$id}";
-                        continue;
-                    }
-
-                    switch ($action) {
-                        case 'activate':
-                            $service->active = 1;
-                            $service->save();
-                            $results[] = "Service {$id} activated";
-                            break;
-                        case 'deactivate':
-                            $service->active = 0;
-                            $service->save();
-                            $results[] = "Service {$id} deactivated";
-                            break;
-                        case 'delete':
-                            $service->forceDelete();
-                            $results[] = "Service {$id} deleted";
-                            break;
-                        default:
-                            $errors[] = "Unknown action: {$action}";
-                    }
-                } catch (\Exception $e) {
-                    $errors[] = "Error processing service {$id}: " . $e->getMessage();
-                }
-            }
-
-            return $this->apiSuccess($response, [
-                'message' => 'Bulk operation completed',
-                'results' => $results,
-                'errors' => $errors,
-                'processed' => count($results),
-                'failed' => count($errors)
-            ]);
-        } catch (\Exception $e) {
-            return $this->apiError($response, 'Bulk operation failed', 500, $e->getMessage());
-        }
-    }
-
-    // ================================
-    // HELPER METHODS
-    // ================================
-
-    /**
-     * Parse request data from various HTTP methods
-     */
-    private function parseRequestData(Request $request): array
-    {
-        // Try to get JSON data first
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-
-        // If not JSON, try form data
-        if (json_last_error() !== JSON_ERROR_NONE || empty($data)) {
-            parse_str($input, $data);
-        }
-
-        // Fallback to request fields
-        if (empty($data)) {
-            $data = $request->getFields();
-        }
-
-        return $data ?: [];
-    }
-
-    /**
-     * Validate PATCH request data
-     */
-    private function validatePatchData(array $data): bool
-    {
-        $allowedFields = ['code', 'name', 'description', 'base_price', 'icon', 'active'];
-
-        foreach ($data as $field => $value) {
-            if (!in_array($field, $allowedFields)) {
-                continue; // Skip unknown fields
-            }
-
-            // Validate specific fields
-            if ($field === 'base_price' && (!is_numeric($value) || $value < 0)) {
-                return false;
-            }
-
-            if ($field === 'active' && !in_array($value, ['0', '1', 0, 1, true, false])) {
-                return false;
-            }
-
-            if ($field === 'code' && !preg_match('/^[a-z_]+$/', $value)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->toggleStatus($id, false, 'deactivate', $request, $response, $user);
     }
 
     /**
      * Toggle service status (activate/deactivate)
      */
-    private function toggleStatus($id, int $status, string $action, Request $request, Response $response, ?AuthUser $user = null)
+    private function toggleStatus($id, bool $status, string $action, Request $request, Response $response, ?AuthUser $user = null)
     {
         try {
             if (!$id) {
@@ -625,58 +416,109 @@ class ServiceController extends Controller
 
             $service = Service::new()->findById($id);
             if (!$service) {
-                return $this->apiError($response, 'Service not found', 404);
+                return $this->apiNotFound($response, 'Service');
             }
 
-            if (!$user || !$service->can('update', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot update service', 403);
+            // Check authorization
+            if ($authResponse = $this->requireModelPermission($response, $user, 'update', $service, 'service')) {
+                return $authResponse;
             }
 
-            $service->active = $status;
-            $service->save();
+            // Use trait method for consistent status management
+            if ($status) {
+                $service->activate();
+            } else {
+                $service->deactivate();
+            }
 
             return $this->apiSuccess($response, [
-                'message' => "Service {$action} successfully",
-                'data' => $service->toArray()
+                'message' => "Service {$action}d successfully",
+                'service' => $service->toArray()
             ]);
         } catch (\Exception $e) {
             return $this->apiError($response, "Failed to {$action} service", 500, $e->getMessage());
         }
     }
 
-    /**
-     * Helper method for API success responses
-     */
-    private function apiSuccess(Response $response, array $data, int $status = 200): Response
-    {
-        $response->setStatus($status);
-
-        foreach ($data as $key => $value) {
-            $response->setData($key, $value);
-        }
-
-        return $response;
-    }
+    // ================================
+    // BULK OPERATIONS
+    // ================================
 
     /**
-     * Helper method for API error responses
+     * REST API: Bulk operations on services
+     * POST /api/v1/services/bulk
+     * Body: {"action": "activate|deactivate|delete|restore", "ids": [1,2,3]}
      */
-    private function apiError(Response $response, string $message, int $status = 400, $details = null): Response
+    public function bulk(Request $request, Response $response, ?AuthUser $user = null)
     {
-        $response->setStatus($status);
-        $response->setData('success', false);
-        $response->setData('error', $message);
+        try {
+            $inputData = $this->parseRequestData($request);
+            [$action, $ids, $errors] = ApiHelpers::parseBulkOperation($inputData);
 
-        if ($details) {
-            if (is_array($details)) {
-                $response->setData('validation_errors', $details);
-            } else {
-                $response->setData('details', $details);
+            if (!empty($errors)) {
+                return $this->apiValidationError($response, $errors);
             }
-        }
 
-        return $response;
+            // Check authorization
+            if ($authResponse = $this->requirePermission($response, $user, 'update', 'services')) {
+                return $authResponse;
+            }
+
+            $results = [];
+            $errorResults = [];
+
+            foreach ($ids as $id) {
+                try {
+                    $service = Service::new()->findById($id);
+                    if (!$service) {
+                        $errorResults[] = "Service ID {$id} not found";
+                        continue;
+                    }
+
+                    // Check individual authorization
+                    if (!$this->canPerformActionOnModel($user, 'update', $service)) {
+                        $errorResults[] = "Unauthorized to update service ID {$id}";
+                        continue;
+                    }
+
+                    // Perform action using trait methods
+                    switch ($action) {
+                        case 'activate':
+                            $service->activate();
+                            break;
+                        case 'deactivate':
+                            $service->deactivate();
+                            break;
+                        case 'delete':
+                            $service->softDelete();
+                            break;
+                        case 'restore':
+                            $service->restore();
+                            break;
+                    }
+
+                    $results[] = $service->toArray();
+                } catch (\Exception $e) {
+                    $errorResults[] = "Error processing service ID {$id}: " . $e->getMessage();
+                }
+            }
+
+            return $this->apiSuccess($response, [
+                'message' => 'Bulk operation completed',
+                'action' => $action,
+                'results' => $results,
+                'errors' => $errorResults,
+                'processed' => count($results),
+                'failed' => count($errorResults)
+            ]);
+        } catch (\Exception $e) {
+            return $this->apiError($response, 'Bulk operation failed', 500, $e->getMessage());
+        }
     }
+
+    // ================================
+    // UTILITY ENDPOINTS
+    // ================================
 
     /**
      * REST API: Generate code from name (utility endpoint)
@@ -692,9 +534,9 @@ class ServiceController extends Controller
                 return $this->apiError($response, 'Name is required to generate code', 400);
             }
 
-            $model = new $this->modelClass;
-            if (!$user || !$model->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot generate service code', 403);
+            // Check authorization
+            if ($authResponse = $this->requirePermission($response, $user, 'read', 'services')) {
+                return $authResponse;
             }
 
             $generatedCode = Service::generateCodeFromName($name, $excludeId);
@@ -707,5 +549,104 @@ class ServiceController extends Controller
         } catch (\Exception $e) {
             return $this->apiError($response, 'Failed to generate code', 500, $e->getMessage());
         }
+    }
+
+    // ================================
+    // TRAIT METHOD OVERRIDES
+    // ================================
+
+    /**
+     * Override to customize search fields
+     */
+    protected function getSearchFields(): array
+    {
+        return ['name', 'code', 'description'];
+    }
+
+    /**
+     * Override to customize allowed fields for updates
+     */
+    protected function getAllowedFields(): array
+    {
+        return ['code', 'name', 'description', 'base_price', 'icon', 'active'];
+    }
+
+    /**
+     * Override to customize required fields for creation
+     */
+    protected function getRequiredFields(): array
+    {
+        return ['name'];
+    }
+
+    /**
+     * Override to add service-specific validation
+     */
+    protected function validateField(string $field, $value): array
+    {
+        // Get base validation errors from trait
+        $errors = [];
+
+        // Call trait method directly (no parent::)
+        switch ($field) {
+            case 'base_price':
+            case 'price':
+                if (!is_numeric($value) || $value < 0) {
+                    $errors[] = "The {$field} must be a positive number.";
+                }
+                break;
+
+            case 'active':
+                if (!in_array($value, ['0', '1', 0, 1, true, false], true)) {
+                    $errors[] = "The {$field} field must be true or false.";
+                }
+                break;
+
+            case 'code':
+                if (!preg_match('/^[a-z0-9_]+$/', $value)) {
+                    $errors[] = "The {$field} may only contain lowercase letters, numbers, and underscores.";
+                }
+                break;
+
+            case 'email':
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = "The {$field} must be a valid email address.";
+                }
+                break;
+        }
+
+        // Add service-specific validation
+        switch ($field) {
+            case 'name':
+                if (empty($value) || strlen($value) < 2) {
+                    $errors[] = 'Service name must be at least 2 characters long.';
+                }
+                break;
+
+            case 'base_price':
+                if (!is_numeric($value) || $value < 0) {
+                    $errors[] = 'Base price must be a positive number.';
+                }
+                break;
+
+            case 'icon':
+                // You could add icon validation here if needed
+                break;
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Override resource names for consistent API responses
+     */
+    protected function getResourceName(): string
+    {
+        return 'service';
+    }
+
+    protected function getPluralResourceName(): string
+    {
+        return 'services';
     }
 }

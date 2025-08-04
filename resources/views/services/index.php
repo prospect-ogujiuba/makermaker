@@ -93,18 +93,18 @@ $table->addSearchFormFilter(function () {
             ->get();
         ?>
         <?php if (!empty($categories)): ?>
-        <div class="tr-filter-group">
-            <label>Category:</label>
-            <select name="category_filter" class="tr-filter">
-                <option value="">All Categories</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= htmlspecialchars($category->name); ?>"
-                        <?= ($_GET['category_filter'] ?? '') === $category->name ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($category->name); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+            <div class="tr-filter-group">
+                <label>Category:</label>
+                <select name="category_filter" class="tr-filter">
+                    <option value="">All Categories</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= htmlspecialchars($category->name); ?>"
+                            <?= ($_GET['category_filter'] ?? '') === $category->name ? 'selected' : ''; ?>>
+                            <?= htmlspecialchars($category->name); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         <?php endif; ?>
 
         <!-- Date Filters -->
@@ -148,6 +148,16 @@ $table->addSearchFormFilter(function () {
                 placeholder="Search in name, code, or description">
         </div>
 
+        <!-- Include Soft Dtrelted -->
+        <div class="tr-filter-group">
+            <label>Include Soft Deleted:</label>
+
+            <input type="checkbox" name="include_deleted" value="1" class="tr-filter"
+                <?= !empty($_GET['include_deleted']) ? 'checked' : ''; ?>>
+
+
+        </div>
+
     </div>
 <?php
 });
@@ -185,9 +195,9 @@ $table->addSearchModelFilter(function ($args, $model, $table) {
         if ($_GET['pricing_type'] === 'has_price') {
             $model->where('base_price', '>', 0)->where('base_price', '!=', null);
         } elseif ($_GET['pricing_type'] === 'quote_required') {
-            $model->where(function($query) {
+            $model->where(function ($query) {
                 $query->where('base_price', '=', 0)
-                      ->orWhere('base_price', '=', null);
+                    ->orWhere('base_price', '=', null);
             });
         }
     }
@@ -222,11 +232,17 @@ $table->addSearchModelFilter(function ($args, $model, $table) {
     // Keywords Search (searches across multiple fields)
     if (!empty($_GET['keywords'])) {
         $keywords = $_GET['keywords'];
-        $model->where(function($query) use ($keywords) {
+        $model->where(function ($query) use ($keywords) {
             $query->where('name', 'LIKE', '%' . $keywords . '%')
-                  ->orWhere('code', 'LIKE', '%' . $keywords . '%')
-                  ->orWhere('description', 'LIKE', '%' . $keywords . '%');
+                ->orWhere('code', 'LIKE', '%' . $keywords . '%')
+                ->orWhere('description', 'LIKE', '%' . $keywords . '%');
         });
+    }
+
+    if (empty($_GET['include_deleted'])) {
+        $model->where('deleted_at', null);
+    } else {
+       
     }
 
     return $args;
