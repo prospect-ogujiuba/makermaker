@@ -535,7 +535,7 @@ class ServiceController extends Controller
                             $results[] = "Service {$id} deactivated";
                             break;
                         case 'delete':
-                            $service->softDelete();
+                            $service->forceDelete();
                             $results[] = "Service {$id} deleted";
                             break;
                         default:
