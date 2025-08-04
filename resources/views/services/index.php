@@ -232,17 +232,14 @@ $table->addSearchModelFilter(function ($args, $model, $table) {
     // Keywords Search (searches across multiple fields)
     if (!empty($_GET['keywords'])) {
         $keywords = $_GET['keywords'];
-        $model->where(function ($query) use ($keywords) {
-            $query->where('name', 'LIKE', '%' . $keywords . '%')
-                ->orWhere('code', 'LIKE', '%' . $keywords . '%')
-                ->orWhere('description', 'LIKE', '%' . $keywords . '%');
-        });
+        $model->where('name', 'LIKE', '%' . $keywords . '%')
+            ->orWhere('code', 'LIKE', '%' . $keywords . '%')
+            ->orWhere('description', 'LIKE', '%' . $keywords . '%');
     }
 
     if (empty($_GET['include_deleted'])) {
         $model->where('deleted_at', null);
     } else {
-       
     }
 
     return $args;

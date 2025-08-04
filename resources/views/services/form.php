@@ -95,6 +95,9 @@ $systemInfo = $form->fieldset(
                     ->setAttribute('value', $service && $service->deleted_at ? 'Deleted on ' . date('Y-m-d H:i:s', strtotime($service->deleted_at)) : 'Active')
                     ->setHelp('Shows if service has been soft deleted')
             )
+            ->withColumn(
+                $form->checkbox('Restore')->when('soft_delete_status', '!=', 'Active')
+            )
     ]
 );
 

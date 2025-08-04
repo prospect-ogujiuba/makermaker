@@ -31,10 +31,10 @@ class ServiceController extends Controller
     {
         try {
             // Check authorization for reading services
-            $model = new $this->modelClass;
-            if (!$user || !$model->can('read', $user)) {
-                return $this->apiError($response, 'Unauthorized: Cannot read services', 403);
-            }
+            // $model = new $this->modelClass;
+            // if (!$user || !$model->can('read', $user)) {
+            //     return $this->apiError($response, 'Unauthorized: Cannot read services', 403);
+            // }
 
 
 

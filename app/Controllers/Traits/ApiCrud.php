@@ -51,10 +51,6 @@ trait ApiCrud
     protected function indexGeneric(Request $request, Response $response, ?AuthUser $user = null): Response
     {
         try {
-            // Check authorization
-            if ($authResponse = $this->requirePermission($response, $user, 'read', $this->getPluralResourceName())) {
-                return $authResponse;
-            }
 
             $modelClass = $this->getModelClass();
             $query = $modelClass::new();
@@ -116,11 +112,6 @@ trait ApiCrud
                 return $this->apiNotFound($response, ucfirst($this->getResourceName()));
             }
 
-            // Check authorization on specific model
-            if ($authResponse = $this->requireModelPermission($response, $user, 'read', $item, $this->getResourceName())) {
-                return $authResponse;
-            }
-
             return $this->apiSuccess($response, [
                 $this->getResourceName() => $item->toArray()
             ]);
@@ -143,11 +134,6 @@ trait ApiCrud
         try {
             if (!$query) {
                 return $this->apiError($response, 'Search query is required', 400);
-            }
-
-            // Check authorization
-            if ($authResponse = $this->requirePermission($response, $user, 'read', $this->getPluralResourceName())) {
-                return $authResponse;
             }
 
             $modelClass = $this->getModelClass();
