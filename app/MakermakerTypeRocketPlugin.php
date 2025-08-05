@@ -19,6 +19,14 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
 
         $resources = [
+            // 'service',
+            // 'customer',
+            // 'portfolio',
+            // 'quote',
+            // 'testimonial',
+        ];
+        
+        $post_types = [
             'service',
             // 'customer',
             // 'portfolio',
@@ -29,6 +37,11 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         foreach ($resources as $resource) {
 
             include MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $resource . '.php';
+        }
+        
+        foreach ($post_types as $post_type) {
+
+            include MAKERMAKER_PLUGIN_DIR . 'inc/resources/post-types/' . $post_type . '.php';
         }
 
 
