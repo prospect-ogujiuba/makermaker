@@ -88,7 +88,8 @@ $categoryInfo = $form->fieldset(
 
         $form->select('Parent Category')
             ->setName('parent_id')
-            ->setOptions(getParentCategoryOptions($serviceCategory->id ?? null))
+            ->setOptions(['Top Level' => NULL])
+            ->setModelOptions(ServiceCategory::class, 'name')
             ->setHelp('Select parent category to create hierarchical structure'),
 
         $form->textarea('Description')

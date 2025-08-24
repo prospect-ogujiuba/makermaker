@@ -22,7 +22,7 @@ $table->setSearchColumns([
 ]);
 
 $table->addSearchFormFilter(function () {
-    renderAdvancedSearchActions('service_category'); ?>
+    renderAdvancedSearchActions('servicecategory'); ?>
 
     <div class="tr-search-filters">
         <!-- Basic Category Information -->

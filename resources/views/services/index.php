@@ -396,11 +396,11 @@ $table->setColumns([
     ],
 
     // Service Classification
-    'service.service_category.name' => [
+    'category.name' => [
         'label' => 'Category',
         'sort' => true,
         'callback' => function ($value, $item) {
-            $category = $item->serviceCategory ?? null;
+            $category = $item->category;  // This gets the actual ServiceCategory model
             if ($category && $category->icon) {
                 return '<span class="dashicons ' . $category->icon . '" style="margin-right: 5px;"></span>' . $value;
             }
@@ -408,23 +408,23 @@ $table->setColumns([
         }
     ],
 
-    'service_type' => [
-        'label' => 'Type',
-        'sort' => true,
-        'callback' => function ($value, $item) {
+    // 'service_type' => [
+    //     'label' => 'Type',
+    //     'sort' => true,
+    //     'callback' => function ($value, $item) {
 
-            return ucfirst($value) ?: '-';
-        }
-    ],
+    //         return ucfirst($value) ?: '-';
+    //     }
+    // ],
 
-    'complexity_level' => [
-        'label' => 'Complexity',
-        'sort' => true,
-        'callback' => function ($value, $item) {
+    // 'complexity_level' => [
+    //     'label' => 'Complexity',
+    //     'sort' => true,
+    //     'callback' => function ($value, $item) {
 
-            return ucfirst($value) ?: 'Basic';
-        }
-    ],
+    //         return ucfirst($value) ?: 'Basic';
+    //     }
+    // ],
 
     'base_price' => [
         'label' => 'Base Price',
@@ -450,31 +450,31 @@ $table->setColumns([
         }
     ],
 
-    'pricing_model' => [
-        'label' => 'Pricing Model',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return ucfirst($value) ?: 'Not Set';
-        }
-    ],
+    // 'pricing_model' => [
+    //     'label' => 'Pricing Model',
+    //     'sort' => true,
+    //     'callback' => function ($value, $item) {
+    //         return ucfirst($value) ?: 'Not Set';
+    //     }
+    // ],
 
-    // Delivery & Operations
-    'delivery_method' => [
-        'label' => 'Delivery',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            $method = $item->serviceDeliveryMethod ?? null;
-            $icons = [];
+    // // Delivery & Operations
+    // 'delivery_method' => [
+    //     'label' => 'Delivery',
+    //     'sort' => true,
+    //     'callback' => function ($value, $item) {
+    //         $method = $item->serviceDeliveryMethod ?? null;
+    //         $icons = [];
 
-            if ($item->requires_site_visit) $icons[] = '🏢';
-            if ($item->supports_remote_delivery) $icons[] = '💻';
-            if ($item->requires_assessment) $icons[] = '📝';
-            if ($method && $method->requires_location) $icons[] = '📍';
+    //         if ($item->requires_site_visit) $icons[] = '🏢';
+    //         if ($item->supports_remote_delivery) $icons[] = '💻';
+    //         if ($item->requires_assessment) $icons[] = '📝';
+    //         if ($method && $method->requires_location) $icons[] = '📍';
 
-            $icon_str = !empty($icons) ? implode(' ', $icons) . ' ' : '';
-            return $icon_str . (ucfirst($value) ?: 'Not Set');
-        }
-    ],
+    //         $icon_str = !empty($icons) ? implode(' ', $icons) . ' ' : '';
+    //         return $icon_str . (ucfirst($value) ?: 'Not Set');
+    //     }
+    // ],
 
     'min_notice_days' => [
         'label' => 'Lead Time',
