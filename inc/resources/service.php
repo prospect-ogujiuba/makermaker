@@ -6,7 +6,7 @@ $service = tr_resource_pages('Service@\MakerMaker\Controllers\Web\ServiceControl
     ->setPosition(2);
 
 // Helper function to create service resources
-function createServiceResource($resourceKey, $controller, $title, $hasAddButton = false) {
+function createServiceResource($resourceKey, $controller, $title, $hasAddButton = true) {
     $resourcePage = tr_resource_pages(
         $resourceKey . '@\MakerMaker\Controllers\Web\\' . $controller,
         $title
@@ -22,9 +22,9 @@ function createServiceResource($resourceKey, $controller, $title, $hasAddButton 
 
 // Create all service subpages
 $serviceSubpages = [
-    createServiceResource('ServiceAddons', 'ServiceAddonController', 'Service Addons', true),
-    createServiceResource('ServiceBundles', 'ServiceBundleController', 'Service Bundles', true),
-    createServiceResource('ServiceCategory', 'ServiceCategoryController', 'Service Categories', true),
+    createServiceResource('ServiceAddons', 'ServiceAddonController', 'Service Addons'),
+    createServiceResource('ServiceBundles', 'ServiceBundleController', 'Service Bundles'),
+    createServiceResource('ServiceCategory', 'ServiceCategoryController', 'Service Categories'),
     createServiceResource('ServiceComplexity', 'ServiceComplexityController', 'Service Complexity'),
     createServiceResource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
     createServiceResource('ServiceDeliverables', 'ServiceDeliverableController', 'Deliverables'),

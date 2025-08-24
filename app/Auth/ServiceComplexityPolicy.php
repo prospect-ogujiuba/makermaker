@@ -6,7 +6,7 @@ use MakerMaker\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
-class ServiceAddonPolicy extends Policy
+class ServiceComplexityPolicy extends Policy
 {
     public function update(AuthUser $auth, $object)
     {

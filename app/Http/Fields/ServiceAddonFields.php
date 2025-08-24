@@ -3,7 +3,7 @@ namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
 
-class ServiceAddonsFields extends Fields
+class ServiceAddonFields extends Fields
 {
     /**
      * Run On Import

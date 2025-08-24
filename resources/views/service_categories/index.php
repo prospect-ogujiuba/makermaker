@@ -313,18 +313,6 @@ $table->setColumns([
         }
     ],
 
-    // Icon display
-    'icon' => [
-        'label' => 'Icon',
-        'sort' => false,
-        'callback' => function ($value, $item) {
-            if (!$value) {
-                return '<em style="color: #999;">None</em>';
-            }
-            return '<span class="dashicons ' . $value . '" style="font-size: 18px; color: #0073aa;" title="' . $value . '"></span>';
-        }
-    ],
-
     // Status
     'is_active' => [
         'label' => 'Status',
