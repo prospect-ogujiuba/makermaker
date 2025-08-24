@@ -19,30 +19,21 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
 
         $resources = [
-            // 'service',
-            // 'customer',
-            // 'portfolio',
-            // 'quote',
-            // 'testimonial',
-        ];
-        
-        $post_types = [
             'service',
-            // 'customer',
-            // 'portfolio',
-            // 'quote',
-            // 'testimonial',
+            'ticket',
+            'customer',
+            'portfolio',
+            'quote',
+            'testimonial',
+            'invoice',
+            'payment',
         ];
 
         foreach ($resources as $resource) {
 
             include MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $resource . '.php';
         }
-        
-        foreach ($post_types as $post_type) {
 
-            include MAKERMAKER_PLUGIN_DIR . 'inc/resources/post-types/' . $post_type . '.php';
-        }
 
 
         // Plugin Settings
@@ -108,7 +99,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // Migrate `down` only on plugin uninstall
         System::updateSiteState('flush_rewrite_rules');
-        
+
         // Uncomment the line below if you want to run migrations down on deactivation
         $this->migrateDown();
 

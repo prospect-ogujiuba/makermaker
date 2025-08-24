@@ -31,12 +31,13 @@ class ServiceFields extends Fields
      */
     protected function rules() {
         return [
-            'code' => '?required',
+            'category_id' => 'required',
             'name' => 'required',
-            'description' => 'required',
-            'base_price' => '?required',
-            'icon' => '?required',
-
+            'service_type' => 'required',
+            'delivery_method' => 'required',
+            'pricing_model' => 'required',
+            'base_price' => '?numeric',
+            'hourly_rate' => '?numeric',
         ];
     }
 

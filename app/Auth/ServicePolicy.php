@@ -2,7 +2,7 @@
 
 namespace MakerMaker\Auth;
 
-use \App\Models\User;
+use MakerMaker\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
