@@ -10,6 +10,7 @@
  */
 
 use MakerMaker\Models\Service;
+use MakerMaker\Models\ServiceCategory;
 
 /** @var \App\Elements\Form $form */
 /** @var \MakerMaker\Models\Service $service */
@@ -53,7 +54,7 @@ $overview = $form->fieldset(
             ->withColumn(
                 $form->select('Service Category')
                     ->setName('category_id')
-                    // ->setOptions(getRelationshipOptions('\MakerMaker\Models\ServiceCategory'))
+                    ->setModelOptions(ServiceCategory::class, 'name')
                     ->setHelp('Primary service category')
                     ->markLabelRequired()
             )
