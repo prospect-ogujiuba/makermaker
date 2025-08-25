@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Models;
 
 use TypeRocket\Models\Model;
@@ -6,7 +7,7 @@ use TypeRocket\Models\Model;
 class Service extends Model
 {
     protected $resource = 'b2bcnc_services';
-    
+
     protected $fillable = [
         'category_id',
         'name',
@@ -145,7 +146,7 @@ class Service extends Model
     public function bundles()
     {
         return $this->belongsToMany(
-            ServiceBundles::class,
+            ServiceBundle::class,
             'wp_b2bcnc_bundle_services',
             'service_id',
             'bundle_id'
@@ -308,7 +309,7 @@ class Service extends Model
             'support' => 'Support',
             'hybrid' => 'Hybrid'
         ];
-        
+
         return $types[$this->service_type] ?? ucfirst($this->service_type);
     }
 
@@ -323,7 +324,7 @@ class Service extends Model
             'hybrid' => 'Hybrid',
             'hosted' => 'Hosted'
         ];
-        
+
         return $methods[$this->delivery_method] ?? ucfirst($this->delivery_method);
     }
 
@@ -340,7 +341,7 @@ class Service extends Model
             'tiered' => 'Tiered Pricing',
             'custom' => 'Custom Quote'
         ];
-        
+
         return $models[$this->pricing_model] ?? ucfirst($this->pricing_model);
     }
 
@@ -355,7 +356,7 @@ class Service extends Model
             'advanced' => 'Advanced',
             'expert' => 'Expert'
         ];
-        
+
         return $levels[$this->complexity_level] ?? ucfirst($this->complexity_level);
     }
 
@@ -372,7 +373,7 @@ class Service extends Model
         $categoryCode = $this->category ? strtoupper(substr($this->category->slug, 0, 3)) : 'SVC';
         $serviceCode = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $this->name), 0, 6));
         $timestamp = substr(time(), -4);
-        
+
         return $categoryCode . '-' . $serviceCode . '-' . $timestamp;
     }
 
@@ -441,7 +442,7 @@ class Service extends Model
             if (empty($tierData['tier_name']) || empty($tierData['price'])) {
                 continue;
             }
-            
+
             $tierData['service_id'] = $this->id;
             ServicePricingTier::new()->create($tierData);
         }
@@ -464,7 +465,7 @@ class Service extends Model
             if (empty($addonData['addon_name']) || empty($addonData['price'])) {
                 continue;
             }
-            
+
             $addonData['service_id'] = $this->id;
             ServiceAddons::new()->create($addonData);
         }
@@ -487,7 +488,7 @@ class Service extends Model
             if (empty($equip['equipment_name'])) {
                 continue;
             }
-            
+
             $equip['service_id'] = $this->id;
             ServiceEquipment::new()->create($equip);
         }
@@ -510,7 +511,7 @@ class Service extends Model
             if (empty($area['area_type']) || empty($area['area_value'])) {
                 continue;
             }
-            
+
             $area['service_id'] = $this->id;
             ServiceCoverageArea::new()->create($area);
         }
@@ -533,7 +534,7 @@ class Service extends Model
             if (empty($dep['dependent_service_id'])) {
                 continue;
             }
-            
+
             $dep['primary_service_id'] = $this->id;
             ServiceDependency::new()->create($dep);
         }
@@ -556,7 +557,7 @@ class Service extends Model
             if (empty($prereq['prerequisite_description'])) {
                 continue;
             }
-            
+
             $prereq['service_id'] = $this->id;
             ServicePrerequisite::new()->create($prereq);
         }
@@ -579,7 +580,7 @@ class Service extends Model
             if (empty($deliverable['deliverable_name'])) {
                 continue;
             }
-            
+
             $deliverable['service_id'] = $this->id;
             ServiceDeliverables::new()->create($deliverable);
         }
@@ -602,7 +603,7 @@ class Service extends Model
             if (empty($attr['attribute_name'])) {
                 continue;
             }
-            
+
             $attr['service_id'] = $this->id;
             ServiceAttribute::new()->create($attr);
         }
@@ -663,7 +664,7 @@ class Service extends Model
         if (empty($this->sku)) {
             $this->sku = $this->generateSku();
         }
-        
+
         parent::beforeSave();
     }
 }
