@@ -40,7 +40,7 @@ function renderAdvancedSearchActions($resource)
 function createServiceResource($resourceKey, $controller, $title, $hasAddButton = true)
 {
     $resourcePage = tr_resource_pages(
-        $resourceKey . '@\MakerMaker\Controllers\Web\\' . $controller,
+        $resourceKey . '@\MakerMaker\Controllers\\' . $controller,
         $title
     );
 
