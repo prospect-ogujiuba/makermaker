@@ -194,7 +194,7 @@ class Crud extends Command
         $template .= " * Add your index/list functionality here.\n";
         $template .= " */\n";
         $template .= " \n";
-        $template .= " tr_smart_index(\MakerMaker\Models\{$pascalCase}::class);\n";
+        $template .= " tr_smart_index(\MakerMaker\Models\\{$pascalCase}::class);\n";
         $template .= "?>";
 
         return $template;
