@@ -193,6 +193,8 @@ class Crud extends Command
         $template .= " * This view displays a list of {$pluralModelVariable}.\n";
         $template .= " * Add your index/list functionality here.\n";
         $template .= " */\n";
+        $template .= " \n";
+        $template .= " tr_smart_index(\MakerMaker\Models\{$pascalCase}::class);\n";
         $template .= "?>";
 
         return $template;
