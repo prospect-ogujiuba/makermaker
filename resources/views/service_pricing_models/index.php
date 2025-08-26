@@ -6,6 +6,4 @@
  * Add your index/list functionality here.
  */
 
-$table = tr_index_setup(\MakerMaker\Models\ServicePricingModel::class);
-$table->render();
-?>
+ tr_smart_index(\MakerMaker\Models\ServicePricingModel::class);
