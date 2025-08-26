@@ -9,6 +9,7 @@ $service = tr_resource_pages('Service@\MakerMaker\Controllers\ServiceController'
 $serviceSubpages = [
     createServiceResource('ServiceComplexity', 'ServiceComplexityController', 'Complexities'),
     createServiceResource('ServicePricingModel', 'ServicePricingModelController', 'Pricing Models'),
+    createServiceResource('ServicePricingTier', 'ServicePricingTierController', 'Pricing Tiers'),
 ];
 
 // Add all subpages to the main service resource
