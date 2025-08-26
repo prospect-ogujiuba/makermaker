@@ -22,11 +22,13 @@ define('MAKERMAKER_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 // Require additional files
 $includes = [
-    'helpers'
+    'helpers',
+    'index_table',
+    'main_form'
 ];
 
 foreach ($includes as $include) {
-    require_once MAKERMAKER_PLUGIN_DIR . 'inc/' . $include . '.php';
+    require_once MAKERMAKER_PLUGIN_DIR . 'inc/helpers/' . $include . '.php';
 }
 
 $__typerocket_plugin_makermaker = null;
