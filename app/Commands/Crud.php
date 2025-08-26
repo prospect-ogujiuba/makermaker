@@ -101,7 +101,7 @@ class Crud extends Command
 
     protected function generatePolicy($name, $force = false)
     {
-        $command = "php galaxy_makermaker make:policy {$name}";
+        $command = "php galaxy_makermaker make:policy {$name}Policy";
         if ($force) {
             $command .= " --force";
         }
@@ -117,7 +117,7 @@ class Crud extends Command
 
     protected function generateFields($name, $force = false)
     {
-        $command = "php galaxy_makermaker make:fields {$name}";
+        $command = "php galaxy_makermaker make:fields {$name}Fields";
         if ($force) {
             $command .= " --force";
         }
