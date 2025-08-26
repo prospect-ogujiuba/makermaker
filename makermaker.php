@@ -24,7 +24,9 @@ define('MAKERMAKER_PLUGIN_URL', plugin_dir_url(__FILE__));
 $includes = [
     'helpers',
     'index_table',
-    'main_form'
+    'main_form',
+    'model_inspector',
+    'smart_index'
 ];
 
 foreach ($includes as $include) {
