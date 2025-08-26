@@ -35,3 +35,19 @@ function renderAdvancedSearchActions($resource)
     <label for="search-toggle" class="button">Toggle Advanced Search</label>
 <?php
 }
+
+// Helper function to create service resources
+function createServiceResource($resourceKey, $controller, $title, $hasAddButton = true)
+{
+    $resourcePage = tr_resource_pages(
+        $resourceKey . '@\MakerMaker\Controllers\Web\\' . $controller,
+        $title
+    );
+
+    if ($hasAddButton) {
+        $adminPageSlug = strtolower($resourceKey) . '_add';
+        $resourcePage->addNewButton(admin_url('admin.php?page=' . $adminPageSlug));
+    }
+
+    return $resourcePage;
+}

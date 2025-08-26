@@ -18,53 +18,15 @@ use MakerMaker\Controllers\Api\V1\ServiceController as ApiServiceController;
 // ================================
 
 // Standard REST API endpoints
-tr_route()->get()->match('api/v1/services')->do([ApiServiceController::class, 'index']);
-tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'show']);
-tr_route()->post()->match('api/v1/services')->do([ApiServiceController::class, 'create']);
-tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'update']);
-tr_route()->patch()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'patch']);
-tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'destroy']);
-tr_route()->post()->match('api/v1/services/generate-code')->do([ApiServiceController::class, 'generateCode']);
-tr_route()->get()->match('api/v1/services/search/(.+)')->do([ApiServiceController::class, 'search']);
-tr_route()->get()->match('api/v1/services/code/([a-z_]+)')->do([ApiServiceController::class, 'showByCode']);
-tr_route()->post()->match('api/v1/services/([0-9]+)/activate')->do([ApiServiceController::class, 'activate']); 
-tr_route()->post()->match('api/v1/services/([0-9]+)/deactivate')->do([ApiServiceController::class, 'deactivate']);
-tr_route()->post()->match('api/v1/services/bulk')->do([ApiServiceController::class, 'bulk']);
-
-/*
-|--------------------------------------------------------------------------
-| Route Usage Examples
-|--------------------------------------------------------------------------
-|
-| BASIC CRUD:
-| GET    /api/v1/services                    - List all services (excludes deleted)
-| GET    /api/v1/services?include_deleted=true - List all services including deleted  
-| GET    /api/v1/services/123               - Get single service
-| POST   /api/v1/services                   - Create new service
-| PUT    /api/v1/services/123               - Full update of service
-| PATCH  /api/v1/services/123               - Partial update of service
-| DELETE /api/v1/services/123               - Soft delete service
-|
-| SOFT DELETE MANAGEMENT:
-| GET    /api/v1/services/deleted           - Get only soft deleted services
-| POST   /api/v1/services/123/restore       - Restore soft deleted service
-| DELETE /api/v1/services/123/force         - Permanently delete (cannot undo)
-|
-| STATUS FILTERING:
-| GET    /api/v1/services/active            - Get only active services
-| GET    /api/v1/services/inactive          - Get only inactive services
-|
-| SEARCH & LOOKUP: 
-| GET    /api/v1/services/search/hosting    - Search for "hosting" in name/code/description
-| GET    /api/v1/services/code/voip_premium - Get service with code "voip_premium"
-|
-| STATUS MANAGEMENT:
-| POST   /api/v1/services/123/activate      - Set service as active
-| POST   /api/v1/services/123/deactivate    - Set service as inactive
-|
-| BULK OPERATIONS:
-| POST   /api/v1/services/bulk              - Body: {"action": "activate", "ids": [1,2,3]}
-|                                           - Body: {"action": "deactivate", "ids": [1,2,3]}  
-|                                           - Body: {"action": "delete", "ids": [1,2,3]}
-|
-*/
+// tr_route()->get()->match('api/v1/services')->do([ApiServiceController::class, 'index']);
+// tr_route()->get()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'show']);
+// tr_route()->post()->match('api/v1/services')->do([ApiServiceController::class, 'create']);
+// tr_route()->put()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'update']);
+// tr_route()->patch()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'patch']);
+// tr_route()->delete()->match('api/v1/services/([0-9]+)')->do([ApiServiceController::class, 'destroy']);
+// tr_route()->post()->match('api/v1/services/generate-code')->do([ApiServiceController::class, 'generateCode']);
+// tr_route()->get()->match('api/v1/services/search/(.+)')->do([ApiServiceController::class, 'search']);
+// tr_route()->get()->match('api/v1/services/code/([a-z_]+)')->do([ApiServiceController::class, 'showByCode']);
+// tr_route()->post()->match('api/v1/services/([0-9]+)/activate')->do([ApiServiceController::class, 'activate']); 
+// tr_route()->post()->match('api/v1/services/([0-9]+)/deactivate')->do([ApiServiceController::class, 'deactivate']);
+// tr_route()->post()->match('api/v1/services/bulk')->do([ApiServiceController::class, 'bulk']);

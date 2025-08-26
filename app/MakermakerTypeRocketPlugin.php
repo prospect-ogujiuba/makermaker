@@ -20,13 +20,13 @@ class MakermakerTypeRocketPlugin extends BasePlugin
 
         $resources = [
             'service',
-            'ticket',
-            'customer',
-            'portfolio',
-            'quote',
-            'testimonial',
-            'invoice',
-            'payment',
+            // 'ticket',
+            // 'customer',
+            // 'portfolio',
+            // 'quote',
+            // 'testimonial',
+            // 'invoice',
+            // 'payment',
         ];
 
         foreach ($resources as $resource) {
@@ -81,11 +81,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         // TODO: Add your TypeRocket policies here
         return [
             '\MakerMaker\Models\Service' => '\MakerMaker\Auth\ServicePolicy',
-            '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',
-            '\MakerMaker\Models\ServiceAttribute' => '\MakerMaker\Auth\ServiceAttributePolicy',
-            '\MakerMaker\Models\ServiceBundle' => '\MakerMaker\Auth\ServiceBundlePolicy',
-            '\MakerMaker\Models\ServiceCategory' => '\MakerMaker\Auth\ServiceCategoryPolicy',
-            '\MakerMaker\Models\ServiceComplexity' => '\MakerMaker\Auth\ServiceComplexityPolicy',
         ];
     }
 
