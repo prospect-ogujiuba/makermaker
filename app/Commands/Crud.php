@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Commands;
 
 use TypeRocket\Console\Command;
@@ -15,7 +16,7 @@ class Crud extends Command
     {
         $name = $this->getArgument('name');
         $force = $this->getOption('force');
-        
+
         if (!$name) {
             $this->error('Name argument is required');
             return;
@@ -31,20 +32,21 @@ class Crud extends Command
 
         // Generate each component
         $results = [];
-        
+
         try {
             $results['model'] = $this->generateModel($pascalCase, $force);
             $results['controller'] = $this->generateController($pascalCase, $force);
             $results['policy'] = $this->generatePolicy($pascalCase, $force);
             $results['fields'] = $this->generateFields($pascalCase, $force);
             $results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $force);
-            
+            $results['migration'] = $this->generateMigration($pascalCase, $force);
+
             // Summary
             $this->line('');
             $this->success('✓ CRUD generation completed successfully!');
             $this->line('');
             $this->info('Generated files:');
-            
+
             foreach ($results as $type => $files) {
                 if (is_array($files)) {
                     foreach ($files as $file) {
@@ -54,13 +56,12 @@ class Crud extends Command
                     $this->line("  - {$files}");
                 }
             }
-            
+
             $this->line('');
             $this->info('Next steps:');
             $this->line('1. Add routes for your controller in your routes file');
             $this->line('2. Run migrations if you created database tables');
             $this->line('3. Customize the generated files as needed');
-            
         } catch (\Exception $e) {
             $this->error('Error generating CRUD: ' . $e->getMessage());
         }
@@ -72,13 +73,13 @@ class Crud extends Command
         if ($force) {
             $command .= " --force";
         }
-        
+
         exec($command, $output, $return);
-        
+
         if ($return === 0) {
             return "app/Models/{$name}.php";
         }
-        
+
         throw new \Exception("Failed to generate Model: " . implode("\n", $output));
     }
 
@@ -88,13 +89,13 @@ class Crud extends Command
         if ($force) {
             $command .= " --force";
         }
-        
+
         exec($command, $output, $return);
-        
+
         if ($return === 0) {
             return "app/Controllers/{$name}Controller.php";
         }
-        
+
         throw new \Exception("Failed to generate Controller: " . implode("\n", $output));
     }
 
@@ -104,13 +105,13 @@ class Crud extends Command
         if ($force) {
             $command .= " --force";
         }
-        
+
         exec($command, $output, $return);
-        
+
         if ($return === 0) {
             return "app/Policies/{$name}Policy.php";
         }
-        
+
         throw new \Exception("Failed to generate Policy: " . implode("\n", $output));
     }
 
@@ -120,45 +121,63 @@ class Crud extends Command
         if ($force) {
             $command .= " --force";
         }
-        
+
         exec($command, $output, $return);
-        
+
         if ($return === 0) {
             return "app/Fields/{$name}Fields.php";
         }
-        
+
         throw new \Exception("Failed to generate Fields: " . implode("\n", $output));
+    }
+
+    protected function generateMigration($name, $force = false)
+    {
+        $migrationName = "create_{$this->toSnakeCase($name)}_table";
+        $command = "php galaxy_makermaker make:migration {$migrationName}";
+        if ($force) {
+            $command .= " --force";
+        }
+
+        exec($command, $output, $return);
+
+        if ($return === 0) {
+            // Migration files are typically timestamped, so we return a generic path
+            return "database/migrations/*_{$migrationName}.php";
+        }
+
+        throw new \Exception("Failed to generate Migration: " . implode("\n", $output));
     }
 
     protected function generateViews($pluralSnakeCase, $pascalCase, $force = false)
     {
         // Use the plugin's defined view path
-        $pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH') 
-            ? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH 
+        $pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')
+            ? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH
             : __DIR__ . '/../../resources/views';
-            
+
         $viewsDir = "{$pluginViewsPath}/{$pluralSnakeCase}";
-        
+
         // Create directory if it doesn't exist
         if (!is_dir($viewsDir)) {
             mkdir($viewsDir, 0755, true);
         }
-        
+
         $indexFile = "{$viewsDir}/index.php";
         $formFile = "{$viewsDir}/form.php";
-        
+
         // Generate index view
         if (!file_exists($indexFile) || $force) {
             $indexContent = $this->getIndexViewTemplate($pascalCase, $pluralSnakeCase);
             file_put_contents($indexFile, $indexContent);
         }
-        
+
         // Generate form view
         if (!file_exists($formFile) || $force) {
             $formContent = $this->getFormViewTemplate($pascalCase, $pluralSnakeCase);
             file_put_contents($formFile, $formContent);
         }
-        
+
         return array($indexFile, $formFile);
     }
 
@@ -166,7 +185,7 @@ class Crud extends Command
     {
         $modelVariable = lcfirst($pascalCase);
         $pluralModelVariable = $this->pluralize($modelVariable);
-        
+
         $template = "<?php\n";
         $template .= "/**\n";
         $template .= " * {$pascalCase} Index View\n";
@@ -175,14 +194,14 @@ class Crud extends Command
         $template .= " * Add your index/list functionality here.\n";
         $template .= " */\n";
         $template .= "?>";
-        
+
         return $template;
     }
 
     protected function getFormViewTemplate($pascalCase, $pluralSnakeCase)
     {
-        $modelVariable = lcfirst($pascalCase);
-        
+        $modelVariable = ucwords($pascalCase);
+
         $template = "<?php\n";
         $template .= "/**\n";
         $template .= " * {$pascalCase} Form View\n";
@@ -191,7 +210,7 @@ class Crud extends Command
         $template .= " * Add your form fields and functionality here.\n";
         $template .= " */\n";
         $template .= "?>";
-        
+
         return $template;
     }
 
