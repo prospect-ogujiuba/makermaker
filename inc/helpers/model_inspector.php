@@ -499,7 +499,7 @@ class TR_ModelInspector
         
         if ($filterType === 'select') {
             // Would need to query database for actual options
-            return 'dynamic'; // Indicates options should be loaded dynamically
+            return ['dynamic']; // Indicates options should be loaded dynamically
         }
         
         return [];
