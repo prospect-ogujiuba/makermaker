@@ -1,0 +1,66 @@
+-- Description:
+-- >>> Up >>>
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_deliverables`;
+CREATE TABLE `{!!prefix!!}srvc_deliverables` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
+  `updated_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
+  PRIMARY KEY (`id`),
+  KEY `idx_deliverable__name` (`name`),
+  KEY `idx_deliverable__deleted_at` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Deliverable items that can be associated with services';
+
+INSERT INTO `{!!prefix!!}srvc_deliverables` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+(1,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(2,	'Installation Plan',	'Step-by-step installation and deployment plan',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(3,	'Network Diagram',	'Complete network topology and connection diagrams',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(4,	'Equipment List',	'Detailed bill of materials and equipment specifications',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(5,	'Configuration Documentation',	'System configuration settings and parameters',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(6,	'Testing Report',	'Comprehensive system testing and validation results',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(7,	'User Manual',	'End-user operation and maintenance documentation',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(8,	'Training Materials',	'Training guides, videos, and reference materials',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(9,	'Warranty Documentation',	'Equipment warranties and service agreements',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(10,	'As-Built Documentation',	'Final installation documentation with actual configurations',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(11,	'Performance Baseline',	'Initial system performance metrics and benchmarks',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(12,	'Security Assessment',	'Security configuration review and recommendations',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(13,	'Compliance Certificate',	'Industry compliance and certification documentation',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(14,	'Maintenance Schedule',	'Recommended maintenance tasks and schedules',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(15,	'Emergency Procedures',	'Troubleshooting and emergency contact procedures',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
+(16,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(17,	'Installation Plan',	'Step-by-step installation and deployment plan',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(18,	'Network Diagram',	'Complete network topology and connection diagrams',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(19,	'Equipment List',	'Detailed bill of materials and equipment specifications',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(20,	'Configuration Documentation',	'System configuration settings and parameters',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(21,	'Testing Report',	'Comprehensive system testing and validation results',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(22,	'User Manual',	'End-user operation and maintenance documentation',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(23,	'Training Materials',	'Training guides, videos, and reference materials',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(24,	'Warranty Documentation',	'Equipment warranties and service agreements',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(25,	'As-Built Documentation',	'Final installation documentation with actual configurations',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(26,	'Performance Baseline',	'Initial system performance metrics and benchmarks',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(27,	'Security Assessment',	'Security configuration review and recommendations',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(28,	'Compliance Certificate',	'Industry compliance and certification documentation',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(29,	'Maintenance Schedule',	'Recommended maintenance tasks and schedules',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(30,	'Emergency Procedures',	'Troubleshooting and emergency contact procedures',	'2025-08-25 23:57:18',	'2025-08-25 23:57:18',	NULL,	NULL,	NULL),
+(31,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(32,	'Installation Plan',	'Step-by-step installation and deployment plan',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(33,	'Network Diagram',	'Complete network topology and connection diagrams',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(34,	'Equipment List',	'Detailed bill of materials and equipment specifications',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(35,	'Configuration Documentation',	'System configuration settings and parameters',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(36,	'Testing Report',	'Comprehensive system testing and validation results',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(37,	'User Manual',	'End-user operation and maintenance documentation',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(38,	'Training Materials',	'Training guides, videos, and reference materials',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(39,	'Warranty Documentation',	'Equipment warranties and service agreements',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(40,	'As-Built Documentation',	'Final installation documentation with actual configurations',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(41,	'Performance Baseline',	'Initial system performance metrics and benchmarks',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(42,	'Security Assessment',	'Security configuration review and recommendations',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(43,	'Compliance Certificate',	'Industry compliance and certification documentation',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(44,	'Maintenance Schedule',	'Recommended maintenance tasks and schedules',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL),
+(45,	'Emergency Procedures',	'Troubleshooting and emergency contact procedures',	'2025-08-25 23:57:29',	'2025-08-25 23:57:29',	NULL,	NULL,	NULL);
+
+-- >>> Down >>>
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_deliverables`;

@@ -12,6 +12,7 @@ $serviceSubpages = [
     createServiceResource('ServicePricingTier', 'ServicePricingTierController', 'Pricing Tiers'),
     createServiceResource('ServiceDeliveryMethod', 'ServiceDeliveryMethodController', 'Delivery Methods'),
     createServiceResource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
+    createServiceResource('ServiceDeliverable', 'ServiceDeliverableController', 'Deliverables'),
 ];
 
 // Add all subpages to the main service resource
