@@ -80,6 +80,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         // TODO: Add your TypeRocket policies here
         return [
             '\MakerMaker\Models\ServiceComplexity' => '\MakerMaker\Auth\ServiceComplexityPolicy',
+            '\MakerMaker\Models\ServicePricingModel' => '\MakerMaker\Auth\ServicePricingModelPolicy',
         ];
     }
 
