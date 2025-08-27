@@ -101,7 +101,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         System::updateSiteState('flush_rewrite_rules');
 
         // Uncomment the line below if you want to run migrations down on deactivation
-        $this->migrateDown();
+        // $this->migrateDown();
 
         // TODO: Add your plugin deactivation code here
     }
