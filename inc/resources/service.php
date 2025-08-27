@@ -14,6 +14,7 @@ $serviceSubpages = [
     createServiceResource('ServiceEquipment', 'ServiceEquipmentController', 'Equipment'),
     createServiceResource('ServiceType', 'ServiceTypeController', 'Types'),
     createServiceResource('ServiceCategory', 'ServiceCategoryController', 'Categories'),
+    createServiceResource('ServiceAttributeDefinition', 'ServiceAttributeDefinitionController', 'Attribute Definitions'),
 ];
 
 // Add all subpages to the main service resource
