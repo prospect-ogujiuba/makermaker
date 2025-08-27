@@ -1,7 +1,7 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_complexity`;
-CREATE TABLE `{!!prefix!!}srvc_complexity` (
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_complexities`;
+CREATE TABLE `{!!prefix!!}srvc_complexities` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `level` int(11) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexity` (
   KEY `idx_complexity__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Service complexity levels with associated pricing multipliers';
 
-INSERT INTO `{!!prefix!!}srvc_complexity` (`id`, `name`, `level`, `price_multiplier`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_complexities` (`id`, `name`, `level`, `price_multiplier`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Basic',	1,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (2,	'Standard',	2,	1.3000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (3,	'Professional',	3,	1.6000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
@@ -26,4 +26,4 @@ INSERT INTO `{!!prefix!!}srvc_complexity` (`id`, `name`, `level`, `price_multipl
 (5,	'Custom/Complex',	5,	3.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL);
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_complexity`;
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_complexities`;

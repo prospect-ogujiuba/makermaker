@@ -133,7 +133,7 @@ class Crud extends Command
 
     protected function generateMigration($name, $force = false)
     {
-        $migrationName = "create_{$this->toSnakeCase($name)}_table";
+        $migrationName = "create_{$this->toSnakeCase($this->pluralize($name))}_table";
         $command = "php galaxy_makermaker make:migration {$migrationName}";
         if ($force) {
             $command .= " --force";

@@ -1,7 +1,7 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tier`;
-CREATE TABLE `{!!prefix!!}srvc_pricing_tier` (
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tiers`;
+CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `code` varchar(64) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_tier` (
   KEY `idx_pricing_tier__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Pricing tiers: Retail, Partner, Enterprise, etc.';
 
-INSERT INTO `{!!prefix!!}srvc_pricing_tier` (`id`, `name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_pricing_tiers` (`id`, `name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Small Business',	'SMB',	1,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (2,	'Mid-Market',	'MID',	2,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (3,	'Enterprise',	'ENT',	3,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
@@ -26,4 +26,4 @@ INSERT INTO `{!!prefix!!}srvc_pricing_tier` (`id`, `name`, `code`, `sort_order`,
 (5,	'Non-Profit',	'NPO',	5,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL);
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tier`;
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tiers`;

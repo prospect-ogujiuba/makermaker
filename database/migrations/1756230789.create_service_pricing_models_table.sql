@@ -1,7 +1,7 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_model`;
-CREATE TABLE `{!!prefix!!}srvc_pricing_model` (
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_models`;
+CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `code` varchar(64) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_model` (
   KEY `idx_pricing_model__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Pricing models: fixed, hourly, per_unit, subscription, tiered, volume';
 
-INSERT INTO `{!!prefix!!}srvc_pricing_model` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_pricing_models` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Fixed Project',	'FIXED',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (2,	'Hourly Rate',	'HOURLY',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
 (3,	'Per Unit/Device',	'UNIT',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
@@ -26,4 +26,4 @@ INSERT INTO `{!!prefix!!}srvc_pricing_model` (`id`, `name`, `code`, `created_at`
 (7,	'Tiered Pricing',	'TIERED',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL);
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_model`;
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_models`;
