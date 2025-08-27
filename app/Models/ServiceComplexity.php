@@ -6,7 +6,7 @@ use TypeRocket\Models\Model;
 
 class ServiceComplexity extends Model
 {
-    protected $resource = 'srvc_complexity';
+    protected $resource = 'srvc_complexities';
 
     protected $format = [];
 

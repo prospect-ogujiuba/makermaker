@@ -6,7 +6,7 @@ use TypeRocket\Models\Model;
 
 class ServicePricingModel extends Model
 {
-    protected $resource = 'srvc_pricing_model';
+    protected $resource = 'srvc_pricing_models';
 
     protected $format = [];
 
