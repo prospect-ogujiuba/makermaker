@@ -1,9 +1,7 @@
 <?php
 
 // Main Service resource
-$service = tr_resource_pages('Service@\MakerMaker\Controllers\ServiceController', 'Services')
-    ->setIcon('cart')
-    ->setPosition(2);
+$service = createServiceResource('Service', 'ServiceController', 'Services')->setIcon('cart')->setPosition(2);
 
 // Create all service subpages
 $serviceSubpages = [
@@ -13,6 +11,7 @@ $serviceSubpages = [
     createServiceResource('ServiceDeliveryMethod', 'ServiceDeliveryMethodController', 'Delivery Methods'),
     createServiceResource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
     createServiceResource('ServiceDeliverable', 'ServiceDeliverableController', 'Deliverables'),
+    createServiceResource('ServiceEquipment', 'ServiceEquipmentController', 'Equipment'),
 ];
 
 // Add all subpages to the main service resource
