@@ -1,5 +1,5 @@
 <?php
 
-it('works', function () {
+it('integrates', function () {
     expect(true)->toBeTrue();
 });
