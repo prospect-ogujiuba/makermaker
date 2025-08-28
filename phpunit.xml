@@ -5,6 +5,7 @@
          colors="true"
          processIsolation="false"
          stopOnFailure="false">
+
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
@@ -15,15 +16,23 @@
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
+        <testsuite name="Acceptance">
+            <directory suffix="Test.php">./tests/Acceptance</directory>
+        </testsuite>
     </testsuites>
+
     <source>
         <include>
             <directory suffix=".php">./app</directory>
         </include>
     </source>
+
     <groups>
-        <group>unit</group>
-        <group>integration</group>
-        <group>feature</group>
+        <include>
+            <group>unit</group>
+            <group>integration</group>
+            <group>feature</group>
+            <group>acceptance</group>
+        </include>
     </groups>
 </phpunit>

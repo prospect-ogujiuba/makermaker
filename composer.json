@@ -23,9 +23,11 @@
   },
   "scripts": {
     "test": "pest",
-    "test:unit": "pest --group=unit", 
-    "test:integration": "pest --group=integration",
-    "test:watch": "pest --watch"
+    "test:unit": "pest --group=unit",
+    "test:quick": "pest --group=unit,smoke --testdox",
+    "test:ci": "pest --coverage --min=85",
+    "test:all": "pest --testsuite=Unit,Integration,Feature,Acceptance",
+    "test:affected": "pest --group!=slow,quarantine"
   },
   "config": {
     "allow-plugins": {
