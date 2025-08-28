@@ -11,7 +11,7 @@ class TR_ModelInspector
 {
     protected $model;
     protected $reflectionClass;
-    
+
     public function __construct($model)
     {
         $this->model = $model;
@@ -43,7 +43,7 @@ class TR_ModelInspector
     protected function getBasicInfo(): array
     {
         $className = $this->reflectionClass->getShortName();
-        
+
         return [
             'class_name' => $className,
             'full_class_name' => get_class($this->model),
@@ -63,19 +63,19 @@ class TR_ModelInspector
     {
         $properties = [];
         $reflectionProperties = $this->reflectionClass->getProperties(ReflectionProperty::IS_PROTECTED);
-        
+
         foreach ($reflectionProperties as $property) {
             $property->setAccessible(true);
             $name = $property->getName();
-            
+
             // Skip internal properties
             if (in_array($name, ['query', 'relationships', 'errors', 'composer'])) {
                 continue;
             }
-            
+
             $properties[$name] = $property->getValue($this->model);
         }
-        
+
         return $properties;
     }
 
@@ -88,7 +88,7 @@ class TR_ModelInspector
         $guarded = $this->getProperty('guard', []);
         $builtin = $this->getProperty('builtin', []);
         $metaless = $this->getProperty('metaless', []);
-        
+
         return [
             'fillable' => $fillable,
             'guarded' => $guarded,
@@ -107,26 +107,28 @@ class TR_ModelInspector
     {
         $relationships = [];
         $methods = $this->reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-        
+
         foreach ($methods as $method) {
             if ($method->class !== get_class($this->model)) {
                 continue;
             }
-            
+
             $methodName = $method->getName();
-            
+
             // Skip obvious non-relationship methods
-            if (in_array($methodName, ['__construct', '__toString', 'toArray', 'toJson']) ||
+            if (
+                in_array($methodName, ['__construct', '__toString', 'toArray', 'toJson']) ||
                 str_starts_with($methodName, 'get') ||
                 str_starts_with($methodName, 'set') ||
-                str_starts_with($methodName, 'is')) {
+                str_starts_with($methodName, 'is')
+            ) {
                 continue;
             }
-            
+
             try {
                 // Try to execute the method to see if it returns a relationship
                 $result = $method->invoke($this->model);
-                
+
                 if ($this->isRelationshipResult($result)) {
                     $relationships[$methodName] = $this->analyzeRelationship($result, $methodName);
                 }
@@ -139,7 +141,7 @@ class TR_ModelInspector
                 }
             }
         }
-        
+
         return $relationships;
     }
 
@@ -149,13 +151,13 @@ class TR_ModelInspector
     protected function getTableColumns(): array
     {
         global $wpdb;
-        
+
         $tableName = $this->model->getTable();
         $columns = [];
-        
+
         try {
             $results = $wpdb->get_results("SHOW COLUMNS FROM `{$tableName}`");
-            
+
             foreach ($results as $column) {
                 $columns[$column->Field] = [
                     'name' => $column->Field,
@@ -173,7 +175,7 @@ class TR_ModelInspector
             // Fallback to basic inspection
             $columns = $this->getBasicColumnInfo();
         }
-        
+
         return $columns;
     }
 
@@ -186,9 +188,9 @@ class TR_ModelInspector
         $fillable = $this->getProperty('fillable', []);
         $builtin = $this->getProperty('builtin', []);
         $searchable = [];
-        
+
         $searchableTypes = ['varchar', 'text', 'longtext', 'mediumtext', 'tinytext'];
-        
+
         foreach ($columns as $name => $info) {
             $isTextType = false;
             foreach ($searchableTypes as $type) {
@@ -197,7 +199,7 @@ class TR_ModelInspector
                     break;
                 }
             }
-            
+
             if ($isTextType) {
                 $searchable[$name] = [
                     'column' => $name,
@@ -207,7 +209,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         return $searchable;
     }
 
@@ -218,9 +220,9 @@ class TR_ModelInspector
     {
         $columns = $this->getTableColumns();
         $sortable = [];
-        
+
         $sortableTypes = ['int', 'bigint', 'decimal', 'float', 'double', 'datetime', 'timestamp', 'date', 'varchar'];
-        
+
         foreach ($columns as $name => $info) {
             $isSortableType = false;
             foreach ($sortableTypes as $type) {
@@ -229,7 +231,7 @@ class TR_ModelInspector
                     break;
                 }
             }
-            
+
             if ($isSortableType) {
                 $sortable[$name] = [
                     'column' => $name,
@@ -239,7 +241,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         return $sortable;
     }
 
@@ -251,7 +253,7 @@ class TR_ModelInspector
         $columns = $this->getTableColumns();
         $relationships = $this->getRelationships();
         $filterable = [];
-        
+
         foreach ($columns as $name => $info) {
             $filterType = $this->determineFilterType($info['type'], $name);
             if ($filterType) {
@@ -262,7 +264,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         // Add relationship filters
         foreach ($relationships as $name => $info) {
             if ($info['type'] === 'belongsTo' || $info['type'] === 'hasOne') {
@@ -274,7 +276,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         return $filterable;
     }
 
@@ -286,10 +288,10 @@ class TR_ModelInspector
         $columns = $this->getTableColumns();
         $relationships = $this->getRelationships();
         $displayColumns = [];
-        
+
         // Primary display column (usually name, title, or first text column)
         $primaryColumn = $this->findPrimaryDisplayColumn($columns);
-        
+
         // Build display columns with smart defaults
         foreach ($columns as $name => $info) {
             if ($this->shouldDisplayColumn($name, $info)) {
@@ -303,7 +305,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         // Add relationship display columns
         foreach ($relationships as $name => $info) {
             if ($info['display_in_index']) {
@@ -316,7 +318,7 @@ class TR_ModelInspector
                 ];
             }
         }
-        
+
         return [
             'columns' => $displayColumns,
             'primary_column' => $primaryColumn,
@@ -358,9 +360,9 @@ class TR_ModelInspector
     protected function isRelationshipResult($result): bool
     {
         // Check if result is a model query or model instance that indicates a relationship
-        return $result instanceof \TypeRocket\Models\Model || 
-               $result instanceof \TypeRocket\Database\Results ||
-               (is_object($result) && method_exists($result, 'getRelatedBy'));
+        return $result instanceof \TypeRocket\Models\Model ||
+            $result instanceof \TypeRocket\Database\Results ||
+            (is_object($result) && method_exists($result, 'getRelatedBy'));
     }
 
     protected function analyzeRelationship($result, string $methodName): array
@@ -373,13 +375,13 @@ class TR_ModelInspector
             'local_key' => null,
             'display_in_index' => $this->shouldDisplayRelationshipInIndex($methodName),
         ];
-        
+
         if (method_exists($result, 'getRelatedBy')) {
             $relatedBy = $result->getRelatedBy();
             if (isset($relatedBy['type'])) {
                 $info['type'] = $relatedBy['type'];
                 $info['model'] = get_class($result);
-                
+
                 if (isset($relatedBy['query'])) {
                     $query = $relatedBy['query'];
                     $info['foreign_key'] = $query['id_foreign'] ?? null;
@@ -387,14 +389,14 @@ class TR_ModelInspector
                 }
             }
         }
-        
+
         return $info;
     }
 
     protected function inferRelationshipFromMethod(ReflectionMethod $method): ?array
     {
         $methodName = $method->getName();
-        
+
         // Common relationship patterns
         if (str_ends_with($methodName, 's') && !in_array($methodName, ['class', 'exists'])) {
             return [
@@ -404,15 +406,15 @@ class TR_ModelInspector
                 'display_in_index' => false,
             ];
         }
-        
+
         return null;
     }
 
     protected function mapSqlTypeToPhp(string $sqlType): string
     {
         $type = strtolower(explode('(', $sqlType)[0]);
-        
-        return match($type) {
+
+        return match ($type) {
             'int', 'bigint', 'smallint', 'tinyint', 'mediumint' => 'integer',
             'decimal', 'float', 'double' => 'float',
             'varchar', 'char', 'text', 'longtext', 'mediumtext', 'tinytext' => 'string',
@@ -428,63 +430,147 @@ class TR_ModelInspector
         // Higher weight for more important fields
         $highWeight = ['name', 'title', 'subject', 'headline'];
         $mediumWeight = ['description', 'content', 'body', 'text'];
-        
+
         foreach ($highWeight as $field) {
             if (str_contains(strtolower($columnName), $field)) {
                 return 10;
             }
         }
-        
+
         foreach ($mediumWeight as $field) {
             if (str_contains(strtolower($columnName), $field)) {
                 return 5;
             }
         }
-        
+
         return 1;
     }
 
     protected function getDefaultSortDirection(string $columnName, string $type): string
     {
         // Dates and IDs usually sort DESC (newest first)
-        if (str_contains($columnName, 'created') || 
-            str_contains($columnName, 'updated') || 
+        if (
+            str_contains($columnName, 'created') ||
+            str_contains($columnName, 'updated') ||
             str_contains($columnName, 'date') ||
-            $columnName === 'id') {
+            $columnName === 'id'
+        ) {
             return 'DESC';
         }
-        
+
         return 'ASC';
     }
+
+    /**
+     * Enhanced determineFilterType method for model_inspector.php
+     * This fixes the issue where basic text fields (name, description, code, sku) 
+     * weren't being auto-detected as filterable.
+     */
 
     protected function determineFilterType(string $sqlType, string $columnName): ?string
     {
         $type = strtolower(explode('(', $sqlType)[0]);
-        
+        $columnLower = strtolower($columnName);
+
+        // Skip system/internal fields
+        if (in_array($columnLower, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+            return null;
+        }
+
         // Boolean fields
-        if (str_contains($columnName, 'is_') || 
-            str_contains($columnName, 'has_') ||
-            in_array($type, ['boolean', 'bool', 'tinyint(1)'])) {
+        if (
+            str_contains($columnLower, 'is_') ||
+            str_contains($columnLower, 'has_') ||
+            str_contains($columnLower, 'can_') ||
+            in_array($type, ['boolean', 'bool']) ||
+            $type === 'tinyint' && str_contains($sqlType, '(1)')
+        ) {
             return 'boolean';
         }
-        
+
         // Date fields
         if (in_array($type, ['date', 'datetime', 'timestamp'])) {
             return 'date_range';
         }
-        
-        // Numeric fields
+
+        // Numeric fields - use range for better filtering
         if (in_array($type, ['int', 'bigint', 'decimal', 'float', 'double'])) {
             return 'number_range';
         }
-        
-        // Status or type fields
-        if (str_contains($columnName, 'status') || 
-            str_contains($columnName, 'type') ||
-            str_contains($columnName, 'category')) {
+
+        // Status, type, or category fields - use select dropdown
+        if (
+            str_contains($columnLower, 'status') ||
+            str_contains($columnLower, 'type') ||
+            str_contains($columnLower, 'category') ||
+            str_contains($columnLower, 'state') ||
+            str_contains($columnLower, 'level')
+        ) {
             return 'select';
         }
-        
+
+        // Email fields
+        if (str_contains($columnLower, 'email')) {
+            return 'email';
+        }
+
+        // URL fields  
+        if (str_contains($columnLower, 'url') || str_contains($columnLower, 'link')) {
+            return 'url';
+        }
+
+        // Phone fields
+        if (str_contains($columnLower, 'phone') || str_contains($columnLower, 'tel')) {
+            return 'tel';
+        }
+
+        // TEXT FIELDS - This is the key addition!
+        // Handle all text-based fields that should be searchable
+        if (in_array($type, ['varchar', 'char', 'text', 'longtext', 'mediumtext', 'tinytext'])) {
+
+            // Large text fields get textarea for better UX
+            if (
+                in_array($type, ['text', 'longtext', 'mediumtext']) ||
+                str_contains($columnLower, 'description') ||
+                str_contains($columnLower, 'content') ||
+                str_contains($columnLower, 'body') ||
+                str_contains($columnLower, 'notes') ||
+                str_contains($columnLower, 'comment')
+            ) {
+                return 'textarea';
+            }
+
+            // Code, SKU, and similar fields get specific text input
+            if (
+                str_contains($columnLower, 'code') ||
+                str_contains($columnLower, 'sku') ||
+                str_contains($columnLower, 'slug') ||
+                str_contains($columnLower, 'key')
+            ) {
+                return 'text';  // Could also be 'search' for better UX
+            }
+
+            // Name fields and other short text
+            if (
+                str_contains($columnLower, 'name') ||
+                str_contains($columnLower, 'title') ||
+                str_contains($columnLower, 'label') ||
+                str_contains($columnLower, 'tag')
+            ) {
+                return 'search';  // Use search input type for better UX
+            }
+
+            // Default for all other text fields
+            return 'text';
+        }
+
+        // JSON fields - could be searchable in some cases
+        if ($type === 'json') {
+            return 'textarea';  // Allow JSON searching as text
+        }
+
+        // If we don't recognize it but it looks searchable, default to text
+        // This ensures we don't miss filterable fields
         return null;
     }
 
@@ -496,32 +582,32 @@ class TR_ModelInspector
                 '0' => 'No'
             ];
         }
-        
+
         if ($filterType === 'select') {
             // Would need to query database for actual options
             return ['dynamic']; // Indicates options should be loaded dynamically
         }
-        
+
         return [];
     }
 
     protected function findPrimaryDisplayColumn(array $columns): string
     {
         $priorities = ['name', 'title', 'subject', 'headline', 'label'];
-        
+
         foreach ($priorities as $priority) {
             if (isset($columns[$priority])) {
                 return $priority;
             }
         }
-        
+
         // Fallback to first text column
         foreach ($columns as $name => $info) {
             if ($info['php_type'] === 'string' && $name !== 'id') {
                 return $name;
             }
         }
-        
+
         return 'id';
     }
 
@@ -529,18 +615,18 @@ class TR_ModelInspector
     {
         // Skip certain columns
         $skipColumns = ['password', 'token', 'secret', 'hash'];
-        
+
         foreach ($skipColumns as $skip) {
             if (str_contains(strtolower($name), $skip)) {
                 return false;
             }
         }
-        
+
         // Skip very long text fields in index
         if (str_contains(strtolower($info['type']), 'longtext')) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -548,13 +634,13 @@ class TR_ModelInspector
     {
         // Only show belongsTo relationships by default
         $showInIndex = ['user', 'author', 'category', 'type', 'status', 'parent'];
-        
+
         foreach ($showInIndex as $show) {
             if (str_contains(strtolower($methodName), $show)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -573,7 +659,7 @@ class TR_ModelInspector
         if (str_contains($name, 'date')) return 'date';
         if (str_contains($name, 'image') || str_contains($name, 'photo')) return 'image';
         if ($info['php_type'] === 'boolean') return 'boolean';
-        
+
         return null;
     }
 
@@ -666,7 +752,7 @@ function tr_model_info($model): array
 function tr_smart_table($model, array $overrides = []): array
 {
     $modelInfo = tr_model_info($model);
-    
+
     $config = [
         'columns' => [],
         'searchable' => [],
@@ -675,7 +761,7 @@ function tr_smart_table($model, array $overrides = []): array
         'actions' => $modelInfo['display']['actions'],
         'per_page' => $modelInfo['display']['default_per_page'],
     ];
-    
+
     // Build columns for table
     foreach ($modelInfo['display']['columns'] as $name => $column) {
         $config['columns'][$name] = [
@@ -683,12 +769,12 @@ function tr_smart_table($model, array $overrides = []): array
             'sort' => $column['sortable'],
             'actions' => $column['primary'] ? $config['actions'] : false,
         ];
-        
+
         if ($column['searchable']) {
             $config['searchable'][] = $name;
         }
     }
-    
+
     // Merge with any overrides
     return array_merge_recursive($config, $overrides);
 }
@@ -700,7 +786,7 @@ function tr_smart_filters($model): array
 {
     $modelInfo = tr_model_info($model);
     $filters = [];
-    
+
     foreach ($modelInfo['filterable'] as $name => $config) {
         $filters[$name] = [
             'type' => $config['type'],
@@ -708,7 +794,7 @@ function tr_smart_filters($model): array
             'options' => $config['options'],
         ];
     }
-    
+
     return $filters;
 }
 

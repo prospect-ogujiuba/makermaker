@@ -8,7 +8,3 @@
  */
 // Simple form with auto-detected fields
 // Auto-configured tabs with smart field distribution
-
-$tabs = tr_form_tabs(\MakerMaker\Models\ServiceComplexity::class);
-$tabs->setFooter($form->submit('Save Changes'));
-$tabs->render();
