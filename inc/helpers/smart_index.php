@@ -166,7 +166,7 @@ function tr_apply_smart_configuration($table, array $modelInfo, array $overrides
         $columns[$name] = [
             'label' => $config['label'],
             'sort' => $config['sortable'],
-            'actions' => $config['primary'] ? ['edit', 'delete'] : false,
+            'actions' => $config['primary'] ? ['edit', 'view', 'delete'] : false,
         ];
     }
     $table->setColumns($columns, $modelInfo['display']['primary_column']);
