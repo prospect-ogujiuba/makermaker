@@ -14,7 +14,7 @@ CREATE TABLE `{!!prefix!!}srvc_delivery_methods` (
   UNIQUE KEY `uq_delivery_method__name` (`name`),
   UNIQUE KEY `uq_delivery_method__code` (`code`),
   KEY `idx_delivery_method__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Delivery methods: On-site, Remote, Ship, Pickup, etc.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Delivery methods: On-site, Remote, Ship, Pickup, etc.';
 
 INSERT INTO `{!!prefix!!}srvc_delivery_methods` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1, 'On-Site Installation', 'ONSITE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),

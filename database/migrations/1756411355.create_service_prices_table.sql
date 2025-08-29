@@ -30,7 +30,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_prices` (
   CONSTRAINT `fk_service_price__pricing_model` FOREIGN KEY (`pricing_model_id`) REFERENCES `{!!prefix!!}srvc_pricing_models` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_price__pricing_tier` FOREIGN KEY (`pricing_tier_id`) REFERENCES `{!!prefix!!}srvc_pricing_tiers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_price__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Service pricing with effective date ranges';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service pricing with effective date ranges';
 
 DROP TRIGGER IF EXISTS `tr_service_price_overlap_check`;
 CREATE TRIGGER `tr_service_price_overlap_check` BEFORE INSERT ON `{!!prefix!!}srvc_service_prices` FOR EACH ROW BEGIN DECLARE overlap_count INT DEFAULT 0; SELECT COUNT(*) INTO overlap_count FROM `{!!prefix!!}srvc_service_prices` sp WHERE sp.service_id = NEW.service_id AND sp.pricing_tier_id = NEW.pricing_tier_id AND sp.pricing_model_id = NEW.pricing_model_id AND ( (NEW.effective_from BETWEEN sp.effective_from AND COALESCE(sp.effective_to, '9999-12-31')) OR (COALESCE(NEW.effective_to, '9999-12-31') BETWEEN sp.effective_from AND COALESCE(sp.effective_to, '9999-12-31')) OR (sp.effective_from BETWEEN NEW.effective_from AND COALESCE(NEW.effective_to, '9999-12-31')) ); IF overlap_count > 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Overlapping service price ranges not allowed for same service/tier/model combination'; END IF; END;

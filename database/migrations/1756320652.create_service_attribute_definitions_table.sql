@@ -21,7 +21,7 @@ CREATE TABLE `{!!prefix!!}srvc_attribute_definitions` (
   KEY `idx_attribute_definition__code` (`code`),
   KEY `idx_attribute_definition__deleted_at` (`deleted_at`),
   CONSTRAINT `fk_attribute_definition__service_type` FOREIGN KEY (`service_type_id`) REFERENCES `{!!prefix!!}srvc_service_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Parametric attribute definitions per service type';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Parametric attribute definitions per service type';
 
 INSERT INTO `{!!prefix!!}srvc_attribute_definitions` (`id`, `service_type_id`, `code`, `label`, `data_type`, `enum_options`, `unit`, `required`, `created_at`, `updated_at`) VALUES
 (1,	1,	'user_count',	'Number of Users',	'int',	NULL,	'users',	1,	NOW(),	NOW()),

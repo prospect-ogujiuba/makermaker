@@ -35,7 +35,7 @@ CREATE TABLE `{!!prefix!!}srvc_services` (
   CONSTRAINT `fk_service__category` FOREIGN KEY (`category_id`) REFERENCES `{!!prefix!!}srvc_categories` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service__complexity` FOREIGN KEY (`complexity_id`) REFERENCES `{!!prefix!!}srvc_complexities` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service__service_type` FOREIGN KEY (`service_type_id`) REFERENCES `{!!prefix!!}srvc_service_types` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Core service catalog entries';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Core service catalog entries';
 
 INSERT INTO `{!!prefix!!}srvc_services` (`id`, `sku`, `slug`, `name`, `short_desc`, `long_desc`, `category_id`, `service_type_id`, `complexity_id`, `is_active`, `is_addon`, `default_unit`, `metadata`, `version`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'VOIP-SYS-BASIC',	'voip-system-basic',	'Basic VoIP System',	'Entry-level VoIP phone system for small offices',	'Complete VoIP phone system including IP PBX, desk phones, and basic features like voicemail, call forwarding, and auto-attendant. Perfect for small businesses with up to 25 users.',	5,	1,	1,	1,	0,	'users',	NULL,	1,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

@@ -14,7 +14,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
   UNIQUE KEY `uq_pricing_model__name` (`name`),
   UNIQUE KEY `uq_pricing_model__code` (`code`),
   KEY `idx_pricing_model__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Pricing models: fixed, hourly, per_unit, subscription, tiered, volume';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Pricing models: fixed, hourly, per_unit, subscription, tiered, volume';
 
 INSERT INTO `{!!prefix!!}srvc_pricing_models` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Fixed Project',	'FIXED',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

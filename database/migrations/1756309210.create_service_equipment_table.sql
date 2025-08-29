@@ -17,7 +17,7 @@ CREATE TABLE `{!!prefix!!}srvc_equipment` (
   KEY `idx_equipment__name` (`name`),
   KEY `idx_equipment__manufacturer` (`manufacturer`),
   KEY `idx_equipment__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Equipment catalog items';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Equipment catalog items';
 
 INSERT INTO `{!!prefix!!}srvc_equipment` (`id`, `sku`, `name`, `manufacturer`, `specs`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'VOIP-PBX-001',	'VoIP PBX System',	'Cisco',	'{\"model\": \"UC560\", \"ports\": 24, \"users\": 50, \"features\": [\"SIP\", \"H.323\", \"PoE\"]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

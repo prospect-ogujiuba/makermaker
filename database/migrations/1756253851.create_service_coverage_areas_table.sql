@@ -15,7 +15,7 @@ CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
   UNIQUE KEY `uq_coverage_area__code` (`code`),
   KEY `idx_coverage_area__name` (`name`),
   KEY `idx_coverage_area__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Geographic coverage areas for service delivery';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Geographic coverage areas for service delivery';
 
 INSERT INTO `{!!prefix!!}srvc_coverage_areas` (`id`, `code`, `name`, `geo`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'GTA',	'Greater Toronto Area',	'{\"type\": \"Polygon\", \"coordinates\": [[[-79.6, 43.5], [-79.6, 43.9], [-79.1, 43.9], [-79.1, 43.5], [-79.6, 43.5]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

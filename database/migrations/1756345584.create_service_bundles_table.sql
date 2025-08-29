@@ -16,7 +16,7 @@ CREATE TABLE `{!!prefix!!}srvc_bundles` (
   UNIQUE KEY `uq_bundle__slug` (`slug`),
   KEY `idx_bundle__is_active` (`is_active`),
   KEY `idx_bundle__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Service bundles for grouped offerings';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service bundles for grouped offerings';
 
 INSERT INTO `{!!prefix!!}srvc_bundles` (`id`, `name`, `slug`, `short_desc`, `is_active`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Small Office Complete',	'small-office-complete',	'Complete IT solution for small offices (5-15 employees)',	1,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

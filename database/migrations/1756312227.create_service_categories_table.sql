@@ -18,7 +18,7 @@ CREATE TABLE `{!!prefix!!}srvc_categories` (
   KEY `idx_category__path` (`path`),
   KEY `idx_category__deleted_at` (`deleted_at`),
   CONSTRAINT `fk_category__parent` FOREIGN KEY (`parent_id`) REFERENCES `{!!prefix!!}srvc_categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Hierarchical service categorization';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Hierarchical service categorization';
 
 INSERT INTO `{!!prefix!!}srvc_categories` (`id`, `parent_id`, `name`, `slug`, `path`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1, NULL, 'Telecommunications', 'telecommunications', '/telecommunications', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),

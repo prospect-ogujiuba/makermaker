@@ -16,7 +16,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexities` (
   UNIQUE KEY `uq_complexity__level` (`level`),
   KEY `idx_complexity__level` (`level`),
   KEY `idx_complexity__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Service complexity levels with associated pricing multipliers';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service complexity levels with associated pricing multipliers';
 
 INSERT INTO `{!!prefix!!}srvc_complexities` (`id`, `name`, `level`, `price_multiplier`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'Basic',	1,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),

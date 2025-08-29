@@ -13,7 +13,7 @@ CREATE TABLE `{!!prefix!!}srvc_deliverables` (
   PRIMARY KEY (`id`),
   KEY `idx_deliverable__name` (`name`),
   KEY `idx_deliverable__deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Deliverable items that can be associated with services';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Deliverable items that can be associated with services';
 
 INSERT INTO `{!!prefix!!}srvc_deliverables` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 (1,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
