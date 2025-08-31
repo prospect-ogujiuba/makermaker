@@ -16,15 +16,5 @@ CREATE TABLE `{!!prefix!!}srvc_delivery_methods` (
   KEY `idx_delivery_method__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Delivery methods: On-site, Remote, Ship, Pickup, etc.';
 
-INSERT INTO `{!!prefix!!}srvc_delivery_methods` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1, 'On-Site Installation', 'ONSITE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(2, 'Remote Configuration', 'REMOTE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(3, 'Hybrid (On-site + Remote)', 'HYBRID', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(4, 'Client Self-Install', 'SELFINSTALL', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(5, 'White Glove Service', 'WHITEGLOVE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(6, 'Pickup', 'PICKUP', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(7, 'Shipping/Delivery', 'SHIPPING', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(8, 'In-Store Service', 'INSTORE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL);
-
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_delivery_methods`;

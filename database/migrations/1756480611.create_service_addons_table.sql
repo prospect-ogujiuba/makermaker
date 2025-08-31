@@ -28,20 +28,6 @@ CREATE TRIGGER `tr_service_addon_no_self_ref` BEFORE INSERT ON `{!!prefix!!}srvc
 DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref_update`;
 CREATE TRIGGER `tr_service_addon_no_self_ref_update` BEFORE UPDATE ON `{!!prefix!!}srvc_service_addons` FOR EACH ROW BEGIN IF NEW.service_id = NEW.addon_service_id THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Service cannot be an addon to itself';END IF; END;
 
-INSERT INTO `{!!prefix!!}srvc_service_addons` (`service_id`, `addon_service_id`, `required`, `min_qty`, `max_qty`, `price_delta`, `multiplier`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
-(1,	4,	1,	1.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(1,	14,	0,	0.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(2,	4,	1,	1.000,	1.000,	NULL,	1.2000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(2,	15,	0,	0.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(3,	4,	1,	1.000,	1.000,	NULL,	1.5000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(3,	15,	0,	0.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(8,	5,	0,	0.000,	NULL,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(9,	6,	0,	0.000,	NULL,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(10,	7,	0,	0.000,	NULL,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(11,	16,	0,	0.000,	1.000,	-10.00,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(12,	17,	0,	0.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
-(13,	17,	1,	1.000,	1.000,	NULL,	1.0000,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL);
-
 -- >>> Down >>>
 DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref`;
 DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref_update`;

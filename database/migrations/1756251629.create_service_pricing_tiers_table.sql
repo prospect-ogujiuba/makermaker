@@ -18,12 +18,5 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
   KEY `idx_pricing_tier__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Pricing tiers: Retail, Partner, Enterprise, etc.';
 
-INSERT INTO `{!!prefix!!}srvc_pricing_tiers` (`id`, `name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'Small Business',	'SMB',	1,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(2,	'Mid-Market',	'MID',	2,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(3,	'Enterprise',	'ENT',	3,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(4,	'Government',	'GOV',	4,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(5,	'Non-Profit',	'NPO',	5,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL);
-
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tiers`;

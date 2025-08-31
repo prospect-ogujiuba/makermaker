@@ -15,7 +15,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
   KEY `idx_service_equipment__equipment_id` (`equipment_id`),
   CONSTRAINT `fk_service_equipment__equipment` FOREIGN KEY (`equipment_id`) REFERENCES `{!!prefix!!}srvc_equipment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_service_equipment__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Equipment requirements for services';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Equipment requirements for services';
 
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_service_equipment_assignments`;

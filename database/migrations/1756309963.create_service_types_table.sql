@@ -16,17 +16,5 @@ CREATE TABLE `{!!prefix!!}srvc_service_types` (
   KEY `idx_service_type__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Defines types of services offered (e.g., consulting, hosting, support)';
 
-INSERT INTO `{!!prefix!!}srvc_service_types` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1, 'Installation Services', 'INSTALL', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(2, 'Maintenance & Support', 'SUPPORT', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(3, 'Consulting Services', 'CONSULT', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(4, 'Training Services', 'TRAINING', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(5, 'Configuration Services', 'CONFIG', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(6, 'Repair Services', 'REPAIR', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(7, 'Upgrade Services', 'UPGRADE', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(8, 'Design & Planning', 'DESIGN', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(9, 'Monitoring Services', 'MONITOR', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL),
-(10, 'Emergency Services', 'EMERGENCY', '2025-08-25 23:57:07', '2025-08-25 23:57:07', NULL, NULL, NULL);
-
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_service_types`;

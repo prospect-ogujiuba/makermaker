@@ -17,12 +17,5 @@ CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
   KEY `idx_coverage_area__deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Geographic coverage areas for service delivery';
 
-INSERT INTO `{!!prefix!!}srvc_coverage_areas` (`id`, `code`, `name`, `geo`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'GTA',	'Greater Toronto Area',	'{\"type\": \"Polygon\", \"coordinates\": [[[-79.6, 43.5], [-79.6, 43.9], [-79.1, 43.9], [-79.1, 43.5], [-79.6, 43.5]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(2,	'ON-SW',	'Southwest Ontario',	'{\"type\": \"Polygon\", \"coordinates\": [[[-82.5, 42.0], [-82.5, 44.5], [-80.0, 44.5], [-80.0, 42.0], [-82.5, 42.0]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(3,	'ON-CENTRAL',	'Central Ontario',	'{\"type\": \"Polygon\", \"coordinates\": [[[-80.0, 43.0], [-80.0, 45.5], [-77.0, 45.5], [-77.0, 43.0], [-80.0, 43.0]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(4,	'ON-EAST',	'Eastern Ontario',	'{\"type\": \"Polygon\", \"coordinates\": [[[-77.0, 44.0], [-77.0, 46.0], [-74.5, 46.0], [-74.5, 44.0], [-77.0, 44.0]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL),
-(5,	'ON-NORTH',	'Northern Ontario',	'{\"type\": \"Polygon\", \"coordinates\": [[[-90.0, 46.0], [-90.0, 52.0], [-79.0, 52.0], [-79.0, 46.0], [-90.0, 46.0]]]}',	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL,	NULL);
-
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_coverage_areas`;
