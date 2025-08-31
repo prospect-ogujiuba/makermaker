@@ -14,7 +14,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_coverage` (
   KEY `idx_service_coverage__service_id` (`service_id`),
   CONSTRAINT `fk_service_coverage__coverage_area` FOREIGN KEY (`coverage_area_id`) REFERENCES `{!!prefix!!}srvc_coverage_areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_service_coverage__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Service availability in coverage areas';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service availability in coverage areas';
 
 INSERT INTO `{!!prefix!!}srvc_service_coverage` (`service_id`, `coverage_area_id`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1,	1,	'2025-08-25 23:57:07',	'2025-08-25 23:57:07',	NULL,	NULL),
