@@ -21,6 +21,7 @@ $serviceSubpages = [
     createServiceResource('ServiceAttributeValue', 'ServiceAttributeValueController', 'Attribute Values'),
     createServiceResource('ServiceCoverage', 'ServiceCoverageController', 'Service Coverages'),
     createServiceResource('ServiceDeliverableAssignment', 'ServiceDeliverableAssignmentController', 'Service Deliverables'),
+    createServiceResource('ServiceDeliveryMethodAssignment', 'ServiceDeliveryMethodAssignmentController', 'Service Delivery Methods'),
 ];
 
 // Add all subpages to the main service resource
