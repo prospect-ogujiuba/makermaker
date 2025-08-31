@@ -47,6 +47,7 @@ function typerocket_plugin_makermaker() {
         'model_inspector',
         'smart_index',
         'smart_form',
+        'model_debug',
     ];
     
     foreach ($includes as $include) {
