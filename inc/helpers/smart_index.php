@@ -584,9 +584,10 @@ function tr_render_select_filter(string $field, $value, array $config, string $m
         tr_render_dynamic_select_options($field, $modelClass, $value);
     } elseif (is_callable($options)) {
         tr_render_callback_select_options($options, $value);
-    } else {
-        tr_render_static_select_options($options, $value, $config['multiple']);
-    }
+    } 
+    // else {
+    //     tr_render_static_select_options($options, $value, $config['multiple']);
+    // }
     
     echo '</select>';
 }
