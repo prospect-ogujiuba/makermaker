@@ -3,11 +3,11 @@
 
 -- Complexities
 INSERT INTO `{!!prefix!!}srvc_complexities` (`id`, `name`, `level`, `price_multiplier`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'Basic',	1,	1.0000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(2,	'Standard',	2,	1.3000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(3,	'Professional',	3,	1.6000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(4,	'Enterprise',	4,	2.2000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(5,	'Custom/Complex',	5,	3.0000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL);
+(1,	'Basic',	1,	1.0000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(2,	'Standard',	2,	1.3000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(3,	'Professional',	3,	1.6000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(4,	'Enterprise',	4,	2.2000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(5,	'Custom/Complex',	5,	3.0000,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
 
 -- Pricing Models
 INSERT INTO `{!!prefix!!}srvc_pricing_models` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES

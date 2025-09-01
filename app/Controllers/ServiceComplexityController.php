@@ -7,6 +7,8 @@ use MakerMaker\Http\Fields\ServiceComplexityFields;
 use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
 use MakerMaker\View;
+use TypeRocket\Models\AuthUser;
+use TypeRocket\Models\WPUser;
 
 class ServiceComplexityController extends Controller
 {
@@ -25,12 +27,9 @@ class ServiceComplexityController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        $form = tr_form(ServiceComplexity::class)->useErrors()->useOld();;
-        $button = 'Add';
-
-        return View::new('service_complexities.form', compact('form', 'button'));
+        return View::new('service_complexities.form', compact( 'user'));
     }
 
     /**
@@ -40,32 +39,31 @@ class ServiceComplexityController extends Controller
      *
      * @return mixed
      */
-    public function create(ServiceComplexityFields $fields, ServiceComplexity $info_session, Response $response)
+    public function create(ServiceComplexityFields $fields, ServiceComplexity $service_complexity, Response $response, AuthUser $user)
     {
 
-        if (!$info_session->can('create')) {
+        if (!$service_complexity->can('create')) {
             $response->unauthorized('Unauthorized: ServiceComplexity not created')->abort();
         }
 
-        $info_session->save($fields);
+        $service_complexity->created_by = $user->getID;
+        $service_complexity->updated_by = $user->getID;
+        $service_complexity->save($fields);
 
-        return tr_redirect()->toPage('serviceComplexity', 'index')
-            ->withFlash('Info Session Created');
+        return tr_redirect()->toPage('servicecomplexity', 'index')
+            ->withFlash('Service Complexity Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServiceComplexity $info_session
+     * @param string|ServiceComplexity $service_complexity
      *
      * @return mixed
      */
-    public function edit(ServiceComplexity $info_session)
+    public function edit(ServiceComplexity $service_complexity, AuthUser $user)
     {
-        $form = tr_form($info_session)->useErrors()->useOld();;
-        $button = 'Update';
-
-        return View::new('service_complexities.form', compact('form', 'button'));
+        return View::new('service_complexities.form', compact('service_complexity', 'user'));
     }
 
     /**
@@ -73,64 +71,151 @@ class ServiceComplexityController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceComplexity $info_session
+     * @param string|ServiceComplexity $service_complexity
      *
      * @return mixed
      */
-    public function update(ServiceComplexity $info_session, ServiceComplexityFields $fields, Response $response)
+    public function update(ServiceComplexity $service_complexity, ServiceComplexityFields $fields, Response $response)
     {
 
-        if (!$info_session->can('update')) {
+        if (!$service_complexity->can('update')) {
             $response->unauthorized('Unauthorized: ServiceComplexity not updated')->abort();
         }
 
-        $info_session->save($fields);
+        $service_complexity->save($fields);
 
-        return tr_redirect()->toPage('serviceComplexity', 'edit', $info_session->getID())
+        return tr_redirect()->toPage('servicecomplexity', 'edit', $service_complexity->getID())
             ->withFlash('Info Session Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServiceComplexity $info_session
+     * @param string|ServiceComplexity $service_complexity
      *
      * @return mixed
      */
-    public function show(ServiceComplexity $info_session)
+    public function show(ServiceComplexity $service_complexity)
     {
-        // TODO: Implement show() method.
+        return $service_complexity->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServiceComplexity $info_session
+     * @param string|ServiceComplexity $service_complexity
      *
      * @return mixed
      */
-    public function delete(ServiceComplexity $info_session)
+    public function delete(ServiceComplexity $service_complexity)
     {
         // TODO: Implement delete() method.
     }
 
-    /**
-     * Destroy item
-     *
-     * AJAX requests and normal requests can be made to this action
-     *
-     * @param string|ServiceComplexity $info_session
-     *
-     * @return mixed
+    /** 
+     * Destroy item 
+     * 
+     * AJAX requests and normal requests can be made to this action 
+     * 
+     * @param string|ServiceComplexity $service_complexity 
+     * 
+     * @return mixed 
      */
-    public function destroy(ServiceComplexity $info_session, Response $response)
+    public function destroy(ServiceComplexity $service_complexity, Response $response)
     {
-        if (!$info_session->can('destroy')) {
-            $response->unauthorized('Unauthorized: ServiceComplexity not deleted')->abort();
+
+        if (!$service_complexity->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServiceComplexity not deleted');
         }
 
-        $info_session->delete();
+        // Check if this complexity is still being used by services using TypeRocket relationship
+        $servicesCount = $service_complexity->services()->count();
 
-        return $response->warning('ServiceComplexity Deleted');
+        if ($servicesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicesCount} service(s) still use this complexity. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        // Attempt to delete using TypeRocket's delete method
+        $deleted = $service_complexity->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('ServiceComplexity deleted.')->setData('service_complexity', $service_complexity);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response|array
+     */
+
+    public function indexRest()
+    {
+        try {
+            $serviceComplexities = ServiceComplexity::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->get();
+            if (empty($serviceComplexities)) {
+                return \TypeRocket\Http\Response::getFromContainer()
+                    ->setData('service_complexities', [])
+                    ->setMessage('No service complexities found', 'info')
+                    ->setStatus(200);
+            }
+            return \TypeRocket\Http\Response::getFromContainer()
+                ->setData('service_complexities', $serviceComplexities)
+                ->setMessage('Service complexities retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceComplexity indexRest error: ' . $e->getMessage());
+            return \TypeRocket\Http\Response::getFromContainer()
+                ->setError('api', 'Failed to retrieve service complexities')
+                ->setMessage('An error occurred while retrieving service complexities', 'error')
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The index function for API
+     *
+     * Returns all service complexities with their related services.
+     * Includes error handling and response formatting following TypeRocket patterns.
+     *
+     * @return \TypeRocket\Http\Response|array
+     */
+    public function showRest(ServiceComplexity $service_complexity)
+    {
+        try {
+            // Get the service complexity records with eager loaded services relationship
+            $service_complexity = ServiceComplexity::new()->with(['services', 'createdBy', 'updatedBy'])->find($service_complexity->getID());
+
+            // Check if we have any results
+            if (empty($service_complexity)) {
+                return \TypeRocket\Http\Response::getFromContainer()
+                    ->setData('service_complexity', [])
+                    ->setMessage('No service complexity found', 'info')
+                    ->setStatus(200);
+            }
+
+            // Return successful response with data
+            return \TypeRocket\Http\Response::getFromContainer()
+                ->setData('service_complexity', $service_complexity)
+                ->setMessage('Service complexity retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            error_log('ServiceComplexity showRest error: ' . $e->getMessage());
+
+            // Return error response
+            return \TypeRocket\Http\Response::getFromContainer()
+                ->setError('api', 'Failed to retrieve service complexity')
+                ->setMessage('An error occurred while retrieving service complexity', 'error')
+                ->setStatus(500);
+        }
     }
 }

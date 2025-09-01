@@ -27,6 +27,10 @@ $serviceSubpages = [
     createServiceResource('ServiceBundleItem', 'ServiceBundleItemController', 'Service Bundle Items'),
 ];
 
+\TypeRocket\Register\Registry::addCustomResource('complexity', [
+	'controller' => '\MakerMaker\Controllers\ServiceComplexityController',
+]);
+
 // Add all subpages to the main service resource
 foreach ($serviceSubpages as $subpage) {
     $service->addPage($subpage);
