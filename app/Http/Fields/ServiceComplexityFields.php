@@ -34,8 +34,8 @@ class ServiceComplexityFields extends Fields
     protected function rules()
     {
         return [
-            'name' => 'unique:name:wp_srvc_complexities@id|required',
-            'level' => '?unique:level:wp_srvc_complexities@id|required|min:1',
+            'name' => 'unique:name:wp_srvc_complexities|required',
+            'level' => '?unique:level:wp_srvc_complexities|required|min:1',
             'price_multiplier' => '?required|numeric'
         ];
     }

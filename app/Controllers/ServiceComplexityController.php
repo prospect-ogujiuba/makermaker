@@ -46,8 +46,8 @@ class ServiceComplexityController extends Controller
             $response->unauthorized('Unauthorized: ServiceComplexity not created')->abort();
         }
 
-        $service_complexity->created_by = $user->getID;
-        $service_complexity->updated_by = $user->getID;
+        $service_complexity->created_by = $user->ID;
+        $service_complexity->updated_by = $user->ID;
         $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'index')

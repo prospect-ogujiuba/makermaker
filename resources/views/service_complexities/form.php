@@ -11,8 +11,8 @@
 use MakerMaker\Models\ServiceComplexity;
 use TypeRocket\Models\WPUser;
 
-$userID = $user->ID;
-echo $user;
+// $userID = $user->ID;
+// echo $user;
 
 $form = tr_form($service_complexity ?? ServiceComplexity::new())->useErrors()->useOld();
 
@@ -281,3 +281,4 @@ $tabs->render();
 echo $form->close();
 
 debugModel($form);
+debugModelFieldInfo($complexity_level);
