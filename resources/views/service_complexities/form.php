@@ -54,7 +54,7 @@ $overview = $form->fieldset(
 
         $form->row()
             ->withColumn(
-                $form->text('Price Multiplier')
+                $form->number('Price Multiplier')
                     ->setName('price_multiplier')
                     ->setHelp('Decimal multiplier for pricing (1.0 = base price, 1.5 = 150% markup)')
                     ->setAttribute('min', '1')

@@ -29,7 +29,7 @@ class ServiceComplexityController extends Controller
      */
     public function add(AuthUser $user)
     {
-        return View::new('service_complexities.form', compact( 'user'));
+        return View::new('service_complexities.form', compact('user'));
     }
 
     /**
@@ -75,12 +75,15 @@ class ServiceComplexityController extends Controller
      *
      * @return mixed
      */
-    public function update(ServiceComplexity $service_complexity, ServiceComplexityFields $fields, Response $response)
+    public function update(ServiceComplexity $service_complexity, ServiceComplexityFields $fields, Response $response, AuthUser $user)
     {
+
 
         if (!$service_complexity->can('update')) {
             $response->unauthorized('Unauthorized: ServiceComplexity not updated')->abort();
         }
+
+        $fields['updated_by'] = $user->ID;
 
         $service_complexity->save($fields);
 

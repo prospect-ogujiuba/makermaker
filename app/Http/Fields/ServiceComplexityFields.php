@@ -41,8 +41,8 @@ class ServiceComplexityFields extends Fields
 
         // Correct format: unique:field:table@id_column:id_value
         $rules['name'] = "unique:name:{$table_prefix}srvc_complexities@id:{$id}|required";
-        $rules['level'] = "unique:level:{$table_prefix}srvc_complexities@id:{$id}|min:1|required";
-        $rules['price_multiplier'] = "numeric|min:1|?required";
+        $rules['level'] = "unique:level:{$table_prefix}srvc_complexities@id:{$id}|numeric|required";
+        $rules['price_multiplier'] = "numeric|?required";
 
         return $rules;
     }
