@@ -279,6 +279,3 @@ if ($complexity_level != NULL) {
 $tabs->render();
 
 echo $form->close();
-
-debugModel($form);
-debugModelFieldInfo($complexity_level);
