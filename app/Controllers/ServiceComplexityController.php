@@ -88,7 +88,7 @@ class ServiceComplexityController extends Controller
         $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'edit', $service_complexity->getID())
-            ->withFlash('Info Session Updated');
+            ->withFlash('Service Complexity Updated');
     }
 
     /**
@@ -184,11 +184,8 @@ class ServiceComplexityController extends Controller
     }
 
     /**
-     * The index function for API
-     *
-     * Returns all service complexities with their related services.
-     * Includes error handling and response formatting following TypeRocket patterns.
-     *
+     * The show function for API
+     * 
      * @return \TypeRocket\Http\Response|array
      */
     public function showRest(ServiceComplexity $service_complexity)

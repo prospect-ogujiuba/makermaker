@@ -20,13 +20,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
 
         $resources = [
             'service',
-            // 'ticket',
-            // 'customer',
-            // 'portfolio',
-            // 'quote',
-            // 'testimonial',
-            // 'invoice',
-            // 'payment',
         ];
 
         foreach ($resources as $resource) {
@@ -99,9 +92,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // Migrate `down` only on plugin uninstall
         System::updateSiteState('flush_rewrite_rules');
-
-        // Uncomment the line below if you want to run migrations down on deactivation
-        $this->migrateDown();
 
         // TODO: Add your plugin deactivation code here
     }

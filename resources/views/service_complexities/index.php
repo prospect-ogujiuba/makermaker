@@ -15,28 +15,13 @@ use TypeRocket\Register\Page;
 $table = tr_table(\MakerMaker\Models\ServiceComplexity::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
-// $table->setLimit(25);
-// $table->removeSearch();
-// $table->removePaging();
-// $table->setCustomSearchOnly();
-// $table->setSearchColumns(['ID']);
-// echo json_encode($table->getSearchColumns());
-// $table->setTag('srvc_service_complexity');
-// var_dump($table->hasTag('srvc_service_complexity'));
-// $table->setPage(Page::new($resource, $action, $title, $settings = [], $handler = null));
-// $table->setModel(ServiceComplexity::new());
-// var_dump($table->getModel());
-// $table->setupModel(); // -- Protected
-
-// $table->addSearchQueryFilter(function () {});
-
 
 $table->addSearchFormFilter(function () {
     renderAdvancedSearchActions('servicecomplexity'); ?>
 
     <?php
     // Services
-    
+
     $services = tr_query()
         ->table('wp_srvc_services')
         ->select('id', 'name', 'sku', 'short_desc')
@@ -139,7 +124,7 @@ $table->addSearchFormFilter(function () {
                 <?php endforeach; ?>
             </select>
         </div>
-        
+
         <!-- User Search -->
         <div class="tr-filter-group">
             <label>Updated By User:</label>
@@ -187,7 +172,7 @@ $table->addSearchModelFilter(function ($args, $model, $table) {
 
     // Price Multiplier filter
     if (!empty($_GET['price_multiplier'])) {
-        $model->where('price_multiplier', '=', $_GET['price_multiplier']);
+        $model->where('price_multiplier', 'LIKE', '%' . $_GET['price_multiplier'] . '%');
     }
 
     // Date filters - FIXED: aligned with form field names
@@ -219,7 +204,7 @@ $table->addSearchModelFilter(function ($args, $model, $table) {
     return $args;
 });
 
-$table->setOrder('ID', 'DESC');
+
 $table->setColumns([
     'name' => [
         'label' => 'Name',
@@ -243,13 +228,16 @@ $table->setColumns([
         'label' => 'Updated At',
         'sort' => 'true'
     ],
+    'createdBy.user_nicename' => [
+        'label' => 'Created By',
+    ],
+    'updatedBy.user_nicename' => [
+        'label' => 'Last Updated By',
+    ],
     'id' => [
         'label' => 'ID',
         'sort' => 'true'
-    ],
-    // 'deleted_at',
-    // 'created_by',
-    // 'updated_by',
-], 'id');
+    ]
+], 'name')->setOrder('ID', 'DESC')->render();
 
-$table->render();
+$table;

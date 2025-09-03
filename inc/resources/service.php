@@ -27,7 +27,7 @@ $serviceSubpages = [
     createServiceResource('ServiceBundleItem', 'ServiceBundleItemController', 'Service Bundle Items'),
 ];
 
-\TypeRocket\Register\Registry::addCustomResource('complexity', [
+$service_complexity_rest = \TypeRocket\Register\Registry::addCustomResource('service-complexity', [
 	'controller' => '\MakerMaker\Controllers\ServiceComplexityController',
 ]);
 
