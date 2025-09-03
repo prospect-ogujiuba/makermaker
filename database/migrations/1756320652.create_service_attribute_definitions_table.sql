@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_attribute_definitions`;
 CREATE TABLE `{!!prefix!!}srvc_attribute_definitions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_type_id` bigint(20) NOT NULL,

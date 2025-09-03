@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_tiers`;
 CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,

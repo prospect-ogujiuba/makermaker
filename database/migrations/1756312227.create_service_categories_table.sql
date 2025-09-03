@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_categories`;
 CREATE TABLE `{!!prefix!!}srvc_categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(20) DEFAULT NULL,

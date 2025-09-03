@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_bundle_items`;
 CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
   `bundle_id` bigint(20) NOT NULL,
   `service_id` bigint(20) NOT NULL,

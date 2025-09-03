@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_services`;
 CREATE TABLE `{!!prefix!!}srvc_services` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sku` varchar(64) DEFAULT NULL,

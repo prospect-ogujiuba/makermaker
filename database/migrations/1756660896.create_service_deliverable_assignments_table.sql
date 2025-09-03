@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_service_deliverable_assignments`;
 CREATE TABLE `{!!prefix!!}srvc_service_deliverable_assignments` (
   `service_id` bigint(20) NOT NULL,
   `deliverable_id` bigint(20) NOT NULL,

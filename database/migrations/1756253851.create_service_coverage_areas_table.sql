@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_coverage_areas`;
 CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `code` varchar(64) NOT NULL,

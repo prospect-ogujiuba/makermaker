@@ -1,6 +1,5 @@
 -- Description:
 -- >>> Up >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_service_coverage`;
 CREATE TABLE `{!!prefix!!}srvc_service_coverage` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
