@@ -1,3 +1,23 @@
+## Project Files
+
+- [MakermakerTypeRocketPlugin][MakermakerTypeRocketPlugin]
+- [Migration-Order][Migration-Order]
+- [MVC-SOP][MVC-SOP]
+- [Sample-Data][Sample-Data]
+- [Roles-Capabilities][Roles-Capabilities]
+- [Service-Resources][Service-Resources]
+- [Plugin-Bootstrap][Plugin-Bootstrap]
+
+[MakermakerTypeRocketPlugin]: /app/MakermakerTypeRocketPlugin.php
+[Migration-Order]: /database/migration_order.md
+[MVC-SOP]: /database/mvc_sop.md
+[Sample-Data]: /database/migrations/1756668700.add_sample_data.sql
+[Roles-Capabilities]: /inc/capabilities/capabilities.php
+[Service-Resources]: /inc/resources/service.php
+[Plugin-Bootstrap]: /makermaker.php
+
+---
+
 ## Service Complexity
 
 [ServiceComplexity-Migration]: /database/migrations/1756191393.create_service_complexities_table.sql
