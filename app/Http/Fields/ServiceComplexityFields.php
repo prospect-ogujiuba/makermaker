@@ -44,8 +44,6 @@ class ServiceComplexityFields extends Fields
         $rules['level'] = "unique:level:{$table_prefix}srvc_complexities@id:{$id}|numeric|required";
         $rules['price_multiplier'] = "numeric|?required";
 
-        die(var_dump($id));
-
         return $rules;
     }
 

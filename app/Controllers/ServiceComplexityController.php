@@ -29,7 +29,8 @@ class ServiceComplexityController extends Controller
      */
     public function add(AuthUser $user)
     {
-        return View::new('service_complexities.form', compact('user'));
+        $form = tr_form(ServiceComplexity::class)->useErrors()->useOld();
+        return View::new('service_complexities.form', compact('form', 'user'));
     }
 
     /**
@@ -48,9 +49,6 @@ class ServiceComplexityController extends Controller
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
-
-        // $service_complexity->created_by = $user->ID;
-        // $service_complexity->updated_by = $user->ID;
         $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'index')
@@ -60,13 +58,30 @@ class ServiceComplexityController extends Controller
     /**
      * The edit page for admin
      *
+     * FIXED: Properly load the ServiceComplexity model with all its data
+     * before passing it to the form
+     *
      * @param string|ServiceComplexity $service_complexity
      *
      * @return mixed
      */
     public function edit(ServiceComplexity $service_complexity, AuthUser $user)
     {
-        return View::new('service_complexities.form', compact('service_complexity', 'user'));
+    
+        if ($service_complexity->getID()) {
+          
+            $service_complexity = ServiceComplexity::new()->find($service_complexity->getID());
+
+            if (!$service_complexity) {
+                return tr_redirect()->toPage('servicecomplexity', 'index')
+                    ->withFlash('Service Complexity not found', 'error');
+            }
+        }
+
+        // Now create the form with the fully loaded model
+        $form = tr_form($service_complexity)->useErrors()->useOld();
+
+        return View::new('service_complexities.form', compact('form', 'service_complexity', 'user'));
     }
 
     /**
@@ -84,10 +99,18 @@ class ServiceComplexityController extends Controller
             $response->unauthorized('Unauthorized: ServiceComplexity not updated')->abort();
         }
 
-        $service_complexity->updated_by = $user->ID;
+        // FIXED: Ensure we're working with a fully loaded model
+        if ($service_complexity->getID()) {
+            $service_complexity = ServiceComplexity::new()->find($service_complexity->getID());
 
-        // $fields['updated_by'] = $user->ID;
-        $service_complexity->update($fields);
+            if (!$service_complexity) {
+                return $response->error('Service Complexity not found')->setStatus(404);
+            }
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'edit', $service_complexity->getID())
             ->withFlash('Service Complexity Updated');
@@ -114,7 +137,7 @@ class ServiceComplexityController extends Controller
      */
     public function delete(ServiceComplexity $service_complexity)
     {
-        return View::new('service_complexities.delete', compact('service_complexity'));
+        //
     }
 
     /**
@@ -163,14 +186,14 @@ class ServiceComplexityController extends Controller
             $serviceComplexities = ServiceComplexity::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
-                
+
             if (empty($serviceComplexities)) {
                 return $response
                     ->setData('service_complexities', [])
                     ->setMessage('No service complexities found', 'info')
                     ->setStatus(200);
             }
-            
+
             return $response
                 ->setData('service_complexities', $serviceComplexities)
                 ->setMessage('Service complexities retrieved successfully', 'success')

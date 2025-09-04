@@ -12,18 +12,10 @@ use MakerMaker\Models\ServiceComplexity;
 use TypeRocket\Models\WPUser;
 
 // Form instance
-$form = tr_form($service_complexity ?? ServiceComplexity::new())->useErrors()->useOld();
-$service_complexity = $service_complexity ?? NULL;
-
-// Relationships
-$services = $service_complexity->services ?? [];
-
-
-
 echo $form->open();
 
 // Tab Layout
-$tabs = \TypeRocket\Elements\Tabs::new()
+$tabs = tr_tabs()
     ->setFooter($form->save())
     ->layoutLeft();
 
@@ -35,16 +27,16 @@ $tabs->tab('Overview', 'admin-settings', [
         [
             $form->row()
                 ->withColumn(
-                    $form->text('Name')
-                        ->setName('name')
+                    $form->text('name') // Changed from 'Name' to 'name'
+                        ->setLabel('Name') // Use setLabel to set display label
                         ->setHelp('Descriptive name for this complexity level (e.g., "Basic", "Standard", "Advanced", "Expert")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->number('Complexity Level')
-                        ->setName('level')
+                    $form->number('level') // Changed from 'Complexity Level' to 'level'
+                        ->setLabel('Complexity Level') // Use setLabel to set display label
                         ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
                         ->setAttribute('min', '1')
                         ->setAttribute('step', '1')
@@ -53,8 +45,8 @@ $tabs->tab('Overview', 'admin-settings', [
 
             $form->row()
                 ->withColumn(
-                    $form->number('Price Multiplier')
-                        ->setName('price_multiplier')
+                    $form->number('price_multiplier') // Changed from 'Price Multiplier' to 'price_multiplier'
+                        ->setLabel('Price Multiplier') // Use setLabel to set display label
                         ->setHelp('Decimal multiplier for pricing (1.0 = base price, 1.5 = 150% markup)')
                         ->setAttribute('min', '1')
                         ->setAttribute('max', '10.00')
@@ -68,7 +60,7 @@ $tabs->tab('Overview', 'admin-settings', [
 
 ])->setDescription('Complexity information');
 
-if ($service_complexity != NULL) {
+if (isset($service_complexity)) {
 
     // System Info Tab
     $tabs->tab('System', 'info', [
@@ -78,45 +70,43 @@ if ($service_complexity != NULL) {
             [
                 $form->row()
                     ->withColumn(
-                        $form->text('ID')
-                            ->setName('id')
+                        $form->text('id')
+                            ->setLabel('ID')
                             ->setHelp('System generated ID')
                             ->setAttribute('readonly', 'readonly')
                     )
                     ->withColumn(),
                 $form->row()
                     ->withColumn(
-                        $form->text('Created At')
-                            ->setName('created_at')
+                        $form->text('created_at')
+                            ->setLabel('Created At')
                             ->setHelp('Record creation timestamp')
                             ->setAttribute('readonly', 'readonly')
                     )
                     ->withColumn(
-                        $form->text('Updated At')
-                            ->setName('updated_at')
+                        $form->text('updated_at')
+                            ->setLabel('Updated At')
                             ->setHelp('Last update timestamp')
                             ->setAttribute('readonly', 'readonly')
                     ),
                 $form->row()
                     ->withColumn(
-                        $form->text('Created By')
-                            ->setName('created_by')
+                        $form->text('created_by')
+                            ->setLabel('Created By')
                             ->setHelp('User ID who originally created this record')
                             ->setAttribute('readonly', 'readonly')
                     )
                     ->withColumn(
-                        $form->text('Updated By')
-                            ->setName('updated_by')
+                        $form->text('updated_by')
+                            ->setLabel('Updated By')
                             ->setHelp('User ID who last updated this record')
                             ->setAttribute('readonly', 'readonly')
                     ),
 
-
-
                 $form->row()
                     ->withColumn(
-                        $form->text('Deleted At')
-                            ->setName('deleted_at')
+                        $form->text('deleted_at')
+                            ->setLabel('Deleted At')
                             ->setHelp('Timestamp when this record was soft-deleted, if applicable')
                             ->setAttribute('readonly', 'readonly')
                     )
@@ -129,20 +119,6 @@ if ($service_complexity != NULL) {
     // Nested Tabs for relationship information
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
-
-    // // Services relationship sub-tab
-    // if ($services && count($services) > 0) {
-    //     foreach ($services as $service) {
-    //         $service_fields[] = $form->text($service->name ?? "Service #{$service->id}")
-    //             ->setAttribute('value', $service->name)
-    //             ->setAttribute('readonly', 'readonly')
-    //             ->setHelp("Service ID: {$service->id}");
-    //     }
-    // } else {
-    //     $service_fields[] = $form->text('No Services')
-    //         ->setAttribute('value', 'No services are currently associated with this complexity level')
-    //         ->setAttribute('readonly', 'readonly');
-    // }
 
     $relationshipNestedTabs->tab('Services', 'admin-post', tr_table($service_complexity))->setDescription('Services using this complexity');
 
