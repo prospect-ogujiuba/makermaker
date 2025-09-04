@@ -67,21 +67,8 @@ class ServiceComplexityController extends Controller
      */
     public function edit(ServiceComplexity $service_complexity, AuthUser $user)
     {
-    
-        if ($service_complexity->getID()) {
-          
-            $service_complexity = ServiceComplexity::new()->find($service_complexity->getID());
-
-            if (!$service_complexity) {
-                return tr_redirect()->toPage('servicecomplexity', 'index')
-                    ->withFlash('Service Complexity not found', 'error');
-            }
-        }
-
-        // Now create the form with the fully loaded model
         $form = tr_form($service_complexity)->useErrors()->useOld();
-
-        return View::new('service_complexities.form', compact('form', 'service_complexity', 'user'));
+        return View::new('service_complexities.form', compact('form', 'user'));
     }
 
     /**
@@ -97,15 +84,6 @@ class ServiceComplexityController extends Controller
     {
         if (!$service_complexity->can('update')) {
             $response->unauthorized('Unauthorized: ServiceComplexity not updated')->abort();
-        }
-
-        // FIXED: Ensure we're working with a fully loaded model
-        if ($service_complexity->getID()) {
-            $service_complexity = ServiceComplexity::new()->find($service_complexity->getID());
-
-            if (!$service_complexity) {
-                return $response->error('Service Complexity not found')->setStatus(404);
-            }
         }
 
         $fields['updated_by'] = $user->ID;

@@ -35,7 +35,7 @@ class ServiceComplexityFields extends Fields
     {
         global $wpdb;
         $table_prefix = $wpdb->prefix;
-        $id = $this['id'] ?? '';
+        $id = 1;
 
         $rules = [];
 
