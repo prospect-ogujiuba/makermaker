@@ -60,7 +60,7 @@ $tabs->tab('Overview', 'admin-settings', [
 
 ])->setDescription('Complexity information');
 
-if (isset($service_complexity)) {
+if (isset($current_id)) {
 
     // System Info Tab
     $tabs->tab('System', 'info', [
@@ -120,7 +120,7 @@ if (isset($service_complexity)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
-    $relationshipNestedTabs->tab('Services', 'admin-post', tr_table($service_complexity))->setDescription('Services using this complexity');
+    $relationshipNestedTabs->tab('Services', 'admin-post', [])->setDescription('Services using this complexity');
 
     // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationship', 'admin-links', [$relationshipNestedTabs])

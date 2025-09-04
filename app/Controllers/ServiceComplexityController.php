@@ -67,8 +67,9 @@ class ServiceComplexityController extends Controller
      */
     public function edit(ServiceComplexity $service_complexity, AuthUser $user)
     {
+        $current_id = $service_complexity->getID();
         $form = tr_form($service_complexity)->useErrors()->useOld();
-        return View::new('service_complexities.form', compact('form', 'user'));
+        return View::new('service_complexities.form', compact('form', 'current_id', 'user'));
     }
 
     /**

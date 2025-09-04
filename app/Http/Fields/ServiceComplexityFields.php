@@ -3,6 +3,7 @@
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceComplexityFields extends Fields
 {
@@ -35,7 +36,11 @@ class ServiceComplexityFields extends Fields
     {
         global $wpdb;
         $table_prefix = $wpdb->prefix;
-        $id = 1;
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+
+        // Get the first route arg (the ID)
+        $id = $route_args[0] ?? null;
 
         $rules = [];
 

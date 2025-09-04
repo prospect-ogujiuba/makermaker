@@ -33,10 +33,8 @@
 
 ### Todo
 
-- [ ] Fix unique id not being passed – [Fields][ServiceComplexity-Fields]
-- [ ] Get CRUD API to work – [Controller][ServiceComplexity-Controller]
-- [ ] Fix relationship table in form – [Form][ServiceComplexity-Form]
-- [ ] Clean up filters – [Index][ServiceComplexity-Index]
+- [x] Fix unique id not being passed – [Fields][ServiceComplexity-Fields]
+- [x] Fix relationship table in form – [Form][ServiceComplexity-Form]
 
 ---
 
