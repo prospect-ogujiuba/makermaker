@@ -8,6 +8,7 @@
  * based on the actual database structure and system logic requirements.
  */
 
+use MakerMaker\Models\Service;
 use MakerMaker\Models\ServiceComplexity;
 use TypeRocket\Models\WPUser;
 
@@ -120,7 +121,22 @@ if (isset($current_id)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
-    $relationshipNestedTabs->tab('Services', 'admin-post', [])->setDescription('Services using this complexity');
+    $service_fields = [];
+
+    if ($services && count($services) > 0) {
+        foreach ($services as $service) {
+            $service_fields[] = $form->text($service->name ?? "Service #{$service->id}")
+                ->setAttribute('value', $service->name)
+                ->setAttribute('readonly', 'readonly')
+                ->setHelp("Service ID: {$service->id}");
+        }
+    } else {
+        $service_fields[] = $form->text('No Services')
+            ->setAttribute('value', 'No services are currently associated with this complexity level')
+            ->setAttribute('readonly', 'readonly');
+    }
+
+    $relationshipNestedTabs->tab('Services', 'admin-post', $service_fields)->setDescription('Services using this complexity');
 
     // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationship', 'admin-links', [$relationshipNestedTabs])

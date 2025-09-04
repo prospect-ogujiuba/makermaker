@@ -4,6 +4,7 @@ namespace MakerMaker\Controllers;
 
 use MakerMaker\Models\ServiceComplexity;
 use MakerMaker\Http\Fields\ServiceComplexityFields;
+use MakerMaker\Models\Service;
 use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
 use MakerMaker\View;
@@ -68,8 +69,10 @@ class ServiceComplexityController extends Controller
     public function edit(ServiceComplexity $service_complexity, AuthUser $user)
     {
         $current_id = $service_complexity->getID();
+        $services = $service_complexity->services;
+        // tr_dd($services);
         $form = tr_form($service_complexity)->useErrors()->useOld();
-        return View::new('service_complexities.form', compact('form', 'current_id', 'user'));
+        return View::new('service_complexities.form', compact('form', 'current_id', 'services', 'user'));
     }
 
     /**
