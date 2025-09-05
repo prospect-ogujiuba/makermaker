@@ -2,17 +2,11 @@
 
 /**
  * ServiceComplexity Index View
- * 
- * This view displays a list of serviceComplexities.
- * Add your index/list functionality here.
  */
 
-use MakerMaker\Models\Service;
 use MakerMaker\Models\ServiceComplexity;
-use TypeRocket\Database\Query;
-use TypeRocket\Register\Page;
 
-$table = tr_table(\MakerMaker\Models\ServiceComplexity::class);
+$table = tr_table(ServiceComplexity::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -20,17 +14,17 @@ $table->addSearchFormFilter(function () {
     renderAdvancedSearchActions('servicecomplexity'); ?>
 
     <?php
-    // Services
 
+    // Services
     $services = tr_query()
-        ->table('wp_srvc_services')
+        ->table(GLOBAL_WPDB_PREFIX . "srvc_services")
         ->select('id', 'name', 'sku', 'short_desc')
         ->orderBy('name', 'ASC')
         ->get();
 
     // Users
     $users = tr_query()
-        ->table('wp_users')
+        ->table(GLOBAL_WPDB_PREFIX . "users")
         ->select('id', 'user_nicename', 'user_email')
         ->orderBy('user_nicename', 'ASC')
         ->get();
@@ -146,13 +140,16 @@ $table->addSearchFormFilter(function () {
 
 // Model filters - ALIGNED to match the form filters above
 $table->addSearchModelFilter(function ($args, $model, $table) {
+
+
+
     // Service filter - NEW: added to match form
     if (!empty($_GET['service'])) {
         // Assuming there's a relationship to services table
         // $model->where('service_id', '=', $_GET['service']);
 
-        $model->join('wp_srvc_services', 'wp_srvc_services.complexity_id', '=', 'wp_srvc_complexities.id')
-            ->where('wp_srvc_services.id', '=', $_GET['service']);
+        $model->join(GLOBAL_WPDB_PREFIX . "srvc_services", GLOBAL_WPDB_PREFIX . "srvc_services.complexity_id", '=', GLOBAL_WPDB_PREFIX . "srvc_complexities.id")
+            ->where(GLOBAL_WPDB_PREFIX . "srvc_services.id", '=', $_GET['service']);
     }
 
     // Name filter

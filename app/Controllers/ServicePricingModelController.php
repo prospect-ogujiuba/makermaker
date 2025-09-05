@@ -7,6 +7,7 @@ use MakerMaker\Http\Fields\ServicePricingModelFields;
 use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
 use MakerMaker\View;
+use TypeRocket\Models\AuthUser;
 
 class ServicePricingModelController extends Controller
 {
@@ -25,12 +26,10 @@ class ServicePricingModelController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        $form = tr_form(ServicePricingModel::class)->useErrors()->useOld();;
-        $button = 'Add';
-
-        return View::new('service_pricing_models.form', compact('form', 'button'));
+        $form = tr_form(ServicePricingModel::class)->useErrors()->useOld();
+        return View::new('service_pricing_models.form', compact('form', 'user'));
     }
 
     /**
@@ -40,32 +39,37 @@ class ServicePricingModelController extends Controller
      *
      * @return mixed
      */
-    public function create(ServicePricingModelFields $fields, ServicePricingModel $info_session, Response $response)
+    public function create(ServicePricingModelFields $fields, ServicePricingModel $service_pricing_model, Response $response, AuthUser $user)
     {
-
-        if (!$info_session->can('create')) {
+        if (!$service_pricing_model->can('create')) {
             $response->unauthorized('Unauthorized: ServicePricingModel not created')->abort();
         }
 
-        $info_session->save($fields);
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
 
-        return tr_redirect()->toPage('servicePricingModel', 'index')
-            ->withFlash('Info Session Created');
+        $service_pricing_model->save($fields);
+
+        return tr_redirect()->toPage('servicepricingmodel', 'index')
+            ->withFlash('Service Pricing Model Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServicePricingModel $info_session
+     * @param ServicePricingModel $service_pricing_model
      *
      * @return mixed
      */
-    public function edit(ServicePricingModel $info_session)
+    public function edit(ServicePricingModel $service_pricing_model, AuthUser $user)
     {
-        $form = tr_form($info_session)->useErrors()->useOld();;
-        $button = 'Update';
-
-        return View::new('service_pricing_model.form', compact('form', 'button'));
+        $current_id = $service_pricing_model->getID();
+        $servicePrices = $service_pricing_model->servicePrices;
+        $createdBy = $service_pricing_model->createdBy;
+        $updatedBy = $service_pricing_model->updatedBy;
+        
+        $form = tr_form($service_pricing_model)->useErrors()->useOld();
+        return View::new('service_pricing_models.form', compact('form', 'current_id', 'servicePrices', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -73,45 +77,46 @@ class ServicePricingModelController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServicePricingModel $info_session
+     * @param ServicePricingModel $service_pricing_model
      *
      * @return mixed
      */
-    public function update(ServicePricingModel $info_session, ServicePricingModelFields $fields, Response $response)
+    public function update(ServicePricingModel $service_pricing_model, ServicePricingModelFields $fields, Response $response, AuthUser $user)
     {
-
-        if (!$info_session->can('update')) {
+        if (!$service_pricing_model->can('update')) {
             $response->unauthorized('Unauthorized: ServicePricingModel not updated')->abort();
         }
 
-        $info_session->save($fields);
+        $fields['updated_by'] = $user->ID;
 
-        return tr_redirect()->toPage('servicePricingModel', 'edit', $info_session->getID())
-            ->withFlash('Info Session Updated');
+        $service_pricing_model->save($fields);
+
+        return tr_redirect()->toPage('servicepricingmodel', 'edit', $service_pricing_model->getID())
+            ->withFlash('Service Pricing Model Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServicePricingModel $info_session
+     * @param ServicePricingModel $service_pricing_model
      *
      * @return mixed
      */
-    public function show(ServicePricingModel $info_session)
+    public function show(ServicePricingModel $service_pricing_model)
     {
-        // TODO: Implement show() method.
+        return $service_pricing_model->with(['servicePrices', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServicePricingModel $info_session
+     * @param ServicePricingModel $service_pricing_model
      *
      * @return mixed
      */
-    public function delete(ServicePricingModel $info_session)
+    public function delete(ServicePricingModel $service_pricing_model)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -119,18 +124,65 @@ class ServicePricingModelController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServicePricingModel $info_session
+     * @param ServicePricingModel $service_pricing_model
      *
      * @return mixed
      */
-    public function destroy(ServicePricingModel $info_session, Response $response)
+    public function destroy(ServicePricingModel $service_pricing_model, Response $response)
     {
-        if (!$info_session->can('destroy')) {
-            $response->unauthorized('Unauthorized: ServicePricingModel not deleted')->abort();
+        if (!$service_pricing_model->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServicePricingModel not deleted');
         }
 
-        $info_session->delete();
+        // Check if this pricing model is still being used by service prices
+        $servicePricesCount = $service_pricing_model->servicePrices()->count();
 
-        return $response->warning('ServicePricingModel Deleted');
+        if ($servicePricesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicePricesCount} service price(s) still use this pricing model. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        $deleted = $service_pricing_model->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('ServicePricingModel deleted.')->setData('service_pricing_model', $service_pricing_model);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $servicePricingModels = ServicePricingModel::new()
+                ->with(['servicePrices', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($servicePricingModels)) {
+                return $response
+                    ->setData('service_pricing_models', [])
+                    ->setMessage('No service pricing models found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_pricing_models', $servicePricingModels)
+                ->setMessage('Service pricing models retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServicePricingModel indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }

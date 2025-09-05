@@ -94,6 +94,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         System::updateSiteState('flush_rewrite_rules');
 
         // TODO: Add your plugin deactivation code here
+        $this->migrateDown();
     }
 
     public function uninstall()

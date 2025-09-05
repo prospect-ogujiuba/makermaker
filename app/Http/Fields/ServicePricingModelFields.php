@@ -3,6 +3,7 @@
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServicePricingModelFields extends Fields
 {
@@ -33,11 +34,21 @@ class ServicePricingModelFields extends Fields
      */
     protected function rules()
     {
-        return [
-            'id' => 'required',
-            'name' => 'required',
-            'code' => 'required'
-        ];
+        global $wpdb;
+        $table_prefix = $wpdb->prefix;
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+
+        // Get the first route arg (the ID)
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        // Correct format: unique:field:table@id_column:id_value
+        $rules['name'] = "unique:name:{$table_prefix}srvc_pricing_models@id:{$id}|required";
+        $rules['code'] = "unique:code:{$table_prefix}srvc_pricing_models@id:{$id}|required";
+
+        return $rules;
     }
 
     /**

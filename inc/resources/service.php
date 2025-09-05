@@ -30,6 +30,9 @@ $serviceSubpages = [
 $service_complexity_rest = \TypeRocket\Register\Registry::addCustomResource('service-complexity', [
 	'controller' => '\MakerMaker\Controllers\ServiceComplexityController',
 ]);
+$service_pricing_model_rest = \TypeRocket\Register\Registry::addCustomResource('service-pricing-model', [
+	'controller' => '\MakerMaker\Controllers\ServicePricingModelController',
+]);
 
 // Add all subpages to the main service resource
 foreach ($serviceSubpages as $subpage) {

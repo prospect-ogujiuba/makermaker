@@ -2,8 +2,8 @@
 
 namespace MakerMaker\Models;
 
-use App\Models\User;
 use TypeRocket\Models\Model;
+use TypeRocket\Models\WPUser;
 
 class ServiceComplexity extends Model
 {
@@ -37,12 +37,12 @@ class ServiceComplexity extends Model
     // User who last updated this record
     public function updatedBy()
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(WPUser::class, 'updated_by');
     }
 
     // User who created this record
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(WPUser::class, 'created_by');
     }
 }

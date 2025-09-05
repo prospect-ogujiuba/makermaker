@@ -1,16 +1,8 @@
 <?php
 
 /**
- * Enhanced ServiceComplexity Form - Complete Data Management
- * File: resources/views/admin/service_complexities/form.php
- * 
- * This form handles ServiceComplexity properties organized into logical tabs
- * based on the actual database structure and system logic requirements.
+ * Enhanced ServiceComplexity Form
  */
-
-use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceComplexity;
-use TypeRocket\Models\WPUser;
 
 // Form instance
 echo $form->open();
@@ -123,7 +115,7 @@ if (isset($current_id)) {
                             ->setHelp('Timestamp when this record was soft-deleted, if applicable')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
-
+                            ->setAttribute('disabled', true)
                     )
                     ->withColumn()
             ]

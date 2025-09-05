@@ -11,13 +11,13 @@ INSERT INTO `{!!prefix!!}srvc_complexities` (`id`, `name`, `level`, `price_multi
 
 -- Pricing Models
 INSERT INTO `{!!prefix!!}srvc_pricing_models` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'Fixed Project',	'FIXED',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(2,	'Hourly Rate',	'HOURLY',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(3,	'Per Unit/Device',	'UNIT',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(4,	'Monthly Subscription',	'MONTHLY',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(5,	'Annual Contract',	'ANNUAL',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(6,	'Per Square Foot',	'SQ_FT',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(7,	'Tiered Pricing',	'TIERED',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL);
+(1,	'Fixed Project',	'FIXED',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(2,	'Hourly Rate',	'HOURLY',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(3,	'Per Unit/Device',	'UNIT',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(4,	'Monthly Subscription',	'MONTHLY',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(5,	'Annual Contract',	'ANNUAL',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(6,	'Per Square Foot',	'SQ_FT',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(7,	'Tiered Pricing',	'TIERED',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2);
 
 -- Pricing Tiers
 INSERT INTO `{!!prefix!!}srvc_pricing_tiers` (`id`, `name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
