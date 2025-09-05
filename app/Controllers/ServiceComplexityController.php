@@ -70,9 +70,11 @@ class ServiceComplexityController extends Controller
     {
         $current_id = $service_complexity->getID();
         $services = $service_complexity->services;
+        $createdBy = $service_complexity->createdBy;
+        $updatedBy = $service_complexity->updatedBy;
         // tr_dd($services);
         $form = tr_form($service_complexity)->useErrors()->useOld();
-        return View::new('service_complexities.form', compact('form', 'current_id', 'services', 'user'));
+        return View::new('service_complexities.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**

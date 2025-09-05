@@ -61,8 +61,8 @@ $tabs->tab('Overview', 'admin-settings', [
 
 ])->setDescription('Complexity information');
 
+// Conditional
 if (isset($current_id)) {
-
     // System Info Tab
     $tabs->tab('System', 'info', [
         $form->fieldset(
@@ -95,12 +95,15 @@ if (isset($current_id)) {
                         $form->text('created_by')
                             ->setLabel('Created By')
                             ->setHelp('User ID who originally created this record')
+                            ->setAttribute('value', $createdBy->user_nicename)
+
                             ->setAttribute('readonly', 'readonly')
                     )
                     ->withColumn(
                         $form->text('updated_by')
-                            ->setLabel('Updated By')
+                            ->setLabel('Last Updated By')
                             ->setHelp('User ID who last updated this record')
+                            ->setAttribute('value', $updatedBy->user_nicename)
                             ->setAttribute('readonly', 'readonly')
                     ),
 
@@ -121,14 +124,34 @@ if (isset($current_id)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
-    $service_fields = [];
+
 
     if ($services && count($services) > 0) {
         foreach ($services as $service) {
-            $service_fields[] = $form->text($service->name ?? "Service #{$service->id}")
-                ->setAttribute('value', $service->name)
-                ->setAttribute('readonly', 'readonly')
-                ->setHelp("Service ID: {$service->id}");
+            $row = $form->row();
+
+            // Name Column (main content)
+            $row->column(
+                $form->text("Service Name")
+                    ->setAttribute('value', $service->name ?? "Service #{$service->id}")
+                    ->setAttribute('readonly', 'readonly')
+            );
+
+            // Additional info column (optional)
+            $row->column(
+                $form->text("SKU")
+                    ->setAttribute('value', $service->sku ?? 'B2CNC-' . $service->id)
+                    ->setAttribute('readonly', 'readonly')
+            );
+
+            // ID Column (smaller width)
+            $row->column(
+                $form->text("ID")
+                    ->setAttribute('value', $service->id)
+                    ->setAttribute('readonly', 'readonly')
+            );
+
+            $service_fields[] = $row;
         }
     } else {
         $service_fields[] = $form->text('No Services')
@@ -136,7 +159,13 @@ if (isset($current_id)) {
             ->setAttribute('readonly', 'readonly');
     }
 
-    $relationshipNestedTabs->tab('Services', 'admin-post', $service_fields)->setDescription('Services using this complexity');
+    $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
+        NULL,
+        NULL,
+        $service_fields
+    ));
+
+
 
     // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationship', 'admin-links', [$relationshipNestedTabs])
