@@ -17,8 +17,8 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
   KEY `idx_pricing_tier__deleted_at` (`deleted_at`),
   KEY `idx_pricing_tier__created_by` (`created_by`),
   KEY `idx_pricing_tier__updated_by` (`updated_by`),
-  CONSTRAINT `fk_pricing_tier__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_pricing_tier__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE
+  CONSTRAINT `fk_pricing_tier__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_pricing_tier__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Pricing tiers: Retail, Partner, Enterprise, etc.';
 
 -- >>> Down >>>

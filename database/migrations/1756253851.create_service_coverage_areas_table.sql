@@ -15,8 +15,8 @@ CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
   KEY `idx_coverage_area__deleted_at` (`deleted_at`),
   KEY `idx_coverage_area__created_by` (`created_by`),
   KEY `idx_coverage_area__updated_by` (`updated_by`),
-  CONSTRAINT `fk_coverage_area__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_coverage_area__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE
+  CONSTRAINT `fk_coverage_area__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_coverage_area__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Geographic coverage areas for service delivery';
 
 -- >>> Down >>>

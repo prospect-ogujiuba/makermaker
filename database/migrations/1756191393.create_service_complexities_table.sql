@@ -17,8 +17,8 @@ CREATE TABLE `{!!prefix!!}srvc_complexities` (
   KEY `idx_complexity__deleted_at` (`deleted_at`),
   KEY `idx_complexity__created_by` (`created_by`),
   KEY `idx_complexity__updated_by` (`updated_by`),
-  CONSTRAINT `fk_complexity__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_complexity__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE
+  CONSTRAINT `fk_complexity__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_complexity__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service complexity levels with associated pricing multipliers';
 
 -- >>> Down >>>

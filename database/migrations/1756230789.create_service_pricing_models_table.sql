@@ -15,8 +15,8 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
   KEY `idx_pricing_model__deleted_at` (`deleted_at`),
   KEY `idx_pricing_model__created_by` (`created_by`),
   KEY `idx_pricing_model__updated_by` (`updated_by`),
-  CONSTRAINT `fk_pricing_model__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_pricing_model__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users`(`ID`) ON UPDATE CASCADE
+  CONSTRAINT `fk_pricing_model__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_pricing_model__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Pricing models: fixed, hourly, per_unit, subscription, tiered, volume';
 
 
