@@ -48,21 +48,21 @@ INSERT INTO `{!!prefix!!}srvc_coverage_areas` (`id`, `code`, `name`, `created_at
 
 -- Deliverables
 INSERT INTO `{!!prefix!!}srvc_deliverables` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(2,	'Installation Plan',	'Step-by-step installation and deployment plan',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(3,	'Network Diagram',	'Complete network topology and connection diagrams',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(4,	'Equipment List',	'Detailed bill of materials and equipment specifications',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(5,	'Configuration Documentation',	'System configuration settings and parameters',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(6,	'Testing Report',	'Comprehensive system testing and validation results',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(7,	'User Manual',	'End-user operation and maintenance documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(8,	'Training Materials',	'Training guides, videos, and reference materials',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(9,	'Warranty Documentation',	'Equipment warranties and service agreements',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(10,	'As-Built Documentation',	'Final installation documentation with actual configurations',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(11,	'Performance Baseline',	'Initial system performance metrics and benchmarks',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(12,	'Security Assessment',	'Security configuration review and recommendations',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(13,	'Compliance Certificate',	'Industry compliance and certification documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(14,	'Maintenance Schedule',	'Recommended maintenance tasks and schedules',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(15,	'Emergency Procedures',	'Troubleshooting and emergency contact procedures',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL);
+(1,	'System Design Document',	'Detailed technical design and architecture documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(2,	'Installation Plan',	'Step-by-step installation and deployment plan',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(3,	'Network Diagram',	'Complete network topology and connection diagrams',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(4,	'Equipment List',	'Detailed bill of materials and equipment specifications',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(5,	'Configuration Documentation',	'System configuration settings and parameters',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(6,	'Testing Report',	'Comprehensive system testing and validation results',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(7,	'User Manual',	'End-user operation and maintenance documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(8,	'Training Materials',	'Training guides, videos, and reference materials',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(9,	'Warranty Documentation',	'Equipment warranties and service agreements',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(10,	'As-Built Documentation',	'Final installation documentation with actual configurations',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(11,	'Performance Baseline',	'Initial system performance metrics and benchmarks',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(12,	'Security Assessment',	'Security configuration review and recommendations',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(13,	'Compliance Certificate',	'Industry compliance and certification documentation',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(14,	'Maintenance Schedule',	'Recommended maintenance tasks and schedules',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(15,	'Emergency Procedures',	'Troubleshooting and emergency contact procedures',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
 
 -- Equipment
 INSERT INTO `{!!prefix!!}srvc_equipment` (`id`, `sku`, `name`, `manufacturer`, `specs`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES

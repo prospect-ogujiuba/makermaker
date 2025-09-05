@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceDeliverableFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServiceDeliverableFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,18 @@ class ServiceDeliverableFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_models@id:{$id}|required";
+        $rules['description'] = "required";
+
+        return $rules;
     }
 
     /**
@@ -38,7 +51,8 @@ class ServiceDeliverableFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

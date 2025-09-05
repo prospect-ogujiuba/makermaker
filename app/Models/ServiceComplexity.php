@@ -31,7 +31,7 @@ class ServiceComplexity extends Model
     // Get all services using this complexity level
     public function services()
     {
-        return $this->hasMany(\MakerMaker\Models\Service::class, 'complexity_id');
+        return $this->hasMany(Service::class, 'complexity_id');
     }
 
     // User who last updated this record
