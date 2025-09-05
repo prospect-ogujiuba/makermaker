@@ -36,13 +36,10 @@ class ServicePricingTierFields extends Fields
     {
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
-
-        // Get the first route arg (the ID)
         $id = $route_args[0] ?? null;
 
         $rules = [];
 
-        // Correct format: unique:field:table@id_column:id_value
         $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_tiers@id:{$id}|required";
         $rules['code'] = "unique:code:{GLOBAL_WPDB_PREFIX}srvc_pricing_tiers@id:{$id}|required";
         $rules['sort_order'] = "numeric|?required";
