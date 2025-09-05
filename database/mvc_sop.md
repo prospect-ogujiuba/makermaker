@@ -226,7 +226,7 @@ Design data entry interface and validation
     `resources/views/services/form.php`
   - [ ] Instantiate form bound to model instance; enable errors + old input
     ```php
-    $form = tr_form($service ?? \MakerMaker\Models\Service::new())->useErrors()->useOld();
+    $form = tr_form($service ?? \MakerMaker\Models\Service::new())->useErrors()->useOld()->useConfirm();
     ```
   - [ ] Use tabbed layout with a save footer
     ```php
@@ -261,7 +261,7 @@ Design data entry interface and validation
     echo $form->close();
     ```
   - [ ] Wire validation to Field class (`ServiceFields`)
-    - Ensure controller uses `ServiceFields` so errors surface via `->useErrors()->useOld()`
+    - Ensure controller uses `ServiceFields` so errors surface via `->useErrors()->useOld()->useConfirm()`
   - [ ] UX polish
     - Mark required labels (`->markLabelRequired()`)
     - Set sensible `min|max|step|maxlength|placeholder`

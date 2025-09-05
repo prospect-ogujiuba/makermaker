@@ -21,11 +21,11 @@ INSERT INTO `{!!prefix!!}srvc_pricing_models` (`id`, `name`, `code`, `created_at
 
 -- Pricing Tiers
 INSERT INTO `{!!prefix!!}srvc_pricing_tiers` (`id`, `name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'Small Business',	'SMB',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(2,	'Mid-Market',	'MID',	2,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(3,	'Enterprise',	'ENT',	3,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(4,	'Government',	'GOV',	4,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(5,	'Non-Profit',	'NPO',	5,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL);
+(1,	'Small Business',	'SMB',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(2,	'Mid-Market',	'MID',	2,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(3,	'Enterprise',	'ENT',	3,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(4,	'Government',	'GOV',	4,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(5,	'Non-Profit',	'NPO',	5,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
 
 -- Delivery Methods
 INSERT INTO `{!!prefix!!}srvc_delivery_methods` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES

@@ -1,6 +1,6 @@
 /* Search Container */
 .tr-search-filters {
-  display: grid !important;
+  display: none;
   grid-template-columns: repeat(6, 1fr);
   gap: 16px;
   width: 100%;
@@ -85,7 +85,7 @@
 }
 
 #search-toggle:checked ~ .tr-search-filters {
-  display: none !important;
+  display: grid !important;
 }
 
 /* Table Tags and Labels */

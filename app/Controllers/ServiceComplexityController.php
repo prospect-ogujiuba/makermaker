@@ -30,7 +30,7 @@ class ServiceComplexityController extends Controller
      */
     public function add(AuthUser $user)
     {
-        $form = tr_form(ServiceComplexity::class)->useErrors()->useOld();
+        $form = tr_form(ServiceComplexity::class)->useErrors()->useOld()->useConfirm();
         return View::new('service_complexities.form', compact('form', 'user'));
     }
 
@@ -73,7 +73,7 @@ class ServiceComplexityController extends Controller
         $createdBy = $service_complexity->createdBy;
         $updatedBy = $service_complexity->updatedBy;
         // tr_dd($services);
-        $form = tr_form($service_complexity)->useErrors()->useOld();
+        $form = tr_form($service_complexity)->useErrors()->useOld()->useConfirm();
         return View::new('service_complexities.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 

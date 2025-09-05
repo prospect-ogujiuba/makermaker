@@ -28,7 +28,7 @@ class ServicePricingModelController extends Controller
      */
     public function add(AuthUser $user)
     {
-        $form = tr_form(ServicePricingModel::class)->useErrors()->useOld();
+        $form = tr_form(ServicePricingModel::class)->useErrors()->useOld()->useConfirm();
         return View::new('service_pricing_models.form', compact('form', 'user'));
     }
 
@@ -68,7 +68,7 @@ class ServicePricingModelController extends Controller
         $createdBy = $service_pricing_model->createdBy;
         $updatedBy = $service_pricing_model->updatedBy;
         
-        $form = tr_form($service_pricing_model)->useErrors()->useOld();
+        $form = tr_form($service_pricing_model)->useErrors()->useOld()->useConfirm();
         return View::new('service_pricing_models.form', compact('form', 'current_id', 'servicePrices', 'createdBy', 'updatedBy', 'user'));
     }
 

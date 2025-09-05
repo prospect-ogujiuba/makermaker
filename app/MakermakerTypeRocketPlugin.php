@@ -74,6 +74,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         return [
             '\MakerMaker\Models\ServiceComplexity' => '\MakerMaker\Auth\ServiceComplexityPolicy',
             '\MakerMaker\Models\ServicePricingModel' => '\MakerMaker\Auth\ServicePricingModelPolicy',
+            '\MakerMaker\Models\ServicePricingTier' => '\MakerMaker\Auth\ServicePricingTierPolicy',
         ];
     }
 
