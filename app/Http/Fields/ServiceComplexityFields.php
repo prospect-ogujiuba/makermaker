@@ -34,8 +34,6 @@ class ServiceComplexityFields extends Fields
      */
     protected function rules()
     {
-        global $wpdb;
-        $table_prefix = $wpdb->prefix;
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
 
@@ -45,8 +43,8 @@ class ServiceComplexityFields extends Fields
         $rules = [];
 
         // Correct format: unique:field:table@id_column:id_value
-        $rules['name'] = "unique:name:{$table_prefix}srvc_complexities@id:{$id}|required";
-        $rules['level'] = "unique:level:{$table_prefix}srvc_complexities@id:{$id}|numeric|required";
+        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_complexities@id:{$id}|required";
+        $rules['level'] = "unique:level:{GLOBAL_WPDB_PREFIX}srvc_complexities@id:{$id}|numeric|required";
         $rules['price_multiplier'] = "numeric|?required";
 
         return $rules;

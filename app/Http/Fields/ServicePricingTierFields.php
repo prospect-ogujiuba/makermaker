@@ -34,8 +34,6 @@ class ServicePricingTierFields extends Fields
      */
     protected function rules()
     {
-        global $wpdb;
-        $table_prefix = $wpdb->prefix;
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
 
@@ -45,8 +43,8 @@ class ServicePricingTierFields extends Fields
         $rules = [];
 
         // Correct format: unique:field:table@id_column:id_value
-        $rules['name'] = "unique:name:{$table_prefix}srvc_pricing_tiers@id:{$id}|required";
-        $rules['code'] = "unique:code:{$table_prefix}srvc_pricing_tiers@id:{$id}|required";
+        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_tiers@id:{$id}|required";
+        $rules['code'] = "unique:code:{GLOBAL_WPDB_PREFIX}srvc_pricing_tiers@id:{$id}|required";
         $rules['sort_order'] = "numeric|?required";
 
         return $rules;
