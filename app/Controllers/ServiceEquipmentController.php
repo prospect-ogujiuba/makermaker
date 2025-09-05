@@ -1,9 +1,12 @@
 <?php
 namespace MakerMaker\Controllers;
 
+use MakerMaker\Http\Fields\ServiceEquipmentFields;
 use MakerMaker\Models\ServiceEquipment;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
+use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 class ServiceEquipmentController extends Controller
 {
@@ -22,9 +25,10 @@ class ServiceEquipmentController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        // TODO: Implement add() method.
+        $form = tr_form(ServiceEquipment::class)->useErrors()->useOld()->useConfirm();
+        return View::new('service_equipment.form', compact('form', 'user'));
     }
 
     /**
@@ -34,21 +38,37 @@ class ServiceEquipmentController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServiceEquipmentFields $fields, ServiceEquipment $service_equipment, Response $response, AuthUser $user)
     {
-        // TODO: Implement create() method.
+        if (!$service_equipment->can('create')) {
+            $response->unauthorized('Unauthorized: ServiceEquipment not created')->abort();
+        }
+
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
+
+        $service_equipment->save($fields);
+
+        return tr_redirect()->toPage('serviceequipment', 'index')
+            ->withFlash('Service Equipment Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServiceEquipment $service_equipment
+     * @param ServiceEquipment $service_equipment
      *
      * @return mixed
      */
-    public function edit(ServiceEquipment $service_equipment)
+    public function edit(ServiceEquipment $service_equipment, AuthUser $user)
     {
-        // TODO: Implement edit() method.
+        $current_id = $service_equipment->getID();
+        $services = $service_equipment->services;
+        $createdBy = $service_equipment->createdBy;
+        $updatedBy = $service_equipment->updatedBy;
+
+        $form = tr_form($service_equipment)->useErrors()->useOld()->useConfirm();
+        return View::new('service_equipment.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -56,37 +76,46 @@ class ServiceEquipmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceEquipment $service_equipment
+     * @param ServiceEquipment $service_equipment
      *
      * @return mixed
      */
-    public function update(ServiceEquipment $service_equipment)
+    public function update(ServiceEquipment $service_equipment, ServiceEquipmentFields $fields, Response $response, AuthUser $user)
     {
-        // TODO: Implement update() method.
+        if (!$service_equipment->can('update')) {
+            $response->unauthorized('Unauthorized: ServiceEquipment not updated')->abort();
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $service_equipment->save($fields);
+
+        return tr_redirect()->toPage('serviceequipment', 'edit', $service_equipment->getID())
+            ->withFlash('Service Equipment Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServiceEquipment $service_equipment
+     * @param ServiceEquipment $service_equipment
      *
      * @return mixed
      */
     public function show(ServiceEquipment $service_equipment)
     {
-        // TODO: Implement show() method.
+        return $service_equipment->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServiceEquipment $service_equipment
+     * @param ServiceEquipment $service_equipment
      *
      * @return mixed
      */
     public function delete(ServiceEquipment $service_equipment)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -94,12 +123,64 @@ class ServiceEquipmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceEquipment $service_equipment
+     * @param ServiceEquipment $service_equipment
      *
      * @return mixed
      */
-    public function destroy(ServiceEquipment $service_equipment)
+    public function destroy(ServiceEquipment $service_equipment, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$service_equipment->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServiceEquipment not deleted');
+        }
+
+        $servicesCount = $service_equipment->services()->count();
+
+        if ($servicesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicesCount} service equipment(s) still use this. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        $deleted = $service_equipment->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('ServiceEquipment deleted.')->setData('service_pricing_model', $service_equipment);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $serviceEquipServiceEquipmentServiceEquipments = ServiceEquipment::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($serviceEquipServiceEquipmentServiceEquipments)) {
+                return $response
+                    ->setData('service_equipment', [])
+                    ->setMessage('No service equipments found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_equipment', $serviceEquipServiceEquipmentServiceEquipments)
+                ->setMessage('Service equipment retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceEquipment indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service equipment: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }
