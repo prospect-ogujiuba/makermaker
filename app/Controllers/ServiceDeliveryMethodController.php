@@ -3,8 +3,11 @@
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Models\ServiceDeliveryMethod;
-use MakerMaker\View;
+use MakerMaker\Http\Fields\ServiceDeliveryMethodFields;
+use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
+use MakerMaker\View;
+use TypeRocket\Models\AuthUser;
 
 class ServiceDeliveryMethodController extends Controller
 {
@@ -23,9 +26,10 @@ class ServiceDeliveryMethodController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        // TODO: Implement add() method.
+        $form = tr_form(ServiceDeliveryMethod::class)->useErrors()->useOld()->useConfirm();
+        return View::new('service_delivery_methods.form', compact('form', 'user'));
     }
 
     /**
@@ -35,21 +39,37 @@ class ServiceDeliveryMethodController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServiceDeliveryMethodFields $fields, ServiceDeliveryMethod $service_delivery_method, Response $response, AuthUser $user)
     {
-        // TODO: Implement create() method.
+        if (!$service_delivery_method->can('create')) {
+            $response->unauthorized('Unauthorized: ServiceDeliveryMethod not created')->abort();
+        }
+
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
+
+        $service_delivery_method->save($fields);
+
+        return tr_redirect()->toPage('servicedeliverymethod', 'index')
+            ->withFlash('Service Pricing Model Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServiceDeliveryMethod $service_delivery_method
+     * @param ServiceDeliveryMethod $service_delivery_method
      *
      * @return mixed
      */
-    public function edit(ServiceDeliveryMethod $service_delivery_method)
+    public function edit(ServiceDeliveryMethod $service_delivery_method, AuthUser $user)
     {
-        // TODO: Implement edit() method.
+        $current_id = $service_delivery_method->getID();
+        $services = $service_delivery_method->services;
+        $createdBy = $service_delivery_method->createdBy;
+        $updatedBy = $service_delivery_method->updatedBy;
+        
+        $form = tr_form($service_delivery_method)->useErrors()->useOld()->useConfirm();
+        return View::new('service_delivery_methods.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -57,37 +77,46 @@ class ServiceDeliveryMethodController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceDeliveryMethod $service_delivery_method
+     * @param ServiceDeliveryMethod $service_delivery_method
      *
      * @return mixed
      */
-    public function update(ServiceDeliveryMethod $service_delivery_method)
+    public function update(ServiceDeliveryMethod $service_delivery_method, ServiceDeliveryMethodFields $fields, Response $response, AuthUser $user)
     {
-        // TODO: Implement update() method.
+        if (!$service_delivery_method->can('update')) {
+            $response->unauthorized('Unauthorized: ServiceDeliveryMethod not updated')->abort();
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $service_delivery_method->save($fields);
+
+        return tr_redirect()->toPage('servicedeliverymethod', 'edit', $service_delivery_method->getID())
+            ->withFlash('Service Pricing Model Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServiceDeliveryMethod $service_delivery_method
+     * @param ServiceDeliveryMethod $service_delivery_method
      *
      * @return mixed
      */
     public function show(ServiceDeliveryMethod $service_delivery_method)
     {
-        // TODO: Implement show() method.
+        return $service_delivery_method->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServiceDeliveryMethod $service_delivery_method
+     * @param ServiceDeliveryMethod $service_delivery_method
      *
      * @return mixed
      */
     public function delete(ServiceDeliveryMethod $service_delivery_method)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -95,12 +124,65 @@ class ServiceDeliveryMethodController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceDeliveryMethod $service_delivery_method
+     * @param ServiceDeliveryMethod $service_delivery_method
      *
      * @return mixed
      */
-    public function destroy(ServiceDeliveryMethod $service_delivery_method)
+    public function destroy(ServiceDeliveryMethod $service_delivery_method, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$service_delivery_method->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServiceDeliveryMethod not deleted');
+        }
+
+        // Check if this pricing model is still being used by service prices
+        $servicesCount = $service_delivery_method->services()->count();
+
+        if ($servicesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicesCount} service price(s) still use this pricing model. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        $deleted = $service_delivery_method->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('ServiceDeliveryMethod deleted.')->setData('service_pricing_model', $service_delivery_method);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $serviceDeliveryMethods = ServiceDeliveryMethod::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($serviceDeliveryMethods)) {
+                return $response
+                    ->setData('service_delivery_methods', [])
+                    ->setMessage('No service pricing models found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_delivery_methods', $serviceDeliveryMethods)
+                ->setMessage('Service pricing models retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceDeliveryMethod indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }

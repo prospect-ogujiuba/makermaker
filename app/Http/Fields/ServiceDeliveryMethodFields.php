@@ -2,10 +2,11 @@
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceDeliveryMethodFields extends Fields
 {
-    /**
+   /**
      * Run On Import
      *
      * Validate and then redirect on failure with errors, immediately
@@ -13,14 +14,15 @@ class ServiceDeliveryMethodFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +31,23 @@ class ServiceDeliveryMethodFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        global $wpdb;
+        $table_prefix = $wpdb->prefix;
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+
+        // Get the first route arg (the ID)
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        // Correct format: unique:field:table@id_column:id_value
+        $rules['name'] = "unique:name:{$table_prefix}srvc_pricing_models@id:{$id}|required";
+        $rules['code'] = "unique:code:{$table_prefix}srvc_pricing_models@id:{$id}|required";
+
+        return $rules;
     }
 
     /**
@@ -38,7 +55,8 @@ class ServiceDeliveryMethodFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

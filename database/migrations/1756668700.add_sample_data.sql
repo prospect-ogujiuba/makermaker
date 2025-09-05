@@ -29,14 +29,14 @@ INSERT INTO `{!!prefix!!}srvc_pricing_tiers` (`id`, `name`, `code`, `sort_order`
 
 -- Delivery Methods
 INSERT INTO `{!!prefix!!}srvc_delivery_methods` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1, 'On-Site Installation', 'ONSITE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(2, 'Remote Configuration', 'REMOTE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(3, 'Hybrid (On-site + Remote)', 'HYBRID', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(4, 'Client Self-Install', 'SELFINSTALL', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(5, 'White Glove Service', 'WHITEGLOVE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(6, 'Pickup', 'PICKUP', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(7, 'Shipping/Delivery', 'SHIPPING', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(8, 'In-Store Service', 'INSTORE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL);
+(1, 'On-Site Installation', 'ONSITE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(2, 'Remote Configuration', 'REMOTE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(3, 'Hybrid (On-site + Remote)', 'HYBRID', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(4, 'Client Self-Install', 'SELFINSTALL', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(5, 'White Glove Service', 'WHITEGLOVE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(6, 'Pickup', 'PICKUP', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(7, 'Shipping/Delivery', 'SHIPPING', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(8, 'In-Store Service', 'INSTORE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2);
 
 -- Coverage Areas
 INSERT INTO `{!!prefix!!}srvc_coverage_areas` (`id`, `code`, `name`, `geo`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
