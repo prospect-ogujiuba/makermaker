@@ -74,7 +74,9 @@ if (isset($current_id)) {
                         $form->text('id')
                             ->setLabel('ID')
                             ->setHelp('System generated ID')
-                            ->setAttribute('readonly', 'readonly')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+
                     )
                     ->withColumn(),
                 $form->row()
@@ -82,29 +84,36 @@ if (isset($current_id)) {
                         $form->text('created_at')
                             ->setLabel('Created At')
                             ->setHelp('Record creation timestamp')
-                            ->setAttribute('readonly', 'readonly')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
                     )
                     ->withColumn(
                         $form->text('updated_at')
                             ->setLabel('Updated At')
                             ->setHelp('Last update timestamp')
-                            ->setAttribute('readonly', 'readonly')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+
                     ),
                 $form->row()
                     ->withColumn(
-                        $form->text('created_by')
+                        $form->text('created_by_user')
                             ->setLabel('Created By')
                             ->setHelp('User ID who originally created this record')
                             ->setAttribute('value', $createdBy->user_nicename)
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
 
-                            ->setAttribute('readonly', 'readonly')
+
                     )
                     ->withColumn(
-                        $form->text('updated_by')
+                        $form->text('updated_by_user')
                             ->setLabel('Last Updated By')
                             ->setHelp('User ID who last updated this record')
                             ->setAttribute('value', $updatedBy->user_nicename)
-                            ->setAttribute('readonly', 'readonly')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+
                     ),
 
                 $form->row()
@@ -112,7 +121,9 @@ if (isset($current_id)) {
                         $form->text('deleted_at')
                             ->setLabel('Deleted At')
                             ->setHelp('Timestamp when this record was soft-deleted, if applicable')
-                            ->setAttribute('readonly', 'readonly')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+
                     )
                     ->withColumn()
             ]
@@ -134,21 +145,27 @@ if (isset($current_id)) {
             $row->column(
                 $form->text("Service Name")
                     ->setAttribute('value', $service->name ?? "Service #{$service->id}")
-                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
             );
 
             // Additional info column (optional)
             $row->column(
                 $form->text("SKU")
                     ->setAttribute('value', $service->sku ?? 'B2CNC-' . $service->id)
-                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
             );
 
             // ID Column (smaller width)
             $row->column(
                 $form->text("ID")
                     ->setAttribute('value', $service->id)
-                    ->setAttribute('readonly', 'readonly')
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
             );
 
             $service_fields[] = $row;
@@ -156,12 +173,12 @@ if (isset($current_id)) {
     } else {
         $service_fields[] = $form->text('No Services')
             ->setAttribute('value', 'No services are currently associated with this complexity level')
-            ->setAttribute('readonly', 'readonly');
+            ->setAttribute('readonly', true);
     }
 
     $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
-        NULL,
-        NULL,
+        'Related Services',
+        'Services using this complexity level',
         $service_fields
     ));
 
