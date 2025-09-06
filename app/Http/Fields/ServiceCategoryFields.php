@@ -2,6 +2,7 @@
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceCategoryFields extends Fields
 {
@@ -13,7 +14,7 @@ class ServiceCategoryFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
@@ -30,7 +31,17 @@ class ServiceCategoryFields extends Fields
      * @return array
      */
     protected function rules() {
-        return [];
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['name'] = "required";
+        $rules['slug'] = "required";
+        $rules['parent_id'] = "numeric|?required";
+
+        return $rules;
     }
 
     /**

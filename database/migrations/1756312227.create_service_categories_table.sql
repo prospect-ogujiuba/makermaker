@@ -5,18 +5,20 @@ CREATE TABLE `{!!prefix!!}srvc_categories` (
   `parent_id` bigint(20) DEFAULT NULL,
   `name` varchar(128) NOT NULL,
   `slug` varchar(128) NOT NULL,
-  `path` varchar(512) DEFAULT NULL COMMENT 'Materialized path for fast tree queries (e.g., /root/parent/child)',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
-  `created_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
-  `updated_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
+  `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
+  `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_category__slug` (`slug`),
   KEY `idx_category__parent_id` (`parent_id`),
-  KEY `idx_category__path` (`path`),
   KEY `idx_category__deleted_at` (`deleted_at`),
-  CONSTRAINT `fk_category__parent` FOREIGN KEY (`parent_id`) REFERENCES `{!!prefix!!}srvc_categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `idx_category__created_by` (`created_by`),
+  KEY `idx_category__updated_by` (`updated_by`),
+  CONSTRAINT `fk_category__parent` FOREIGN KEY (`parent_id`) REFERENCES `{!!prefix!!}srvc_categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_category__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_category__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Hierarchical service categorization';
 
 -- >>> Down >>>
