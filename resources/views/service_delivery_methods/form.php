@@ -115,6 +115,9 @@ if (isset($current_id)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
+    $services_fields = [];
+
+
     if ($services && count($services) > 0) {
         foreach ($services as $service) {
             $row = $form->row();

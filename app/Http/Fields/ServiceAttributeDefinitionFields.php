@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceAttributeDefinitionFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServiceAttributeDefinitionFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,25 @@ class ServiceAttributeDefinitionFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['service_type_id'] = "numeric|required";
+        $rules['code'] = "unique:code:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|required";
+        $rules['label'] = "unique:label:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|required";
+        $rules['data_type'] = "required";
+        $rules['enum_options'] = "?required";
+        $rules['unit'] = "?required";
+        $rules['required'] = "?required";
+
+
+
+        return $rules;
     }
 
     /**
@@ -38,7 +58,8 @@ class ServiceAttributeDefinitionFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

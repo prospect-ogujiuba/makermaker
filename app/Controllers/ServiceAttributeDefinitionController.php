@@ -1,9 +1,13 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
+use MakerMaker\Http\Fields\ServiceAttributeDefinitionFields;
 use MakerMaker\Models\ServiceAttributeDefinition;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
+use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 class ServiceAttributeDefinitionController extends Controller
 {
@@ -22,9 +26,10 @@ class ServiceAttributeDefinitionController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        // TODO: Implement add() method.
+        $form = tr_form(ServiceAttributeDefinition::class)->useErrors()->useOld()->useConfirm();
+        return View::new('service_attribute_definitions.form', compact('form', 'user'));
     }
 
     /**
@@ -34,21 +39,37 @@ class ServiceAttributeDefinitionController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServiceAttributeDefinitionFields $fields, ServiceAttributeDefinition $service_attribute_definition, Response $response, AuthUser $user)
     {
-        // TODO: Implement create() method.
+        if (!$service_attribute_definition->can('create')) {
+            $response->unauthorized('Unauthorized: Service Attribute Definition not created')->abort();
+        }
+
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
+
+        $service_attribute_definition->save($fields);
+
+        return tr_redirect()->toPage('serviceattributedefinition', 'index')
+            ->withFlash('Service Attribute Definition Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServiceAttributeDefinition $service_attribute_definition
+     * @param ServiceAttributeDefinition $service_attribute_definition
      *
      * @return mixed
      */
-    public function edit(ServiceAttributeDefinition $service_attribute_definition)
+    public function edit(ServiceAttributeDefinition $service_attribute_definition, AuthUser $user)
     {
-        // TODO: Implement edit() method.
+        $current_id = $service_attribute_definition->getID();
+        $services = $service_attribute_definition->services;
+        $createdBy = $service_attribute_definition->createdBy;
+        $updatedBy = $service_attribute_definition->updatedBy;
+
+        $form = tr_form($service_attribute_definition)->useErrors()->useOld()->useConfirm();
+        return View::new('service_attribute_definitions.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -56,37 +77,46 @@ class ServiceAttributeDefinitionController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceAttributeDefinition $service_attribute_definition
+     * @param ServiceAttributeDefinition $service_attribute_definition
      *
      * @return mixed
      */
-    public function update(ServiceAttributeDefinition $service_attribute_definition)
+    public function update(ServiceAttributeDefinition $service_attribute_definition, ServiceAttributeDefinitionFields $fields, Response $response, AuthUser $user)
     {
-        // TODO: Implement update() method.
+        if (!$service_attribute_definition->can('update')) {
+            $response->unauthorized('Unauthorized: ServiceAttributeDefinition not updated')->abort();
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $service_attribute_definition->save($fields);
+
+        return tr_redirect()->toPage('serviceattributedefinition', 'edit', $service_attribute_definition->getID())
+            ->withFlash('Service Attribute Definition Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServiceAttributeDefinition $service_attribute_definition
+     * @param ServiceAttributeDefinition $service_attribute_definition
      *
      * @return mixed
      */
     public function show(ServiceAttributeDefinition $service_attribute_definition)
     {
-        // TODO: Implement show() method.
+        return $service_attribute_definition->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServiceAttributeDefinition $service_attribute_definition
+     * @param ServiceAttributeDefinition $service_attribute_definition
      *
      * @return mixed
      */
     public function delete(ServiceAttributeDefinition $service_attribute_definition)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -94,12 +124,64 @@ class ServiceAttributeDefinitionController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceAttributeDefinition $service_attribute_definition
+     * @param ServiceAttributeDefinition $service_attribute_definition
      *
      * @return mixed
      */
-    public function destroy(ServiceAttributeDefinition $service_attribute_definition)
+    public function destroy(ServiceAttributeDefinition $service_attribute_definition, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$service_attribute_definition->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServiceAttributeDefinition not deleted');
+        }
+
+        $servicesCount = $service_attribute_definition->serviceType()->count();
+
+        if ($servicesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        $deleted = $service_attribute_definition->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('Service Attribute Definition deleted.')->setData('service_pricing_model', $service_attribute_definition);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $serviceAttributeDefinition = ServiceAttributeDefinition::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($serviceAttributeDefinition)) {
+                return $response
+                    ->setData('service_attribute_definition', [])
+                    ->setMessage('No service Attribute Definitions found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_attribute_definition', $serviceAttributeDefinition)
+                ->setMessage('Service Attribute Definition retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceAttributeDefinition indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service Attribute Definition: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }

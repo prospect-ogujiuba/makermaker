@@ -177,13 +177,13 @@
 
 ## Attribute Definition
 
-[AttributeDefinition-Migration]: /database/migrations/1756320652.create_attribute_definitions_table.sql
-[AttributeDefinition-Model]: /app/Models/AttributeDefinition.php
-[AttributeDefinition-Policy]: /app/Auth/AttributeDefinitionPolicy.php
-[AttributeDefinition-Fields]: /app/Http/Fields/AttributeDefinitionFields.php
-[AttributeDefinition-Controller]: /app/Controllers/AttributeDefinitionController.php
-[AttributeDefinition-Form]: /resources/views/attribute_definitions/form.php
-[AttributeDefinition-Index]: /resources/views/attribute_definitions/index.php
+[AttributeDefinition-Migration]: /database/migrations/1756320652.create_service_attribute_definitions_table.sql
+[AttributeDefinition-Model]: /app/Models/ServiceAttributeDefinition.php
+[AttributeDefinition-Policy]: /app/Auth/ServiceAttributeDefinitionPolicy.php
+[AttributeDefinition-Fields]: /app/Http/Fields/ServiceAttributeDefinitionFields.php
+[AttributeDefinition-Controller]: /app/Controllers/ServiceAttributeDefinitionController.php
+[AttributeDefinition-Form]: /resources/views/service_attribute_definitions/form.php
+[AttributeDefinition-Index]: /resources/views/service_attribute_definitions/index.php
 
 - [Migration][AttributeDefinition-Migration] - [Model][AttributeDefinition-Model] - [Policy][AttributeDefinition-Policy] - [Fields][AttributeDefinition-Fields] - [Controller][AttributeDefinition-Controller] - [Form][AttributeDefinition-Form] - [Index][AttributeDefinition-Index]
 
