@@ -16,15 +16,15 @@ $serviceSubpages = [
     createServiceResource('ServiceCategory', 'ServiceCategoryController', 'Categories'),
     createServiceResource('ServiceAttributeDefinition', 'ServiceAttributeDefinitionController', 'Attribute Definitions'),
     createServiceResource('ServiceBundle', 'ServiceBundleController', 'Bundle Offers'),
-    createServiceResource('ServicePrice', 'ServicePriceController', 'Service Prices'),
-    createServiceResource('ServiceAddon', 'ServiceAddonController', 'Service Addons'),
+    createServiceResource('ServicePrice', 'ServicePriceController', 'Prices'),
+    createServiceResource('ServiceAddon', 'ServiceAddonController', 'Addons'),
     createServiceResource('ServiceAttributeValue', 'ServiceAttributeValueController', 'Attribute Values'),
-    createServiceResource('ServiceCoverage', 'ServiceCoverageController', 'Service Coverages'),
-    createServiceResource('ServiceDeliverableAssignment', 'ServiceDeliverableAssignmentController', 'Service Deliverables'),
-    createServiceResource('ServiceDeliveryMethodAssignment', 'ServiceDeliveryMethodAssignmentController', 'Service Delivery Methods'),
-    createServiceResource('ServiceEquipmentAssignment', 'ServiceEquipmentAssignmentController', 'Service Equipment'),
-    createServiceResource('ServiceRelationship', 'ServiceRelationshipController', 'Service Relationships'),
-    createServiceResource('ServiceBundleItem', 'ServiceBundleItemController', 'Service Bundle Items'),
+    createServiceResource('ServiceCoverage', 'ServiceCoverageController', 'Coverages'),
+    createServiceResource('ServiceDeliverableAssignment', 'ServiceDeliverableAssignmentController', 'Deliverables'),
+    createServiceResource('ServiceDeliveryMethodAssignment', 'ServiceDeliveryMethodAssignmentController', 'Delivery Methods'),
+    createServiceResource('ServiceEquipmentAssignment', 'ServiceEquipmentAssignmentController', 'Equipment'),
+    createServiceResource('ServiceRelationship', 'ServiceRelationshipController', 'Relationships'),
+    createServiceResource('ServiceBundleItem', 'ServiceBundleItemController', 'Bundle Items'),
 ];
 
 $service_complexity_rest = \TypeRocket\Register\Registry::addCustomResource('service-complexity', [

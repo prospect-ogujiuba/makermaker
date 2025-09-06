@@ -79,6 +79,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             '\MakerMaker\Models\ServiceCoverageArea' => '\MakerMaker\Auth\ServiceCoverageAreaPolicy',
             '\MakerMaker\Models\ServiceDeliverable' => '\MakerMaker\Auth\ServiceDeliverablePolicy',
             '\MakerMaker\Models\ServiceEquipment' => '\MakerMaker\Auth\ServiceEquipmentPolicy',
+            '\MakerMaker\Models\ServiceType' => '\MakerMaker\Auth\ServiceTypePolicy',
         ];
     }
 

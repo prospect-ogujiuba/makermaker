@@ -1,10 +1,57 @@
 <?php
+
 /**
  * ServiceType Index View
- * 
- * This view displays a list of serviceTypes.
- * Add your index/list functionality here.
  */
- 
- tr_smart_index(\MakerMaker\Models\ServiceType::class);
-?>
+
+use MakerMaker\Models\ServiceType;
+
+$table = tr_table(ServiceType::class);
+
+$table->setBulkActions(tr_form()->useConfirm(), []);
+
+$table->setColumns([
+    'name' => [
+        'label' => 'Name',
+        'sort' => true,
+        'actions' => ['edit', 'view', 'delete'],
+    ],
+
+    'code' => [
+        'label' => 'Code',
+        'sort' => true,
+    ],
+
+    'services' => [
+        'label' => 'Services',
+        'callback' => function ($value, $item) {
+            return count((array)$item->services);
+        }
+    ],
+
+    'created_at' => [
+        'label' => 'Created',
+        'sort' => true,
+        'callback' => function ($value, $item) {
+            return date('M j, Y g:i A', strtotime($value));
+        }
+    ],
+
+    'updated_at' => [
+        'label' => 'Updated',
+        'sort' => true,
+        'callback' => function ($value, $item) {
+            return date('M j, Y g:i A', strtotime($value));
+        }
+    ],
+    'createdBy.user_nicename' => [
+        'label' => 'Created By',
+    ],
+    'updatedBy.user_nicename' => [
+        'label' => 'Last Updated By',
+    ],
+    'id' => [
+        'label' => 'ID',
+        'sort' => 'true'
+    ]
+], 'name')->setOrder('ID', 'DESC')->render();

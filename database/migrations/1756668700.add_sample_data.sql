@@ -89,16 +89,16 @@ INSERT INTO `{!!prefix!!}srvc_equipment` (`id`, `sku`, `name`, `manufacturer`, `
 
 -- Service Types
 INSERT INTO `{!!prefix!!}srvc_service_types` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1, 'Installation Services', 'INSTALL', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(2, 'Maintenance & Support', 'SUPPORT', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(3, 'Consulting Services', 'CONSULT', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(4, 'Training Services', 'TRAINING', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(5, 'Configuration Services', 'CONFIG', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(6, 'Repair Services', 'REPAIR', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(7, 'Upgrade Services', 'UPGRADE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(8, 'Design & Planning', 'DESIGN', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(9, 'Monitoring Services', 'MONITOR', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL),
-(10, 'Emergency Services', 'EMERGENCY', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, NULL, NULL);
+(1, 'Installation Services', 'INSTALL', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(2, 'Maintenance & Support', 'SUPPORT', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(3, 'Consulting Services', 'CONSULT', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(4, 'Training Services', 'TRAINING', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(5, 'Configuration Services', 'CONFIG', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(6, 'Repair Services', 'REPAIR', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(7, 'Upgrade Services', 'UPGRADE', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(8, 'Design & Planning', 'DESIGN', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(9, 'Monitoring Services', 'MONITOR', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2),
+(10, 'Emergency Services', 'EMERGENCY', '2025-08-25 23:57:07', TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL, 1, 2);
 
 -- Service Categories
 INSERT INTO `{!!prefix!!}srvc_categories` (`id`, `parent_id`, `name`, `slug`, `path`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
