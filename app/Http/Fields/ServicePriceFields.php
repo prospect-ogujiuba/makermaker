@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServicePriceFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServicePriceFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,36 @@ class ServicePriceFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        // Core Required Fields
+        $rules['service_id'] = 'required|numeric';
+        $rules['pricing_tier_id'] = 'required|numeric';
+        $rules['pricing_model_id'] = 'required|numeric';
+        $rules['currency'] = 'required';
+        $rules['effective_from'] = 'required';
+
+        // Amount validation - allow null for quote-based pricing
+        $rules['amount'] = 'numeric|min:0';
+
+        // Unit validation
+        $rules['unit'] = 'max:32';
+
+        // Quantity validation
+        $rules['min_qty'] = '?required|numeric|min:0';
+        $rules['max_qty'] = '?numeric|min:0';
+
+        // Setup fee validation
+        $rules['setup_fee'] = '?required|numeric|min:0';
+        $rules['notes'] = 'max:512';
+
+        return $rules;
     }
 
     /**
@@ -38,7 +69,8 @@ class ServicePriceFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

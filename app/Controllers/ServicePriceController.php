@@ -1,10 +1,12 @@
 <?php
-
 namespace MakerMaker\Controllers;
 
+use MakerMaker\Http\Fields\ServicePriceFields;
 use MakerMaker\Models\ServicePrice;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
+use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 class ServicePriceController extends Controller
 {
@@ -23,9 +25,10 @@ class ServicePriceController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        // TODO: Implement add() method.
+        $form = tr_form(ServicePrice::class)->useErrors()->useOld()->useConfirm();
+        return View::new('service_prices.form', compact('form', 'user'));
     }
 
     /**
@@ -35,21 +38,39 @@ class ServicePriceController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServicePriceFields $fields, ServicePrice $servicePrice, Response $response, AuthUser $user)
     {
-        // TODO: Implement create() method.
+        if (!$servicePrice->can('create')) {
+            $response->unauthorized('Unauthorized: ServicePrice not created')->abort();
+        }
+
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
+
+        $servicePrice->save($fields);
+
+        return tr_redirect()->toPage('serviceprice', 'index')
+            ->withFlash('Service Price Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServicePrice $service_price
+     * @param ServicePrice $servicePrice
      *
      * @return mixed
      */
-    public function edit(ServicePrice $service_price)
+    public function edit(ServicePrice $servicePrice, AuthUser $user)
     {
-        // TODO: Implement edit() method.
+        $current_id = $servicePrice->getID();
+        $service = $servicePrice->service;
+        $pricingTier = $servicePrice->pricingTier;
+        $pricingModel = $servicePrice->pricingModel;
+        $createdBy = $servicePrice->createdBy;
+        $updatedBy = $servicePrice->updatedBy;
+
+        $form = tr_form($servicePrice)->useErrors()->useOld()->useConfirm();
+        return View::new('service_prices.form', compact('form', 'current_id', 'service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -57,37 +78,46 @@ class ServicePriceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServicePrice $service_price
+     * @param ServicePrice $servicePrice
      *
      * @return mixed
      */
-    public function update(ServicePrice $service_price)
+    public function update(ServicePrice $servicePrice, ServicePriceFields $fields, Response $response, AuthUser $user)
     {
-        // TODO: Implement update() method.
+        if (!$servicePrice->can('update')) {
+            $response->unauthorized('Unauthorized: ServicePrice not updated')->abort();
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $servicePrice->save($fields);
+
+        return tr_redirect()->toPage('serviceprice', 'edit', $servicePrice->getID())
+            ->withFlash('Service Price Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServicePrice $service_price
+     * @param ServicePrice $servicePrice
      *
      * @return mixed
      */
-    public function show(ServicePrice $service_price)
+    public function show(ServicePrice $servicePrice)
     {
-        // TODO: Implement show() method.
+        return $servicePrice->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServicePrice $service_price
+     * @param ServicePrice $servicePrice
      *
      * @return mixed
      */
-    public function delete(ServicePrice $service_price)
+    public function delete(ServicePrice $servicePrice)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -95,12 +125,56 @@ class ServicePriceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServicePrice $service_price
+     * @param ServicePrice $servicePrice
      *
      * @return mixed
      */
-    public function destroy(ServicePrice $service_price)
+    public function destroy(ServicePrice $servicePrice, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$servicePrice->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServicePrice not deleted');
+        }
+
+        $deleted = $servicePrice->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('Service Price deleted.')->setData('serviceprice', $servicePrice);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $servicePrices = ServicePrice::new()
+                ->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($servicePrices)) {
+                return $response
+                    ->setData('service_prices', [])
+                    ->setMessage('No service prices found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_prices', $servicePrices)
+                ->setMessage('Service Prices retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServicePrice indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service prices: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }
