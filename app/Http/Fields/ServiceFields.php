@@ -2,6 +2,7 @@
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceFields extends Fields
 {
@@ -13,7 +14,7 @@ class ServiceFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
@@ -30,7 +31,31 @@ class ServiceFields extends Fields
      * @return array
      */
     protected function rules() {
-        return [];
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        // Core Required Fields
+        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}required";
+        $rules['slug'] = "unique:slug:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}|required";
+        $rules['category_id'] = 'required|numeric';
+        $rules['service_type_id'] = 'required|numeric';
+        $rules['complexity_id'] = 'required|numeric';
+
+        // Optional Fields with Constraints
+        $rules['sku'] = "unique:sku:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}";
+        $rules['short_desc'] = 'max:512';
+        $rules['long_desc'] = '?required';
+        $rules['default_unit'] = 'max:32';
+        $rules['metadata'] = '?required'; // JSON validation could be added with custom validator
+
+        // Boolean Fields
+        $rules['is_active'] = '?numeric';
+        $rules['is_addon'] = '?numeric';
+
+        return $rules;
     }
 
     /**

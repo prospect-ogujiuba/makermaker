@@ -18,8 +18,8 @@ CREATE TABLE `{!!prefix!!}srvc_services` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
-  `created_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
-  `updated_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
+  `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
+  `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_service__slug` (`slug`),
   UNIQUE KEY `uq_service__sku` (`sku`),
@@ -29,11 +29,15 @@ CREATE TABLE `{!!prefix!!}srvc_services` (
   KEY `idx_service__is_active` (`is_active`),
   KEY `idx_service__is_addon` (`is_addon`),
   KEY `idx_service__deleted_at` (`deleted_at`),
+  KEY `idx_service__created_by` (`created_by`),
+  KEY `idx_service__updated_by` (`updated_by`),
   KEY `idx_service__sku` (`sku`),
   KEY `idx_service__slug` (`slug`),
   CONSTRAINT `fk_service__category` FOREIGN KEY (`category_id`) REFERENCES `{!!prefix!!}srvc_categories` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service__complexity` FOREIGN KEY (`complexity_id`) REFERENCES `{!!prefix!!}srvc_complexities` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_service__service_type` FOREIGN KEY (`service_type_id`) REFERENCES `{!!prefix!!}srvc_service_types` (`id`) ON UPDATE CASCADE
+  CONSTRAINT `fk_service__service_type` FOREIGN KEY (`service_type_id`) REFERENCES `{!!prefix!!}srvc_service_types` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_service__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_service__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Core service catalog entries';
 
 -- >>> Down >>>
