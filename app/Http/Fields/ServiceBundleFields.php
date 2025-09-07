@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceBundleFields extends Fields
 {
@@ -20,7 +22,8 @@ class ServiceBundleFields extends Fields
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,22 @@ class ServiceBundleFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_bundles@id:{$id}|required";
+        $rules['slug'] = "unique:slug:{GLOBAL_WPDB_PREFIX}srvc_bundles@id:{$id}|required";
+        $rules['short_desc'] = "required";
+        $rules['is_active'] = "?required";
+
+
+
+        return $rules;
     }
 
     /**
@@ -38,7 +55,8 @@ class ServiceBundleFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

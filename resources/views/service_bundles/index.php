@@ -1,10 +1,53 @@
 <?php
+
 /**
  * ServiceBundle Index View
- * 
- * This view displays a list of serviceBundles.
- * Add your index/list functionality here.
  */
- 
- tr_smart_index(\MakerMaker\Models\ServiceBundle::class);
-?>
+
+use MakerMaker\Models\ServiceBundle;
+
+$table = tr_table(ServiceBundle::class);
+
+$table->setBulkActions(tr_form()->useConfirm(), []);
+
+$table->setColumns([
+    'name' => [
+        'label' => 'Bundle Name',
+        'sort' => 'true',
+        'actions' => ['edit', 'view', 'delete'],
+    ],
+    'short_desc' => [
+        'label' => 'Short Description',
+        'sort' => 'true'
+    ],
+    'services' => [
+        'label' => 'Services',
+        'callback' => function ($value, $item) {
+            return count((array)$item->services);
+        }
+    ],
+    'is_active' => [
+        'label' => 'Is Active',
+        'sort' => 'true'
+    ],
+    'created_at' => [
+        'label' => 'Created At',
+        'sort' => 'true'
+    ],
+    'updated_at' => [
+        'label' => 'Updated At',
+        'sort' => 'true'
+    ],
+    'createdBy.user_nicename' => [
+        'label' => 'Created By',
+    ],
+    'updatedBy.user_nicename' => [
+        'label' => 'Last Updated By',
+    ],
+    'id' => [
+        'label' => 'ID',
+        'sort' => 'true'
+    ]
+], 'name')->setOrder('ID', 'DESC')->render();
+
+$table;

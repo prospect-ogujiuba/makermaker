@@ -134,7 +134,7 @@ INSERT INTO `{!!prefix!!}srvc_attribute_definitions` (`id`, `service_type_id`, `
 (7,	2,	'cable_runs',	'Number of Cable Runs',	'int',	NULL,	'runs',	1,	NOW(),	NOW(), NULL, 1, 2),
 (8,	2,	'cable_length',	'Total Cable Length',	'int',	NULL,	'feet',	0,	NOW(),	NOW(), NULL, 1, 2),
 (9,	2,	'outlet_count',	'Network Outlets',	'int',	NULL,	'outlets',	1,	NOW(),	NOW(), NULL, 1, 2),
-(10,	2,	'cable_category',	'Cable Category',	'enum',	'[\"Cat5e\", \"Cat6\", \"Cat6A\", \"Cat7\", \"Fiber\"]',	NULL,	1,	NOW(),	NOW(), NULL, 1, 2),
+(10,	2,	'cable_category',	'Cable Category',	'enum',	"[{\"option\":\"Cat5e\"}, {\"option\":\"Cat6\"}, {\"option\":\"Cat6A\"}, {\"option\":\"Cat7\"}, {\"option\":\"Fiber\"}]",	NULL,	1,	NOW(),	NOW(), NULL, 1, 2),
 (11,	2,	'fiber_required',	'Fiber Optic Required',	'bool',	NULL,	NULL,	0,	NOW(),	NOW(), NULL, 1, 2),
 (12,	2,	'wireless_coverage',	'Wireless Coverage Area',	'int',	NULL,	'sq_ft',	0,	NOW(),	NOW(), NULL, 1, 2),
 (13,	2,	'access_points',	'Number of Access Points',	'int',	NULL,	'devices',	0,	NOW(),	NOW(), NULL, 1, 2),
@@ -146,7 +146,7 @@ INSERT INTO `{!!prefix!!}srvc_attribute_definitions` (`id`, `service_type_id`, `
 (19,	3,	'coverage_area',	'Coverage Area',	'int',	NULL,	'sq_ft',	1,	NOW(),	NOW(), NULL, 1, 2),
 (20,	4,	'door_count',	'Number of Doors',	'int',	NULL,	'doors',	1,	NOW(),	NOW(), NULL, 1, 2),
 (21,	4,	'user_capacity',	'User Capacity',	'int',	NULL,	'users',	1,	NOW(),	NOW(), NULL, 1, 2),
-(22,	4,	'card_technology',	'Card Technology',	'enum',	'[\"Proximity\", \"Mifare\", \"iClass\", \"Mobile\", \"Biometric\"]',	NULL,	1,	NOW(),	NOW(), NULL, 1, 2),
+(22,	4,	'card_technology',	'Card Technology',	'enum',	"[{\"option\":\"Proximity\"},{\"option\":\"Mifare\"},{\"option\":\"iClass\"},{\"option\":\"Mobile\"},{\"option\":\"Biometric\"}]",	NULL,	1,	NOW(),	NOW(), NULL, 1, 2),
 (23,	4,	'integration_required',	'System Integration',	'bool',	NULL,	NULL,	0,	NOW(),	NOW(), NULL, 1, 2),
 (24,	4,	'time_attendance',	'Time & Attendance',	'bool',	NULL,	NULL,	0,	NOW(),	NOW(), NULL, 1, 2),
 (25,	5,	'install_duration',	'Installation Duration',	'int',	NULL,	'days',	1,	NOW(),	NOW(), NULL, 1, 2),
@@ -156,11 +156,11 @@ INSERT INTO `{!!prefix!!}srvc_attribute_definitions` (`id`, `service_type_id`, `
 
 -- Service Bundles
 INSERT INTO `{!!prefix!!}srvc_bundles` (`id`, `name`, `slug`, `short_desc`, `is_active`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'Small Office Complete',	'small-office-complete',	'Complete IT solution for small offices (5-15 employees)',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(2,	'Medium Business Package',	'medium-business-package',	'Comprehensive IT infrastructure for growing businesses (15-50 employees)',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(3,	'Enterprise Security Suite',	'enterprise-security-suite',	'Complete security solution with cameras, access control, and monitoring',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(4,	'Network Infrastructure Bundle',	'network-infrastructure-bundle',	'Complete network setup with cabling, equipment, and wireless',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL),
-(5,	'Communication Package',	'communication-package',	'VoIP system with professional installation and training',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	NULL,	NULL);
+(1,	'Small Office Complete',	'small-office-complete',	'Complete IT solution for small offices (5-15 employees)',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(2,	'Medium Business Package',	'medium-business-package',	'Comprehensive IT infrastructure for growing businesses (15-50 employees)',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(3,	'Enterprise Security Suite',	'enterprise-security-suite',	'Complete security solution with cameras, access control, and monitoring',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(4,	'Network Infrastructure Bundle',	'network-infrastructure-bundle',	'Complete network setup with cabling, equipment, and wireless',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(5,	'Communication Package',	'communication-package',	'VoIP system with professional installation and training',	1,	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
 
 -- Services
 INSERT INTO `{!!prefix!!}srvc_services` (`id`, `sku`, `slug`, `name`, `short_desc`, `long_desc`, `category_id`, `service_type_id`, `complexity_id`, `is_active`, `is_addon`, `default_unit`, `metadata`, `version`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
