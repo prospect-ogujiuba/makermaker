@@ -104,7 +104,7 @@ class ServiceAttributeDefinitionController extends Controller
      */
     public function show(ServiceAttributeDefinition $service_attribute_definition)
     {
-        return $service_attribute_definition->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_attribute_definition->with(['services', 'serviceType', 'createdBy', 'updatedBy'])->get();
     }
 
     /**

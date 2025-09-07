@@ -40,13 +40,13 @@ class ServiceAttributeDefinitionFields extends Fields
 
         $rules = [];
 
-        $rules['service_type_id'] = "numeric|required";
+        $rules['service_type_id'] = "unique:service_type_id:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|numeric|required";
         $rules['code'] = "unique:code:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|required";
         $rules['label'] = "unique:label:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|required";
         $rules['data_type'] = "required";
         $rules['enum_options'] = "?required";
         $rules['unit'] = "?required";
-        $rules['required'] = "?required";
+        $rules['required'] = "?numeric";
 
 
 

@@ -18,27 +18,24 @@ $tabs = tr_tabs()
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Attribute Definition',
-        'Define the attribute Definition level characteristics and pricing impact',
+        'Define the attribute definition characteristics and pricing impact',
         [
             $form->row()
                 ->withColumn(
-                    $form->select('service_type_id')
+                   $form->text('label')
+                    ->setLabel('Attribute Name')
+                    ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                    ->setAttribute('maxlength', '100')
+                    ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                    ->markLabelRequired()
+                )
+                ->withColumn( $form->select('service_type_id')
                         ->setLabel('Service Type')
-                        ->setHelp('Descriptive name for this attribute Definition level (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                        ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
                         ->setOptions(['Select Service Type' => NULL])
                         ->setModelOptions(ServiceType::class, 'name', 'id')
-                        ->markLabelRequired()
-                )
-                ->withColumn(),
+                        ->markLabelRequired()),
             $form->row()
-                ->withColumn(
-                    $form->text('label')
-                        ->setLabel('Name')
-                        ->setHelp('Descriptive name for this attribute Definition level (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
-                        ->markLabelRequired()
-                )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Attribute Code')
@@ -46,53 +43,50 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('min', '1')
                         ->setAttribute('step', '1')
                         ->markLabelRequired()
-                ),
-            $form->row()
-                ->withColumn(
-                    $form->select('data_type')
-                        ->setLabel('Attribute Data Type')
-                        ->setHelp('Descriptive name for this attribute Definition level (e.g., "int", "decimal", "bool", "text", "enum")')
-                        ->setOptions([
-                            'Integer' => 'int',
-                            'Decimal' => 'decimal',
-                            'Bool' => 'bool',
-                            'Text' => 'text',
-                            'Enum' => 'enum',
-                        ])
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
-                        ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->select('enum_options')
-                        ->setLabel('List Options')
-                        ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
-                        ->setOptions([
-                            'Integer' => 'int',
-                            'Decimal' => 'decimal',
-                            'Bool' => 'bool',
-                            'Text' => 'text',
-                            'Enum' => 'enum',
-                        ])
-                        ->markLabelRequired()
-                ),
-            $form->row()
-                ->withColumn(
-                    $form->text('unit')
+                  $form->text('unit')
                         ->setLabel('Unit')
                         ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
                         ->setAttribute('min', '1')
                         ->setAttribute('step', '1')
                         ->markLabelRequired()
-                )
+                ),
+            $form->row()
                 ->withColumn(
-                    $form->checkbox('required')
-                        ->setLabel('Required')
-                        ->setHelp('Descriptive name for this attribute Definition level (e.g., "int", "decimal", "bool", "text", "enum")')
+                      $form->select('data_type')
+                        ->setLabel('Attribute Data Type')
+                        ->setHelp('Descriptive name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
+                        ->setOptions([
+                            'Integer' => 'int',
+                            'Decimal' => 'decimal',
+                            'Bool' => 'bool',
+                            'Text' => 'text',
+                            'Enum' => 'enum',
+                        ])
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
+                ->withColumn(
+                    $form->repeater('Options')->setName('enum_options')
+                        ->setFields([
+                            $form->row()
+                                ->withColumn(
+                                    $form->text('Option')->setName('option')->setHelp('Option to save to database')
+                                )
+                        ])->when('data_type', '=', 'enum')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('required')
+                        ->setLabel('Required')
+                        ->setHelp('Descriptive name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
+                        ->setAttribute('maxlength', '100')
+                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->markLabelRequired()
+                )
+                ->withColumn()
         ]
     )
 
@@ -209,14 +203,14 @@ if (isset($current_id)) {
         }
     } else {
         $service_fields[] = $form->text('No Services')
-            ->setAttribute('value', 'No services are currently associated with this attribute Definition level')
+            ->setAttribute('value', 'No services are currently associated with this attribute definition')
             ->setAttribute('readonly', true)
             ->setAttribute('name', false);
     }
 
     $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
         'Related Services',
-        'Services using this attribute Definition level',
+        'Services using this attribute definition',
         $service_fields
     ));
 

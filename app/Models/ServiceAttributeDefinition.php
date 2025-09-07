@@ -3,6 +3,7 @@
 namespace MakerMaker\Models;
 
 use TypeRocket\Models\Model;
+use TypeRocket\Models\WPUser;
 
 class ServiceAttributeDefinition extends Model
 {
@@ -21,7 +22,7 @@ class ServiceAttributeDefinition extends Model
     ];
 
     protected $format = [
-        'enum_options' => 'json'
+        'enum_options' => 'json_encode'
     ];
     protected $cast = [
         'enum_options' => 'array'
@@ -33,6 +34,12 @@ class ServiceAttributeDefinition extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    /** Services using this attribute definition */
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_attribute_values', 'attribute_definition_id', 'service_id');
+    }
 
     /** ServiceAttributeDefinition belongs to a ServiceType */
     public function serviceType()
@@ -49,12 +56,12 @@ class ServiceAttributeDefinition extends Model
     /** Created by WP user */
     public function createdBy()
     {
-        return $this->belongsTo(\TypeRocket\Models\WPUser::class, 'created_by');
+        return $this->belongsTo(WPUser::class, 'created_by');
     }
 
     /** Updated by WP user */
     public function updatedBy()
     {
-        return $this->belongsTo(\TypeRocket\Models\WPUser::class, 'updated_by');
+        return $this->belongsTo(WPUser::class, 'updated_by');
     }
 }
