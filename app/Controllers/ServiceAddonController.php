@@ -1,13 +1,16 @@
 <?php
 namespace MakerMaker\Controllers;
 
+use MakerMaker\Http\Fields\ServiceAddonFields;
 use MakerMaker\Models\ServiceAddon;
 use TypeRocket\Controllers\Controller;
 use MakerMaker\View;
+use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 class ServiceAddonController extends Controller
 {
-    /**
+       /**
      * The index page for admin
      *
      * @return mixed
@@ -22,9 +25,10 @@ class ServiceAddonController extends Controller
      *
      * @return mixed
      */
-    public function add()
+    public function add(AuthUser $user)
     {
-        // TODO: Implement add() method.
+        $form = tr_form(ServiceAddon::class)->useErrors()->useOld()->useConfirm();
+        return View::new('service_addons.form', compact('form', 'user'));
     }
 
     /**
@@ -34,21 +38,36 @@ class ServiceAddonController extends Controller
      *
      * @return mixed
      */
-    public function create()
+    public function create(ServiceAddonFields $fields, ServiceAddon $service_addon, Response $response, AuthUser $user)
     {
-        // TODO: Implement create() method.
+        if (!$service_addon->can('create')) {
+            $response->unauthorized('Unauthorized: Service Attribute Definition not created')->abort();
+        }
+
+        $fields['created_by'] = $user->ID;
+        $fields['updated_by'] = $user->ID;
+
+        $service_addon->save($fields);
+
+        return tr_redirect()->toPage('serviceaddon', 'index')
+            ->withFlash('Service Attribute Definition Created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param string|ServiceAddon $service_addon
+     * @param ServiceAddon $service_addon
      *
      * @return mixed
      */
-    public function edit(ServiceAddon $service_addon)
+    public function edit(ServiceAddon $service_addon, AuthUser $user)
     {
-        // TODO: Implement edit() method.
+        $current_id = $service_addon->getID();
+        $createdBy = $service_addon->createdBy;
+        $updatedBy = $service_addon->updatedBy;
+
+        $form = tr_form($service_addon)->useErrors()->useOld()->useConfirm();
+        return View::new('service_addons.form', compact('form', 'current_id', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -56,37 +75,46 @@ class ServiceAddonController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceAddon $service_addon
+     * @param ServiceAddon $service_addon
      *
      * @return mixed
      */
-    public function update(ServiceAddon $service_addon)
+    public function update(ServiceAddon $service_addon, ServiceAddonFields $fields, Response $response, AuthUser $user)
     {
-        // TODO: Implement update() method.
+        if (!$service_addon->can('update')) {
+            $response->unauthorized('Unauthorized: ServiceAddon not updated')->abort();
+        }
+
+        $fields['updated_by'] = $user->ID;
+
+        $service_addon->save($fields);
+
+        return tr_redirect()->toPage('serviceaddon', 'edit', $service_addon->getID())
+            ->withFlash('Service Attribute Definition Updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param string|ServiceAddon $service_addon
+     * @param ServiceAddon $service_addon
      *
      * @return mixed
      */
     public function show(ServiceAddon $service_addon)
     {
-        // TODO: Implement show() method.
+        return $service_addon->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param string|ServiceAddon $service_addon
+     * @param ServiceAddon $service_addon
      *
      * @return mixed
      */
     public function delete(ServiceAddon $service_addon)
     {
-        // TODO: Implement delete() method.
+        //
     }
 
     /**
@@ -94,12 +122,64 @@ class ServiceAddonController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param string|ServiceAddon $service_addon
+     * @param ServiceAddon $service_addon
      *
      * @return mixed
      */
-    public function destroy(ServiceAddon $service_addon)
+    public function destroy(ServiceAddon $service_addon, Response $response)
     {
-        // TODO: Implement destroy() method.
+        if (!$service_addon->can('destroy')) {
+            return $response->unauthorized('Unauthorized: ServiceAddon not deleted');
+        }
+
+        $servicesCount = $service_addon->service()->count();
+
+        if ($servicesCount > 0) {
+            return $response
+                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this. Reassign or remove them first.")
+                ->setStatus(409);
+        }
+
+        $deleted = $service_addon->delete();
+
+        if ($deleted === false) {
+            return $response
+                ->error('Delete failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        return $response->success('Service Attribute Definition deleted.')->setData('service_pricing_model', $service_addon);
+    }
+
+    /**
+     * The index function for API
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function indexRest(Response $response)
+    {
+        try {
+            $serviceAddon = ServiceAddon::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->get();
+
+            if (empty($serviceAddon)) {
+                return $response
+                    ->setData('service_attribute_definition', [])
+                    ->setMessage('No service Attribute Definitions found', 'info')
+                    ->setStatus(200);
+            }
+
+            return $response
+                ->setData('service_attribute_definition', $serviceAddon)
+                ->setMessage('Service Attribute Definition retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceAddon indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve service Attribute Definition: ' . $e->getMessage())
+                ->setStatus(500);
+        }
     }
 }
