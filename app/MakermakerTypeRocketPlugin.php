@@ -86,6 +86,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             '\MakerMaker\Models\Service' => '\MakerMaker\Auth\ServicePolicy',
             '\MakerMaker\Models\ServicePrice' => '\MakerMaker\Auth\ServicePricePolicy',
             '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',
+            '\MakerMaker\Models\ServiceAttributeValue' => '\MakerMaker\Auth\ServiceAttributeValuePolicy',
         ];
     }
 

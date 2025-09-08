@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceAttributeValueFields extends Fields
 {
@@ -20,7 +22,8 @@ class ServiceAttributeValueFields extends Fields
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,22 @@ class ServiceAttributeValueFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['service_id'] = 'required';
+        $rules['attribute_definition_id'] = 'required';
+        $rules['int_val'] = 'numeric|?required';
+        $rules['bool_val'] = '?required';
+        $rules['text_val'] = '?required';
+        $rules['enum_val'] = '?required';
+
+        return $rules;
     }
 
     /**
@@ -38,7 +55,8 @@ class ServiceAttributeValueFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }
