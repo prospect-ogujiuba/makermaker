@@ -1,6 +1,7 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_attribute_values` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `attribute_definition_id` bigint(20) NOT NULL,
   `int_val` bigint(20) DEFAULT NULL,
@@ -13,7 +14,9 @@ CREATE TABLE `{!!prefix!!}srvc_service_attribute_values` (
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'Fk to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'Fk to user table',
-  PRIMARY KEY (`service_id`,`attribute_definition_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_attribute_value` (`service_id`,`attribute_definition_id`),
+  KEY `idx_service_attribute_value__service_id` (`service_id`),
   KEY `idx_service_attribute_value__attribute_definition_id` (`attribute_definition_id`),
   KEY `idx_service_attribute_value__deleted_at` (`deleted_at`),
   KEY `idx_service_attribute_value__created_by` (`created_by`),
