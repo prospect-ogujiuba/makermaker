@@ -2,8 +2,50 @@
 
 namespace MakerMaker\Http\Fields;
 
+use MakerMaker\Models\ServiceAttributeDefinition;
+use MakerMaker\Models\ServiceAttributeValue;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
+
+// Define the standalone function OUTSIDE the class
+function validateTypedValue($args)
+{
+    /**
+     * @var $option
+     * @var $option2
+     * @var $option3
+     * @var $name
+     * @var $field_name
+     * @var $value
+     * @var $type
+     * @var \TypeRocket\Utility\Validator $validator
+     */
+    extract($args);
+
+    // Get all form data from validator
+    $form_data = $validator->getFields();
+    $attributeDefinitionId = $form_data['attribute_definition_id'] ?? null;
+
+    if (!$attributeDefinitionId) {
+        return 'Attribute definition is required';
+    }
+
+    // Create instance and find the definition
+    $definitionModel = new ServiceAttributeDefinition();
+    $definition = $definitionModel->findById($attributeDefinitionId);
+
+    if (!$definition) {
+        return 'Invalid attribute definition';
+    }
+
+    // Create temporary model instance for validation
+    $tempModel = new ServiceAttributeValue();
+    $tempModel->attribute_definition_id = $attributeDefinitionId;
+
+    $validation = $tempModel->validateValue($value);
+
+    return $validation['Valid'] ? true : $validation['Message'];
+}
 
 class ServiceAttributeValueFields extends Fields
 {
@@ -15,7 +57,7 @@ class ServiceAttributeValueFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
@@ -42,10 +84,7 @@ class ServiceAttributeValueFields extends Fields
 
         $rules['service_id'] = 'required';
         $rules['attribute_definition_id'] = 'required';
-        $rules['int_val'] = 'numeric|?required';
-        $rules['bool_val'] = '?required';
-        $rules['text_val'] = '?required';
-        $rules['enum_val'] = '?required';
+        $rules['value'] = 'required';
 
         return $rules;
     }

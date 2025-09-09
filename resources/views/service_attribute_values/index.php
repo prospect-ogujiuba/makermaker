@@ -20,24 +20,8 @@ $table->setColumns([
         'label' => 'Parent ID',
         'sort' => 'true'
     ],
-    'int_val' => [
+    'value' => [
         'label' => 'Int Val',
-        'sort' => 'true'
-    ],
-    'decimal_val' => [
-        'label' => 'Decimal Val',
-        'sort' => 'true'
-    ],
-    'bool_val' => [
-        'label' => 'Bool Val',
-        'sort' => 'true'
-    ],
-    'text_val' => [
-        'label' => 'Text Val',
-        'sort' => 'true'
-    ],
-    'enum_val' => [
-        'label' => 'Enum Val',
         'sort' => 'true'
     ],
     'created_at' => [

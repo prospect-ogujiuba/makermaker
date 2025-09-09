@@ -1,19 +1,15 @@
--- Description:
+-- Description: Service Attribute Values
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_attribute_values` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `attribute_definition_id` bigint(20) NOT NULL,
-  `int_val` bigint(20) DEFAULT NULL,
-  `decimal_val` decimal(18,6) DEFAULT NULL,
-  `bool_val` tinyint(1) DEFAULT NULL,
-  `text_val` text DEFAULT NULL,
-  `enum_val` varchar(64) DEFAULT NULL,
+  `value` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
-  `created_by` bigint(20) unsigned NOT NULL COMMENT 'Fk to user table',
-  `updated_by` bigint(20) unsigned NOT NULL COMMENT 'Fk to user table',
+  `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
+  `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_service_attribute_value` (`service_id`,`attribute_definition_id`),
   KEY `idx_service_attribute_value__service_id` (`service_id`),

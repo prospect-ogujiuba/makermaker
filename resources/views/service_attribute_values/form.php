@@ -15,6 +15,14 @@ $tabs = tr_tabs()
     ->setFooter($form->save())
     ->layoutLeft();
 
+$dataType = null;
+if ($form->getModel() && method_exists($form->getModel(), 'attributeDefinition')) {
+    $rel = $form->getModel()->attributeDefinition;
+    if ($rel) {
+        $dataType = $rel->data_type;
+    }
+}
+
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
@@ -38,47 +46,23 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setModelOptions(ServiceAttributeDefinition::class, 'label', 'id')
                         ->markLabelRequired()
                 ),
-            
-            $form->fieldset(
-                'Value Fields',
-                'Set the appropriate value based on the attribute definition type (only one should be used)',
-                [
-                    $form->row()
-                        ->withColumn(
-                            $form->number('int_val')
-                                ->setLabel('Integer Value')
-                                ->setHelp('For integer-type attributes')
-                                ->setAttribute('step', '1')
-                        )
-                        ->withColumn(
-                            $form->number('decimal_val')
-                                ->setLabel('Decimal Value')
-                                ->setHelp('For decimal-type attributes (up to 6 decimal places)')
-                                ->setAttribute('step', '0.000001')
-                                ->setAttribute('max', '999999999999.999999')
-                        ),
-                    $form->row()
-                        ->withColumn(
-                            $form->toggle('bool_val')
-                                ->setLabel('Boolean Value')
-                                ->setHelp('For true/false attributes')
-                        )
-                        ->withColumn(
-                            $form->select('enum_val')
-                                ->setLabel('Enum Value')
-                                ->setHelp('For enumerated/select list attributes')
-                                ->setOptions(['Select Value' => NULL])
-                                // Populate options based on the attribute definition
-                        ),
-                    $form->row()
-                        ->withColumn(
-                            $form->textarea('text_val')
-                                ->setLabel('Text Value')
-                                ->setHelp('For text-based attributes')
-                        )
-                        ->withColumn()
-                ]
-            )
+
+            $form->row()
+                ->withColumn(
+                    $form->text('data_type_display')
+                        ->setLabel('Expected Data Type')
+                        ->setHelp('Data type for this attribute (from definition)')
+                        ->setAttribute('readonly', true)
+                        ->setAttribute('name', false)              // keep it out of POST
+                        ->setAttribute('value',$dataType ?: 'Select attribute definition') // <-- use setValue, not setAttribute('value', ...)
+                        ->setAttribute('class', 'tr-field-readonly')
+                )
+                ->withColumn(
+                    $form->text('value')
+                        ->setLabel('Value')
+                        ->setHelp('Enter the value for this attribute (will be automatically typed based on the selected attribute definition)')
+                        ->markLabelRequired()
+                )
         ]
     )
 ])->setDescription('Attribute Value');
