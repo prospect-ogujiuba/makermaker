@@ -17,8 +17,8 @@ $table->setColumns([
         'actions' => ['edit', 'view', 'delete'],
 
     ],
-    'parent_id' => [
-        'label' => 'Parent ID',
+    'parentCategory.name' => [
+        'label' => 'Parent',
         'sort' => 'true'
     ],
     'slug' => [
