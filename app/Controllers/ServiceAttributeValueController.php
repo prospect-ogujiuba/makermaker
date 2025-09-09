@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceAttributeValueFields;
+use MakerMaker\Models\ServiceAttributeDefinition;
 use MakerMaker\Models\ServiceAttributeValue;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
@@ -10,6 +12,33 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceAttributeValueController extends Controller
 {
+    /**
+     * Build attribute definition options and JS data
+     * 
+     * @return array
+     */
+    private function buildAttributeDefinitionData()
+    {
+        // Get ALL attribute definitions with service type info
+        $attributeDefinitions = ServiceAttributeDefinition::new()->with(['serviceType'])->findAll()->get();
+        $options = ['Select Attribute Definition' => null];
+        $jsData = [];
+
+        foreach ($attributeDefinitions as $def) {
+            $unit = $def->unit ? " {$def->unit}" : '';
+            $displayText = "{$def->label} - {$unit} : ({$def->data_type})";
+            $options[$displayText] = $def->id;
+
+            // Build JS data for filtering
+            $jsData[$def->id] = [
+                'service_type_id' => $def->service_type_id,
+                'text' => $displayText
+            ];
+        }
+
+        return compact('options', 'jsData');
+    }
+
     /**
      * The index page for admin
      *
@@ -27,8 +56,14 @@ class ServiceAttributeValueController extends Controller
      */
     public function add(AuthUser $user)
     {
+
+        $attributeData = $this->buildAttributeDefinitionData();
         $form = tr_form(ServiceAttributeValue::class)->useErrors()->useOld()->useConfirm();
-        return View::new('service_attribute_values.form', compact('form', 'user'));
+
+        return View::new('service_attribute_values.form', array_merge([
+            'form' => $form,
+            'user' => $user
+        ], $attributeData));
     }
 
     /**
@@ -67,8 +102,17 @@ class ServiceAttributeValueController extends Controller
         $createdBy = $service_attribute_value->createdBy;
         $updatedBy = $service_attribute_value->updatedBy;
 
+        $attributeData = $this->buildAttributeDefinitionData();
+
         $form = tr_form($service_attribute_value)->useErrors()->useOld()->useConfirm();
-        return View::new('service_attribute_values.form', compact('form', 'current_id', 'service', 'createdBy', 'updatedBy', 'user'));
+        return View::new('service_attribute_values.form', array_merge([
+            'form' => $form,
+            'current_id' => $current_id,
+            'service' => $service,
+            'createdBy' => $createdBy,
+            'updatedBy' => $updatedBy,
+            'user' => $user
+        ], $attributeData));
     }
 
     /**

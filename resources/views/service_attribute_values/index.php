@@ -21,7 +21,7 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'value' => [
-        'label' => 'Int Val',
+        'label' => 'Value',
         'sort' => 'true'
     ],
     'created_at' => [

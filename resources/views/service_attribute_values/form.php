@@ -15,14 +15,6 @@ $tabs = tr_tabs()
     ->setFooter($form->save())
     ->layoutLeft();
 
-$dataType = null;
-if ($form->getModel() && method_exists($form->getModel(), 'attributeDefinition')) {
-    $rel = $form->getModel()->attributeDefinition;
-    if ($rel) {
-        $dataType = $rel->data_type;
-    }
-}
-
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
@@ -37,28 +29,18 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setOptions(['Select Service' => NULL])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
-                )
+                )->withColumn(),
+            $form->row()->when('service_id', '!=', '')
                 ->withColumn(
                     $form->select('attribute_definition_id')
                         ->setLabel('Attribute Definition')
                         ->setHelp('Attribute definition this value applies to')
-                        ->setOptions(['Select Attribute Definition' => NULL])
-                        ->setModelOptions(ServiceAttributeDefinition::class, 'label', 'id')
+                        ->setOptions($options)
                         ->markLabelRequired()
-                ),
-
-            $form->row()
-                ->withColumn(
-                    $form->text('data_type')
-                        ->setLabel('Data Type')
-                        ->setHelp('Data type for this attribute (from definition)')
-                        ->setAttribute('readonly', true)
-                        ->setAttribute('value', ucfirst($dataType)  ?: 'Select attribute definition')
-                        ->setAttribute('class', 'tr-field-readonly')
                 )
                 ->withColumn(
                     $form->text('value')
-                        ->setLabel('Value')
+                        ->setLabel('Attribute Value')
                         ->setHelp('Enter the value for this attribute (will be automatically typed based on the selected attribute definition)')
                         ->markLabelRequired()
                 )
@@ -132,4 +114,60 @@ if (isset($current_id)) {
 // Render the complete tabbed interface
 $tabs->render();
 
-echo $form->close();
+echo $form->close(); ?>
+
+<script>
+const attributeData = <?php echo json_encode($jsData); ?>;
+const serviceData = <?php 
+// Get services with their service_type_id
+$services = Service::new()->findAll()->get();
+$serviceTypes = [];
+foreach ($services as $service) {
+    $serviceTypes[$service->id] = $service->service_type_id;
+}
+echo json_encode($serviceTypes);
+?>;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // TypeRocket uses complex name attributes, so we need to be more specific
+    const serviceSelect = document.querySelector('select[name*="service_id"]');
+    const attributeSelect = document.querySelector('select[name*="attribute_definition_id"]');
+    
+    console.log('Service select:', serviceSelect); // Debug
+    console.log('Attribute select:', attributeSelect); // Debug
+    
+    if (serviceSelect && attributeSelect) {
+        // Store original options for restoration
+        const originalOptions = attributeSelect.innerHTML;
+        
+        serviceSelect.addEventListener('change', function() {
+            const selectedServiceId = this.value;
+            const serviceTypeId = serviceData[selectedServiceId];
+            
+            console.log('Selected service ID:', selectedServiceId); // Debug
+            console.log('Service type ID:', serviceTypeId); // Debug
+            
+            // Clear current options except the first one
+            attributeSelect.innerHTML = '<option value="">Select Attribute Definition</option>';
+            
+            if (!selectedServiceId) {
+                // If no service selected, show all options
+                attributeSelect.innerHTML = originalOptions;
+                return;
+            }
+            
+            // Add filtered options
+            for (const [attrId, attrData] of Object.entries(attributeData)) {
+                if (!serviceTypeId || attrData.service_type_id == serviceTypeId) {
+                    const option = document.createElement('option');
+                    option.value = attrId;
+                    option.textContent = attrData.text;
+                    attributeSelect.appendChild(option);
+                }
+            }
+        });
+    } else {
+        console.log('Could not find form elements'); // Debug
+    }
+});
+</script>
