@@ -7,46 +7,6 @@ use MakerMaker\Models\ServiceAttributeValue;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-// Define the standalone function OUTSIDE the class
-function validateTypedValue($args)
-{
-    /**
-     * @var $option
-     * @var $option2
-     * @var $option3
-     * @var $name
-     * @var $field_name
-     * @var $value
-     * @var $type
-     * @var \TypeRocket\Utility\Validator $validator
-     */
-    extract($args);
-
-    // Get all form data from validator
-    $form_data = $validator->getFields();
-    $attributeDefinitionId = $form_data['attribute_definition_id'] ?? null;
-
-    if (!$attributeDefinitionId) {
-        return 'Attribute definition is required';
-    }
-
-    // Create instance and find the definition
-    $definitionModel = new ServiceAttributeDefinition();
-    $definition = $definitionModel->findById($attributeDefinitionId);
-
-    if (!$definition) {
-        return 'Invalid attribute definition';
-    }
-
-    // Create temporary model instance for validation
-    $tempModel = new ServiceAttributeValue();
-    $tempModel->attribute_definition_id = $attributeDefinitionId;
-
-    $validation = $tempModel->validateValue($value);
-
-    return $validation['Valid'] ? true : $validation['Message'];
-}
-
 class ServiceAttributeValueFields extends Fields
 {
     /**
@@ -82,11 +42,74 @@ class ServiceAttributeValueFields extends Fields
 
         $rules = [];
 
+        // Basic required fields
         $rules['service_id'] = 'required';
         $rules['attribute_definition_id'] = 'required';
-        $rules['value'] = 'required';
+
+        // Get the attribute definition to determine data type and validation
+        $attribute_definition_id = $this->get('attribute_definition_id');
+        $definition = null;
+
+        if ($attribute_definition_id) {
+            $definition = ServiceAttributeDefinition::new()->find($attribute_definition_id);
+        }
+
+        // If we have a definition, apply type-specific validation
+        if ($definition) {
+            // tr_dd($definition->data_type); // This should now work
+
+            $rules['value'] = $this->getValueValidationRule($definition);
+        } else {
+            // Default validation if no definition found
+            $rules['value'] = 'required';
+        }
 
         return $rules;
+    }
+
+    /**
+     * Get validation rule based on attribute definition
+     */
+    private function getValueValidationRule(ServiceAttributeDefinition $definition)
+    {
+        $rule = $definition->required ? 'required' : '?required';
+
+        switch ($definition->data_type) {
+            case 'int':
+                $rule .= '|numeric';
+                break;
+            case 'decimal':
+                $rule .= '|numeric';
+                break;
+            case 'bool':
+                $rule .= '|numeric|max:1';
+                break;
+            case 'date':
+                $rule .= '|date';
+                break;
+            case 'datetime':
+                $rule .= '|date';
+                break;
+            case 'email':
+                $rule .= '|email';
+                break;
+            case 'url':
+                $rule .= '|url';
+                break;
+            case 'json':
+                $rule .= '|json';
+                break;
+            case 'enum':
+                if ($definition->enum_options) {
+                    $options = json_decode($definition->enum_options, true);
+                    if (is_array($options) && !empty($options)) {
+                        $rule .= '|in:' . implode(',', $options);
+                    }
+                }
+                break;
+        }
+
+        return $rule;
     }
 
     /**
@@ -96,6 +119,15 @@ class ServiceAttributeValueFields extends Fields
      */
     protected function messages()
     {
-        return [];
+        return [
+            'value.required' => 'This attribute value is required.',
+            'value.numeric' => 'This attribute must be a number.',
+            'value.boolean' => 'This attribute must be true or false.',
+            'value.date' => 'This attribute must be a valid date.',
+            'value.email' => 'This attribute must be a valid email address.',
+            'value.url' => 'This attribute must be a valid URL.',
+            'value.json' => 'This attribute must be valid JSON.',
+            'value.in' => 'This attribute must be one of the allowed values.',
+        ];
     }
 }

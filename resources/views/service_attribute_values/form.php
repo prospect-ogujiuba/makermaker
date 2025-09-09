@@ -49,12 +49,11 @@ $tabs->tab('Overview', 'admin-settings', [
 
             $form->row()
                 ->withColumn(
-                    $form->text('data_type_display')
-                        ->setLabel('Expected Data Type')
+                    $form->text('data_type')
+                        ->setLabel('Data Type')
                         ->setHelp('Data type for this attribute (from definition)')
                         ->setAttribute('readonly', true)
-                        ->setAttribute('name', false)              // keep it out of POST
-                        ->setAttribute('value',$dataType ?: 'Select attribute definition') // <-- use setValue, not setAttribute('value', ...)
+                        ->setAttribute('value', ucfirst($dataType)  ?: 'Select attribute definition')
                         ->setAttribute('class', 'tr-field-readonly')
                 )
                 ->withColumn(
