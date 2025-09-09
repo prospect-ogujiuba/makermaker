@@ -40,11 +40,15 @@ INSERT INTO `{!!prefix!!}srvc_delivery_methods` (`id`, `name`, `code`, `created_
 
 -- Coverage Areas
 INSERT INTO `{!!prefix!!}srvc_coverage_areas` (`id`, `code`, `name`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-(1,	'GTA',	'Greater Toronto Area',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
-(2,	'ON-SW',	'Southwest Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
-(3,	'ON-CENTRAL',	'Central Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
-(4,	'ON-EAST',	'Eastern Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
-(5,	'ON-NORTH',	'Northern Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
+(1,	'LOCAL',	'Local Area',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(2,	'REGIONAL',	'Regional Coverage',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(3,	'NATIONAL',	'National Coverage',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(4,	'INTERNATIONAL',	'International Coverage',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(5,	'GTA',	'Greater Toronto Area',	'2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(6,	'ON-SW',	'Southwest Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(7,	'ON-CENTRAL',	'Central Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(8,	'ON-EAST',	'Eastern Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2),
+(9,	'ON-NORTH',	'Northern Ontario', '2025-08-25 23:57:07',	TIMESTAMP(CURDATE(), SEC_TO_TIME(FLOOR(RAND() * 86400))), NULL,	1, 2);
 
 -- Deliverables
 INSERT INTO `{!!prefix!!}srvc_deliverables` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
