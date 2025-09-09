@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceCoverageFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServiceCoverageFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,18 @@ class ServiceCoverageFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['service_id'] = "required";
+        $rules['coverage_area_id'] = "required";
+
+        return $rules;
     }
 
     /**
@@ -38,7 +51,8 @@ class ServiceCoverageFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

@@ -1,9 +1,49 @@
 <?php
+
 namespace MakerMaker\Models;
 
 use TypeRocket\Models\Model;
+use TypeRocket\Models\WPUser;
 
 class ServiceCoverage extends Model
 {
     protected $resource = 'srvc_service_coverage';
+
+    protected $fillable = [
+        'service_id',
+        'servie_coverage_id',
+        'created_by',
+        'updated_by',
+    ];
+
+    protected $guard = [
+        'id',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    /** ServiceCoverage belongs to a Service */
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+
+    /** ServiceCoverage belongs to a ServiceCoverageArea */
+    public function coverageArea()
+    {
+        return $this->belongsTo(ServiceCoverageArea::class, 'coverage_area_id');
+    }
+
+    /** Created by WP user */
+    public function createdBy()
+    {
+        return $this->belongsTo(WPUser::class, 'created_by');
+    }
+
+    /** Updated by WP user */
+    public function updatedBy()
+    {
+        return $this->belongsTo(WPUser::class, 'updated_by');
+    }
 }
