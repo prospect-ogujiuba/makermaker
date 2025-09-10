@@ -15,7 +15,7 @@ class ServiceBundleFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override

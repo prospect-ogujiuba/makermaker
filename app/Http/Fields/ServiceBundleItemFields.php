@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceBundleItemFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServiceBundleItemFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,20 @@ class ServiceBundleItemFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['bundle_id'] = "numeric|?required";
+        $rules['service_id'] = "numeric|?required";
+        $rules['quantity'] = "numeric|?required";
+        $rules['discount_pct'] = "numeric|?required";
+
+        return $rules;
     }
 
     /**
@@ -38,7 +53,8 @@ class ServiceBundleItemFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }

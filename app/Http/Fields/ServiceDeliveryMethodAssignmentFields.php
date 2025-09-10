@@ -1,7 +1,9 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
+use TypeRocket\Http\Request;
 
 class ServiceDeliveryMethodAssignmentFields extends Fields
 {
@@ -13,14 +15,15 @@ class ServiceDeliveryMethodAssignmentFields extends Fields
      *
      * @var bool
      */
-    protected $run = null;
+    protected $run = true;
 
     /**
      * Model Fillable Property Override
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -29,8 +32,21 @@ class ServiceDeliveryMethodAssignmentFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
-        return [];
+    protected function rules()
+    {
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+
+        $rules = [];
+
+        $rules['service_id'] = "numeric|?required";
+        $rules['delivery_method_id'] = "numeric|?required";
+        $rules['lead_time_days'] = "numeric|?required";
+        $rules['sla_hours'] = "numeric|?required";
+        $rules['surcharge'] = "numeric|?required";
+
+        return $rules;
     }
 
     /**
@@ -38,7 +54,8 @@ class ServiceDeliveryMethodAssignmentFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }
