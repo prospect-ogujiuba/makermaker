@@ -1,6 +1,7 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `related_service_id` bigint(20) NOT NULL,
   `relation_type` enum('prerequisite','dependency','incompatible_with','substitute_for') NOT NULL,
@@ -10,7 +11,8 @@ CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
-  PRIMARY KEY (`service_id`,`related_service_id`,`relation_type`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_relationship` (`service_id`,`related_service_id`,`relation_type`),
   KEY `idx_service_relationship__related_service_id` (`related_service_id`),
   KEY `idx_service_relationship__relationship_type` (`relation_type`),
   KEY `idx_service_relationship__deleted_at` (`deleted_at`),

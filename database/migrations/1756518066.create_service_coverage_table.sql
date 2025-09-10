@@ -10,6 +10,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_coverage` (
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_coverage` (`service_id`,`coverage_area_id`),
   KEY `idx_service_coverage__coverage_area_id` (`coverage_area_id`),
   KEY `idx_service_coverage__service_id` (`service_id`),
   KEY `idx_service_coverage__deleted_at` (`deleted_at`),

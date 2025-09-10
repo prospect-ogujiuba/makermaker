@@ -1,6 +1,7 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_delivery_method_assignments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `delivery_method_id` bigint(20) NOT NULL,
   `lead_time_days` int(11) NOT NULL DEFAULT 0,
@@ -11,7 +12,8 @@ CREATE TABLE `{!!prefix!!}srvc_service_delivery_method_assignments` (
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
-  PRIMARY KEY (`service_id`,`delivery_method_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_delivery_method_assignment` (`service_id`,`delivery_method_id`),
   KEY `idx_service_delivery_method_assignment__delivery_method_id` (`delivery_method_id`),
   KEY `idx_service_delivery_method_assignment__deleted_at` (`deleted_at`),
   KEY `idx_service_delivery_method_assignment__created_by` (`created_by`),

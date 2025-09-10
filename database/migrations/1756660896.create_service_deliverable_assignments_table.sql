@@ -1,17 +1,17 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_deliverable_assignments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,  
   `service_id` bigint(20) NOT NULL,
   `deliverable_id` bigint(20) NOT NULL,
-  `sort_order` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
-  PRIMARY KEY (`service_id`,`deliverable_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_deliverable_assignment` (`service_id`,`deliverable_id`),
   KEY `idx_service_deliverable_assignment__deliverable_id` (`deliverable_id`),
-  KEY `idx_service_deliverable_assignment__sort_order` (`sort_order`),
   KEY `idx_service_deliverable_assignment__deleted_at` (`deleted_at`),
   KEY `idx_service_deliverable_assignment__created_by` (`created_by`),
   KEY `idx_service_deliverable_assignment__updated_by` (`updated_by`),

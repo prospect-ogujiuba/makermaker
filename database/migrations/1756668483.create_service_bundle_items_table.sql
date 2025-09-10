@@ -1,6 +1,7 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `bundle_id` bigint(20) NOT NULL,
   `service_id` bigint(20) NOT NULL,
   `quantity` decimal(12,3) NOT NULL DEFAULT 1.000,
@@ -10,7 +11,8 @@ CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
-  PRIMARY KEY (`bundle_id`,`service_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_bundle_item` (`bundle_id`,`service_id`),
   KEY `idx_bundle_item__service_id` (`service_id`),
   KEY `idx_bundle_item__deleted_at` (`deleted_at`),
   KEY `idx_bundle_item__created_by` (`created_by`),

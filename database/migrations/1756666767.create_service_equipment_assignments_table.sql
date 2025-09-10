@@ -1,6 +1,7 @@
 -- Description:
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `equipment_id` bigint(20) NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT 1,
@@ -11,7 +12,8 @@ CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
   `deleted_at` datetime DEFAULT NULL,
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
-  PRIMARY KEY (`service_id`,`equipment_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_service_equipment_assignments` (`service_id`,`equipment_id`),
   KEY `idx_service_equipment_assignment__equipment_id` (`equipment_id`),
   KEY `idx_service_equipment_assignment__deleted_at` (`deleted_at`),
   KEY `idx_service_equipment_assignment__created_by` (`created_by`),
