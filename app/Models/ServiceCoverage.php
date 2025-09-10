@@ -11,7 +11,7 @@ class ServiceCoverage extends Model
 
     protected $fillable = [
         'service_id',
-        'service_coverage_id',
+        'coverage_area_id',
         'created_by',
         'updated_by',
     ];
