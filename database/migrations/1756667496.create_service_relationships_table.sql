@@ -7,13 +7,19 @@ CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
   `notes` varchar(512) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
-  `updated_by` bigint(20) DEFAULT NULL COMMENT 'Future FK to user table',
+  `deleted_at` datetime DEFAULT NULL,
+  `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
+  `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`service_id`,`related_service_id`,`relation_type`),
-  KEY `idx_service_relation__related_service_id` (`related_service_id`),
-  KEY `idx_service_relation__relation_type` (`relation_type`),
-  CONSTRAINT `fk_service_relation__related_service` FOREIGN KEY (`related_service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_service_relation__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx_service_relationship__related_service_id` (`related_service_id`),
+  KEY `idx_service_relationship__relationship_type` (`relation_type`),
+  KEY `idx_service_relationship__deleted_at` (`deleted_at`),
+  KEY `idx_service_relationship__created_by` (`created_by`),
+  KEY `idx_service_relationship__updated_by` (`updated_by`),
+  CONSTRAINT `fk_service_relationship__related_service` FOREIGN KEY (`related_service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_relationship__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_relationship__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_relationship__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service relationships: prerequisites, dependencies, incompatibilities, substitutions';
 
 DROP TRIGGER IF EXISTS `tr_service_relation_no_self_ref`;
