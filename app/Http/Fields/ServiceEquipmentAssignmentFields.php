@@ -40,11 +40,11 @@ class ServiceEquipmentAssignmentFields extends Fields
 
         $rules = [];
 
-        $rules['service_id'] = "numeric|?required";
-        $rules['equipment_id'] = "numeric|?required";
-        $rules['required'] = "numeric|?required";
-        $rules['quantity'] = "numeric|?required";
-        $rules['substitute_ok'] = "numeric|?required";
+        $rules['service_id'] = "numeric";
+        $rules['equipment_id'] = "numeric";
+        $rules['required'] = "numeric";
+        $rules['quantity'] = "numeric";
+        $rules['substitute_ok'] = "numeric";
 
         return $rules;
     }

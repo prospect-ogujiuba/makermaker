@@ -88,6 +88,11 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',
             '\MakerMaker\Models\ServiceAttributeValue' => '\MakerMaker\Auth\ServiceAttributeValuePolicy',
             '\MakerMaker\Models\ServiceCoverage' => '\MakerMaker\Auth\ServiceCoveragePolicy',
+            '\MakerMaker\Models\ServiceDeliverableAssignment' => '\MakerMaker\Auth\ServiceDeliverableAssignmentPolicy',
+            '\MakerMaker\Models\ServiceDeliveryMethodAssignment' => '\MakerMaker\Auth\ServiceDeliveryMethodAssignmentPolicy',
+            '\MakerMaker\Models\ServiceEquipmentAssignment' => '\MakerMaker\Auth\ServiceEquipmentAssignmentPolicy',
+            '\MakerMaker\Models\ServiceRelationship' => '\MakerMaker\Auth\ServiceRelationshipPolicy',
+            '\MakerMaker\Models\ServiceBundleItem' => '\MakerMaker\Auth\ServiceBundleItemPolicy',
         ];
     }
 

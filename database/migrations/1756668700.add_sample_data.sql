@@ -741,7 +741,7 @@ INSERT INTO `{!!prefix!!}srvc_service_equipment_assignments` (`service_id`, `equ
 (17, 7, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2);
 
 -- Service Relationships
-INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `notes`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1, 2, 'substitute_for', 'Professional VoIP can substitute for Basic VoIP with additional features', '2025-08-25 23:57:12', NOW(), 1, 2),
 (1, 4, 'prerequisite', 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), 1, 2),
 (1, 5, 'prerequisite', 'Cat6 cabling required for VoIP phone connectivity', '2025-08-25 23:57:12', NOW(), 1, 2),
