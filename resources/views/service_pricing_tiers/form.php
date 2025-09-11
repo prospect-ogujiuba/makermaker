@@ -53,7 +53,7 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
 if (isset($current_id) && $current_id) {
     $relationshipNestedTabs = tr_tabs()->layoutTop();
 
-       // System Info Tab
+    // System Info Tab
     $tabs->tab('System', 'info', [
         $form->fieldset(
             'System Info',
@@ -169,7 +169,7 @@ if (isset($current_id) && $current_id) {
 
     // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
-        ->setDescription('Relationship information');
+        ->setDescription('Related Entities');
 }
 
 // Render the complete tabbed interface

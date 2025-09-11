@@ -22,19 +22,19 @@ $tabs->tab('Overview', 'admin-settings', [
         [
             $form->row()
                 ->withColumn(
-                   $form->text('label')
-                    ->setLabel('Attribute Name')
-                    ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                    ->setAttribute('maxlength', '100')
-                    ->setAttribute('placeholder', 'e.g., Advanced Implementation')
-                    ->markLabelRequired()
-                )
-                ->withColumn( $form->select('service_type_id')
-                        ->setLabel('Service Type')
+                    $form->text('label')
+                        ->setLabel('Attribute Name')
                         ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                        ->setOptions(['Select Service Type' => NULL])
-                        ->setModelOptions(ServiceType::class, 'name', 'id')
-                        ->markLabelRequired()),
+                        ->setAttribute('maxlength', '100')
+                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->markLabelRequired()
+                )
+                ->withColumn($form->select('service_type_id')
+                    ->setLabel('Service Type')
+                    ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                    ->setOptions(['Select Service Type' => NULL])
+                    ->setModelOptions(ServiceType::class, 'name', 'id')
+                    ->markLabelRequired()),
             $form->row()
                 ->withColumn(
                     $form->text('code')
@@ -45,7 +45,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                  $form->text('unit')
+                    $form->text('unit')
                         ->setLabel('Unit')
                         ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
                         ->setAttribute('min', '1')
@@ -54,7 +54,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ),
             $form->row()
                 ->withColumn(
-                      $form->select('data_type')
+                    $form->select('data_type')
                         ->setLabel('Attribute Data Type')
                         ->setHelp('Descriptive name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
                         ->setOptions([
@@ -162,7 +162,7 @@ if (isset($current_id)) {
 
     ])->setDescription('System information');
 
-    // Nested Tabs for relationship information
+    // Nested Tabs for Related Entities
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
@@ -217,8 +217,8 @@ if (isset($current_id)) {
 
 
     // Add the nested relationship tabs to main tabs
-    $tabs->tab('Relationship', 'admin-links', [$relationshipNestedTabs])
-        ->setDescription('Relationship information');
+    $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
+        ->setDescription('Related Entities');
 }
 
 // Render the complete tabbed interface

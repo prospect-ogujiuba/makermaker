@@ -109,7 +109,7 @@ if (isset($current_id)) {
 
     ])->setDescription('System information');
 
-    // Nested Tabs for relationship information
+    // Nested Tabs for Related Entities
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
@@ -207,8 +207,8 @@ if (isset($current_id)) {
 
 
     // Add the nested relationship tabs to main tabs
-    $tabs->tab('Relationship', 'admin-links', [$relationshipNestedTabs])
-        ->setDescription('Relationship information');
+    $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
+        ->setDescription('Related Entities');
 }
 
 // Render the complete tabbed interface
