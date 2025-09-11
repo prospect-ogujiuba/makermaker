@@ -4,14 +4,19 @@
 -- Complexities
 INSERT INTO `{!!prefix!!}srvc_complexities`
 (`name`, `level`, `price_multiplier`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Basic', 1, 1.0000, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Standard', 2, 1.3000, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
-('Professional', 3, 1.6000, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Enterprise', 4, 2.2000, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Custom/Complex', 5, 3.0000, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
-('Proof of Concept', 0, 0.8000, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Mission Critical', 6, 3.5000, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('R&D/Experimental', 7, 2.8000, '2025-08-28 23:57:07', NOW(), NULL, 2, 1);
+('Proof of Concept', 0, 0.89, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Evaluation', 1, 1.09, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Foundational', 2, 1.29, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Standard', 3, 1.49, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Enhanced', 4, 1.69, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Advanced', 5, 1.89, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Professional', 6, 2.19, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Enterprise', 7, 2.59, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Bespoke', 8, 2.89, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Strategic', 9, 3.29, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Transformational', 10, 3.79, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Mission Critical', 11, 4.29, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('R&D Experimental', 12, 4.79, '2025-08-28 23:57:07', NOW(), NULL, 2, 1);
 
 -- Pricing Models
 INSERT INTO `{!!prefix!!}srvc_pricing_models`
@@ -741,7 +746,7 @@ INSERT INTO `{!!prefix!!}srvc_service_equipment_assignments` (`service_id`, `equ
 (17, 7, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2);
 
 -- Service Relationships
-INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `notes`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1, 2, 'substitute_for', 'Professional VoIP can substitute for Basic VoIP with additional features', '2025-08-25 23:57:12', NOW(), 1, 2),
 (1, 4, 'prerequisite', 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), 1, 2),
 (1, 5, 'prerequisite', 'Cat6 cabling required for VoIP phone connectivity', '2025-08-25 23:57:12', NOW(), 1, 2),

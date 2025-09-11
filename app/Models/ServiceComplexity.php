@@ -9,10 +9,6 @@ class ServiceComplexity extends Model
 {
     protected $resource = 'srvc_complexities';
 
-    protected $format = [];
-
-    protected $cast = [];
-
     protected $fillable = [
         'name',
         'level',

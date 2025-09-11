@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Enhanced ServiceComplexity Form
+ * ServiceComplexity Form
  */
 
 // Form instance
@@ -14,22 +14,23 @@ $tabs = tr_tabs()
 
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
+
     $form->fieldset(
-        'Complexity Overview',
+        'Service Complexity',
         'Define the complexity level characteristics and pricing impact',
         [
             $form->row()
                 ->withColumn(
-                    $form->text('name') // Changed from 'Name' to 'name'
-                        ->setLabel('Name') // Use setLabel to set display label
+                    $form->text('name')
+                        ->setLabel('Name')
                         ->setHelp('Descriptive name for this complexity level (e.g., "Basic", "Standard", "Advanced", "Expert")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->number('level') // Changed from 'Complexity Level' to 'level'
-                        ->setLabel('Complexity Level') // Use setLabel to set display label
+                    $form->number('level')
+                        ->setLabel('Complexity Level')
                         ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
                         ->setAttribute('min', '1')
                         ->setAttribute('step', '1')
@@ -38,8 +39,8 @@ $tabs->tab('Overview', 'admin-settings', [
 
             $form->row()
                 ->withColumn(
-                    $form->number('price_multiplier') // Changed from 'Price Multiplier' to 'price_multiplier'
-                        ->setLabel('Price Multiplier') // Use setLabel to set display label
+                    $form->number('price_multiplier')
+                        ->setLabel('Price Multiplier')
                         ->setHelp('Decimal multiplier for pricing (1.0 = base price, 1.5 = 150% markup)')
                         ->setAttribute('min', '1')
                         ->setAttribute('max', '10.00')
@@ -51,7 +52,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-])->setDescription('Complexity information');
+])->setDescription('Service Complexity');
 
 // Conditional
 if (isset($current_id)) {
@@ -133,7 +134,6 @@ if (isset($current_id)) {
         foreach ($services as $service) {
             $row = $form->row();
 
-            // Name Column (main content)
             $row->column(
                 $form->text("Service Name")
                     ->setAttribute('value', $service->name ?? "Service #{$service->id}")
@@ -142,7 +142,6 @@ if (isset($current_id)) {
 
             );
 
-            // Additional info column (optional)
             $row->column(
                 $form->text("SKU")
                     ->setAttribute('value', $service->sku ?? 'B2CNC-' . $service->id)
@@ -151,7 +150,6 @@ if (isset($current_id)) {
 
             );
 
-            // ID Column (smaller width)
             $row->column(
                 $form->text("ID")
                     ->setAttribute('value', $service->id)
