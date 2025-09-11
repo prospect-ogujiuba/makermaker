@@ -4,12 +4,10 @@ namespace MakerMaker\Controllers;
 
 use MakerMaker\Models\ServiceComplexity;
 use MakerMaker\Http\Fields\ServiceComplexityFields;
-use MakerMaker\Models\Service;
 use TypeRocket\Http\Response;
 use TypeRocket\Controllers\Controller;
 use MakerMaker\View;
 use TypeRocket\Models\AuthUser;
-use TypeRocket\Models\WPUser;
 
 class ServiceComplexityController extends Controller
 {
@@ -44,7 +42,7 @@ class ServiceComplexityController extends Controller
     public function create(ServiceComplexityFields $fields, ServiceComplexity $service_complexity, Response $response, AuthUser $user)
     {
         if (!$service_complexity->can('create')) {
-            $response->unauthorized('Unauthorized: ServiceComplexity not created')->abort();
+            $response->unauthorized('Unauthorized: Service Complexity not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -57,10 +55,7 @@ class ServiceComplexityController extends Controller
     }
 
     /**
-     * The edit page for admin
-     *
-     * FIXED: Properly load the ServiceComplexity model with all its data
-     * before passing it to the form
+     * Edit item
      *
      * @param string|ServiceComplexity $service_complexity
      *
@@ -72,7 +67,7 @@ class ServiceComplexityController extends Controller
         $services = $service_complexity->services;
         $createdBy = $service_complexity->createdBy;
         $updatedBy = $service_complexity->updatedBy;
-        // tr_dd($services);
+
         $form = tr_form($service_complexity)->useErrors()->useOld()->useConfirm();
         return View::new('service_complexities.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
@@ -89,7 +84,7 @@ class ServiceComplexityController extends Controller
     public function update(ServiceComplexity $service_complexity, ServiceComplexityFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_complexity->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceComplexity not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Complexity not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -136,7 +131,7 @@ class ServiceComplexityController extends Controller
     public function destroy(ServiceComplexity $service_complexity, Response $response)
     {
         if (!$service_complexity->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceComplexity not deleted');
+            return $response->unauthorized('Unauthorized: Service Complexity not deleted');
         }
 
         // Check if this complexity is still being used by services
@@ -156,7 +151,7 @@ class ServiceComplexityController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServiceComplexity deleted.')->setData('service_complexity', $service_complexity);
+        return $response->success('Service Complexity deleted.')->setData('service_complexity', $service_complexity);
     }
 
     /**
@@ -183,7 +178,7 @@ class ServiceComplexityController extends Controller
                 ->setMessage('Service complexities retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceComplexity indexRest error: ' . $e->getMessage());
+            error_log('Service Complexity indexRest error: ' . $e->getMessage());
             return $response
                 ->setError('api', 'Failed to retrieve service complexities')
                 ->setMessage('An error occurred while retrieving service complexities', 'error')
@@ -209,13 +204,13 @@ class ServiceComplexityController extends Controller
             if (empty($service_complexity)) {
                 return $response
                     ->setData('service_complexity', null)
-                    ->setMessage('Service complexity not found', 'info')
+                    ->setMessage('Service Complexity not found', 'info')
                     ->setStatus(404);
             }
 
             return $response
                 ->setData('service_complexity', $service_complexity)
-                ->setMessage('Service complexity retrieved successfully', 'success')
+                ->setMessage('Service Complexity retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServiceComplexity showRest error: ' . $e->getMessage());

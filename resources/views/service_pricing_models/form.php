@@ -42,7 +42,6 @@ $tabs->tab('Overview', 'admin-settings', [
 
 // Conditional
 if (isset($current_id)) {
-    // System Info Tab
     $tabs->tab('System', 'info', [
         $form->fieldset(
             'System Info',
@@ -111,7 +110,6 @@ if (isset($current_id)) {
 
     ])->setDescription('System Information');
 
-    // Nested Tabs for Related Entities
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
@@ -119,25 +117,30 @@ if (isset($current_id)) {
         foreach ($servicePrices as $servicePrice) {
             $row = $form->row();
 
-            // Name Column (main content)
             $row->column(
-                $form->text("Price ID")
-                    ->setAttribute('value', $servicePrice->id ?? "Service #{$servicePrice->id}")
+                $form->text("Pricing Tier")
+                    ->setAttribute('value', $servicePrice->pricingTier->name ?? 'B2CNC-' . $servicePrice->id)
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
             );
 
-            // Additional info column (optional)
             $row->column(
-                $form->text("Pricing Tier ID")
-                    ->setAttribute('value', $servicePrice->pricing_tier_id ?? 'B2CNC-' . $servicePrice->id)
+                $form->text("Service Name")
+                    ->setAttribute('value', $servicePrice->service->name ?? "Service #{$servicePrice->id}")
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
             );
 
-            // ID Column (smaller width)
+            $row->column(
+                $form->text("Pricing Currency")
+                    ->setAttribute('value', $servicePrice->amount)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
             $row->column(
                 $form->text("Pricing Currency")
                     ->setAttribute('value', $servicePrice->currency)
@@ -160,7 +163,6 @@ if (isset($current_id)) {
         $service_price_fields
     ));
 
-    // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
         ->setDescription('Related Entities');
 }

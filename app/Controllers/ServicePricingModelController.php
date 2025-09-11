@@ -42,7 +42,7 @@ class ServicePricingModelController extends Controller
     public function create(ServicePricingModelFields $fields, ServicePricingModel $service_pricing_model, Response $response, AuthUser $user)
     {
         if (!$service_pricing_model->can('create')) {
-            $response->unauthorized('Unauthorized: ServicePricingModel not created')->abort();
+            $response->unauthorized('Unauthorized: Service Pricing Model not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -84,7 +84,7 @@ class ServicePricingModelController extends Controller
     public function update(ServicePricingModel $service_pricing_model, ServicePricingModelFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_pricing_model->can('update')) {
-            $response->unauthorized('Unauthorized: ServicePricingModel not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Pricing Model not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -131,7 +131,7 @@ class ServicePricingModelController extends Controller
     public function destroy(ServicePricingModel $service_pricing_model, Response $response)
     {
         if (!$service_pricing_model->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServicePricingModel not deleted');
+            return $response->unauthorized('Unauthorized: Service Pricing Model not deleted');
         }
 
         // Check if this pricing model is still being used by service prices
@@ -151,7 +151,7 @@ class ServicePricingModelController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServicePricingModel deleted.')->setData('service_pricing_model', $service_pricing_model);
+        return $response->success('Service Pricing Model deleted.')->setData('service_pricing_model', $service_pricing_model);
     }
 
     /**
@@ -178,7 +178,7 @@ class ServicePricingModelController extends Controller
                 ->setMessage('Service pricing models retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServicePricingModel indexRest error: ' . $e->getMessage());
+            error_log('Service Pricing Model indexRest error: ' . $e->getMessage());
 
             return $response
                 ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
