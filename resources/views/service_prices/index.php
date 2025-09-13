@@ -67,20 +67,6 @@ $table->setColumns([
         }
     ],
 
-    'min_qty' => [
-        'label' => 'Min Qty',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            $qty = number_format($value, 3);
-            if ($item->max_qty) {
-                $qty .= ' - ' . number_format($item->max_qty, 3);
-            } else {
-                $qty .= '+';
-            }
-            return $qty;
-        }
-    ],
-
     'effective_from' => [
         'label' => 'Effective Period',
         'sort' => true,

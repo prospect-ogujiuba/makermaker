@@ -53,10 +53,6 @@ class ServicePriceFields extends Fields
         // Unit validation
         $rules['unit'] = 'max:32';
 
-        // Quantity validation
-        $rules['min_qty'] = '?required|numeric|min:0';
-        $rules['max_qty'] = '?numeric|min:0';
-
         // Setup fee validation
         $rules['setup_fee'] = '?required|numeric|min:0';
         $rules['notes'] = 'max:512';

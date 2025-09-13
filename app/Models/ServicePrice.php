@@ -15,8 +15,6 @@ class ServicePrice extends Model
         'current',
         'amount',
         'unit',
-        'min_qty',
-        'mac_qty',
         'setup_fee',
         'notes',
         'effective_from',

@@ -8,8 +8,6 @@ CREATE TABLE `{!!prefix!!}srvc_service_prices` (
   `currency` char(3) NOT NULL DEFAULT 'CAD',
   `amount` decimal(12,2) DEFAULT NULL,
   `unit` varchar(32) DEFAULT NULL COMMENT 'Pricing unit: hour, user, device, site, month',
-  `min_qty` decimal(12,3) NOT NULL DEFAULT 1.000,
-  `max_qty` decimal(12,3) DEFAULT NULL,
   `setup_fee` decimal(12,2) NOT NULL DEFAULT 0.00,
   `notes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Informational service price configuration and properties' CHECK (json_valid(`notes`)),
   `effective_from` date NOT NULL DEFAULT curdate(),

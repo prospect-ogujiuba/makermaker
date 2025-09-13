@@ -84,23 +84,6 @@ $tabs->tab('Overview', 'admin-settings', [
                 ),
             $form->row()
                 ->withColumn(
-                    $form->number('min_qty')
-                        ->setLabel('Minimum Quantity')
-                        ->setHelp('Minimum billable quantity')
-                        ->setAttribute('step', '0.001')
-                        ->setAttribute('min', '0')
-                        ->setDefault('1.000')
-                        ->markLabelRequired()
-                )
-                ->withColumn(
-                    $form->number('max_qty')
-                        ->setLabel('Maximum Quantity')
-                        ->setHelp('Maximum quantity (leave empty for unlimited)')
-                        ->setAttribute('step', '0.001')
-                        ->setAttribute('min', '0')
-                ),
-            $form->row()
-                ->withColumn(
                     $form->number('setup_fee')
                         ->setLabel('Setup Fee')
                         ->setHelp('One-time setup fee for this service')
