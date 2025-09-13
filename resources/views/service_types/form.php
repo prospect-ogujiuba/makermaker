@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Type Overview',
+        'Service Type',
         'Define the service type characteristics and pricing impact',
         [
             $form->row()

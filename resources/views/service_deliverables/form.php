@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Deliverable Overview',
+        'Deliverable',
         'Define the service deliverable characteristics',
         [
             $form->row()

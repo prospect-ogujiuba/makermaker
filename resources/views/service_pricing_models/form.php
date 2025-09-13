@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Pricing Model Overview',
+        'Pricing Model',
         'Define the pricing model characteristics and pricing impact',
         [
             $form->row()

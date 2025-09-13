@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Coverage Area Overview',
+        'Coverage Area',
         'Define the coverage area characteristics and code',
         [
             $form->row()

@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('OVERVIEW', 'admin-settings', [
     $form->fieldset(
-        'Pricing Tier Overview',
+        'Pricing Tier',
         'Define the pricing tier characteristics and sorting order',
         [
             $form->row()

@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Equipment Overview',
+        'Equipment',
         'Define the service equipment characteristics',
         [
             $form->row()

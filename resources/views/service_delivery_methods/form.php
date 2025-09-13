@@ -15,7 +15,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Delivery Method Overview',
+        'Delivery Method',
         'Define the delivery method characteristics and code',
         [
             $form->row()
@@ -38,7 +38,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-])->setDescription('Delivery method information');
+])->setDescription('Delivery Method');
 
 // Conditional
 if (isset($current_id)) {

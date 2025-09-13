@@ -17,7 +17,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Category Overview',
+        'Category',
         'Define the category characteristics and pricing impact',
         [
             $form->row()
