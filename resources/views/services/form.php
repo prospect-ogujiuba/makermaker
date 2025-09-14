@@ -26,7 +26,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Service Name')
-                        ->setHelp('Descriptive name for this service (e.g., "Advanced Network Setup")')
+                        ->setHelp('Name for this service (e.g., "Advanced Network Setup")')
                         ->setAttribute('maxlength', '255')
                         ->setAttribute('placeholder', 'e.g., VoIP Phone System Installation')
                         ->markLabelRequired()
@@ -70,7 +70,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 )
         ]
     ),
-    
+
     $form->fieldset(
         'Service Classification',
         'Categorize and classify this service',

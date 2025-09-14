@@ -37,11 +37,12 @@ class ServicePricingModelFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_models@id:{$id}|required";
-        $rules['code'] = "unique:code:{GLOBAL_WPDB_PREFIX}srvc_pricing_models@id:{$id}|required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required";
+        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required";
 
         return $rules;
     }

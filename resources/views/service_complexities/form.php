@@ -17,21 +17,22 @@ $tabs->tab('Overview', 'admin-settings', [
 
     $form->fieldset(
         'Service Complexity',
-        'Define the complexity level characteristics and pricing impact',
+        'Define service complexity',
         [
             $form->row()
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this complexity level (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                        ->setAttribute('maxlength', '100')
+                        ->setHelp('Name for this complexity')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('level')
                         ->setLabel('Complexity Level')
-                        ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
+                        ->setHelp('Numeric ranking')
+                        ->setAttribute('placeholder', 'e.g., 9')
                         ->setAttribute('min', '1')
                         ->setAttribute('step', '1')
                         ->markLabelRequired()
@@ -41,12 +42,10 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('price_multiplier')
                         ->setLabel('Price Multiplier')
-                        ->setHelp('Decimal multiplier for pricing (1.0 = base price, 1.5 = 150% markup)')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('max', '10.00')
+                        ->setHelp('Decimal multiplier for pricing')
+                        ->setAttribute('min', '0')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('placeholder', '1.00')
-                        ->markLabelRequired()
                 )
                 ->withColumn(),
         ]

@@ -16,23 +16,21 @@ $tabs = tr_tabs()
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Pricing Model',
-        'Define the pricing model characteristics and pricing impact',
+        'Define the pricing model',
         [
             $form->row()
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this pricing model (e.g., "Tiered", "Hourly", "Monthly Subscription", "Per Unit")')
+                        ->setHelp('Name for this pricing model')
                         ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setAttribute('placeholder', 'e.g., Annual Contract')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Pricing Model Code')
-                        ->setHelp('i.e. Annual Contract = ANNUAL')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('step', '1')
+                        ->setHelp('e.g., Annual Contract = ANNUAL')
                         ->markLabelRequired()
                 )
         ]

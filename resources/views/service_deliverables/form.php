@@ -22,14 +22,14 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this service deliverable (e.g., "Ebook", "Manual", "Disaster Rrcovery Plan", "Testing Report")')
-                        ->setAttribute('maxlength', '100')
+                        ->setHelp('Name for this service deliverable')
+                        ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->text('description')
-                        ->setLabel('Deliverable Description')
+                    $form->textarea('description')
+                        ->setLabel('Description')
                         ->setHelp('Describe the deliverable')
                         ->markLabelRequired()
                 )
@@ -119,15 +119,6 @@ if (isset($current_id)) {
         foreach ($services as $service) {
             $row = $form->row();
 
-            // Name Column (main content)
-            $row->column(
-                $form->text("Service ID")
-                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-
             // Additional info column (optional)
             $row->column(
                 $form->text("Service Name")
@@ -141,6 +132,15 @@ if (isset($current_id)) {
             $row->column(
                 $form->text("SKU")
                     ->setAttribute('value', $service->sku)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            // Name Column (main content)
+            $row->column(
+                $form->text("Service ID")
+                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 

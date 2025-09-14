@@ -24,7 +24,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this category (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                        ->setHelp('Name for this category (e.g., "Basic", "Standard", "Advanced", "Expert")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()

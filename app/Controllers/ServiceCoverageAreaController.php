@@ -64,7 +64,7 @@ class ServiceCoverageAreaController extends Controller
     public function edit(ServiceCoverageArea $service_coverage_area, AuthUser $user)
     {
         $current_id = $service_coverage_area->getID();
-        $serviceCoverages = $service_coverage_area->servicesCoverages;
+        $serviceCoverages = $service_coverage_area->serviceCoverages;
         $createdBy = $service_coverage_area->createdBy;
         $updatedBy = $service_coverage_area->updatedBy;
         

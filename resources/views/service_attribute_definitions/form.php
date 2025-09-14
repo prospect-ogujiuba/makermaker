@@ -24,14 +24,14 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('label')
                         ->setLabel('Attribute Name')
-                        ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                        ->setHelp('Name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
                 ->withColumn($form->select('service_type_id')
                     ->setLabel('Service Type')
-                    ->setHelp('Descriptive name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                    ->setHelp('Name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
                     ->setOptions(['Select Service Type' => NULL])
                     ->setModelOptions(ServiceType::class, 'name', 'id')
                     ->markLabelRequired()),
@@ -56,7 +56,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('data_type')
                         ->setLabel('Attribute Data Type')
-                        ->setHelp('Descriptive name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
+                        ->setHelp('Name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
                         ->setOptions([
                             'Integer' => 'int',
                             'Decimal' => 'decimal',
@@ -81,7 +81,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->toggle('required')
                         ->setLabel('Required')
-                        ->setHelp('Descriptive name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
+                        ->setHelp('Name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()

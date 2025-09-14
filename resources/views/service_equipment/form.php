@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this service equipment (e.g., "Ebook", "Manual", "Disaster Rrcovery Plan", "Testing Report")')
+                        ->setHelp('Name for this service equipment (e.g., "Ebook", "Manual", "Disaster Rrcovery Plan", "Testing Report")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()

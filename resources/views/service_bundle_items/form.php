@@ -21,7 +21,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Deliverable Assignment',
+        'Bundle Item',
         'Define coverage relationships between services',
         [
             $form->row()
@@ -56,7 +56,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-])->setDescription('Service Deliverable Assignment');
+])->setDescription('Service Bundle Item');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
@@ -120,6 +120,21 @@ if (isset($current_id)) {
             ]
         )
     ])->setDescription('System information');
+
+
+    $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
+        ->layoutTop();
+
+ 
+
+    $relationshipNestedTabs->tab('Prices', 'admin-post', $form->fieldset(
+        'Related Prices',
+        'Prices using this pricing model',
+        []
+    ));
+
+    $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
+        ->setDescription('Related Entities');
 }
 
 // Render the complete tabbed interface

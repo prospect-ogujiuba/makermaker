@@ -41,7 +41,7 @@ class ServiceDeliverableFields extends Fields
         $rules = [];
 
         $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_models@id:{$id}|required";
-        $rules['description'] = "required";
+        $rules['description'] = "required|max:128";
 
         return $rules;
     }

@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this delivery method (e.g., "Tiered", "Hourly", "Monthly Subscription", "Per Unit")')
+                        ->setHelp('Name for this delivery method')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()

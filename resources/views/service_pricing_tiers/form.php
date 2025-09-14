@@ -22,7 +22,7 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this pricing tier (e.g., "Small Business", "Enterprise", "Government")')
+                        ->setHelp('Name for this pricing tier')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Enterprise')
                         ->markLabelRequired()
@@ -30,7 +30,7 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Code')
-                        ->setHelp('Unique code for this pricing tier (e.g., "SMB", "ENT", "GOV")')
+                        ->setHelp('Unique code for this pricing tier')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., ENT')
                         ->markLabelRequired()
@@ -40,14 +40,14 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 ->withColumn(
                     $form->number('sort_order')
                         ->setLabel('Sort Order')
-                        ->setHelp('Numeric order for displaying tiers (0 = first, higher numbers = later in list)')
+                        ->setHelp('Numeric order for displaying tiers')
                         ->setAttribute('min', '0')
                         ->setAttribute('step', '1')
                         ->setDefault(0)
                 )
         ]
     )
-])->setDescription('Pricing Tier Information');
+])->setDescription('Pricing Tier');
 
 // Show relationship info if editing
 if (isset($current_id) && $current_id) {

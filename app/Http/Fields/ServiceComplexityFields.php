@@ -37,12 +37,13 @@ class ServiceComplexityFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_complexities@id:{$id}|required";
-        $rules['level'] = "unique:level:{GLOBAL_WPDB_PREFIX}srvc_complexities@id:{$id}|numeric|required";
-        $rules['price_multiplier'] = "numeric|?required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_complexities@id:{$id}|required|max:64";
+        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexities@id:{$id}|numeric|required";
+        $rules['price_multiplier'] = "?numeric";
 
         return $rules;
     }

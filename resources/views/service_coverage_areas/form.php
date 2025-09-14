@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Descriptive name for this coverage area (e.g., "Tiered", "Hourly", "Monthly Subscription", "Per Unit")')
+                        ->setHelp('Name for this coverage area (e.g., "Tiered", "Hourly", "Monthly Subscription", "Per Unit")')
                         ->setAttribute('maxlength', '100')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
@@ -38,7 +38,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-])->setDescription('Coverage area information');
+])->setDescription('Coverage Area');
 
 // Conditional
 if (isset($current_id)) {
@@ -121,19 +121,11 @@ if (isset($current_id)) {
         foreach ($serviceCoverages as $serviceCoverage) {
             $row = $form->row();
 
-            // Name Column (main content)
-            $row->column(
-                $form->text("Service ID")
-                    ->setAttribute('value', $serviceCoverage->id ?? "Service #{$serviceCoverage->id}")
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
 
             // Additional info column (optional)
             $row->column(
                 $form->text("Service Name")
-                    ->setAttribute('value', $serviceCoverage->name ?? 'B2CNC-' . $serviceCoverage->id)
+                    ->setAttribute('value', $serviceCoverage->service->name ?? 'B2CNC-' . $serviceCoverage->id)
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
@@ -142,7 +134,16 @@ if (isset($current_id)) {
             // ID Column (smaller width)
             $row->column(
                 $form->text("SKU")
-                    ->setAttribute('value', $serviceCoverage->sku)
+                    ->setAttribute('value', $serviceCoverage->service->sku)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            // Name Column (main content)
+            $row->column(
+                $form->text("Service ID")
+                    ->setAttribute('value', $serviceCoverage->id ?? "Service #{$serviceCoverage->id}")
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
