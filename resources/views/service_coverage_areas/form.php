@@ -22,17 +22,16 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this coverage area (e.g., "Tiered", "Hourly", "Monthly Subscription", "Per Unit")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setHelp('Name for this coverage area')
+                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('placeholder', 'e.g., Local Area')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Coverage Code')
-                        ->setHelp('i.e. Greater Toronto Area = GTA')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('step', '1')
+                        ->setHelp('e.g., Local Area = LOCAL')
+                        ->setAttribute('placeholder', 'e.g., LOCAL')
                         ->markLabelRequired()
                 )
         ]
@@ -159,7 +158,7 @@ if (isset($current_id)) {
 
     $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
         'Related Services',
-        'Services using this coverage area',
+        'Services covering area area',
         $service_coverages_fields
     ));
 

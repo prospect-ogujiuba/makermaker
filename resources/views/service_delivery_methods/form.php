@@ -24,15 +24,14 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Name')
                         ->setHelp('Name for this delivery method')
                         ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setAttribute('placeholder', 'e.g., On-Site Installation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Delivery method Code')
-                        ->setHelp('i.e. Annual Contract = ANNUAL')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('step', '1')
+                        ->setHelp('Code for delivery method')
+                        ->setAttribute('placeholder', 'e.g., ONSITE')
                         ->markLabelRequired()
                 )
         ]
@@ -122,16 +121,6 @@ if (isset($current_id)) {
         foreach ($services as $service) {
             $row = $form->row();
 
-            // Name Column (main content)
-            $row->column(
-                $form->text("Service ID")
-                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-
-            // Additional info column (optional)
             $row->column(
                 $form->text("Service Name")
                     ->setAttribute('value', $service->name ?? 'B2CNC-' . $service->id)
@@ -140,7 +129,6 @@ if (isset($current_id)) {
 
             );
 
-            // ID Column (smaller width)
             $row->column(
                 $form->text("SKU")
                     ->setAttribute('value', $service->sku)
@@ -148,6 +136,14 @@ if (isset($current_id)) {
                     ->setAttribute('name', false)
 
             );
+
+            $row->column(
+                $form->text("Service ID")
+                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+            );
+
 
             $services_fields[] = $row;
         }
@@ -162,8 +158,6 @@ if (isset($current_id)) {
         'Services using this delivery method',
         $services_fields
     ));
-
-
 
     // Add the nested relationship tabs to main tabs
     $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
