@@ -51,7 +51,7 @@ class ServiceDeliveryMethodController extends Controller
         $service_delivery_method->save($fields);
 
         return tr_redirect()->toPage('servicedeliverymethod', 'index')
-            ->withFlash('Service Pricing Model Created');
+            ->withFlash('Service Pricing Model created');
     }
 
     /**
@@ -67,7 +67,7 @@ class ServiceDeliveryMethodController extends Controller
         $services = $service_delivery_method->services;
         $createdBy = $service_delivery_method->createdBy;
         $updatedBy = $service_delivery_method->updatedBy;
-        
+
         $form = tr_form($service_delivery_method)->useErrors()->useOld()->useConfirm();
         return View::new('service_delivery_methods.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
@@ -92,7 +92,7 @@ class ServiceDeliveryMethodController extends Controller
         $service_delivery_method->save($fields);
 
         return tr_redirect()->toPage('servicedeliverymethod', 'edit', $service_delivery_method->getID())
-            ->withFlash('Service Pricing Model Updated');
+            ->withFlash('Service Pricing Model updated');
     }
 
     /**

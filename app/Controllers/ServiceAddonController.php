@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceAddonFields;
@@ -10,7 +11,7 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceAddonController extends Controller
 {
-       /**
+    /**
      * The index page for admin
      *
      * @return mixed
@@ -41,7 +42,7 @@ class ServiceAddonController extends Controller
     public function create(ServiceAddonFields $fields, ServiceAddon $service_addon, Response $response, AuthUser $user)
     {
         if (!$service_addon->can('create')) {
-            $response->unauthorized('Unauthorized: Service Attribute Definition not created')->abort();
+            $response->unauthorized('Unauthorized: Service Addon not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -50,7 +51,7 @@ class ServiceAddonController extends Controller
         $service_addon->save($fields);
 
         return tr_redirect()->toPage('serviceaddon', 'index')
-            ->withFlash('Service Attribute Definition Created');
+            ->withFlash('Service Addon created');
     }
 
     /**
@@ -90,7 +91,7 @@ class ServiceAddonController extends Controller
         $service_addon->save($fields);
 
         return tr_redirect()->toPage('serviceaddon', 'edit', $service_addon->getID())
-            ->withFlash('Service Attribute Definition Updated');
+            ->withFlash('Service Addon updated');
     }
 
     /**
@@ -136,7 +137,7 @@ class ServiceAddonController extends Controller
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this. Reassign or remove them first.")
+                ->error("Cannot delete: {$servicesCount} service Addon(s) still use this. Reassign or remove them first.")
                 ->setStatus(409);
         }
 
@@ -148,7 +149,7 @@ class ServiceAddonController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Attribute Definition deleted.')->setData('service_pricing_model', $service_addon);
+        return $response->success('Service Addon deleted.')->setData('service_pricing_model', $service_addon);
     }
 
     /**
@@ -166,19 +167,19 @@ class ServiceAddonController extends Controller
             if (empty($serviceAddon)) {
                 return $response
                     ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Attribute Definitions found', 'info')
+                    ->setMessage('No service Addons found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_attribute_definition', $serviceAddon)
-                ->setMessage('Service Attribute Definition retrieved successfully', 'success')
+                ->setMessage('Service Addon retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServiceAddon indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service Attribute Definition: ' . $e->getMessage())
+                ->error('Failed to retrieve service Addon: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }

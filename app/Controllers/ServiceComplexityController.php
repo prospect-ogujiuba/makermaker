@@ -51,7 +51,7 @@ class ServiceComplexityController extends Controller
         $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'index')
-            ->withFlash('Service Complexity Created');
+            ->withFlash('Service Complexity created');
     }
 
     /**
@@ -92,7 +92,7 @@ class ServiceComplexityController extends Controller
         $service_complexity->save($fields);
 
         return tr_redirect()->toPage('servicecomplexity', 'edit', $service_complexity->getID())
-            ->withFlash('Service Complexity Updated');
+            ->withFlash('Service Complexity updated');
     }
 
     /**
@@ -169,7 +169,7 @@ class ServiceComplexityController extends Controller
             if (empty($serviceComplexities)) {
                 return $response
                     ->setData('service_complexities', [])
-                    ->setMessage('No service complexities found', 'info')
+                    ->setMessage('No Service complexities found', 'info')
                     ->setStatus(200);
             }
 
@@ -213,7 +213,7 @@ class ServiceComplexityController extends Controller
                 ->setMessage('Service Complexity retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceComplexity showRest error: ' . $e->getMessage());
+            error_log('Service Complexity showRest error: ' . $e->getMessage());
             return $response
                 ->setError('api', 'Failed to retrieve service complexity')
                 ->setMessage('An error occurred while retrieving service complexity', 'error')

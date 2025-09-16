@@ -51,7 +51,7 @@ class ServicePricingTierController extends Controller
         $service_pricing_tier->save($fields);
 
         return tr_redirect()->toPage('servicepricingtier', 'index')
-            ->withFlash('Service Pricing Tier Created');
+            ->withFlash('Service Pricing Tier created');
     }
 
     /**
@@ -67,7 +67,7 @@ class ServicePricingTierController extends Controller
         $servicePrices = $service_pricing_tier->servicePrices;
         $createdBy = $service_pricing_tier->createdBy;
         $updatedBy = $service_pricing_tier->updatedBy;
-        
+
         $form = tr_form($service_pricing_tier)->useErrors()->useOld()->useConfirm();
         return View::new('service_pricing_tiers.form', compact('form', 'current_id', 'servicePrices', 'createdBy', 'updatedBy', 'user'));
     }
@@ -92,7 +92,7 @@ class ServicePricingTierController extends Controller
         $service_pricing_tier->save($fields);
 
         return tr_redirect()->toPage('servicepricingtier', 'edit', $service_pricing_tier->getID())
-            ->withFlash('Service Pricing Tier Updated');
+            ->withFlash('Service Pricing Tier updated');
     }
 
     /**

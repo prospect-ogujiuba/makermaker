@@ -51,7 +51,7 @@ class ServiceAttributeDefinitionController extends Controller
         $service_attribute_definition->save($fields);
 
         return tr_redirect()->toPage('serviceattributedefinition', 'index')
-            ->withFlash('Service Attribute Definition Created');
+            ->withFlash('Service Attribute Definition created');
     }
 
     /**
@@ -92,7 +92,7 @@ class ServiceAttributeDefinitionController extends Controller
         $service_attribute_definition->save($fields);
 
         return tr_redirect()->toPage('serviceattributedefinition', 'edit', $service_attribute_definition->getID())
-            ->withFlash('Service Attribute Definition Updated');
+            ->withFlash('Service Attribute Definition updated');
     }
 
     /**

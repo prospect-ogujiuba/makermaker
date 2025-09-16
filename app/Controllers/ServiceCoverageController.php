@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceCoverageFields;
@@ -50,7 +51,7 @@ class ServiceCoverageController extends Controller
         $service_coverage->save($fields);
 
         return tr_redirect()->toPage('servicecoverage', 'index')
-            ->withFlash('Service Coverage Created');
+            ->withFlash('Service Coverage created');
     }
 
     /**
@@ -90,7 +91,7 @@ class ServiceCoverageController extends Controller
         $service_coverage->save($fields);
 
         return tr_redirect()->toPage('servicecoverage', 'edit', $service_coverage->getID())
-            ->withFlash('Service Coverage Updated');
+            ->withFlash('Service Coverage updated');
     }
 
     /**

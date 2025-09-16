@@ -51,7 +51,7 @@ class ServiceRelationshipController extends Controller
         $service_relationship->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment Created');
+            ->withFlash('Service Delivery_assignment created');
     }
 
     /**
@@ -91,7 +91,7 @@ class ServiceRelationshipController extends Controller
         $service_relationship->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_relationship->getID())
-            ->withFlash('Service Delivery_assignment Updated');
+            ->withFlash('Service Delivery_assignment updated');
     }
 
     /**
@@ -160,11 +160,11 @@ class ServiceRelationshipController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDelServiceRelationship = ServiceRelationship::new()
+            $serviceRelationship = ServiceRelationship::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDelServiceRelationship)) {
+            if (empty($serviceRelationship)) {
                 return $response
                     ->setData('service_attribute_definition', [])
                     ->setMessage('No service Delivery_assignments found', 'info')
@@ -172,7 +172,7 @@ class ServiceRelationshipController extends Controller
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceDelServiceRelationship)
+                ->setData('service_attribute_definition', $serviceRelationship)
                 ->setMessage('Service Delivery_assignment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {

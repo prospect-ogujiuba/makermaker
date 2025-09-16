@@ -51,7 +51,7 @@ class ServicePricingModelController extends Controller
         $service_pricing_model->save($fields);
 
         return tr_redirect()->toPage('servicepricingmodel', 'index')
-            ->withFlash('Service Pricing Model Created');
+            ->withFlash('Service Pricing Model created');
     }
 
     /**
@@ -67,7 +67,7 @@ class ServicePricingModelController extends Controller
         $servicePrices = $service_pricing_model->servicePrices;
         $createdBy = $service_pricing_model->createdBy;
         $updatedBy = $service_pricing_model->updatedBy;
-        
+
         $form = tr_form($service_pricing_model)->useErrors()->useOld()->useConfirm();
         return View::new('service_pricing_models.form', compact('form', 'current_id', 'servicePrices', 'createdBy', 'updatedBy', 'user'));
     }
@@ -92,7 +92,7 @@ class ServicePricingModelController extends Controller
         $service_pricing_model->save($fields);
 
         return tr_redirect()->toPage('servicepricingmodel', 'edit', $service_pricing_model->getID())
-            ->withFlash('Service Pricing Model Updated');
+            ->withFlash('Service Pricing Model updated');
     }
 
     /**

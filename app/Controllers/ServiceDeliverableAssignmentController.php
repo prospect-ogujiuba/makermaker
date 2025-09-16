@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceDeliverableAssignmentFields;
@@ -10,7 +11,7 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceDeliverableAssignmentController extends Controller
 {
-   /**
+    /**
      * The index page for admin
      *
      * @return mixed
@@ -50,7 +51,7 @@ class ServiceDeliverableAssignmentController extends Controller
         $service_deliverable_assingment->save($fields);
 
         return tr_redirect()->toPage('servicedeliverableassignment', 'index')
-            ->withFlash('Service Coverage Created');
+            ->withFlash('Service Coverage created');
     }
 
     /**
@@ -90,7 +91,7 @@ class ServiceDeliverableAssignmentController extends Controller
         $service_deliverable_assingment->save($fields);
 
         return tr_redirect()->toPage('servicedeliverableassignment', 'edit', $service_deliverable_assingment->getID())
-            ->withFlash('Service Coverage Updated');
+            ->withFlash('Service Coverage updated');
     }
 
     /**

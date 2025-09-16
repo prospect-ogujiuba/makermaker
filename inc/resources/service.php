@@ -1,38 +1,31 @@
 <?php
 
 // Main Service resource
-$service = createServiceResource('Service', 'ServiceController', 'Services')->setIcon('cart')->setPosition(2);
+$service = mm_create_custom_resource('Service', 'ServiceController', 'Services')->setIcon('cart')->setPosition(2);
 
 // Create all service subpages
 $serviceSubpages = [
-    createServiceResource('ServiceComplexity', 'ServiceComplexityController', 'Complexities'),
-    createServiceResource('ServicePricingModel', 'ServicePricingModelController', 'Pricing Models'),
-    createServiceResource('ServicePricingTier', 'ServicePricingTierController', 'Pricing Tiers'),
-    createServiceResource('ServiceDeliveryMethod', 'ServiceDeliveryMethodController', 'Delivery Methods'),
-    createServiceResource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
-    createServiceResource('ServiceDeliverable', 'ServiceDeliverableController', 'Deliverables'),
-    createServiceResource('ServiceEquipment', 'ServiceEquipmentController', 'Equipment'),
-    createServiceResource('ServiceType', 'ServiceTypeController', 'Types'),
-    createServiceResource('ServiceCategory', 'ServiceCategoryController', 'Categories'),
-    createServiceResource('ServiceAttributeDefinition', 'ServiceAttributeDefinitionController', 'Attribute Definitions'),
-    createServiceResource('ServiceBundle', 'ServiceBundleController', 'Bundle Offers'),
-    createServiceResource('ServicePrice', 'ServicePriceController', 'Prices'),
-    createServiceResource('ServiceAddon', 'ServiceAddonController', 'Addons'),
-    createServiceResource('ServiceAttributeValue', 'ServiceAttributeValueController', 'Attribute Values'),
-    createServiceResource('ServiceCoverage', 'ServiceCoverageController', 'Coverages'),
-    createServiceResource('ServiceDeliverableAssignment', 'ServiceDeliverableAssignmentController', 'Deliverables'),
-    createServiceResource('ServiceDeliveryMethodAssignment', 'ServiceDeliveryMethodAssignmentController', 'Delivery Methods'),
-    createServiceResource('ServiceEquipmentAssignment', 'ServiceEquipmentAssignmentController', 'Equipment'),
-    createServiceResource('ServiceRelationship', 'ServiceRelationshipController', 'Relationships'),
-    createServiceResource('ServiceBundleItem', 'ServiceBundleItemController', 'Bundle Items'),
+    mm_create_custom_resource('ServiceComplexity', 'ServiceComplexityController', 'Complexities'),
+    mm_create_custom_resource('ServicePricingModel', 'ServicePricingModelController', 'Pricing Models'),
+    mm_create_custom_resource('ServicePricingTier', 'ServicePricingTierController', 'Pricing Tiers'),
+    mm_create_custom_resource('ServiceDeliveryMethod', 'ServiceDeliveryMethodController', 'Delivery Methods'),
+    mm_create_custom_resource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
+    mm_create_custom_resource('ServiceDeliverable', 'ServiceDeliverableController', 'Deliverables'),
+    mm_create_custom_resource('ServiceEquipment', 'ServiceEquipmentController', 'Equipment'),
+    mm_create_custom_resource('ServiceType', 'ServiceTypeController', 'Types'),
+    mm_create_custom_resource('ServiceCategory', 'ServiceCategoryController', 'Categories'),
+    mm_create_custom_resource('ServiceAttributeDefinition', 'ServiceAttributeDefinitionController', 'Attribute Definitions'),
+    mm_create_custom_resource('ServiceBundle', 'ServiceBundleController', 'Bundle Offers'),
+    mm_create_custom_resource('ServicePrice', 'ServicePriceController', 'Prices'),
+    mm_create_custom_resource('ServiceAddon', 'ServiceAddonController', 'Addons'),
+    mm_create_custom_resource('ServiceAttributeValue', 'ServiceAttributeValueController', 'Attribute Values'),
+    mm_create_custom_resource('ServiceCoverage', 'ServiceCoverageController', 'Coverages'),
+    mm_create_custom_resource('ServiceDeliverableAssignment', 'ServiceDeliverableAssignmentController', 'Deliverables'),
+    mm_create_custom_resource('ServiceDeliveryMethodAssignment', 'ServiceDeliveryMethodAssignmentController', 'Delivery Methods'),
+    mm_create_custom_resource('ServiceEquipmentAssignment', 'ServiceEquipmentAssignmentController', 'Equipment'),
+    mm_create_custom_resource('ServiceRelationship', 'ServiceRelationshipController', 'Relationships'),
+    mm_create_custom_resource('ServiceBundleItem', 'ServiceBundleItemController', 'Bundle Items'),
 ];
-
-$service_complexity_rest = \TypeRocket\Register\Registry::addCustomResource('service-complexity', [
-	'controller' => '\MakerMaker\Controllers\ServiceComplexityController',
-]);
-$service_pricing_model_rest = \TypeRocket\Register\Registry::addCustomResource('service-pricing-model', [
-	'controller' => '\MakerMaker\Controllers\ServicePricingModelController',
-]);
 
 // Add all subpages to the main service resource
 foreach ($serviceSubpages as $subpage) {

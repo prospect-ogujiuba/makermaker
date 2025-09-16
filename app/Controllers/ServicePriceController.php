@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServicePriceFields;
@@ -50,7 +51,7 @@ class ServicePriceController extends Controller
         $servicePrice->save($fields);
 
         return tr_redirect()->toPage('serviceprice', 'index')
-            ->withFlash('Service Price Created');
+            ->withFlash('Service Price created');
     }
 
     /**
@@ -93,7 +94,7 @@ class ServicePriceController extends Controller
         $servicePrice->save($fields);
 
         return tr_redirect()->toPage('serviceprice', 'edit', $servicePrice->getID())
-            ->withFlash('Service Price Updated');
+            ->withFlash('Service Price updated');
     }
 
     /**

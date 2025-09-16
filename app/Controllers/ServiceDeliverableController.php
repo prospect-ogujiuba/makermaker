@@ -53,7 +53,7 @@ class ServiceDeliverableController extends Controller
         $service_deliverable->save($fields);
 
         return tr_redirect()->toPage('servicedeliverable', 'index')
-            ->withFlash('Service Deliverable Created');
+            ->withFlash('Service Deliverable created');
     }
 
     /**
@@ -94,7 +94,7 @@ class ServiceDeliverableController extends Controller
         $service_deliverable->save($fields);
 
         return tr_redirect()->toPage('servicedeliverable', 'edit', $service_deliverable->getID())
-            ->withFlash('Service Deliverable Updated');
+            ->withFlash('Service Deliverable updated');
     }
 
     /**

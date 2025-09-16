@@ -51,7 +51,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
         $service_delivery_method_assignment->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment Created');
+            ->withFlash('Service Delivery_assignment created');
     }
 
     /**
@@ -91,7 +91,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
         $service_delivery_method_assignment->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_delivery_method_assignment->getID())
-            ->withFlash('Service Delivery_assignment Updated');
+            ->withFlash('Service Delivery_assignment updated');
     }
 
     /**

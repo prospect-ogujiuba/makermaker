@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Models\ServiceEquipmentAssignment;
@@ -50,7 +51,7 @@ class ServiceEquipmentAssignmentController extends Controller
         $service_equipment_assignment->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment Created');
+            ->withFlash('Service Delivery_assignment created');
     }
 
     /**
@@ -90,7 +91,7 @@ class ServiceEquipmentAssignmentController extends Controller
         $service_equipment_assignment->save($fields);
 
         return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_equipment_assignment->getID())
-            ->withFlash('Service Delivery_assignment Updated');
+            ->withFlash('Service Delivery_assignment updated');
     }
 
     /**

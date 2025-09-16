@@ -85,7 +85,7 @@ class ServiceAttributeValueController extends Controller
         $service_attribute_value->save($fields);
 
         return tr_redirect()->toPage('serviceattributevalue', 'index')
-            ->withFlash('Service Attribute Value Created');
+            ->withFlash('Service Attribute Value created');
     }
 
     /**
@@ -135,7 +135,7 @@ class ServiceAttributeValueController extends Controller
         $service_attribute_value->save($fields);
 
         return tr_redirect()->toPage('serviceattributevalue', 'edit', $service_attribute_value->getID())
-            ->withFlash('Service Attribute Value Updated');
+            ->withFlash('Service Attribute Value updated');
     }
 
     /**

@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Helpers.
+ * Helpers for MakerMaker WordPress/TypeRocket application.
  *
  * @package makermaker
  */
 
-function outputSelectOptions($options, $currentValue, $valueKey = null, $labelKey = null)
+// Output HTML options for select dropdowns
+function outputSelectOptions($options, $currentValue, $valueKey = null, $labelKey = null): void
 {
     foreach ($options as $key => $option) {
         if (is_array($option)) {
@@ -22,11 +23,12 @@ function outputSelectOptions($options, $currentValue, $valueKey = null, $labelKe
     }
 }
 
-function renderAdvancedSearchActions($resource)
+// Render search actions for TypeRocket admin pages
+function renderAdvancedSearchActions(string $resource): void
 { ?>
     <div class="tr-search-actions">
         <div>
-            <a href="<?php echo strtok($_SERVER["REQUEST_URI"], ' ? '); ?>?page=<?= $resource ?>_index" class="button">Reset Filters</a>
+            <a href="<?php echo strtok($_SERVER["REQUEST_URI"], '?'); ?>?page=<?= $resource ?>_index" class="button">Reset Filters</a>
             <button type="submit" class="button">Search</button>
         </div>
     </div>
@@ -36,19 +38,39 @@ function renderAdvancedSearchActions($resource)
 <?php
 }
 
-// Helper function to create service resources
-function createServiceResource($resourceKey, $controller, $title, $hasAddButton = true)
+// Convert CamelCase to kebab-case
+function mm_kebab(string $s): string 
 {
-    $resourcePage = tr_resource_pages(
-        $resourceKey . '@\MakerMaker\Controllers\\' . $controller,
-        $title
-    );
+    $k = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $s));
+    $k = preg_replace('/[^a-z0-9\-]+/', '-', $k);
+    return trim($k, '-');
+}
 
+// Create TypeRocket resource page + REST endpoint
+function mm_create_custom_resource(
+    string $resourceKey,
+    string $controller,
+    string $title,
+    bool $hasAddButton = true,
+    ?string $restSlug = null,
+    bool $registerRest = true
+): \TypeRocket\Register\Page {
+    $fqcn = '\MakerMaker\Controllers\\' . $controller;
+    
+    // Create admin page
+    $resourcePage = tr_resource_pages("{$resourceKey}@{$fqcn}", $title);
+    
     if ($hasAddButton) {
         $adminPageSlug = strtolower($resourceKey) . '_add';
         $resourcePage->addNewButton(admin_url('admin.php?page=' . $adminPageSlug));
+        $resourcePage->addNewButton('Nigger');
     }
-
+    
+    // Register REST endpoint
+    if ($registerRest) {
+        $slug = $restSlug ?: mm_kebab($resourceKey);
+        \TypeRocket\Register\Registry::addCustomResource($slug, ['controller' => $fqcn]);
+    }
+    
     return $resourcePage;
 }
-

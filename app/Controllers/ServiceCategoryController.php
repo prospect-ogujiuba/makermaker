@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceCategoryFields;
@@ -10,7 +11,7 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceCategoryController extends Controller
 {
-   /**
+    /**
      * The index page for admin
      *
      * @return mixed
@@ -50,7 +51,7 @@ class ServiceCategoryController extends Controller
         $service_category->save($fields);
 
         return tr_redirect()->toPage('servicecategory', 'index')
-            ->withFlash('Service Type Created');
+            ->withFlash('Service Type created');
     }
 
     /**
@@ -91,7 +92,7 @@ class ServiceCategoryController extends Controller
         $service_category->save($fields);
 
         return tr_redirect()->toPage('servicecategory', 'edit', $service_category->getID())
-            ->withFlash('Service Type Updated');
+            ->withFlash('Service Type updated');
     }
 
     /**

@@ -42,7 +42,7 @@ class ServiceBundleItemController extends Controller
     public function create(ServiceBundleItemFields $fields, ServiceBundleItem $service_bundle_item, Response $response, AuthUser $user)
     {
         if (!$service_bundle_item->can('create')) {
-            $response->unauthorized('Unauthorized: Service Delivery_assignment not created')->abort();
+            $response->unauthorized('Unauthorized: Service Bundle Item not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -50,8 +50,8 @@ class ServiceBundleItemController extends Controller
 
         $service_bundle_item->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment Created');
+        return tr_redirect()->toPage('servicebundleitem', 'index')
+            ->withFlash('Service Bundle Item created');
     }
 
     /**
@@ -84,15 +84,15 @@ class ServiceBundleItemController extends Controller
     public function update(ServiceBundleItem $service_bundle_item, ServiceBundleItemFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_bundle_item->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceBundleItem not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Bundle Item not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
 
         $service_bundle_item->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_bundle_item->getID())
-            ->withFlash('Service Delivery_assignment Updated');
+        return tr_redirect()->toPage('servicebundleitem', 'edit', $service_bundle_item->getID())
+            ->withFlash('Service Bundle Item updated');
     }
 
     /**
@@ -131,15 +131,7 @@ class ServiceBundleItemController extends Controller
     public function destroy(ServiceBundleItem $service_bundle_item, Response $response)
     {
         if (!$service_bundle_item->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceBundleItem not deleted');
-        }
-
-        $servicesCount = $service_bundle_item->service()->count();
-
-        if ($servicesCount > 0) {
-            return $response
-                ->error("Cannot delete: {$servicesCount} Service Relationship(s) still use this. Reassign or remove them first.")
-                ->setStatus(409);
+            return $response->unauthorized('Unauthorized: Service Bundle Item not deleted');
         }
 
         $deleted = $service_bundle_item->delete();
@@ -150,7 +142,7 @@ class ServiceBundleItemController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Relationship deleted.')->setData('service_pricing_model', $service_bundle_item);
+        return $response->success('Service Bundle Item deleted.')->setData('service_bundle_item', $service_bundle_item);
     }
 
     /**

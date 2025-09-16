@@ -11,7 +11,7 @@ use TypeRocket\Models\AuthUser;
 
 class ServiceCoverageAreaController extends Controller
 {
-   /**
+    /**
      * The index page for admin
      *
      * @return mixed
@@ -51,7 +51,7 @@ class ServiceCoverageAreaController extends Controller
         $service_coverage_area->save($fields);
 
         return tr_redirect()->toPage('servicecoveragearea', 'index')
-            ->withFlash('Service Coverage Area Created');
+            ->withFlash('Service Coverage Area created');
     }
 
     /**
@@ -67,7 +67,7 @@ class ServiceCoverageAreaController extends Controller
         $serviceCoverages = $service_coverage_area->serviceCoverages;
         $createdBy = $service_coverage_area->createdBy;
         $updatedBy = $service_coverage_area->updatedBy;
-        
+
         $form = tr_form($service_coverage_area)->useErrors()->useOld()->useConfirm();
         return View::new('service_coverage_areas.form', compact('form', 'current_id', 'serviceCoverages', 'createdBy', 'updatedBy', 'user'));
     }
@@ -92,7 +92,7 @@ class ServiceCoverageAreaController extends Controller
         $service_coverage_area->save($fields);
 
         return tr_redirect()->toPage('servicecoveragearea', 'edit', $service_coverage_area->getID())
-            ->withFlash('Service Coverage Area Updated');
+            ->withFlash('Service Coverage Area updated');
     }
 
     /**
@@ -161,11 +161,11 @@ class ServiceCoverageAreaController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceCoverageAreas = ServiceCoverageArea::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $serviceCoverages = ServiceCoverageArea::new()
+                ->with(['serviceCoverages', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceCoverageAreas)) {
+            if (empty($serviceCoverages)) {
                 return $response
                     ->setData('service_coverage_areas', [])
                     ->setMessage('No service coverage Areas found', 'info')
@@ -173,7 +173,7 @@ class ServiceCoverageAreaController extends Controller
             }
 
             return $response
-                ->setData('service_coverage_areas', $serviceCoverageAreas)
+                ->setData('service_coverage_areas', $serviceCoverages)
                 ->setMessage('Service coverage areas retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
@@ -181,6 +181,41 @@ class ServiceCoverageAreaController extends Controller
 
             return $response
                 ->error('Failed to retrieve service coverage areas: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceCoverageArea $service_coverage_area
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceCoverageArea $service_coverage_area, Response $response)
+    {
+        try {
+            $service_coverage_area = ServiceCoverageArea::new()
+                ->with(['serviceCoverages', 'createdBy', 'updatedBy'])
+                ->find($service_coverage_area->getID());
+
+            if (empty($service_coverage_area)) {
+                return $response
+                    ->setData('service_complexity', null)
+                    ->setMessage('Service Complexity not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_complexity', $service_coverage_area)
+                ->setMessage('Service Complexity retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceCoverageArea showRest error: ' . $e->getMessage());
+            return $response
+                ->setError('api', 'Failed to retrieve service complexity')
+                ->setMessage('An error occurred while retrieving service complexity', 'error')
                 ->setStatus(500);
         }
     }

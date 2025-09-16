@@ -51,7 +51,7 @@ class ServiceTypeController extends Controller
         $service_type->save($fields);
 
         return tr_redirect()->toPage('servicetype', 'index')
-            ->withFlash('Service Type Created');
+            ->withFlash('Service Type created');
     }
 
     /**
@@ -93,7 +93,7 @@ class ServiceTypeController extends Controller
         $service_type->save($fields);
 
         return tr_redirect()->toPage('servicetype', 'edit', $service_type->getID())
-            ->withFlash('Service Type Updated');
+            ->withFlash('Service Type updated');
     }
 
     /**

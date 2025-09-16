@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServiceEquipmentFields;
@@ -50,7 +51,7 @@ class ServiceEquipmentController extends Controller
         $service_equipment->save($fields);
 
         return tr_redirect()->toPage('serviceequipment', 'index')
-            ->withFlash('Service Equipment Created');
+            ->withFlash('Service Equipment created');
     }
 
     /**
@@ -91,7 +92,7 @@ class ServiceEquipmentController extends Controller
         $service_equipment->save($fields);
 
         return tr_redirect()->toPage('serviceequipment', 'edit', $service_equipment->getID())
-            ->withFlash('Service Equipment Updated');
+            ->withFlash('Service Equipment updated');
     }
 
     /**
@@ -160,11 +161,11 @@ class ServiceEquipmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceEquipServiceEquipmentServiceEquipments = ServiceEquipment::new()
+            $serviceEquipments = ServiceEquipment::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceEquipServiceEquipmentServiceEquipments)) {
+            if (empty($serviceEquipments)) {
                 return $response
                     ->setData('service_equipment', [])
                     ->setMessage('No service equipments found', 'info')
@@ -172,7 +173,7 @@ class ServiceEquipmentController extends Controller
             }
 
             return $response
-                ->setData('service_equipment', $serviceEquipServiceEquipmentServiceEquipments)
+                ->setData('service_equipment', $serviceEquipments)
                 ->setMessage('Service equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {

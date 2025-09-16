@@ -168,7 +168,7 @@ if (isset($current_id)) {
 
     $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
         'Related Services',
-        'Other services in the selected bundle',
+        'All services in the selected bundle',
         $service_fields
     ));
 
