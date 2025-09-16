@@ -21,23 +21,23 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Deliverable Assignment',
-        'Define coverage relationships between services',
+        'Service Equipment Assignment',
+        'Define equipment requirements for this service',
         [
             $form->row()
                 ->withColumn(
                     $form->select('service_id')
-                        ->setLabel('Primary Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(['Select Primary Service' => null])
+                        ->setLabel('Service')
+                        ->setHelp('Select the service that requires this equipment')
+                        ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('equipment_id')
                         ->setLabel('Equipment')
-                        ->setHelp('The deliverable that will be offered by this service')
-                        ->setOptions(['Select Delivery Method' => null])
+                        ->setHelp('Select the equipment needed for this service')
+                        ->setOptions(['Select Equipment' => null])
                         ->setModelOptions(ServiceEquipment::class, 'name', 'id')
                         ->markLabelRequired()
                 ),
@@ -45,27 +45,26 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('quantity')
                         ->setLabel('Quantity')
-                        ->setHelp('The main service that this coverage applies to')
+                        ->setHelp('Number of units required for this service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->toggle('required')
                         ->setLabel('Required')
-                        ->setHelp('The deliverable that will be offered by this service')
+                        ->setHelp('Check if this equipment is mandatory for the service')
                         ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->toggle('substitute_ok')
-                        ->setLabel('Substitute Ok')
-                        ->setHelp('The main service that this coverage applies to')
+                        ->setLabel('Substitute OK')
+                        ->setHelp('Check if equivalent equipment can be substituted')
                         ->markLabelRequired()
                 )
                 ->withColumn()
         ]
     )
-
-])->setDescription('Service Deliverable Assignment');
+])->setDescription('Service Equipment Assignment');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

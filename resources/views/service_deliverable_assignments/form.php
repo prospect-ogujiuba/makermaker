@@ -22,28 +22,27 @@ $tabs = tr_tabs()
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Service Deliverable Assignment',
-        'Define coverage relationships between services',
+        'Define which deliverables are included with this service',
         [
             $form->row()
                 ->withColumn(
                     $form->select('service_id')
-                        ->setLabel('Primary Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(['Select Primary Service' => null])
+                        ->setLabel('Service')
+                        ->setHelp('Select the service that will include this deliverable')
+                        ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('deliverable_id')
-                        ->setLabel('Service Deliverable')
-                        ->setHelp('The deliverable that will be offered by this service')
-                        ->setOptions(['Select Delivery Method' => null])
+                        ->setLabel('Deliverable')
+                        ->setHelp('Select the deliverable that will be included with this service')
+                        ->setOptions(['Select Deliverable' => null])
                         ->setModelOptions(ServiceDeliverable::class, 'name', 'id')
                         ->markLabelRequired()
                 )
         ]
     )
-
 ])->setDescription('Service Deliverable Assignment');
 
 // Conditional System Info Tab

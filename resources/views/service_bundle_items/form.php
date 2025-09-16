@@ -22,21 +22,22 @@ $tabs = tr_tabs()
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Bundle Item',
-        'Define coverage relationships between services',
+        'Define services included in this bundle',
         [
             $form->row()
                 ->withColumn(
-                    $form->select('bundle_Id')
+                    $form->select('bundle_id')
                         ->setLabel('Bundle')
-                        ->setHelp('The deliverable that will be offered by this service')
-                        ->setOptions(['Select Delivery Method' => null])
+                        ->setHelp('Select the service bundle this item belongs to')
+                        ->setOptions(['Select Bundle' => null])
                         ->setModelOptions(ServiceBundle::class, 'name', 'id')
                         ->markLabelRequired()
-                )->withColumn(
+                )
+                ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(['Select Primary Service' => null])
+                        ->setHelp('Select the service to include in this bundle')
+                        ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
                 ),
@@ -44,18 +45,17 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('quantity')
                         ->setLabel('Quantity')
-                        ->setHelp('The main service that this coverage applies to')
+                        ->setHelp('Number of units of this service included in the bundle')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('discount_pct')
                         ->setLabel('Discount %')
-                        ->setHelp('The deliverable that will be offered by this service')
+                        ->setHelp('Percentage discount applied to this service in the bundle (0-100)')
                         ->markLabelRequired()
                 )
         ]
     )
-
 ])->setDescription('Service Bundle Item');
 
 // Conditional System Info Tab

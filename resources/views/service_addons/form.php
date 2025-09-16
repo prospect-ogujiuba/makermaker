@@ -24,7 +24,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Primary Service')
-                        ->setHelp('The main service that this addon applies to')
+                        ->setHelp('Select the main service that this addon can be added to')
                         ->setOptions(['Select Primary Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
@@ -32,7 +32,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('addon_service_id')
                         ->setLabel('Addon Service')
-                        ->setHelp('The service that will be offered as an addon')
+                        ->setHelp('Select the service that will be offered as an addon option')
                         ->setOptions(['Select Addon Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
@@ -48,7 +48,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->toggle('required')
                         ->setLabel('Required Addon')
-                        ->setHelp('Whether this addon is required when purchasing the primary service')
+                        ->setHelp('Check if this addon must be included when purchasing the primary service')
                         ->setText('This addon is required')
                 )
                 ->withColumn(),
@@ -56,8 +56,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('min_qty')
                         ->setLabel('Minimum Quantity')
-                        ->setHelp('Minimum quantity of this addon')
-                        ->setAttribute('step', '0.001')
+                        ->setHelp('Minimum quantity required when this addon is selected (0 = optional)')
+                        ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                         ->setDefault('0.000')
                         ->markLabelRequired()
@@ -65,8 +65,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('max_qty')
                         ->setLabel('Maximum Quantity')
-                        ->setHelp('Maximum quantity of this addon (leave empty for unlimited)')
-                        ->setAttribute('step', '0.001')
+                        ->setHelp('Maximum quantity allowed (leave empty for no limit)')
+                        ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                 )
         ]
@@ -80,17 +80,17 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('price_delta')
                         ->setLabel('Price Delta')
-                        ->setHelp('Fixed price adjustment for this addon (positive or negative)')
+                        ->setHelp('Fixed amount to add/subtract from addon base price (use negative for discounts)')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('placeholder', '0.00')
                 )
                 ->withColumn(
                     $form->number('multiplier')
                         ->setLabel('Price Multiplier')
-                        ->setHelp('Multiplier applied to the addon service base price')
-                        ->setAttribute('step', '0.0001')
+                        ->setHelp('Factor to multiply the addon base price by (1.0 = no change, 0.5 = 50% off)')
+                        ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
-                        ->setDefault('1.0000')
+                        ->setDefault('1.0')
                         ->markLabelRequired()
                 )
         ]

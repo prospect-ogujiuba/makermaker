@@ -81,6 +81,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('unit')
                         ->setLabel('Pricing Unit')
                         ->setHelp('Unit of measurement for pricing (e.g., "per hour", "per device", "flat rate")')
+                        ->setAttribute('maxlength', '32')
                 ),
             $form->row()
                 ->withColumn(

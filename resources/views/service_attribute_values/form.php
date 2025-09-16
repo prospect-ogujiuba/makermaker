@@ -25,7 +25,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Service')
-                        ->setHelp('Service this attribute value applies to')
+                        ->setHelp('Select the service this attribute value will be assigned to')
                         ->setOptions(['Select Service' => NULL])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
@@ -34,14 +34,14 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('attribute_definition_id')
                         ->setLabel('Attribute Definition')
-                        ->setHelp('Attribute definition this value applies to')
+                        ->setHelp('Select which attribute this value applies to (filtered by service type)')
                         ->setOptions($options)
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('value')
                         ->setLabel('Attribute Value')
-                        ->setHelp('Enter the value for this attribute (will be automatically typed based on the selected attribute definition)')
+                        ->setHelp('Enter the specific value for this attribute (format depends on attribute data type)')
                         ->markLabelRequired()
                 )
         ]

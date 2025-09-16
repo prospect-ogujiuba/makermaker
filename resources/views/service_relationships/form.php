@@ -21,53 +21,49 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Deliverable Assignment',
-        'Define coverage relationships between services',
+        'Service Relationship',
+        'Define relationships between services',
         [
             $form->row()
                 ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Primary Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(['Select Primary Service' => null])
+                        ->setHelp('Select the main service in this relationship')
+                        ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
-                )->withColumn(
+                )
+                ->withColumn(
                     $form->select('relation_type')
-                        ->setLabel('Relation Type')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(
-                            [
-                                'Select Relation Type' => null,
-                                'Prerequisite' => 'prerequisite',
-                                'Dependency' => 'dependency',
-                                'Incompatible With' => 'incompatible_with',
-                                'Substitute For' => 'substitute_for'
-                            ]
-                        )
+                        ->setLabel('Relationship Type')
+                        ->setHelp('Select how these services relate to each other')
+                        ->setOptions([
+                            'Select Relation Type' => null,
+                            'Prerequisite' => 'prerequisite',
+                            'Dependency' => 'dependency',
+                            'Incompatible With' => 'incompatible_with',
+                            'Substitute For' => 'substitute_for'
+                        ])
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('related_service_id')
-                        ->setLabel('Service Deliverable')
-                        ->setHelp('The deliverable that will be offered by this service')
-                        ->setOptions(['Select Delivery Method' => null])
+                        ->setLabel('Related Service')
+                        ->setHelp('Select the service that has this relationship with the primary service')
+                        ->setOptions(['Select Related Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
                 ),
-        
             $form->row()
                 ->withColumn(
                     $form->textarea('notes')
-                        ->setLabel('Primary Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->markLabelRequired()
+                        ->setLabel('Relationship Notes')
+                        ->setHelp('Additional details about this service relationship')
                 )
-
+                ->withColumn()
         ]
     )
-
-])->setDescription('Service Deliverable Assignment');
+])->setDescription('Service Relationship');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

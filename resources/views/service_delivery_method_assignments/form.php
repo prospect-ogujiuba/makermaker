@@ -21,22 +21,22 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Deliverable Assignment',
-        'Define coverage relationships between services',
+        'Service Delivery Method Assignment',
+        'Define how this service will be delivered',
         [
             $form->row()
                 ->withColumn(
                     $form->select('service_id')
-                        ->setLabel('Primary Service')
-                        ->setHelp('The main service that this coverage applies to')
-                        ->setOptions(['Select Primary Service' => null])
+                        ->setLabel('Service')
+                        ->setHelp('Select the service this delivery method applies to')
+                        ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('delivery_method_id')
-                        ->setLabel('Service Deliverable')
-                        ->setHelp('The deliverable that will be offered by this service')
+                        ->setLabel('Delivery Method')
+                        ->setHelp('Select how this service will be delivered (e.g., On-site, Remote)')
                         ->setOptions(['Select Delivery Method' => null])
                         ->setModelOptions(ServiceDeliveryMethod::class, 'name', 'id')
                         ->markLabelRequired()
@@ -45,27 +45,26 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('lead_time_days')
                         ->setLabel('Lead Time (days)')
-                        ->setHelp('The main service that this coverage applies to')
+                        ->setHelp('Number of days required to prepare and start service delivery')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('sla_hours')
                         ->setLabel('Service Level Hours')
-                        ->setHelp('The deliverable that will be offered by this service')
+                        ->setHelp('Service level agreement response time in hours')
                         ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->number('surcharge')
                         ->setLabel('Delivery Surcharge')
-                        ->setHelp('The main service that this coverage applies to')
+                        ->setHelp('Additional cost for this delivery method (enter 0 if no surcharge)')
                         ->markLabelRequired()
                 )
                 ->withColumn()
         ]
     )
-
-])->setDescription('Service Deliverable Assignment');
+])->setDescription('Service Delivery Method Assignment');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
