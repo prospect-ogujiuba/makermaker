@@ -42,7 +42,7 @@ class ServiceDeliveryMethodController extends Controller
     public function create(ServiceDeliveryMethodFields $fields, ServiceDeliveryMethod $service_delivery_method, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method->can('create')) {
-            $response->unauthorized('Unauthorized: ServiceDeliveryMethod not created')->abort();
+            $response->unauthorized('Unauthorized: Service Delivery Method not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -51,7 +51,7 @@ class ServiceDeliveryMethodController extends Controller
         $service_delivery_method->save($fields);
 
         return tr_redirect()->toPage('servicedeliverymethod', 'index')
-            ->withFlash('Service Pricing Model created');
+            ->withFlash('Service Delivery Method created');
     }
 
     /**
@@ -84,7 +84,7 @@ class ServiceDeliveryMethodController extends Controller
     public function update(ServiceDeliveryMethod $service_delivery_method, ServiceDeliveryMethodFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceDeliveryMethod not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Delivery Method not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -92,7 +92,7 @@ class ServiceDeliveryMethodController extends Controller
         $service_delivery_method->save($fields);
 
         return tr_redirect()->toPage('servicedeliverymethod', 'edit', $service_delivery_method->getID())
-            ->withFlash('Service Pricing Model updated');
+            ->withFlash('Service Delivery Method updated');
     }
 
     /**
@@ -131,15 +131,14 @@ class ServiceDeliveryMethodController extends Controller
     public function destroy(ServiceDeliveryMethod $service_delivery_method, Response $response)
     {
         if (!$service_delivery_method->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceDeliveryMethod not deleted');
+            return $response->unauthorized('Unauthorized: Service Delivery Method not deleted');
         }
 
-        // Check if this pricing model is still being used by service prices
-        $servicesCount = $service_delivery_method->services()->count();
+        $servicesCount = $service_delivery_method->services->count();
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service price(s) still use this pricing model. Reassign or remove them first.")
+                ->error("Cannot delete: {$servicesCount} service(s) still use this delivery method. Reassign or remove them first.")
                 ->setStatus(409);
         }
 
@@ -151,7 +150,7 @@ class ServiceDeliveryMethodController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServiceDeliveryMethod deleted.')->setData('service_pricing_model', $service_delivery_method);
+        return $response->success('Service Delivery Method deleted.')->setData('service_delivery_method', $service_delivery_method);
     }
 
     /**
@@ -169,19 +168,19 @@ class ServiceDeliveryMethodController extends Controller
             if (empty($serviceDeliveryMethods)) {
                 return $response
                     ->setData('service_delivery_methods', [])
-                    ->setMessage('No service pricing models found', 'info')
+                    ->setMessage('No Service Delivery Methods found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_delivery_methods', $serviceDeliveryMethods)
-                ->setMessage('Service pricing models retrieved successfully', 'success')
+                ->setMessage('Service Delivery Methods retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServiceDeliveryMethod indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Delivery Methods: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }

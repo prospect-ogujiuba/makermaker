@@ -153,26 +153,61 @@ class ServiceBundleItemController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDelServiceBundleItem = ServiceBundleItem::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $service_bundle_items = ServiceBundleItem::new()
+                ->with(['bundle', 'service', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDelServiceBundleItem)) {
+            if (empty($service_bundle_items)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Delivery_assignments found', 'info')
+                    ->setData('service_bundle_items', [])
+                    ->setMessage('No service Bundle Items found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceDelServiceBundleItem)
-                ->setMessage('Service Delivery_assignment retrieved successfully', 'success')
+                ->setData('service_bundle_items', $service_bundle_items)
+                ->setMessage('Service Bundle Items retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceBundleItem indexRest error: ' . $e->getMessage());
+            error_log('Service Bundle Item indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Relationship: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Bundle Items: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceBundleItem $service_bundle_item
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceBundleItem $service_bundle_item, Response $response)
+    {
+        try {
+            $service_bundle_item = ServiceBundleItem::new()
+                ->with(['bundle', 'service', 'createdBy', 'updatedBy'])
+                ->find($service_bundle_item->getID());
+
+            if (empty($service_bundle_item)) {
+                return $response
+                    ->setData('service_bundle_item', null)
+                    ->setMessage('Service Bundle Item not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_bundle_item', $service_bundle_item)
+                ->setMessage('Service Bundle Item retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Bundle Item showRest error: ' . $e->getMessage());
+            return $response
+                ->setError('api', 'Failed to retrieve Service Bundle Item')
+                ->setMessage('An error occurred while retrieving Service Bundle Item', 'error')
                 ->setStatus(500);
         }
     }

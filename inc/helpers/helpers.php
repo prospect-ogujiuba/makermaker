@@ -63,7 +63,6 @@ function mm_create_custom_resource(
     if ($hasAddButton) {
         $adminPageSlug = strtolower($resourceKey) . '_add';
         $resourcePage->addNewButton(admin_url('admin.php?page=' . $adminPageSlug));
-        $resourcePage->addNewButton('Nigger');
     }
     
     // Register REST endpoint

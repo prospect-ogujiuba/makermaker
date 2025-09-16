@@ -134,7 +134,6 @@ class ServicePricingModelController extends Controller
             return $response->unauthorized('Unauthorized: Service Pricing Model not deleted');
         }
 
-        // Check if this pricing model is still being used by service prices
         $servicePricesCount = $service_pricing_model->servicePrices()->count();
 
         if ($servicePricesCount > 0) {
@@ -182,6 +181,41 @@ class ServicePricingModelController extends Controller
 
             return $response
                 ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServicePricingModel $service_pricing_model
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServicePricingModel $service_pricing_model, Response $response)
+    {
+        try {
+            $service_pricing_model = ServicePricingModel::new()
+                ->with(['servicePrices', 'createdBy', 'updatedBy'])
+                ->find($service_pricing_model->getID());
+
+            if (empty($service_pricing_model)) {
+                return $response
+                    ->setData('service_pricing_model', null)
+                    ->setMessage('Service Pricing Model not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_pricing_model', $service_pricing_model)
+                ->setMessage('Service Pricing Model retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Pricing Model showRest error: ' . $e->getMessage());
+            return $response
+                ->setError('api', 'Failed to retrieve service pricing model')
+                ->setMessage('An error occurred while retrieving service pricing model', 'error')
                 ->setStatus(500);
         }
     }

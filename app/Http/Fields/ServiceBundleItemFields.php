@@ -40,10 +40,10 @@ class ServiceBundleItemFields extends Fields
 
         $rules = [];
 
-        $rules['bundle_id'] = "numeric|?required";
-        $rules['service_id'] = "numeric|?required";
-        $rules['quantity'] = "numeric|?required";
-        $rules['discount_pct'] = "numeric|?required";
+        $rules['bundle_id'] = "numeric|required";
+        $rules['service_id'] = "numeric|required";
+        $rules['quantity'] = "?numeric|?required";
+        $rules['discount_pct'] = "?numeric|?required";
 
         return $rules;
     }

@@ -42,7 +42,7 @@ class ServicePricingTierController extends Controller
     public function create(ServicePricingTierFields $fields, ServicePricingTier $service_pricing_tier, Response $response, AuthUser $user)
     {
         if (!$service_pricing_tier->can('create')) {
-            $response->unauthorized('Unauthorized: ServicePricingTier not created')->abort();
+            $response->unauthorized('Unauthorized: Service Pricing Tier not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -84,7 +84,7 @@ class ServicePricingTierController extends Controller
     public function update(ServicePricingTier $service_pricing_tier, ServicePricingTierFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_pricing_tier->can('update')) {
-            $response->unauthorized('Unauthorized: ServicePricingTier not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Pricing Tier not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -131,7 +131,7 @@ class ServicePricingTierController extends Controller
     public function destroy(ServicePricingTier $service_pricing_tier, Response $response)
     {
         if (!$service_pricing_tier->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServicePricingTier not deleted');
+            return $response->unauthorized('Unauthorized: Service Pricing Tier not deleted');
         }
 
         // Check if this pricing tier is still being used by service prices
@@ -170,18 +170,18 @@ class ServicePricingTierController extends Controller
             if (empty($servicePricingTiers)) {
                 return $response
                     ->setData('service_pricing_tiers', [])
-                    ->setMessage('No service pricing tiers found', 'info')
+                    ->setMessage('No service Pricing Tiers found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_pricing_tiers', $servicePricingTiers)
-                ->setMessage('Service pricing tiers retrieved successfully', 'success')
+                ->setMessage('Service Pricing Tiers retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServicePricingTier indexRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving service pricing tiers', 'error')
+                ->setMessage('An error occurred while retrieving service Pricing Tiers', 'error')
                 ->setStatus(500);
         }
     }
@@ -201,18 +201,18 @@ class ServicePricingTierController extends Controller
 
             if (!$service_pricing_tier) {
                 return $response
-                    ->setMessage('Service pricing tier not found', 'error')
+                    ->setMessage('Service Pricing Tier not found', 'error')
                     ->setStatus(404);
             }
 
             return $response
                 ->setData('service_pricing_tier', $service_pricing_tier)
-                ->setMessage('Service pricing tier retrieved successfully', 'success')
+                ->setMessage('Service Pricing Tier retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServicePricingTier showRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving the service pricing tier', 'error')
+                ->setMessage('An error occurred while retrieving the Service Pricing Tier', 'error')
                 ->setStatus(500);
         }
     }

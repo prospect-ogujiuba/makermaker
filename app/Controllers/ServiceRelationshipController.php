@@ -42,7 +42,7 @@ class ServiceRelationshipController extends Controller
     public function create(ServiceRelationshipFields $fields, ServiceRelationship $service_relationship, Response $response, AuthUser $user)
     {
         if (!$service_relationship->can('create')) {
-            $response->unauthorized('Unauthorized: Service Delivery_assignment not created')->abort();
+            $response->unauthorized('Unauthorized: Service Relationship not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -50,8 +50,8 @@ class ServiceRelationshipController extends Controller
 
         $service_relationship->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment created');
+        return tr_redirect()->toPage('servicerelationship', 'index')
+            ->withFlash('Service Relationship created');
     }
 
     /**
@@ -83,15 +83,15 @@ class ServiceRelationshipController extends Controller
     public function update(ServiceRelationship $service_relationship, ServiceRelationshipFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_relationship->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceRelationship not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Relationship not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
 
         $service_relationship->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_relationship->getID())
-            ->withFlash('Service Delivery_assignment updated');
+        return tr_redirect()->toPage('servicerelationship', 'edit', $service_relationship->getID())
+            ->withFlash('Service Relationship updated');
     }
 
     /**
@@ -130,15 +130,7 @@ class ServiceRelationshipController extends Controller
     public function destroy(ServiceRelationship $service_relationship, Response $response)
     {
         if (!$service_relationship->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceRelationship not deleted');
-        }
-
-        $servicesCount = $service_relationship->service()->count();
-
-        if ($servicesCount > 0) {
-            return $response
-                ->error("Cannot delete: {$servicesCount} Service Relationship(s) still use this. Reassign or remove them first.")
-                ->setStatus(409);
+            return $response->unauthorized('Unauthorized: Service Relationship not deleted');
         }
 
         $deleted = $service_relationship->delete();
@@ -161,25 +153,56 @@ class ServiceRelationshipController extends Controller
     {
         try {
             $serviceRelationship = ServiceRelationship::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+                ->with(['service', 'relatedService', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($serviceRelationship)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Delivery_assignments found', 'info')
+                    ->setData('service_relationship', [])
+                    ->setMessage('No Service Relationships found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceRelationship)
-                ->setMessage('Service Delivery_assignment retrieved successfully', 'success')
+                ->setData('service_relationship', $serviceRelationship)
+                ->setMessage('Service Relationships retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceRelationship indexRest error: ' . $e->getMessage());
+            error_log('Service Relationship indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Relationship: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Relationships: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceRelationship $service_relationship
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceRelationship $service_relationship, Response $response)
+    {
+        try {
+            $service_relationship = $service_relationship->with(['service', 'relatedService', 'createdBy', 'updatedBy'])->first();
+
+            if (!$service_relationship) {
+                return $response
+                    ->setMessage('Service Relationship not found', 'error')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_relationship', $service_relationship)
+                ->setMessage('Service Relationship retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Relationship showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving the Service Relationship', 'error')
                 ->setStatus(500);
         }
     }
