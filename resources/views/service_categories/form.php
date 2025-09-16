@@ -4,6 +4,7 @@
  * ServiceCategory Form
  */
 
+use App\Models\Category;
 use MakerMaker\Models\ServiceCategory;
 
 // Form instance
@@ -24,26 +25,25 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this category (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setHelp('Display name for this service category (max 100 characters)')
+                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('placeholder', 'e.g., VoIP Systems')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('slug')
                         ->setLabel('Slug')
-                        ->setHelp('Human readable link for service category')
+                        ->setHelp('URL-friendly version of the name (lowercase, hyphens only)')
+                        ->setAttribute('maxlength', '128')
                         ->markLabelRequired()
                 ),
 
             $form->row()
                 ->withColumn(
                     $form->select('parent_id')
-                        ->setLabel('Parent ID') // Use setLabel to set display label
-                        ->setHelp('ID of the parent category')
-                        ->setOptions(['Select Category' => NULL])
-                        ->setModelOptions(ServiceCategory::class, 'name', 'id')
-                        ->markLabelRequired()
+                        ->setLabel('Parent Category') // Use setLabel to set display label
+                        ->setHelp('Optional parent category for hierarchical organization')
+                        ->setModelOptions(ServiceCategory::class, 'name', 'id', 'Select A Category')
                 )
                 ->withColumn(),
         ]

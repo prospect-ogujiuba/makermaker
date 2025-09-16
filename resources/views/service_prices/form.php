@@ -26,7 +26,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Service')
-                        ->setHelp('The service this price applies to')
+                        ->setHelp('Select the service this pricing applies to')
                         ->setOptions(['Select Service' => null])
                         ->setModelOptions(Service::class, 'name', 'id')
                         ->markLabelRequired()
@@ -34,7 +34,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('pricing_tier_id')
                         ->setLabel('Pricing Tier')
-                        ->setHelp('The pricing tier for this service price')
+                        ->setHelp('Select the pricing tier (e.g., Basic, Standard, Premium)')
                         ->setOptions(['Select Pricing Tier' => null])
                         ->setModelOptions(ServicePricingTier::class, 'name', 'id')
                         ->markLabelRequired()
@@ -43,7 +43,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('pricing_model_id')
                         ->setLabel('Pricing Model')
-                        ->setHelp('The pricing model for this service price')
+                        ->setHelp('Select how this service is priced (e.g., Fixed, Hourly, Monthly)')
                         ->setOptions(['Select Pricing Model' => null])
                         ->setModelOptions(ServicePricingModel::class, 'name', 'id')
                         ->markLabelRequired()
@@ -51,7 +51,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->select('currency')
                         ->setLabel('Currency')
-                        ->setHelp('Currency for this price')
+                        ->setHelp('Currency for this pricing entry')
                         ->setOptions([
                             'CAD' => 'CAD - Canadian Dollar',
                             'USD' => 'USD - US Dollar',
@@ -72,7 +72,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('amount')
                         ->setLabel('Amount')
-                        ->setHelp('Price amount (leave empty for quote-based pricing)')
+                        ->setHelp('Base price amount (leave empty for quote-only services)')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                         ->setAttribute('placeholder', '0.00')
@@ -80,13 +80,13 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('unit')
                         ->setLabel('Pricing Unit')
-                        ->setHelp('Unit for pricing calculation')
+                        ->setHelp('Unit of measurement for pricing (e.g., "per hour", "per device", "flat rate")')
                 ),
             $form->row()
                 ->withColumn(
                     $form->number('setup_fee')
                         ->setLabel('Setup Fee')
-                        ->setHelp('One-time setup fee for this service')
+                        ->setHelp('One-time initial setup fee (enter 0 if no setup fee applies)')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                         ->setDefault('0.00')
@@ -104,14 +104,14 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->date('effective_from')
                         ->setLabel('Effective From')
-                        ->setHelp('Date when this pricing becomes effective')
+                        ->setHelp('Start date when this pricing becomes active')
                         ->setDefault(date('Y-m-d'))
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->date('effective_to')
                         ->setLabel('Effective To')
-                        ->setHelp('Date when this pricing expires (leave empty for indefinite)')
+                        ->setHelp('End date for this pricing (leave empty for no expiration)')
                 )
         ]
     ),
@@ -124,15 +124,16 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->repeater('notes')
                         ->setLabel('Service Notes')
-                        ->setHelp('Additional service price info')
+                        ->setHelp('Additional notes about pricing terms, conditions, or special considerations')
+                        ->setTitle('Note')
+
                         ->setFields($form->row()
                             ->withColumn(
-                                $form->text('Note')->setName('note')->setHelp('Note to save to database')
+                                $form->text('Service Note')->setName('note')->setHelp('Enter pricing note or condition')
                             ))
                 )
         ]
     )
-
 ])->setDescription('Service Price Details');
 
 // Conditional System Info Tab

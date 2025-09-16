@@ -22,32 +22,45 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this service equipment (e.g., "Ebook", "Manual", "Disaster Rrcovery Plan", "Testing Report")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setHelp('Display name for this equipment item (max 100 characters)')
+                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('placeholder', 'e.g., Cisco Catalyst Switch')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('manufacturer')
                         ->setLabel('Equipment Manufacturer')
-                        ->setHelp('The equipment manufacturer')
+                        ->setAttribute('maxlength', '128')
+                        ->setHelp('Company or brand name that produces this equipment')
                         ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->text('sku')
-                        ->setLabel('Sku')
-                        ->setHelp('Descriptive sku for this service equipment (e.g., "Ebook", "Manual", "Disaster Rrcovery Plan", "Testing Report")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setLabel('SKU')
+                        ->setHelp('Stock Keeping Unit or model number for this equipment (max 100 characters)')
+                        ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., CAT-2960X-24TS-L')
                         ->markLabelRequired()
                 )
-                ->withColumn(
-                    $form->text('specs')
-                        ->setLabel('Equipment Description')
-                        ->setHelp('Describe the equipment')
-                        ->markLabelRequired()
+                ->withColumn(),
+
+            $form->repeater('specs')
+                ->setLabel('Equipment Specifications')
+                ->setHelp('Technical specifications and key features of this equipment')
+                ->setFields(
+                    $form->row(
+                        $form->text('specification_name')
+                            ->setLabel('Specification')
+                            ->setAttribute('placeholder', 'e.g., Power Consumption'),
+                        $form->text('specification_value')
+                            ->setLabel('Value')
+                            ->setAttribute('placeholder', 'e.g., 65W')
+                    )
                 )
+                ->setTitle('Equipment Specification')
+                ->confirmRemove()
+                ->markLabelRequired()
         ]
     )
 

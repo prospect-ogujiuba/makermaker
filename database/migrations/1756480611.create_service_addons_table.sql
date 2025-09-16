@@ -31,7 +31,7 @@ DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref`;
 CREATE TRIGGER `tr_service_addon_no_self_ref` BEFORE INSERT ON `{!!prefix!!}srvc_service_addons` FOR EACH ROW BEGIN IF NEW.service_id = NEW.addon_service_id THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Service cannot be an addon to itself'; END IF; END;
 
 DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref_update`;
-CREATE TRIGGER `tr_service_addon_no_self_ref_update` BEFORE UPDATE ON `{!!prefix!!}srvc_service_addons` FOR EACH ROW BEGIN IF NEW.service_id = NEW.addon_service_id THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Service cannot be an addon to itself';END IF; END;
+CREATE TRIGGER `tr_service_addon_no_self_ref_update` BEFORE UPDATE ON `{!!prefix!!}srvc_service_addons` FOR EACH ROW BEGIN IF NEW.service_id = NEW.addon_service_id THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Service cannot be an addon to itself'; END IF; END;
 
 -- >>> Down >>>
 DROP TRIGGER IF EXISTS `tr_service_addon_no_self_ref`;

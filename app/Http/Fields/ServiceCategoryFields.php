@@ -39,7 +39,7 @@ class ServiceCategoryFields extends Fields
 
         $rules['name'] = "required";
         $rules['slug'] = "required";
-        $rules['parent_id'] = "numeric|?required";
+        $rules['parent_id'] = "numeric|required";
 
         return $rules;
     }

@@ -24,39 +24,41 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('label')
                         ->setLabel('Attribute Name')
-                        ->setHelp('Name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setHelp('Display name for this attribute (max 100 characters)')
+                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('placeholder', 'e.g., Number of Phone Lines')
                         ->markLabelRequired()
                 )
                 ->withColumn($form->select('service_type_id')
                     ->setLabel('Service Type')
-                    ->setHelp('Name for this attribute definition (e.g., "Basic", "Standard", "Advanced", "Expert")')
+                    ->setHelp('Service type this attribute applies to')
                     ->setOptions(['Select Service Type' => NULL])
                     ->setModelOptions(ServiceType::class, 'name', 'id')
                     ->markLabelRequired()),
+
             $form->row()
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Attribute Code')
-                        ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('step', '1')
+                        ->setHelp('Unique identifier code for system reference (uppercase)')
+                        ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., PHONE_LINES')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('unit')
                         ->setLabel('Unit')
-                        ->setHelp('Numeric ranking (1 = simplest, higher numbers = more complex)')
-                        ->setAttribute('min', '1')
-                        ->setAttribute('step', '1')
+                        ->setHelp('Unit of measurement for this attribute (e.g., "lines", "GB", "users")')
+                        ->setAttribute('maxlength', '32')
+                        ->setAttribute('placeholder', 'e.g., lines')
                         ->markLabelRequired()
                 ),
+
             $form->row()
                 ->withColumn(
                     $form->select('data_type')
                         ->setLabel('Attribute Data Type')
-                        ->setHelp('Name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
+                        ->setHelp('Type of data this attribute stores')
                         ->setOptions([
                             'Integer' => 'int',
                             'Decimal' => 'decimal',
@@ -64,29 +66,29 @@ $tabs->tab('Overview', 'admin-settings', [
                             'Text' => 'text',
                             'Enum' => 'enum',
                         ])
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
                 )
-                ->withColumn(
-                    $form->repeater('Options')->setName('enum_options')
-                        ->setFields([
-                            $form->row()
-                                ->withColumn(
-                                    $form->text('Option')->setName('option')->setHelp('Option to save to database')
-                                )
-                        ])->when('data_type', '=', 'enum')
-                ),
-            $form->row()
                 ->withColumn(
                     $form->toggle('required')
                         ->setLabel('Required')
-                        ->setHelp('Name for this attribute definition (e.g., "int", "decimal", "bool", "text", "enum")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
-                        ->markLabelRequired()
+                        ->setHelp('Whether this attribute must have a value when configuring services')
+
+                ),
+
+            $form->repeater('enum_options')
+                ->setLabel('Enum Options')
+                ->setHelp('Select options for this attribute')
+                ->setFields(
+                    $form->row(
+                        $form->text('option')
+                            ->setLabel('Option')
+                            ->setAttribute('placeholder', 'e.g., Power Consumption'),
+                    )
                 )
-                ->withColumn()
+                ->setTitle('Attribute Options')
+                ->confirmRemove()
+                ->markLabelRequired()
+                ->when('data_type', '=', 'enum')
         ]
     )
 

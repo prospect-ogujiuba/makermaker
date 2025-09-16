@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this service deliverable')
+                        ->setHelp('Display name for this service deliverable (max 128 characters)')
                         ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
                         ->markLabelRequired()
@@ -30,7 +30,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->textarea('description')
                         ->setLabel('Description')
-                        ->setHelp('Describe the deliverable')
+                        ->setHelp('Detailed description of what this deliverable includes and provides')
+                        ->setAttribute('maxlength', '2000')
                         ->markLabelRequired()
                 )
         ]

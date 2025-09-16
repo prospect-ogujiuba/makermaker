@@ -22,15 +22,16 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this service type (e.g., "Installation", "Maintenance", "Repair", "Upgrade")')
-                        ->setAttribute('maxlength', '100')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setHelp('Display name for this service type (max 100 characters)')
+                        ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., Installation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Type Code')
-                        ->setHelp('i.e. Installation Service = INSTALL')
+                        ->setHelp('Unique identifier code in uppercase (e.g., INSTALL, MAINTENANCE, REPAIR)')
+                        ->setAttribute('maxlength', '64')
                         ->markLabelRequired()
                 )
         ]

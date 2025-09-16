@@ -23,18 +23,20 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this complexity')
-                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setAttribute('maxlength', '64')
+                        ->setHelp('Descriptive name for this complexity level (max 64 characters)')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('level')
                         ->setLabel('Complexity Level')
-                        ->setHelp('Numeric ranking')
                         ->setAttribute('placeholder', 'e.g., 9')
+                        ->setAttribute('maxlength', '3')
                         ->setAttribute('min', '1')
+                        ->setAttribute('max', '255')
                         ->setAttribute('step', '1')
+                        ->setHelp('Numeric value from 0-255 representing difficulty/complexity ranking')
                         ->markLabelRequired()
                 ),
 
@@ -42,10 +44,10 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('price_multiplier')
                         ->setLabel('Price Multiplier')
-                        ->setHelp('Decimal multiplier for pricing')
                         ->setAttribute('min', '0')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('placeholder', '1.00')
+                        ->setHelp('Decimal factor to adjust base service pricing (1.00 = no change, 1.5 = 50% increase)')
                 )
                 ->withColumn(),
         ]

@@ -26,11 +26,6 @@ $table->setColumns([
         'sort' => true,
     ],
 
-    'specs' => [
-        'label' => 'Specs',
-        'sort' => true,
-    ],
-
     'created_at' => [
         'label' => 'Created',
         'sort' => true,

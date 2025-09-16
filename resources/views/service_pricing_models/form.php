@@ -22,15 +22,16 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this pricing model')
-                        ->setAttribute('maxlength', '100')
+                        ->setHelp('Display name for this pricing model (max 100 characters)')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Annual Contract')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Pricing Model Code')
-                        ->setHelp('e.g., Annual Contract = ANNUAL')
+                        ->setHelp('Unique identifier code in uppercase (e.g., ANNUAL, HOURLY, FIXED)')
+                        ->setAttribute('maxlength', '64')
                         ->markLabelRequired()
                 )
         ]

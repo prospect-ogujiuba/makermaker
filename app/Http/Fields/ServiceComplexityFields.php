@@ -42,7 +42,7 @@ class ServiceComplexityFields extends Fields
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_complexities@id:{$id}|required|max:64";
-        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexities@id:{$id}|numeric|required";
+        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexities@id:{$id}|numeric|required|min:1|max:3";
         $rules['price_multiplier'] = "?numeric";
 
         return $rules;

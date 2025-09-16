@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Name for this coverage area')
+                        ->setHelp('Display name for this coverage area (max 128 characters)')
                         ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., Local Area')
                         ->markLabelRequired()
@@ -30,7 +30,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Coverage Code')
-                        ->setHelp('e.g., Local Area = LOCAL')
+                        ->setHelp('Unique identifier code in uppercase (e.g., LOCAL, REGIONAL, NATIONAL)')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., LOCAL')
                         ->markLabelRequired()
                 )
