@@ -42,7 +42,7 @@ class ServiceEquipmentAssignmentController extends Controller
     public function create(ServiceEquipmentAssignmentFields $fields, ServiceEquipmentAssignment $service_equipment_assignment, Response $response, AuthUser $user)
     {
         if (!$service_equipment_assignment->can('create')) {
-            $response->unauthorized('Unauthorized: Service Delivery_assignment not created')->abort();
+            $response->unauthorized('Unauthorized: Service Equipment Assignment not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -50,8 +50,8 @@ class ServiceEquipmentAssignmentController extends Controller
 
         $service_equipment_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment created');
+        return tr_redirect()->toPage('serviceequipmentassignment', 'index')
+            ->withFlash('Service Equipment Assignment created');
     }
 
     /**
@@ -64,11 +64,12 @@ class ServiceEquipmentAssignmentController extends Controller
     public function edit(ServiceEquipmentAssignment $service_equipment_assignment, AuthUser $user)
     {
         $current_id = $service_equipment_assignment->getID();
+        $equipment = $service_equipment_assignment->service->equipment;
         $createdBy = $service_equipment_assignment->createdBy;
         $updatedBy = $service_equipment_assignment->updatedBy;
 
         $form = tr_form($service_equipment_assignment)->useErrors()->useOld()->useConfirm();
-        return View::new('service_equipment_assignments.form', compact('form', 'current_id', 'createdBy', 'updatedBy', 'user'));
+        return View::new('service_equipment_assignments.form', compact('form', 'current_id', 'equipment', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -83,15 +84,15 @@ class ServiceEquipmentAssignmentController extends Controller
     public function update(ServiceEquipmentAssignment $service_equipment_assignment, ServiceEquipmentAssignmentFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_equipment_assignment->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceEquipmentAssignment not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Equipment Assignment not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
 
         $service_equipment_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_equipment_assignment->getID())
-            ->withFlash('Service Delivery_assignment updated');
+        return tr_redirect()->toPage('serviceequipmentassignment', 'edit', $service_equipment_assignment->getID())
+            ->withFlash('Service Equipment Assignment updated');
     }
 
     /**
@@ -103,7 +104,7 @@ class ServiceEquipmentAssignmentController extends Controller
      */
     public function show(ServiceEquipmentAssignment $service_equipment_assignment)
     {
-        return $service_equipment_assignment->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
+        return $service_equipment_assignment->with(['service', 'equipment', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -130,15 +131,7 @@ class ServiceEquipmentAssignmentController extends Controller
     public function destroy(ServiceEquipmentAssignment $service_equipment_assignment, Response $response)
     {
         if (!$service_equipment_assignment->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceEquipmentAssignment not deleted');
-        }
-
-        $servicesCount = $service_equipment_assignment->service()->count();
-
-        if ($servicesCount > 0) {
-            return $response
-                ->error("Cannot delete: {$servicesCount} Service Delivery Assignment(s) still use this. Reassign or remove them first.")
-                ->setStatus(409);
+            return $response->unauthorized('Unauthorized: Service Equipment Assignment not deleted');
         }
 
         $deleted = $service_equipment_assignment->delete();
@@ -149,7 +142,7 @@ class ServiceEquipmentAssignmentController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Delivery Assignment deleted.')->setData('service_pricing_model', $service_equipment_assignment);
+        return $response->success('Service Equipment Assignment deleted.')->setData('service_pricing_model', $service_equipment_assignment);
     }
 
     /**
@@ -160,26 +153,57 @@ class ServiceEquipmentAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDelServiceEquipmentAssignment = ServiceEquipmentAssignment::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $service_equipment_assignment = ServiceEquipmentAssignment::new()
+                ->with(['service', 'equipment', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDelServiceEquipmentAssignment)) {
+            if (empty($service_equipment_assignment)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Delivery_assignments found', 'info')
+                    ->setData('service_equipment_assignment', [])
+                    ->setMessage('No service Equipment Assignments found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceDelServiceEquipmentAssignment)
-                ->setMessage('Service Delivery_assignment retrieved successfully', 'success')
+                ->setData('service_equipment_assignment', $service_equipment_assignment)
+                ->setMessage('Service Equipment Assignments retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceEquipmentAssignment indexRest error: ' . $e->getMessage());
+            error_log('Service Equipment Assignment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Delivery Assignment: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Equipment Assignments: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceEquipmentAssignment $service_equipment_assignment
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceEquipmentAssignment $service_equipment_assignment, Response $response)
+    {
+        try {
+            $service_equipment_assignment = $service_equipment_assignment->with(['service', 'equipment', 'createdBy', 'updatedBy'])->first();
+
+            if (!$service_equipment_assignment) {
+                return $response
+                    ->setMessage('Service Equipment Assignment not found', 'error')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_equipment_assignment', $service_equipment_assignment)
+                ->setMessage('Service Equipment Assignment retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Equipment Assignment showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving the Service Equipment Assignment', 'error')
                 ->setStatus(500);
         }
     }

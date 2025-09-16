@@ -128,6 +128,54 @@ if (isset($current_id)) {
             ]
         )
     ])->setDescription('System information');
+
+    $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
+        ->layoutTop();
+
+    if ($equipment && count($equipment) > 0) {
+        foreach ($equipment as $serviceEquipment) {
+            $row = $form->row();
+
+            $row->column(
+                $form->text("Equipment Name")
+                    ->setAttribute('value', $serviceEquipment->name ?? 'B2CNC-' . $serviceEquipment->id)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $row->column(
+                $form->text("Equipment Manufacturer")
+                    ->setAttribute('value', $serviceEquipment->manufacturer ?? "Service #{$serviceEquipment->id}")
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $row->column(
+                $form->text("SKU")
+                    ->setAttribute('value', $serviceEquipment->sku)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $service_equipment_fields[] = $row;
+        }
+    } else {
+        $service_equipment_fields[] = $form->text('No Equipment')
+            ->setAttribute('value', 'No equipment are currently associated with this service')
+            ->setAttribute('readonly', true);
+    }
+
+    $relationshipNestedTabs->tab('Equipment', 'admin-post', $form->fieldset(
+        'Related Equipment',
+        'Equipment assigned to this service',
+        $service_equipment_fields
+    ));
+
+    $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
+        ->setDescription('Related Entities');
 }
 
 // Render the complete tabbed interface

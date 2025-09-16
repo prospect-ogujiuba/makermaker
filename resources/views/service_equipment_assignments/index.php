@@ -53,11 +53,11 @@ $table->setColumns([
         }
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Addon Service Name',
+        'label' => 'Created By',
         'sort' => true,
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Addon Service Name',
+        'label' => 'Updated By',
         'sort' => true,
     ],
 
