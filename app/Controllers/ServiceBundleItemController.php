@@ -64,11 +64,12 @@ class ServiceBundleItemController extends Controller
     public function edit(ServiceBundleItem $service_bundle_item, AuthUser $user)
     {
         $current_id = $service_bundle_item->getID();
+        $services = $service_bundle_item->bundle->services;
         $createdBy = $service_bundle_item->createdBy;
         $updatedBy = $service_bundle_item->updatedBy;
 
         $form = tr_form($service_bundle_item)->useErrors()->useOld()->useConfirm();
-        return View::new('service_bundle_items.form', compact('form', 'current_id', 'createdBy', 'updatedBy', 'user'));
+        return View::new('service_bundle_items.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**

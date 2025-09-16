@@ -127,10 +127,49 @@ if (isset($current_id)) {
 
  
 
-    $relationshipNestedTabs->tab('Prices', 'admin-post', $form->fieldset(
-        'Related Prices',
-        'Prices using this pricing model',
-        []
+    if ($services && count($services) > 0) {
+        foreach ($services as $service) {
+            $row = $form->row();
+
+            // Name Column (main content)
+            $row->column(
+                $form->text("Service Name")
+                    ->setAttribute('value', $service->name ?? "Service #{$service->id}")
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            // Additional info column (optional)
+            $row->column(
+                $form->text("SKU")
+                    ->setAttribute('value', $service->sku ?? 'B2CNC-' . $service->id)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            // ID Column (smaller width)
+            $row->column(
+                $form->text("ID")
+                    ->setAttribute('value', $service->id)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $service_fields[] = $row;
+        }
+    } else {
+        $service_fields[] = $form->text('No Services')
+            ->setAttribute('value', 'No services are currently associated with this category level')
+            ->setAttribute('readonly', true);
+    }
+
+    $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
+        'Related Services',
+        'Other services in the selected bundle',
+        $service_fields
     ));
 
     $tabs->tab('Relationships', 'admin-links', [$relationshipNestedTabs])
