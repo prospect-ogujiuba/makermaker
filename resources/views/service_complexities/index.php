@@ -15,7 +15,6 @@ $table->setColumns([
         'label' => 'Name',
         'sort' => 'true',
         'actions' => ['edit', 'view', 'delete'],
-
     ],
     'level' => [
         'label' => 'Level',
