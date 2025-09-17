@@ -138,7 +138,7 @@ class ServiceAttributeDefinitionController extends Controller
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this. Reassign or remove them first.")
+                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this.")
                 ->setStatus(409);
         }
 

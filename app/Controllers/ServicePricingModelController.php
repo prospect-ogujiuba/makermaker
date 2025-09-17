@@ -138,7 +138,7 @@ class ServicePricingModelController extends Controller
 
         if ($servicePricesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicePricesCount} service price(s) still use this pricing model. Reassign or remove them first.")
+                ->error("Cannot delete: {$servicePricesCount} service price(s) still use this pricing model.")
                 ->setStatus(409);
         }
 

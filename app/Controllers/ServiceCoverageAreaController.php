@@ -138,7 +138,7 @@ class ServiceCoverageAreaController extends Controller
 
         if ($serviceCoveragesCount > 0) {
             return $response
-                ->error("Cannot delete: {$serviceCoveragesCount} service coverage(s) still use this coverage Area. Reassign or remove them first.")
+                ->error("Cannot delete: {$serviceCoveragesCount} service coverage(s) still use this coverage Area.")
                 ->setStatus(409);
         }
 

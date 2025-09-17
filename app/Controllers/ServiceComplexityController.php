@@ -139,7 +139,7 @@ class ServiceComplexityController extends Controller
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this complexity. Reassign or remove them first.")
+                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Complexity.")
                 ->setStatus(409);
         }
 
@@ -169,19 +169,19 @@ class ServiceComplexityController extends Controller
             if (empty($serviceComplexities)) {
                 return $response
                     ->setData('service_complexities', [])
-                    ->setMessage('No Service complexities found', 'info')
+                    ->setMessage('No Service Complexities found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_complexities', $serviceComplexities)
-                ->setMessage('Service complexities retrieved successfully', 'success')
+                ->setMessage('Service Complexities retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service Complexity indexRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve service complexities')
-                ->setMessage('An error occurred while retrieving service complexities', 'error')
+                ->setError('api', 'Failed to retrieve Service Complexity')
+                ->setMessage('An error occurred while retrieving Service Complexity', 'error')
                 ->setStatus(500);
         }
     }
@@ -215,8 +215,8 @@ class ServiceComplexityController extends Controller
         } catch (\Exception $e) {
             error_log('Service Complexity showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve service complexity')
-                ->setMessage('An error occurred while retrieving service complexity', 'error')
+                ->setError('api', 'Failed to retrieve Service Complexity')
+                ->setMessage('An error occurred while retrieving Service Complexity', 'error')
                 ->setStatus(500);
         }
     }
