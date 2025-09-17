@@ -57,7 +57,7 @@ $table->setColumns([
         'sort' => true,
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => ''Updated By',
         'sort' => true,
     ],
 

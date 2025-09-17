@@ -36,7 +36,7 @@ $table->setColumns([
         'label' => 'Created By',
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Last Updated By',
+        'label' => 'Updated By',
     ],
 ], 'name')->setOrder('service_id', 'DESC')->render();
 

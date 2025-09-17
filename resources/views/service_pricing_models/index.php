@@ -41,7 +41,7 @@ $table->setColumns([
         'label' => 'Created By',
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Last Updated By',
+        'label' => 'Updated By',
     ],
     'id' => [
         'label' => 'ID',
