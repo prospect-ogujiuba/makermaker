@@ -45,7 +45,7 @@ $table->setColumns([
                 return '<em style="color: #666;">Quote Required</em>';
             }
 
-            $symbol = match($item->currency) {
+            $symbol = match ($item->currency) {
                 'USD' => '$',
                 'CAD' => 'C$',
                 'EUR' => '€',
@@ -73,10 +73,10 @@ $table->setColumns([
         'callback' => function ($value, $item) {
             $from = date('M j, Y', strtotime($value));
             $to = $item->effective_to ? date('M j, Y', strtotime($item->effective_to)) : 'Ongoing';
-            
+
             $today = date('Y-m-d');
             $status = '';
-            
+
             if ($item->effective_from > $today) {
                 $status = '<span style="color: #0073aa;">Future</span>';
             } elseif ($item->effective_to && $item->effective_to < $today) {
@@ -84,7 +84,7 @@ $table->setColumns([
             } else {
                 $status = '<span style="color: #00a32a;">Active</span>';
             }
-            
+
             return $from . ' - ' . $to . '<br>' . $status;
         }
     ],
@@ -95,11 +95,18 @@ $table->setColumns([
     ],
 
     'created_at' => [
-        'label' => 'Created',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'label' => 'Created At',
+        'sort' => 'true'
+    ],
+    'updated_at' => [
+        'label' => 'Updated At',
+        'sort' => 'true'
+    ],
+    'createdBy.user_nicename' => [
+        'label' => 'Created By',
+    ],
+    'updatedBy.user_nicename' => [
+        'label' => 'Updated By',
     ],
 
     'id' => [

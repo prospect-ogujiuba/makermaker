@@ -27,14 +27,6 @@ $table->setColumns([
         'sort' => true,
     ],
 
-    'short_desc' => [
-        'label' => 'Description',
-        'sort' => false,
-        'callback' => function ($value, $item) {
-            return $value ? substr($value, 0, 80) . (strlen($value) > 80 ? '...' : '') : '-';
-        }
-    ],
-
     'category_id' => [
         'label' => 'Category',
         'callback' => function ($value, $item) {
@@ -59,32 +51,24 @@ $table->setColumns([
         }
     ],
 
-    'is_active' => [
-        'label' => 'Active',
-        'callback' => function ($value, $item) {
-            return $value ? '✓' : '✗';
-        }
-    ],
-
     'default_unit' => [
         'label' => 'Unit',
         'sort' => true,
     ],
 
     'created_at' => [
-        'label' => 'Created',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'label' => 'Created At',
+        'sort' => 'true'
     ],
-
     'updated_at' => [
-        'label' => 'Updated',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'label' => 'Updated At',
+        'sort' => 'true'
+    ],
+    'createdBy.user_nicename' => [
+        'label' => 'Created By',
+    ],
+    'updatedBy.user_nicename' => [
+        'label' => 'Updated By',
     ],
 
     'id' => [
