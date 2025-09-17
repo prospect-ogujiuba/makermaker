@@ -12,18 +12,18 @@ $table->setBulkActions(tr_form()->useConfirm(), []);
 
 $table->setColumns([
     'bundle.name' => [
-        'label' => 'Service  Name',
+        'label' => 'Bundle Name',
         'sort' => true,
         'actions' => ['edit', 'view', 'delete'],
     ],
 
     'service.name' => [
-        'label' => 'Relation',
+        'label' => 'Service Name',
         'sort' => true,
     ],
 
     'quantity' => [
-        'label' => 'Service Name',
+        'label' => 'Quantity',
         'sort' => true,
     ],
 

@@ -42,7 +42,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function create(ServiceDeliveryMethodAssignmentFields $fields, ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method_assignment->can('create')) {
-            $response->unauthorized('Unauthorized: Service Delivery_assignment not created')->abort();
+            $response->unauthorized('Unauthorized: Service Delivery Method Assignment not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -50,8 +50,8 @@ class ServiceDeliveryMethodAssignmentController extends Controller
 
         $service_delivery_method_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'index')
-            ->withFlash('Service Delivery_assignment created');
+        return tr_redirect()->toPage('servicedeliverymethodassignment', 'index')
+            ->withFlash('Service Delivery Method Assignment created');
     }
 
     /**
@@ -83,15 +83,15 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function update(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, ServiceDeliveryMethodAssignmentFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method_assignment->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceDeliveryMethodAssignment not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Delivery Method Assignment not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
 
         $service_delivery_method_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliveryassignment', 'edit', $service_delivery_method_assignment->getID())
-            ->withFlash('Service Delivery_assignment updated');
+        return tr_redirect()->toPage('servicedeliverymethodassignment', 'edit', $service_delivery_method_assignment->getID())
+            ->withFlash('Service Delivery Method Assignment updated');
     }
 
     /**
@@ -103,7 +103,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      */
     public function show(ServiceDeliveryMethodAssignment $service_delivery_method_assignment)
     {
-        return $service_delivery_method_assignment->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
+        return $service_delivery_method_assignment->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -130,15 +130,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function destroy(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response)
     {
         if (!$service_delivery_method_assignment->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceDeliveryMethodAssignment not deleted');
-        }
-
-        $servicesCount = $service_delivery_method_assignment->service()->count();
-
-        if ($servicesCount > 0) {
-            return $response
-                ->error("Cannot delete: {$servicesCount} service Delivery_assignment(s) still use this. Reassign or remove them first.")
-                ->setStatus(409);
+            return $response->unauthorized('Unauthorized: Service Delivery Method Assignment not deleted');
         }
 
         $deleted = $service_delivery_method_assignment->delete();
@@ -149,7 +141,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Delivery_assignment deleted.')->setData('service_pricing_model', $service_delivery_method_assignment);
+        return $response->success('Service Delivery Method Assignment deleted.')->setData('service_pricing_model', $service_delivery_method_assignment);
     }
 
     /**
@@ -161,25 +153,60 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     {
         try {
             $serviceDeliveryMethodAssignment = ServiceDeliveryMethodAssignment::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+                ->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($serviceDeliveryMethodAssignment)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Delivery_assignments found', 'info')
+                    ->setData('service_delivery_method_assignment', [])
+                    ->setMessage('No Service Delivery Method Assignments found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceDeliveryMethodAssignment)
-                ->setMessage('Service Delivery_assignment retrieved successfully', 'success')
+                ->setData('service_delivery_method_assignment', $serviceDeliveryMethodAssignment)
+                ->setMessage('Service Delivery Method Assignments retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceDeliveryMethodAssignment indexRest error: ' . $e->getMessage());
+            error_log('Service Delivery Method Assignment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service Delivery_assignment: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Delivery Method Assignments: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+     /**
+     * The show function for API
+     *
+     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response)
+    {
+        try {
+            $service_delivery_method_assignment = ServiceDeliveryMethodAssignment::new()
+                ->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])
+                ->find($service_delivery_method_assignment->getID());
+
+            if (empty($service_delivery_method_assignment)) {
+                return $response
+                    ->setData('service_delivery_method_assignment', null)
+                    ->setMessage('Service Delivery Method Assignment not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_delivery_method_assignment', $service_delivery_method_assignment)
+                ->setMessage('Service Delivery Method Assignment retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Delivery Method Assignment showRest error: ' . $e->getMessage());
+            return $response
+                ->setError('api', 'Failed to retrieve Service Delivery Method Assignment')
+                ->setMessage('An error occurred while retrieving Service Delivery Method Assignment', 'error')
                 ->setStatus(500);
         }
     }

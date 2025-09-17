@@ -3,6 +3,7 @@
 namespace MakerMaker\Models;
 
 use TypeRocket\Models\Model;
+use TypeRocket\Models\WPUser;
 
 class ServiceDeliveryMethodAssignment extends Model
 {
@@ -40,12 +41,12 @@ class ServiceDeliveryMethodAssignment extends Model
     /** Created by WP user */
     public function createdBy()
     {
-        return $this->belongsTo(\TypeRocket\Models\WPUser::class, 'created_by');
+        return $this->belongsTo(WPUser::class, 'created_by');
     }
 
     /** Updated by WP user */
     public function updatedBy()
     {
-        return $this->belongsTo(\TypeRocket\Models\WPUser::class, 'updated_by');
+        return $this->belongsTo(WPUser::class, 'updated_by');
     }
 }
