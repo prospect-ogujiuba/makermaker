@@ -21,16 +21,16 @@ INSERT INTO `{!!prefix!!}srvc_complexities`
 -- Pricing Models
 INSERT INTO `{!!prefix!!}srvc_pricing_models`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Fixed Project', 'FIXED', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Hourly Rate', 'HOURLY', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Per Unit/Device', 'UNIT', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Monthly Subscription', 'MONTHLY', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Annual Contract', 'ANNUAL', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Per Square Foot', 'SQ_FT', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Tiered Pricing', 'TIERED', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Usage-Based', 'USAGE', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Pay-As-You-Go', 'PAYG', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Hybrid Model', 'HYBRID', '2025-08-28 23:57:07', NOW(), NULL, 1, 1);
+('Fixed Project',	'fixed-project',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Hourly Rate',	'hourly-rate',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Per Unit/Device',	'per-unit-or-device',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Monthly Subscription',	'monthly-subscription',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Annual Contract',	'annual-contract',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Per Square Foot',	'per-square-foot',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Tiered Pricing',	'tiered-pricing',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Usage-Based',	'usage-based',	'2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Pay-As-You-Go',	'pay-as-you-go',	'2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Hybrid Model',	'hybrid-model',	'2025-08-28 23:57:07', NOW(), NULL, 1, 1);
 
 -- Pricing Tiers
 INSERT INTO `{!!prefix!!}srvc_pricing_tiers`

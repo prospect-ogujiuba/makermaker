@@ -45,6 +45,8 @@ class ServicePricingModelController extends Controller
             $response->unauthorized('Unauthorized: Service Pricing Model not created')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'name');
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -86,6 +88,8 @@ class ServicePricingModelController extends Controller
         if (!$service_pricing_model->can('update')) {
             $response->unauthorized('Unauthorized: Service Pricing Model not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'code', 'name');
 
         $fields['updated_by'] = $user->ID;
 

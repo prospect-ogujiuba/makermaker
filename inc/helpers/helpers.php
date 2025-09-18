@@ -41,10 +41,22 @@ function renderAdvancedSearchActions(string $resource): void
 // Convert CamelCase to kebab-case
 function mm_kebab(string $s): string
 {
-    $k = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $s));
-    $k = preg_replace('/[^a-z0-9\-]+/', '-', $k);
+    // Split camelCase/PascalCase
+    $k = preg_replace('/([a-z])([A-Z])/', '$1-$2', $s);
+    $k = strtolower($k);
+
+    // Convert any slash runs ("/" or "\") to "-or-"
+    $k = preg_replace('~[\\/]+~', '-or-', $k);
+
+    // Replace everything else non a-z/0-9/hyphen with hyphen
+    $k = preg_replace('/[^a-z0-9-]+/', '-', $k);
+
+    // Collapse multiple hyphens
+    $k = preg_replace('/-+/', '-', $k);
+
     return trim($k, '-');
 }
+
 
 // Create TypeRocket resource page + REST endpoint
 function mm_create_custom_resource(
@@ -115,4 +127,33 @@ function checkIntRange($args)
     }
 
     return true;
+}
+
+/**
+ * Auto-generate a code/slug field if it's empty
+ * 
+ * @param array|\TypeRocket\Http\Fields &$fields Reference to fields array or Fields object
+ * @param string $codeField The field name for the code (default: 'code')
+ * @param string $sourceField The field name to generate from (default: 'name') 
+ * @param bool $uppercase Whether to uppercase the result (default: true)
+ * @return void
+ */
+function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', $uppercase = false)
+{
+    // Handle TypeRocket Fields objects
+    if (is_object($fields) && method_exists($fields, 'getArrayCopy')) {
+        $fieldsArray = $fields->getArrayCopy();
+        
+        if (!$fieldsArray[$codeField] || $fieldsArray[$codeField] == NULL) {
+            $fieldsArray[$codeField] = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField])) : mm_kebab($fieldsArray[$sourceField]);
+        }
+        
+        $fields->exchangeArray($fieldsArray);
+    } 
+    // Handle regular arrays
+    else {
+        if (!$fields[$codeField] || $fields[$codeField] == NULL) {
+            $fields[$codeField] = $uppercase ? strtoupper(mm_kebab($fields[$sourceField])) : mm_kebab($fields[$sourceField]);
+        }
+    }
 }

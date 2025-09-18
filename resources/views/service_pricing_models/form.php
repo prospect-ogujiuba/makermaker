@@ -30,13 +30,13 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Pricing Model Code')
-                        ->setHelp('Unique identifier code in uppercase (e.g., ANNUAL, HOURLY, FIXED)')
+                        ->setHelp('Auto-generated from name if left empty. Unique identifier code in uppercase (e.g., ANNUAL, HOURLY, FIXED)')
                         ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'Auto-generated from name')
                         ->markLabelRequired()
                 )
         ]
     )
-
 ])->setDescription('Pricing Model');
 
 // Conditional
@@ -53,7 +53,6 @@ if (isset($current_id)) {
                             ->setHelp('System generated ID')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
-
                     )
                     ->withColumn(),
                 $form->row()
@@ -70,7 +69,6 @@ if (isset($current_id)) {
                             ->setHelp('Last update timestamp')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
-
                     ),
                 $form->row()
                     ->withColumn(
@@ -80,8 +78,6 @@ if (isset($current_id)) {
                             ->setAttribute('value', $createdBy->user_nicename)
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
-
-
                     )
                     ->withColumn(
                         $form->text('updated_by_user')
@@ -90,9 +86,7 @@ if (isset($current_id)) {
                             ->setAttribute('value', $updatedBy->user_nicename)
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
-
                     ),
-
                 $form->row()
                     ->withColumn(
                         $form->text('deleted_at')
@@ -101,7 +95,6 @@ if (isset($current_id)) {
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
                             ->setAttribute('disabled', true)
-
                     )
                     ->withColumn()
             ]

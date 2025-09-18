@@ -19,6 +19,5 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
   CONSTRAINT `fk_pricing_model__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Pricing models: fixed, hourly, per_unit, subscription, tiered, volume';
 
-
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_pricing_models`;
