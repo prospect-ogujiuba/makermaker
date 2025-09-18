@@ -45,6 +45,8 @@ class ServicePricingTierController extends Controller
             $response->unauthorized('Unauthorized: Service Pricing Tier not created')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'name');
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -86,6 +88,8 @@ class ServicePricingTierController extends Controller
         if (!$service_pricing_tier->can('update')) {
             $response->unauthorized('Unauthorized: Service Pricing Tier not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'code', 'name');
 
         $fields['updated_by'] = $user->ID;
 

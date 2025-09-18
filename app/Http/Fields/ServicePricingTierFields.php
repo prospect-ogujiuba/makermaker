@@ -41,9 +41,9 @@ class ServicePricingTierFields extends Fields
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_tiers@id:{$id}|required";
-        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_tiers@id:{$id}|required";
-        $rules['sort_order'] = "numeric|?required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_tiers@id:{$id}|required|max:64";
+        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_tiers@id:{$id}|?required|max:64";
+        $rules['sort_order'] = "?numeric|?required|min:1|max:3|callback:checkIntRange:0:255";
 
         return $rules;
     }

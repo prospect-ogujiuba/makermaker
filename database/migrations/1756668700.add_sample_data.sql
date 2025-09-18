@@ -35,14 +35,14 @@ INSERT INTO `{!!prefix!!}srvc_pricing_models`
 -- Pricing Tiers
 INSERT INTO `{!!prefix!!}srvc_pricing_tiers`
 (`name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Small Business', 'SMB', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Mid-Market', 'MID', 2, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Enterprise', 'ENT', 3, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Government', 'GOV', 4, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Non-Profit', 'NPO', 5, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Startups', 'START', 6, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Education', 'EDU', 7, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Healthcare', 'HLTH', 8, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('Small Business',	'small-business', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Mid-Market', 'mid-market', 2, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Enterprise', 'enterprise', 3, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Government', 'government', 4, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Non-Profit', 'non-profit', 5, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Startups', 'startups', 6, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Education', 'education', 7, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Healthcare', 'healthcare', 8, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Delivery Methods
 INSERT INTO `{!!prefix!!}srvc_delivery_methods`

@@ -4,7 +4,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `code` varchar(64) NOT NULL,
-  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `sort_order` tinyint unsigned NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

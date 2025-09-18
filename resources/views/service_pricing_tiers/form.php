@@ -22,7 +22,7 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this pricing tier (max 64 characters)')
+                        ->setHelp('Display name for this pricing tier')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Enterprise')
                         ->markLabelRequired()
@@ -30,19 +30,20 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Code')
-                        ->setHelp('Unique identifier code for system reference (max 64 characters)')
+                        ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'e.g., ENT')
-                        ->markLabelRequired()
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                 ),
 
             $form->row()
                 ->withColumn(
                     $form->number('sort_order')
                         ->setLabel('Sort Order')
-                        ->setHelp('Numeric value to control display order (lower numbers appear first)')
-                        ->setAttribute('min', '0')
+                        ->setAttribute('placeholder', 'e.g., 9')
+                        ->setAttribute('min', '')
+                        ->setAttribute('max', '255')
                         ->setAttribute('step', '1')
+                        ->setHelp('Numeric value from 0-255 to control display order')
                         ->setDefault(0)
                 )
         ]
