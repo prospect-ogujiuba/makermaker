@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this pricing model (max 100 characters)')
+                        ->setHelp('Display name for this pricing model')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Annual Contract')
                         ->markLabelRequired()
@@ -30,9 +30,9 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Pricing Model Code')
-                        ->setHelp('Auto-generated from name if left empty. Unique identifier code in uppercase (e.g., ANNUAL, HOURLY, FIXED)')
+                        ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'Auto-generated from name')
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                         ->markLabelRequired()
                 )
         ]
