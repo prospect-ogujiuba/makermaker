@@ -14,53 +14,34 @@ $table->setColumns([
     'service.name' => [
         'label' => 'Service  Name',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
-
     'equipment.name' => [
         'label' => 'Equipment Name',
-        'sort' => true,
+        'sort' => true
     ],
-
     'required' => [
         'label' => 'Required',
-        'sort' => true,
+        'sort' => true
     ],
-
     'quantity' => [
         'label' => 'Quantity',
-        'sort' => true,
+        'sort' => true
     ],
-
-    'substitute_ok' => [
-        'label' => 'Subsitite Ok',
-        'sort' => true,
-    ],
-
     'created_at' => [
         'label' => 'Created',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
-
     'updated_at' => [
         'label' => 'Updated',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
-        'sort' => true,
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
-        'sort' => true,
+        'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true

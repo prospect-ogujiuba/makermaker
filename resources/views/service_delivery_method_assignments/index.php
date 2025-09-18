@@ -14,29 +14,24 @@ $table->setColumns([
     'service.name' => [
         'label' => 'Service Name',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
-
     'deliverymethod.name' => [
         'label' => 'Delivery Method',
-        'sort' => true,
+        'sort' => true
     ],
-    
     'lead_time_days' => [
         'label' => 'Lead Time (Days)',
-        'sort' => true,
+        'sort' => true
     ],
-    
     'sla_hours' => [
         'label' => 'SLA Hours',
-        'sort' => true,
+        'sort' => true
     ],
-    
     'surcharge' => [
         'label' => 'Surcharge',
-        'sort' => true,
+        'sort' => true
     ],
-    
     'created_at' => [
         'label' => 'Created At',
         'sort' => 'true'
@@ -46,12 +41,11 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true

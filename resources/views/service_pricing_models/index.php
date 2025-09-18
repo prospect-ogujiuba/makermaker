@@ -21,27 +21,19 @@ $table->setColumns([
         'label' => 'Code',
         'sort' => true,
     ],
-
     'created_at' => [
         'label' => 'Created',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
-
     'updated_at' => [
         'label' => 'Updated',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
     'id' => [
         'label' => 'ID',

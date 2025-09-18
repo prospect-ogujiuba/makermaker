@@ -53,7 +53,7 @@ $table->setColumns([
 
     'default_unit' => [
         'label' => 'Unit',
-        'sort' => true,
+        'sort' => true
     ],
 
     'created_at' => [
@@ -65,10 +65,10 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
 
     'id' => [

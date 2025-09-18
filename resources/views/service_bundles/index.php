@@ -14,7 +14,7 @@ $table->setColumns([
     'name' => [
         'label' => 'Bundle Name',
         'sort' => 'true',
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
     'short_desc' => [
         'label' => 'Short Description',
@@ -39,10 +39,10 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
     'id' => [
         'label' => 'ID',

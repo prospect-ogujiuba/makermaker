@@ -14,8 +14,7 @@ $table->setColumns([
     'name' => [
         'label' => 'Name',
         'sort' => 'true',
-        'actions' => ['edit', 'view', 'delete'],
-
+        'actions' => ['edit', 'view', 'delete']
     ],
     'parentCategory.name' => [
         'label' => 'Parent',
@@ -34,10 +33,10 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
     'id' => [
         'label' => 'ID',

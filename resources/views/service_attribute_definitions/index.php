@@ -14,7 +14,7 @@ $table->setColumns([
     'label' => [
         'label' => 'Label',
         'sort' => 'true',
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
     'service_type_id' => [
         'label' => 'Parent ID',

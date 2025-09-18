@@ -14,12 +14,11 @@ $table->setColumns([
     'service.name' => [
         'label' => 'Primary Service Name',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
-
     'coverageArea.name' => [
         'label' => 'Addon Service Name',
-        'sort' => true,
+        'sort' => true
     ],
     'created_at' => [
         'label' => 'Created At',
@@ -30,12 +29,11 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true

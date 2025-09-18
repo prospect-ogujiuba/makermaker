@@ -14,37 +14,37 @@ $table->setColumns([
     'service.name' => [
         'label' => 'Primary Service Name',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
 
     'addonService.name' => [
         'label' => 'Addon Service Name',
-        'sort' => true,
+        'sort' => true
     ],
 
     'required' => [
         'label' => 'Required',
-        'sort' => true,
+        'sort' => true
     ],
 
     'min_qty' => [
         'label' => 'Min Qty',
-        'sort' => true,
+        'sort' => true
     ],
 
     'max_qty' => [
         'label' => 'Max Qty',
-        'sort' => true,
+        'sort' => true
     ],
 
     'price_delta' => [
         'label' => 'Price Delta',
-        'sort' => true,
+        'sort' => true
     ],
 
     'multiplier' => [
         'label' => 'Multiplier',
-        'sort' => true,
+        'sort' => true
     ],
 
     'created_at' => [
@@ -56,10 +56,10 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
 
     'id' => [

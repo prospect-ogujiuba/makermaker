@@ -1,8 +1,10 @@
 <?php
 
+/**
+ * ServicePrice Index View
+ */
+
 use MakerMaker\Models\ServicePrice;
-use MakerMaker\Models\ServicePricingModel;
-use MakerMaker\Models\ServicePricingTier;
 
 $table = tr_table(ServicePrice::class);
 
@@ -12,31 +14,16 @@ $table->setColumns([
     'service.name' => [
         'label' => 'Service',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
-        'callback' => function ($value, $item) {
-            $service = $item->service;
-            return $service ? $service->name : '<em>Unknown Service</em>';
-        }
+        'actions' => ['edit', 'view', 'delete']
     ],
-
-    'pricing_tier.name' => [
+    'pricingTier.name' => [
         'label' => 'Tier',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            $tier = $item->pricingTier;
-            return $tier ? $tier->name : '<em>Unknown Tier</em>';
-        }
+        'sort' => true
     ],
-
-    'pricing_model.name' => [
+    'pricingModel.name' => [
         'label' => 'Model',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            $model = $item->pricingModel;
-            return $model ? $model->name : '<em>Unknown Model</em>';
-        }
+        'sort' => true
     ],
-
     'amount' => [
         'label' => 'Price',
         'sort' => true,
@@ -66,7 +53,6 @@ $table->setColumns([
             return $formatted;
         }
     ],
-
     'effective_from' => [
         'label' => 'Effective Period',
         'sort' => true,
@@ -88,12 +74,10 @@ $table->setColumns([
             return $from . ' - ' . $to . '<br>' . $status;
         }
     ],
-
     'currency' => [
         'label' => 'Currency',
-        'sort' => true,
+        'sort' => true
     ],
-
     'created_at' => [
         'label' => 'Created At',
         'sort' => 'true'
@@ -103,12 +87,11 @@ $table->setColumns([
         'sort' => 'true'
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
+        'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true

@@ -14,48 +14,34 @@ $table->setColumns([
     'bundle.name' => [
         'label' => 'Bundle Name',
         'sort' => true,
-        'actions' => ['edit', 'view', 'delete'],
+        'actions' => ['edit', 'view', 'delete']
     ],
-
     'service.name' => [
         'label' => 'Service Name',
-        'sort' => true,
+        'sort' => true
     ],
-
     'quantity' => [
         'label' => 'Quantity',
-        'sort' => true,
+        'sort' => true
     ],
-
     'discount_pct' => [
         'label' => 'Discount %',
-        'sort' => true,
+        'sort' => true
     ],
-
     'created_at' => [
         'label' => 'Created',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
-
     'updated_at' => [
         'label' => 'Updated',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            return date('M j, Y g:i A', strtotime($value));
-        }
+        'sort' => true
     ],
     'createdBy.user_nicename' => [
-        'label' => 'Created By',
-        'sort' => true,
+        'label' => 'Created By'
     ],
     'updatedBy.user_nicename' => [
-        'label' => 'Updated By',
-        'sort' => true,
+        'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true
