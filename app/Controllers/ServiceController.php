@@ -134,11 +134,11 @@ class ServiceController extends Controller
             return $response->unauthorized('Unauthorized: Service not deleted');
         }
 
-        $servicesCount = $service->serviceType()->count();
+        $service_count = $service->serviceType()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this.")
+                ->error("Cannot delete: {$service_count} service(s) still use this.")
                 ->setStatus(409);
         }
 

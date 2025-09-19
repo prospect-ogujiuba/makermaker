@@ -89,6 +89,8 @@ class ServiceEquipmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment not updated')->abort();
         }
 
+        autoGenerateCode($fields, 'sku', 'name', true);
+
         $fields['updated_by'] = $user->ID;
 
         $service_equipment->save($fields);
@@ -136,11 +138,11 @@ class ServiceEquipmentController extends Controller
             return $response->unauthorized('Unauthorized: Service Equipment not deleted');
         }
 
-        $servicesCount = $service_equipment->services()->count();
+        $services = $service_equipment->services()->count('service_id');
 
-        if ($servicesCount > 0) {
+        if ($services > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Equipment.")
+                ->error("Cannot delete: {$services} service(s) still use this Service Equipment.")
                 ->setStatus(409);
         }
 
@@ -190,15 +192,15 @@ class ServiceEquipmentController extends Controller
     /**
      * The show function for API
      *
-     * @param ServiceEquipmentController $service_equipment
+     * @param ServiceEquipment $service_equipment
      * @param Response $response
      *
      * @return \TypeRocket\Http\Response
      */
-    public function showRest(ServiceEquipmentController $service_equipment, Response $response)
+    public function showRest(ServiceEquipment $service_equipment, Response $response)
     {
         try {
-            $service_equipment = ServiceEquipmentController::new()
+            $service_equipment = ServiceEquipment::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->find($service_equipment->getID());
 
@@ -214,7 +216,7 @@ class ServiceEquipmentController extends Controller
                 ->setMessage('Service Equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceEquipmentController showRest error: ' . $e->getMessage());
+            error_log('Service Equipment showRest error: ' . $e->getMessage());
             return $response
                 ->setMessage('An error occurred while retrieving Service Equipment', 'error')
                 ->setStatus(500);

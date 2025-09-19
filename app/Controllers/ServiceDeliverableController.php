@@ -146,11 +146,11 @@ class ServiceDeliverableController extends Controller
             return $response->unauthorized('Unauthorized: ServiceDeliverable not deleted');
         }
 
-        $servicesCount = $service_deliverable->services()->count('service_id');
+        $service_count = $service_deliverable->services()->count('service_id');
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Deliverable.")
+                ->error("Cannot delete: {$service_count} service(s) still use this Service Deliverable.")
                 ->setStatus(409);
         }
 

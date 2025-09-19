@@ -19,7 +19,11 @@ class ServiceEquipment extends Model
     ];
 
     protected $format = [
-        'specs' => 'json'
+        'specs' => 'json_encode'
+    ];
+
+    protected $cast = [
+        'specs' => 'array'
     ];
 
     protected $guard = [

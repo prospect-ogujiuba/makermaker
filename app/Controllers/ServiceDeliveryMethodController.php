@@ -138,11 +138,11 @@ class ServiceDeliveryMethodController extends Controller
             return $response->unauthorized('Unauthorized: Service Delivery Method not deleted');
         }
 
-        $servicesCount = $service_delivery_method->services()->count('service_id');
+        $service_count = $service_delivery_method->services()->count('service_id');
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this delivery method.")
+                ->error("Cannot delete: {$service_count} service(s) still use this delivery method.")
                 ->setStatus(409);
         }
 

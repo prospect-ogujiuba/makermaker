@@ -134,11 +134,11 @@ class ServiceCategoryController extends Controller
             return $response->unauthorized('Unauthorized: Service Category not deleted');
         }
 
-        $servicesCount = $service_category->services()->count();
+        $service_count = $service_category->services()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this.")
+                ->error("Cannot delete: {$service_count} service(s) still use this.")
                 ->setStatus(409);
         }
 

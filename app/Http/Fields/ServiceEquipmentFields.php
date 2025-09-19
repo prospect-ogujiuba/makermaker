@@ -41,7 +41,7 @@ class ServiceEquipmentFields extends Fields
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:128";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:64";
         $rules['sku'] = "unique:sku:{$wpdb_prefix}srvc_equipment@id:{$id}|?required|max:64";
         $rules['manufacturer'] = "required|max:64";
         $rules['specs'] = "?required";

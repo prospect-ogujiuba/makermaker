@@ -133,11 +133,11 @@ class ServiceDeliverableAssignmentController extends Controller
             return $response->unauthorized('Unauthorized: Service Deliverable Assignment not deleted');
         }
 
-        $servicesCount = $service_deliverable_assingment->service()->count();
+        $service_count = $service_deliverable_assingment->service()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this.")
+                ->error("Cannot delete: {$service_count} service(s) still use this.")
                 ->setStatus(409);
         }
 

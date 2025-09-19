@@ -135,11 +135,11 @@ class ServiceTypeController extends Controller
             return $response->unauthorized('Unauthorized: ServiceType not deleted');
         }
 
-        $servicesCount = $service_type->services()->count();
+        $service_count = $service_type->services()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service type(s) still use this.")
+                ->error("Cannot delete: {$service_count} service type(s) still use this.")
                 ->setStatus(409);
         }
 

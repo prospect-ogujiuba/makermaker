@@ -177,11 +177,11 @@ class ServiceAttributeValueController extends Controller
             return $response->unauthorized('Unauthorized: ServiceAttributeValue not deleted');
         }
 
-        $servicesCount = $service_attribute_value->service()->count();
+        $service_count = $service_attribute_value->service()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Attribute Value(s) still use this.")
+                ->error("Cannot delete: {$service_count} service Attribute Value(s) still use this.")
                 ->setStatus(409);
         }
 

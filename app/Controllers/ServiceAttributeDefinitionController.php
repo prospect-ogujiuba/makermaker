@@ -134,11 +134,11 @@ class ServiceAttributeDefinitionController extends Controller
             return $response->unauthorized('Unauthorized: ServiceAttributeDefinition not deleted');
         }
 
-        $servicesCount = $service_attribute_definition->serviceType()->count();
+        $service_count = $service_attribute_definition->serviceType()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Attribute Definition(s) still use this.")
+                ->error("Cannot delete: {$service_count} service Attribute Definition(s) still use this.")
                 ->setStatus(409);
         }
 

@@ -133,11 +133,11 @@ class ServiceCoverageController extends Controller
             return $response->unauthorized('Unauthorized: ServiceCoverage not deleted');
         }
 
-        $servicesCount = $service_coverage->service()->count();
+        $service_count = $service_coverage->service()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Coverage(s) still use this.")
+                ->error("Cannot delete: {$service_count} service Coverage(s) still use this.")
                 ->setStatus(409);
         }
 

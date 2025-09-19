@@ -135,11 +135,11 @@ class ServiceComplexityController extends Controller
         }
 
         // Check if this complexity is still being used by services
-        $servicesCount = $service_complexity->services()->count();
+        $service_count = $service_complexity->services()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Complexity.")
+                ->error("Cannot delete: {$service_count} service(s) still use this Service Complexity.")
                 ->setStatus(409);
         }
 

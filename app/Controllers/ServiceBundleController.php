@@ -134,11 +134,11 @@ class ServiceBundleController extends Controller
             return $response->unauthorized('Unauthorized: ServiceBundle not deleted');
         }
 
-        $servicesCount = $service_bundle->services()->count();
+        $service_count = $service_bundle->services()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service bundle(s) still use this.")
+                ->error("Cannot delete: {$service_count} service bundle(s) still use this.")
                 ->setStatus(409);
         }
 

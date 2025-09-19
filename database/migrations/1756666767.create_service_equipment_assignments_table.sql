@@ -18,8 +18,8 @@ CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
   KEY `idx_service_equipment_assignment__deleted_at` (`deleted_at`),
   KEY `idx_service_equipment_assignment__created_by` (`created_by`),
   KEY `idx_service_equipment_assignment__updated_by` (`updated_by`),
-  CONSTRAINT `fk_service_equipment_assignment__equipment` FOREIGN KEY (`equipment_id`) REFERENCES `{!!prefix!!}srvc_equipment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_service_equipment_assignment__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_equipment_assignment__equipment` FOREIGN KEY (`equipment_id`) REFERENCES `{!!prefix!!}srvc_equipment` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_equipment_assignment__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_equipment_assignment__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_equipment_assignment__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Equipment requirements for services';

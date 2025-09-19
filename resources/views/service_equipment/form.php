@@ -23,7 +23,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('name')
                         ->setLabel('Name')
                         ->setHelp('Display name for this equipment item')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Cisco Catalyst Switch')
                         ->markLabelRequired()
                 )
@@ -40,7 +40,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('SKU')
                         ->setHelp('Stock Keeping Unit or model number for this equipment')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'e.g., CAT-2960X-24TS-L')
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                         ->markLabelRequired()
                 )
                 ->withColumn(),

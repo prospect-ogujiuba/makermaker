@@ -18,7 +18,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_delivery_method_assignments` (
   KEY `idx_service_delivery_method_assignment__deleted_at` (`deleted_at`),
   KEY `idx_service_delivery_method_assignment__created_by` (`created_by`),
   KEY `idx_service_delivery_method_assignment__updated_by` (`updated_by`),  
-  CONSTRAINT `fk_service_delivery_method_assignment__delivery_method` FOREIGN KEY (`delivery_method_id`) REFERENCES `{!!prefix!!}srvc_delivery_methods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_delivery_method_assignment__delivery_method` FOREIGN KEY (`delivery_method_id`) REFERENCES `{!!prefix!!}srvc_delivery_methods` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_delivery_method_assignment__service` FOREIGN KEY (`service_id`) REFERENCES `{!!prefix!!}srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_service_delivery_method_assignment__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
   CONSTRAINT `fk_service_delivery_method_assignment__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE

@@ -133,11 +133,11 @@ class ServiceAddonController extends Controller
             return $response->unauthorized('Unauthorized: ServiceAddon not deleted');
         }
 
-        $servicesCount = $service_addon->service()->count();
+        $service_count = $service_addon->service()->count();
 
-        if ($servicesCount > 0) {
+        if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service Addon(s) still use this.")
+                ->error("Cannot delete: {$service_count} service Addon(s) still use this.")
                 ->setStatus(409);
         }
 

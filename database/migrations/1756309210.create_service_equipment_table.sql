@@ -2,9 +2,9 @@
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_equipment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sku` varchar(64) DEFAULT NULL,
-  `name` varchar(128) NOT NULL,
-  `manufacturer` varchar(64) DEFAULT NULL,
+  `name` varchar(64) NOT NULL,
+  `sku` varchar(64) NOT NULL,
+  `manufacturer` varchar(64) NOT NULL,
   `specs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Equipment specifications as JSON object' CHECK (json_valid(`specs`)),
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -12,8 +12,8 @@ CREATE TABLE `{!!prefix!!}srvc_equipment` (
   `created_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   `updated_by` bigint(20) unsigned NOT NULL COMMENT 'FK to user table',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_equipment__name` (`name`),
   UNIQUE KEY `uq_equipment__sku` (`sku`),
-  KEY `idx_equipment__name` (`name`),
   KEY `idx_equipment__manufacturer` (`manufacturer`),
   KEY `idx_equipment__deleted_at` (`deleted_at`),
   KEY `idx_equipment__created_at` (`created_at`),
