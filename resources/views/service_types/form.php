@@ -22,7 +22,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this service type (max 100 characters)')
+                        ->setHelp('Display name for this service type')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Installation')
                         ->markLabelRequired()

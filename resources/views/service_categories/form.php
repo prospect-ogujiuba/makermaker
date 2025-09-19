@@ -25,7 +25,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this service category (max 100 characters)')
+                        ->setHelp('Display name for this service category')
                         ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., VoIP Systems')
                         ->markLabelRequired()

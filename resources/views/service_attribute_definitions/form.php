@@ -24,7 +24,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('label')
                         ->setLabel('Attribute Name')
-                        ->setHelp('Display name for this attribute (max 100 characters)')
+                        ->setHelp('Display name for this attribute')
                         ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., Number of Phone Lines')
                         ->markLabelRequired()

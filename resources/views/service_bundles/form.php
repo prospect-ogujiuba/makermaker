@@ -24,7 +24,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Bundle Name')
-                        ->setHelp('Display name for this service bundle (max 100 characters)')
+                        ->setHelp('Display name for this service bundle')
                         ->setAttribute('maxlength', '128')
                         ->setAttribute('placeholder', 'e.g., Complete Office Setup')
                         ->markLabelRequired()
@@ -41,7 +41,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->textarea('short_desc')
                         ->setLabel('Short Description')
-                        ->setHelp('Brief summary of what this bundle includes (max 100 characters)')
+                        ->setHelp('Brief summary of what this bundle includes')
                         ->setAttribute('maxlength', '512')
                         ->setAttribute('placeholder', 'e.g., VoIP system with network setup')
                         ->markLabelRequired()
