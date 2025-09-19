@@ -22,18 +22,17 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this coverage area (max 128 characters)')
-                        ->setAttribute('maxlength', '128')
+                        ->setHelp('Display name for this coverage area')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Local Area')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
-                        ->setLabel('Coverage Code')
-                        ->setHelp('Unique identifier code in uppercase (e.g., LOCAL, REGIONAL, NATIONAL)')
+                        ->setLabel('Coverage Area Code')
+                        ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'e.g., LOCAL')
-                        ->markLabelRequired()
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                 )
         ]
     )

@@ -41,8 +41,8 @@ class ServiceCoverageAreaFields extends Fields
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|required|max:128";
-        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|required!max:64";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|required|max:64";
+        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|?required|max:64";
 
         return $rules;
     }

@@ -44,7 +44,7 @@ class ServiceDeliverableController extends Controller
     public function create(ServiceDeliverableFields $fields, ServiceDeliverable $service_deliverable, Response $response, AuthUser $user)
     {
         if (!$service_deliverable->can('create')) {
-            $response->unauthorized('Unauthorized: ServiceDeliverable not created')->abort();
+            $response->unauthorized('Unauthorized: Service Deliverable not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -86,7 +86,7 @@ class ServiceDeliverableController extends Controller
     public function update(ServiceDeliverable $service_deliverable, ServiceDeliverableFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_deliverable->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceDeliverable not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Deliverable not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -136,11 +136,11 @@ class ServiceDeliverableController extends Controller
             return $response->unauthorized('Unauthorized: ServiceDeliverable not deleted');
         }
 
-        $servicesCount = $service_deliverable->services()->count();
+        $servicesCount = $service_deliverable->services()->count('service_id');
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service deliverable(s) still use this.")
+                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Deliverable.")
                 ->setStatus(409);
         }
 
@@ -163,26 +163,60 @@ class ServiceDeliverableController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDeliverableServiceDeliverables = ServiceDeliverable::new()
+            $service_deliverables = ServiceDeliverable::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDeliverableServiceDeliverables)) {
+            if (empty($service_deliverables)) {
                 return $response
                     ->setData('service_deliverables', [])
-                    ->setMessage('No service deliverables found', 'info')
+                    ->setMessage('No Service Deliverables found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_deliverables', $serviceDeliverableServiceDeliverables)
-                ->setMessage('Service deliverable retrieved successfully', 'success')
+                ->setData('service_deliverables', $service_deliverables)
+                ->setMessage('Service Deliverables retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceDeliverable indexRest error: ' . $e->getMessage());
+            error_log('Service Deliverable indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service deliverable: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Deliverables: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceDeliverable $service_deliverable
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceDeliverable $service_deliverable, Response $response)
+    {
+        try {
+            $service_deliverable = ServiceDeliverable::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->find($service_deliverable->getID());
+
+            if (empty($service_deliverable)) {
+                return $response
+                    ->setData('service_deliverable', null)
+                    ->setMessage('Service Deliverable not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_deliverable', $service_deliverable)
+                ->setMessage('Service Deliverable retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Deliverable showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Deliverable', 'error')
                 ->setStatus(500);
         }
     }

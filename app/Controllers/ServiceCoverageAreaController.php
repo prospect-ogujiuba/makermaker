@@ -42,8 +42,10 @@ class ServiceCoverageAreaController extends Controller
     public function create(ServiceCoverageAreaFields $fields, ServiceCoverageArea $service_coverage_area, Response $response, AuthUser $user)
     {
         if (!$service_coverage_area->can('create')) {
-            $response->unauthorized('Unauthorized: ServiceCoverageArea not created')->abort();
+            $response->unauthorized('Unauthorized: Service Coverage Area not created')->abort();
         }
+
+        autoGenerateCode($fields, 'code', 'name');
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -84,8 +86,10 @@ class ServiceCoverageAreaController extends Controller
     public function update(ServiceCoverageArea $service_coverage_area, ServiceCoverageAreaFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_coverage_area->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceCoverageArea not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Coverage Area not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'code', 'name');
 
         $fields['updated_by'] = $user->ID;
 
@@ -104,7 +108,7 @@ class ServiceCoverageAreaController extends Controller
      */
     public function show(ServiceCoverageArea $service_coverage_area)
     {
-        return $service_coverage_area->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_coverage_area->with(['serviceCoverages', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -131,14 +135,14 @@ class ServiceCoverageAreaController extends Controller
     public function destroy(ServiceCoverageArea $service_coverage_area, Response $response)
     {
         if (!$service_coverage_area->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceCoverageArea not deleted');
+            return $response->unauthorized('Unauthorized: Service Coverage Area not deleted');
         }
 
         $serviceCoveragesCount = $service_coverage_area->serviceCoverages()->count();
 
         if ($serviceCoveragesCount > 0) {
             return $response
-                ->error("Cannot delete: {$serviceCoveragesCount} service coverage(s) still use this coverage Area.")
+                ->error("Cannot delete: {$serviceCoveragesCount} Service Coverage(s) still use this Service Coverage Area.")
                 ->setStatus(409);
         }
 
@@ -150,7 +154,7 @@ class ServiceCoverageAreaController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServiceCoverageArea deleted.')->setData('service_pricing_model', $service_coverage_area);
+        return $response->success('Service Coverage Area deleted.')->setData('service_coverage_area', $service_coverage_area);
     }
 
     /**
@@ -161,26 +165,26 @@ class ServiceCoverageAreaController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceCoverages = ServiceCoverageArea::new()
+            $service_coverage_areas = ServiceCoverageArea::new()
                 ->with(['serviceCoverages', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceCoverages)) {
+            if (empty($service_coverage_areas)) {
                 return $response
                     ->setData('service_coverage_areas', [])
-                    ->setMessage('No service coverage Areas found', 'info')
+                    ->setMessage('No Service Coverage Areas found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_coverage_areas', $serviceCoverages)
-                ->setMessage('Service coverage areas retrieved successfully', 'success')
+                ->setData('service_coverage_areas', $service_coverage_areas)
+                ->setMessage('Service Coverage Areas retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceCoverageArea indexRest error: ' . $e->getMessage());
+            error_log('Service Coverage Area indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service coverage areas: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Coverage Areas: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }
@@ -202,20 +206,19 @@ class ServiceCoverageAreaController extends Controller
 
             if (empty($service_coverage_area)) {
                 return $response
-                    ->setData('service_complexity', null)
-                    ->setMessage('Service Complexity not found', 'info')
+                    ->setData('service_coverage_area', null)
+                    ->setMessage('Service Coverage Area not found', 'info')
                     ->setStatus(404);
             }
 
             return $response
-                ->setData('service_complexity', $service_coverage_area)
-                ->setMessage('Service Complexity retrieved successfully', 'success')
+                ->setData('service_coverage_area', $service_coverage_area)
+                ->setMessage('Service Coverage Area retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('ServiceCoverageArea showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve service complexity')
-                ->setMessage('An error occurred while retrieving service complexity', 'error')
+                ->setMessage('An error occurred while retrieving Service Coverage Area', 'error')
                 ->setStatus(500);
         }
     }

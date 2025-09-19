@@ -2,7 +2,7 @@
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `code` varchar(64) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
