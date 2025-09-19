@@ -33,7 +33,6 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')
-                        ->markLabelRequired()
                 )
         ]
     )

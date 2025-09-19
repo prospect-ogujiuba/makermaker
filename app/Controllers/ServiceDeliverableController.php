@@ -152,7 +152,7 @@ class ServiceDeliverableController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServiceDeliverable deleted.')->setData('service_pricing_model', $service_deliverable);
+        return $response->success('Service Deliverable deleted.')->setData('service_deliverable', $service_deliverable);
     }
 
     /**

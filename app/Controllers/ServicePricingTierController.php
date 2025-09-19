@@ -155,7 +155,7 @@ class ServicePricingTierController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServicePricingTier deleted.')->setData('service_pricing_tier', $service_pricing_tier);
+        return $response->success('Service Pricing Tier deleted.')->setData('service_pricing_tier', $service_pricing_tier);
     }
 
     /**

@@ -29,7 +29,7 @@ $tabs->tab('OVERVIEW', 'admin-settings', [
                 )
                 ->withColumn(
                     $form->text('code')
-                        ->setLabel('Code')
+                        ->setLabel('Pricing Tier Code')
                         ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')

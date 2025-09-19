@@ -45,9 +45,6 @@ function mm_kebab(string $s): string
     $k = preg_replace('/([a-z])([A-Z])/', '$1-$2', $s);
     $k = strtolower($k);
 
-    // Convert any slash runs ("/" or "\") to "-or-"
-    $k = preg_replace('~[\\/]+~', '-or-', $k);
-
     // Replace everything else non a-z/0-9/hyphen with hyphen
     $k = preg_replace('/[^a-z0-9-]+/', '-', $k);
 
