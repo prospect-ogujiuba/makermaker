@@ -22,18 +22,17 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this delivery method (max 100 characters)')
+                        ->setHelp('Display name for this delivery method')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., On-Site Installation')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('code')
-                        ->setLabel('Delivery method Code')
-                        ->setHelp('Unique identifier code in uppercase (e.g., ONSITE, REMOTE, HYBRID)')
+                        ->setLabel('Delivery Method Code')
+                        ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'e.g., ONSITE')
-                        ->markLabelRequired()
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                 )
         ]
     )
