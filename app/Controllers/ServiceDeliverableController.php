@@ -52,6 +52,16 @@ class ServiceDeliverableController extends Controller
 
         $service_deliverable->save($fields);
 
+        $created = $service_deliverable;
+
+        if ($created === false) {
+            return $response
+                ->error('Creation failed due to a database error.')
+                ->setStatus(500);
+        }
+
+        // return $response->success('Service Complexity created.')->setData('service$service_deliverable', $service_deliverable);
+
         return tr_redirect()->toPage('servicedeliverable', 'index')
             ->withFlash('Service Deliverable created');
     }
