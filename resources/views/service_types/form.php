@@ -119,16 +119,6 @@ if (isset($current_id)) {
         foreach ($services as $service) {
             $row = $form->row();
 
-            // Name Column (main content)
-            $row->column(
-                $form->text("Service ID")
-                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-
-            // Additional info column (optional)
             $row->column(
                 $form->text("Service Name")
                     ->setAttribute('value', $service->name ?? 'B2CNC-' . $service->id)
@@ -137,7 +127,6 @@ if (isset($current_id)) {
 
             );
 
-            // ID Column (smaller width)
             $row->column(
                 $form->text("SKU")
                     ->setAttribute('value', $service->sku)
@@ -145,6 +134,15 @@ if (isset($current_id)) {
                     ->setAttribute('name', false)
 
             );
+
+            $row->column(
+                $form->text("Service ID")
+                    ->setAttribute('value', $service->id ?? "Service #{$service->id}")
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
 
             $service_fields[] = $row;
         }
@@ -158,31 +156,25 @@ if (isset($current_id)) {
         foreach ($attributeDefinitions as $attributeDefinition) {
             $row = $form->row();
 
-            // Name Column (main content)
-            $row->column(
-                $form->text("Definition ID")
-                    ->setAttribute('value', $attributeDefinition->id ?? "attributeDefinition #{$attributeDefinition->id}")
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-
-            // Additional info column (optional)
             $row->column(
                 $form->text("Definition Name")
-                    ->setAttribute('value', $attributeDefinition->label ?? 'B2CNC-' . $attributeDefinition->id)
+                    ->setAttribute('value', $attributeDefinition->label ?? 'N/A')
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
             );
-
-            // ID Column (smaller width)
             $row->column(
-                $form->text("Attribute Value")
-                    ->setAttribute('value', $attributeDefinition->sku)
+                $form->text("Data Type")
+                    ->setAttribute('value', $attributeDefinition->data_type ?? 'N/A')
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
+            );
+            $row->column(
+                $form->text("UOM")
+                    ->setAttribute('value', $attributeDefinition->unit ?? 'N/A')
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
             );
 
             $attributeDefinition_fields[] = $row;

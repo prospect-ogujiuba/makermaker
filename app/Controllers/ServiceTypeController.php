@@ -45,6 +45,8 @@ class ServiceTypeController extends Controller
             $response->unauthorized('Unauthorized: ServiceType not created')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'name', true);
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -88,6 +90,8 @@ class ServiceTypeController extends Controller
             $response->unauthorized('Unauthorized: ServiceType not updated')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'name', true);
+
         $fields['updated_by'] = $user->ID;
 
         $service_type->save($fields);
@@ -105,7 +109,7 @@ class ServiceTypeController extends Controller
      */
     public function show(ServiceType $service_type)
     {
-        return $service_type->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_type->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -162,26 +166,60 @@ class ServiceTypeController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceEquipServiceTypeServiceTypes = ServiceType::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $service_types = ServiceType::new()
+                ->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceEquipServiceTypeServiceTypes)) {
+            if (empty($service_types)) {
                 return $response
-                    ->setData('service_type', [])
-                    ->setMessage('No service types found', 'info')
+                    ->setData('service_types', [])
+                    ->setMessage('No Service Types found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_type', $serviceEquipServiceTypeServiceTypes)
-                ->setMessage('Service type retrieved successfully', 'success')
+                ->setData('service_types', $service_types)
+                ->setMessage('Service Types retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceType indexRest error: ' . $e->getMessage());
+            error_log('Service Type indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service type: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Types: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+        /**
+     * The show function for API
+     *
+     * @param ServiceType $service_type
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceType $service_type, Response $response)
+    {
+        try {
+            $service_type = ServiceType::new()
+                ->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])
+                ->find($service_type->getID());
+
+            if (empty($service_type)) {
+                return $response
+                    ->setData('service_type', null)
+                    ->setMessage('Service Type not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_type', $service_type)
+                ->setMessage('Service Type retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Type showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Type', 'error')
                 ->setStatus(500);
         }
     }
