@@ -47,16 +47,16 @@ INSERT INTO `{!!prefix!!}srvc_pricing_tiers`
 -- Delivery Methods
 INSERT INTO `{!!prefix!!}srvc_delivery_methods`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('On-Site Installation', 'ONSITE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Remote Configuration', 'REMOTE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Hybrid (On-site + Remote)', 'HYBRID', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Client Self-Install', 'SELFINSTALL', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('White Glove Service', 'WHITEGLOVE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Pickup', 'PICKUP', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Shipping/Delivery', 'SHIPPING', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('In-Store Service', 'INSTORE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Drop-Ship Partner', 'DROPSHIP', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('24/7 Emergency Dispatch', 'EMERGENCY', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('On-Site Installation', 'on-site-installation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Remote Configuration', 'remote-configuration', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Hybrid (On-site + Remote)', 'hybrid-on-site-remote', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Client Self-Install', 'client-self-install', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('White Glove Service', 'white-glove', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Pickup', 'pickup', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Shipping/Delivery', 'shipping-delivery', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('In-Store Service', 'in-store-service', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Drop-Ship Partner', 'drop-ship-partner', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('24/7 Emergency Dispatch', '24-7-emergency-dispatch', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Coverage Areas
 INSERT INTO `{!!prefix!!}srvc_coverage_areas`

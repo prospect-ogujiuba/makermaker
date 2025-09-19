@@ -41,8 +41,8 @@ class ServiceDeliveryMethodFields extends Fields
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required";
-        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required|max:64";
+        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_models@id:{$id}|?required|max:64";
 
         return $rules;
     }

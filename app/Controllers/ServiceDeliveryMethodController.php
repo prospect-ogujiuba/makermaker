@@ -45,6 +45,8 @@ class ServiceDeliveryMethodController extends Controller
             $response->unauthorized('Unauthorized: Service Delivery Method not created')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'name');
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -86,6 +88,8 @@ class ServiceDeliveryMethodController extends Controller
         if (!$service_delivery_method->can('update')) {
             $response->unauthorized('Unauthorized: Service Delivery Method not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'code', 'name');
 
         $fields['updated_by'] = $user->ID;
 
@@ -134,7 +138,7 @@ class ServiceDeliveryMethodController extends Controller
             return $response->unauthorized('Unauthorized: Service Delivery Method not deleted');
         }
 
-        $servicesCount = $service_delivery_method->services->count();
+        $servicesCount = $service_delivery_method->services()->count('service_id');
 
         if ($servicesCount > 0) {
             return $response
@@ -177,10 +181,41 @@ class ServiceDeliveryMethodController extends Controller
                 ->setMessage('Service Delivery Methods retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceDeliveryMethod indexRest error: ' . $e->getMessage());
+            error_log('Service Delivery Method indexRest error: ' . $e->getMessage());
 
             return $response
                 ->error('Failed to retrieve Service Delivery Methods: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceDeliveryMethod $service_delivery_method
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceDeliveryMethod $service_delivery_method, Response $response)
+    {
+        try {
+            $service_delivery_method = $service_delivery_method->with(['services', 'createdBy', 'updatedBy'])->first();
+
+            if (!$service_delivery_method) {
+                return $response
+                    ->setMessage('Service Delivery Method not found', 'error')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_delivery_method', $service_delivery_method)
+                ->setMessage('Service Delivery Method retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Delivery Method showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving the Service Delivery Method', 'error')
                 ->setStatus(500);
         }
     }
