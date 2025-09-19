@@ -37,7 +37,8 @@ class ServiceBundleFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
-
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
+        
         $rules = [];
 
         $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_bundles@id:{$id}|required";

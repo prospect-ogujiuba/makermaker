@@ -37,7 +37,8 @@ class ServiceAttributeDefinitionFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
-
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
+        
         $rules = [];
 
         $rules['service_type_id'] = "unique:service_type_id:{GLOBAL_WPDB_PREFIX}srvc_attribute_definitions@id:{$id}|numeric|required";

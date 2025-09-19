@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
@@ -21,7 +22,8 @@ class ServiceFields extends Fields
      *
      * @return array
      */
-    protected function fillable() {
+    protected function fillable()
+    {
         return [];
     }
 
@@ -30,11 +32,13 @@ class ServiceFields extends Fields
      *
      * @return array
      */
-    protected function rules() {
+    protected function rules()
+    {
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
-
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
+        
         $rules = [];
 
         // Core Required Fields
@@ -63,7 +67,8 @@ class ServiceFields extends Fields
      *
      * @return array
      */
-    protected function messages() {
+    protected function messages()
+    {
         return [];
     }
 }
