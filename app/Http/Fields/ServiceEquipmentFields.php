@@ -37,13 +37,14 @@ class ServiceEquipmentFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
 
         $rules = [];
 
-        $rules['sku'] = "required";
-        $rules['name'] = "required";
-        $rules['manufacturer'] = "required";
-        $rules['specs'] = "required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:128";
+        $rules['sku'] = "unique:sku:{$wpdb_prefix}srvc_equipment@id:{$id}|?required|max:64";
+        $rules['manufacturer'] = "required|max:64";
+        $rules['specs'] = "?required";
 
         return $rules;
     }

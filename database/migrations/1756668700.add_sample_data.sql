@@ -61,19 +61,19 @@ INSERT INTO `{!!prefix!!}srvc_delivery_methods`
 -- Coverage Areas
 INSERT INTO `{!!prefix!!}srvc_coverage_areas`
 (`code`, `name`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('LOCAL', 'Local Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('REGIONAL', 'Regional Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('NATIONAL', 'National Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('INTERNATIONAL', 'International Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('GTA', 'Greater Toronto Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('ON-SW', 'Southwest Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('ON-CENTRAL', 'Central Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('ON-EAST', 'Eastern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('ON-NORTH', 'Northern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('QUEBEC', 'Province of Quebec', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('WESTCAN', 'Western Canada', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('USA', 'United States Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('GLOBAL-APAC', 'Asia-Pacific Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('local-area', 'Local Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('regional-coverage', 'Regional Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('national-coverage', 'National Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('international-coverage', 'International Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('greater-toronto-area', 'Greater Toronto Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('southwest-ontario', 'Southwest Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('central-ontario', 'Central Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('eastern-ontario', 'Eastern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('northern-ontario', 'Northern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('province-of-quebec', 'Province of Quebec', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('western-canada', 'Western Canada', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('united-states-coverage', 'United States Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('asia-pacific-coverage', 'Asia-Pacific Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Deliverables
 INSERT INTO `{!!prefix!!}srvc_deliverables`

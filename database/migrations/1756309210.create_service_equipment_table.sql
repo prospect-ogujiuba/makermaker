@@ -4,7 +4,7 @@ CREATE TABLE `{!!prefix!!}srvc_equipment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `sku` varchar(64) DEFAULT NULL,
   `name` varchar(128) NOT NULL,
-  `manufacturer` varchar(128) DEFAULT NULL,
+  `manufacturer` varchar(64) DEFAULT NULL,
   `specs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Equipment specifications as JSON object' CHECK (json_valid(`specs`)),
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),

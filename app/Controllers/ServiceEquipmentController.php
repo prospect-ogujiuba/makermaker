@@ -42,8 +42,10 @@ class ServiceEquipmentController extends Controller
     public function create(ServiceEquipmentFields $fields, ServiceEquipment $service_equipment, Response $response, AuthUser $user)
     {
         if (!$service_equipment->can('create')) {
-            $response->unauthorized('Unauthorized: ServiceEquipment not created')->abort();
+            $response->unauthorized('Unauthorized: Service Equipment not created')->abort();
         }
+
+        autoGenerateCode($fields, 'sku', 'name', true);
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -84,7 +86,7 @@ class ServiceEquipmentController extends Controller
     public function update(ServiceEquipment $service_equipment, ServiceEquipmentFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_equipment->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceEquipment not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Equipment not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -131,14 +133,14 @@ class ServiceEquipmentController extends Controller
     public function destroy(ServiceEquipment $service_equipment, Response $response)
     {
         if (!$service_equipment->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceEquipment not deleted');
+            return $response->unauthorized('Unauthorized: Service Equipment not deleted');
         }
 
         $servicesCount = $service_equipment->services()->count();
 
         if ($servicesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicesCount} service equipment(s) still use this.")
+                ->error("Cannot delete: {$servicesCount} service(s) still use this Service Equipment.")
                 ->setStatus(409);
         }
 
@@ -150,7 +152,7 @@ class ServiceEquipmentController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('ServiceEquipment deleted.')->setData('service_pricing_model', $service_equipment);
+        return $response->success('Service Equipment deleted.')->setData('service_equipment', $service_equipment);
     }
 
     /**
@@ -161,26 +163,60 @@ class ServiceEquipmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceEquipments = ServiceEquipment::new()
+            $service_equipment = ServiceEquipment::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceEquipments)) {
+            if (empty($service_equipment)) {
                 return $response
                     ->setData('service_equipment', [])
-                    ->setMessage('No service equipments found', 'info')
+                    ->setMessage('No Service Equipment found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_equipment', $serviceEquipments)
-                ->setMessage('Service equipment retrieved successfully', 'success')
+                ->setData('service_equipment', $service_equipment)
+                ->setMessage('Service Equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceEquipment indexRest error: ' . $e->getMessage());
+            error_log('Service Equipment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service equipment: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Equipment: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceEquipmentController $service_equipment
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceEquipmentController $service_equipment, Response $response)
+    {
+        try {
+            $service_equipment = ServiceEquipmentController::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->find($service_equipment->getID());
+
+            if (empty($service_equipment)) {
+                return $response
+                    ->setData('service_equipment', null)
+                    ->setMessage('Service Equipment not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_equipment', $service_equipment)
+                ->setMessage('Service Equipment retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('ServiceEquipmentController showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Equipment', 'error')
                 ->setStatus(500);
         }
     }
