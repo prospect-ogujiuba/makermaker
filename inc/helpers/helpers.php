@@ -133,16 +133,30 @@ function checkIntRange($args)
  * @param string $codeField The field name for the code (default: 'code')
  * @param string $sourceField The field name to generate from (default: 'name') 
  * @param bool $uppercase Whether to uppercase the result (default: true)
+ * @param string|null $addon Optional text to add to the generated code
+ * @param string $separator Separator between addon and code (default: '-')
+ * @param string $placement Where to place the addon: 'prefix', 'suffix' (default: 'prefix')
  * @return void
  */
-function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', $uppercase = false)
+function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', $uppercase = false, $addon = null, $separator = '-', $placement = 'prefix')
 {
     // Handle TypeRocket Fields objects
     if (is_object($fields) && method_exists($fields, 'getArrayCopy')) {
         $fieldsArray = $fields->getArrayCopy();
         
         if (!$fieldsArray[$codeField] || $fieldsArray[$codeField] == NULL) {
-            $fieldsArray[$codeField] = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField])) : mm_kebab($fieldsArray[$sourceField]);
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField])) : mm_kebab($fieldsArray[$sourceField]);
+            
+            // Add addon if provided
+            if ($addon !== null && $addon !== '') {
+                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
+                
+                $generatedCode = $placement === 'suffix' 
+                    ? $generatedCode . $separator . $processedAddon
+                    : $processedAddon . $separator . $generatedCode;
+            }
+            
+            $fieldsArray[$codeField] = $generatedCode;
         }
         
         $fields->exchangeArray($fieldsArray);
@@ -150,7 +164,18 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
     // Handle regular arrays
     else {
         if (!$fields[$codeField] || $fields[$codeField] == NULL) {
-            $fields[$codeField] = $uppercase ? strtoupper(mm_kebab($fields[$sourceField])) : mm_kebab($fields[$sourceField]);
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($fields[$sourceField])) : mm_kebab($fields[$sourceField]);
+            
+            // Add addon if provided
+            if ($addon !== null && $addon !== '') {
+                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
+                
+                $generatedCode = $placement === 'suffix' 
+                    ? $generatedCode . $separator . $processedAddon
+                    : $processedAddon . $separator . $generatedCode;
+            }
+            
+            $fields[$codeField] = $generatedCode;
         }
     }
 }

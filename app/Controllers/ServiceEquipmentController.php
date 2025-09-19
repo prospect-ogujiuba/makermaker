@@ -45,7 +45,7 @@ class ServiceEquipmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment not created')->abort();
         }
 
-        autoGenerateCode($fields, 'sku', 'name', true);
+        autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -89,7 +89,7 @@ class ServiceEquipmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment not updated')->abort();
         }
 
-        autoGenerateCode($fields, 'sku', 'name', true);
+        autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
 
         $fields['updated_by'] = $user->ID;
 
