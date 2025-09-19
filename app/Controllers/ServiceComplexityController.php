@@ -162,11 +162,11 @@ class ServiceComplexityController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceComplexities = ServiceComplexity::new()
+            $service_complexities = ServiceComplexity::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceComplexities)) {
+            if (empty($service_complexities)) {
                 return $response
                     ->setData('service_complexities', [])
                     ->setMessage('No Service Complexities found', 'info')
@@ -174,13 +174,12 @@ class ServiceComplexityController extends Controller
             }
 
             return $response
-                ->setData('service_complexities', $serviceComplexities)
+                ->setData('service_complexities', $service_complexities)
                 ->setMessage('Service Complexities retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service Complexity indexRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve Service Complexity')
                 ->setMessage('An error occurred while retrieving Service Complexity', 'error')
                 ->setStatus(500);
         }

@@ -165,11 +165,11 @@ class ServicePricingModelController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $servicePricingModels = ServicePricingModel::new()
+            $service_pricing_models = ServicePricingModel::new()
                 ->with(['servicePrices', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($servicePricingModels)) {
+            if (empty($service_pricing_models)) {
                 return $response
                     ->setData('service_pricing_models', [])
                     ->setMessage('No service pricing models found', 'info')
@@ -177,7 +177,7 @@ class ServicePricingModelController extends Controller
             }
 
             return $response
-                ->setData('service_pricing_models', $servicePricingModels)
+                ->setData('service_pricing_models', $service_pricing_models)
                 ->setMessage('Service pricing models retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
@@ -218,7 +218,6 @@ class ServicePricingModelController extends Controller
         } catch (\Exception $e) {
             error_log('Service Pricing Model showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve service pricing model')
                 ->setMessage('An error occurred while retrieving service pricing model', 'error')
                 ->setStatus(500);
         }

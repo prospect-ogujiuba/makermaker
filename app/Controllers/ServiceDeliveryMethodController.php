@@ -165,11 +165,11 @@ class ServiceDeliveryMethodController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDeliveryMethods = ServiceDeliveryMethod::new()
+            $service_delivery_methods = ServiceDeliveryMethod::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDeliveryMethods)) {
+            if (empty($service_delivery_methods)) {
                 return $response
                     ->setData('service_delivery_methods', [])
                     ->setMessage('No Service Delivery Methods found', 'info')
@@ -177,7 +177,7 @@ class ServiceDeliveryMethodController extends Controller
             }
 
             return $response
-                ->setData('service_delivery_methods', $serviceDeliveryMethods)
+                ->setData('service_delivery_methods', $service_delivery_methods)
                 ->setMessage('Service Delivery Methods retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {

@@ -166,26 +166,26 @@ class ServicePricingTierController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $servicePricingTiers = ServicePricingTier::new()
+            $service_pricing_tiers = ServicePricingTier::new()
                 ->with(['servicePrices', 'createdBy', 'updatedBy'])
                 ->orderBy('sort_order', 'ASC')
                 ->get();
 
-            if (empty($servicePricingTiers)) {
+            if (empty($service_pricing_tiers)) {
                 return $response
                     ->setData('service_pricing_tiers', [])
-                    ->setMessage('No service Pricing Tiers found', 'info')
+                    ->setMessage('No Service Pricing Tiers found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_pricing_tiers', $servicePricingTiers)
+                ->setData('service_pricing_tiers', $service_pricing_tiers)
                 ->setMessage('Service Pricing Tiers retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServicePricingTier indexRest error: ' . $e->getMessage());
+            error_log('Service Pricing Tier indexRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving service Pricing Tiers', 'error')
+                ->setMessage('An error occurred while retrieving Service Pricing Tiers', 'error')
                 ->setStatus(500);
         }
     }
@@ -214,7 +214,7 @@ class ServicePricingTierController extends Controller
                 ->setMessage('Service Pricing Tier retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServicePricingTier showRest error: ' . $e->getMessage());
+            error_log('Service Pricing Tier showRest error: ' . $e->getMessage());
             return $response
                 ->setMessage('An error occurred while retrieving the Service Pricing Tier', 'error')
                 ->setStatus(500);
