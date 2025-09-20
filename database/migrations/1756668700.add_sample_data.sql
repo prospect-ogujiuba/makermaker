@@ -150,30 +150,30 @@ INSERT INTO `{!!prefix!!}srvc_equipment` (`sku`, `name`, `manufacturer`, `specs`
 -- Service Types
 INSERT INTO `{!!prefix!!}srvc_service_types`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Installation Services', 'INSTALL', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Maintenance & Support', 'SUPPORT', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Consulting Services', 'CONSULT', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Training Services', 'TRAINING', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Configuration Services', 'CONFIG', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Repair Services', 'REPAIR', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Upgrade Services', 'UPGRADE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Design & Planning', 'DESIGN', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Monitoring Services', 'MONITOR', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Emergency Services', 'EMERGENCY', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Managed Services', 'MANAGED', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Cloud Migration Services', 'CLOUDMIG', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Data Backup & Recovery', 'BACKUP', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Security Audits', 'SECURITY', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
-('Compliance Services', 'COMPLY', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Network Assessments', 'NETASSESS', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Performance Optimization', 'OPTIMIZE', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Integration Services', 'INTEGRATE', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Custom Development', 'CUSTOMDEV', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Project Management', 'PMO', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Proactive Health Checks', 'HEALTH', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('License Management', 'LICENSE', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Vendor Coordination', 'VENDOR', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('IT Roadmap & Strategy', 'STRATEGY', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('Installation Services','installation-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Maintenance & Support','maintenance-support', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Consulting Services','consulting-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Training Services','training-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Configuration Services','configuration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Repair Services','repair-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Upgrade Services','upgrade-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Design & Planning','design-planning', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Monitoring Services','monitoring-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Emergency Services','emergency-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Managed Services','managed-services', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Cloud Migration Services','cloud-migration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Data Backup & Recovery','data-backup-recovery', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Security Audits','security-audits', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Compliance Services','compliance-services', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Network Assessments','network-assessments', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Performance Optimization','performance-optimization', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Integration Services','integration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Custom Development','custom-development', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Project Management','project-management', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Proactive Health Checks','proactive-health-checks', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('License Management','license-management', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Vendor Coordination','vendor-coordination', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('IT Roadmap & Strategy','it-roadmap-strategy', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Service Categories
 INSERT INTO `{!!prefix!!}srvc_categories`
@@ -797,6 +797,7 @@ INSERT INTO `{!!prefix!!}srvc_bundle_items` (`bundle_id`, `service_id`, `quantit
 -- >>> Down >>>
 DELETE FROM `{!!prefix!!}srvc_bundle_items`;
 DELETE FROM `{!!prefix!!}srvc_service_relationships`;
+DELETE FROM `{!!prefix!!}srvc_service_equipment_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_coverage`;

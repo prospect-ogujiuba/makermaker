@@ -30,9 +30,9 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Type Code')
-                        ->setHelp('Unique identifier code in uppercase (e.g., INSTALL, MAINTENANCE, REPAIR)')
+                        ->setHelp('Unique identifier code in uppercase')
                         ->setAttribute('maxlength', '64')
-                        ->markLabelRequired()
+                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                 )
         ]
     )
