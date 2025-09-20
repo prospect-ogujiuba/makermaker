@@ -46,6 +46,7 @@ class ServiceDeliveryMethodController extends Controller
         }
 
         autoGenerateCode($fields, 'code', 'name');
+        $fields['code'] = mm_kebab($fields['code']);
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -90,6 +91,8 @@ class ServiceDeliveryMethodController extends Controller
         }
 
         autoGenerateCode($fields, 'code', 'name');
+        $fields['code'] = mm_kebab($fields['code']);
+
 
         $fields['updated_by'] = $user->ID;
 

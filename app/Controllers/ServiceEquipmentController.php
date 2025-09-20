@@ -46,7 +46,7 @@ class ServiceEquipmentController extends Controller
         }
 
         autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
-        $fields['sku'] = mm_kebab($fields['sku']);
+        $fields['sku'] = strtoupper(mm_kebab($fields['sku']));
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -91,7 +91,7 @@ class ServiceEquipmentController extends Controller
         }
 
         autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
-        $fields['sku'] = mm_kebab($fields['sku']);
+        $fields['sku'] = strtoupper(mm_kebab($fields['sku']));
 
         $fields['updated_by'] = $user->ID;
 
