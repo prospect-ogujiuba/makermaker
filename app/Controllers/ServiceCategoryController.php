@@ -45,6 +45,9 @@ class ServiceCategoryController extends Controller
             $response->unauthorized('Unauthorized: Service Category not created')->abort();
         }
 
+        autoGenerateCode($fields, 'slug', 'name');
+        $fields['slug'] = mm_kebab($fields['slug']);
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -86,6 +89,9 @@ class ServiceCategoryController extends Controller
         if (!$service_category->can('update')) {
             $response->unauthorized('Unauthorized: Service Category not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'slug', 'name');
+        $fields['slug'] = mm_kebab($fields['slug']);
 
         $fields['updated_by'] = $user->ID;
 

@@ -26,7 +26,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('name')
                         ->setLabel('Name')
                         ->setHelp('Display name for this service category')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., VoIP Systems')
                         ->markLabelRequired()
                 )
@@ -34,7 +34,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('slug')
                         ->setLabel('Slug')
                         ->setHelp('URL-friendly version of the name (lowercase, hyphens only)')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->markLabelRequired()
                 ),
 
