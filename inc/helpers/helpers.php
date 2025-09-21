@@ -132,7 +132,9 @@ function checkIntRange($args)
 }
 
 /**
- * Auto-generate a code/slug field if it's empty
+ * Auto-generate or sanitize a code/slug field
+ * - If code field is empty: generates from source field
+ * - If code field has user input: sanitizes it to proper format
  * 
  * @param array|\TypeRocket\Http\Fields &$fields Reference to fields array or Fields object
  * @param string $codeField The field name for the code (default: 'code')
@@ -149,11 +151,27 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
     if (is_object($fields) && method_exists($fields, 'getArrayCopy')) {
         $fieldsArray = $fields->getArrayCopy();
 
-        if (!$fieldsArray[$codeField] || $fieldsArray[$codeField] == NULL) {
-            $generatedCode = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField], $separator)) : mm_kebab($fieldsArray[$sourceField], $separator);
+        $sourceValue = '';
+        $needsProcessing = false;
 
-            // Add addon if provided
-            if ($addon !== null && $addon !== '') {
+        // Determine source value for code generation
+        if (!isset($fieldsArray[$codeField]) || empty($fieldsArray[$codeField])) {
+            // Code field is empty - generate from source field
+            if (isset($fieldsArray[$sourceField]) && !empty($fieldsArray[$sourceField])) {
+                $sourceValue = $fieldsArray[$sourceField];
+                $needsProcessing = true;
+            }
+        } else {
+            // Code field has user input - sanitize it
+            $sourceValue = $fieldsArray[$codeField];
+            $needsProcessing = true;
+        }
+
+        if ($needsProcessing && $sourceValue !== '') {
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($sourceValue, $separator)) : mm_kebab($sourceValue, $separator);
+
+            // Add addon if provided (only when generating from source field, not when sanitizing user input)
+            if ($addon !== null && $addon !== '' && (!isset($fieldsArray[$codeField]) || empty($fieldsArray[$codeField]))) {
                 $processedAddon = $uppercase ? strtoupper(mm_kebab($addon, $separator)) : mm_kebab($addon, $separator);
 
                 $generatedCode = $placement === 'suffix'
@@ -162,17 +180,32 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
             }
 
             $fieldsArray[$codeField] = $generatedCode;
+            $fields->exchangeArray($fieldsArray);
         }
-
-        $fields->exchangeArray($fieldsArray);
     }
     // Handle regular arrays
     else {
-        if (!$fields[$codeField] || $fields[$codeField] == NULL) {
-            $generatedCode = $uppercase ? strtoupper(mm_kebab($fields[$sourceField], $separator)) : mm_kebab($fields[$sourceField], $separator);
+        $sourceValue = '';
+        $needsProcessing = false;
 
-            // Add addon if provided
-            if ($addon !== null && $addon !== '') {
+        // Determine source value for code generation
+        if (!isset($fields[$codeField]) || empty($fields[$codeField])) {
+            // Code field is empty - generate from source field
+            if (isset($fields[$sourceField]) && !empty($fields[$sourceField])) {
+                $sourceValue = $fields[$sourceField];
+                $needsProcessing = true;
+            }
+        } else {
+            // Code field has user input - sanitize it
+            $sourceValue = $fields[$codeField];
+            $needsProcessing = true;
+        }
+
+        if ($needsProcessing && $sourceValue !== '') {
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($sourceValue, $separator)) : mm_kebab($sourceValue, $separator);
+
+            // Add addon if provided (only when generating from source field, not when sanitizing user input)
+            if ($addon !== null && $addon !== '' && (!isset($fields[$codeField]) || empty($fields[$codeField]))) {
                 $processedAddon = $uppercase ? strtoupper(mm_kebab($addon, $separator)) : mm_kebab($addon, $separator);
 
                 $generatedCode = $placement === 'suffix'
@@ -183,8 +216,6 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
             $fields[$codeField] = $generatedCode;
         }
     }
-
-    $fields[$codeField] = mm_kebab($fields[$codeField], $separator);
 }
 
 /**

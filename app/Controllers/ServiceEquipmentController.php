@@ -45,8 +45,7 @@ class ServiceEquipmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment not created')->abort();
         }
 
-        autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
-        $fields['sku'] = strtoupper(mm_kebab($fields['sku']));
+        autoGenerateCode($fields, 'sku', 'name', '-', $fields['manufacturer'], 'prefix', true);
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -90,8 +89,7 @@ class ServiceEquipmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment not updated')->abort();
         }
 
-        autoGenerateCode($fields, 'sku', 'name', true, $fields['manufacturer']);
-        $fields['sku'] = strtoupper(mm_kebab($fields['sku']));
+        autoGenerateCode($fields, 'sku', 'name', '-', $fields['manufacturer'], 'prefix', true);
 
         $fields['updated_by'] = $user->ID;
 
