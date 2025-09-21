@@ -43,7 +43,7 @@ class ServiceCategoryFields extends Fields
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_categories@id:{$id}|required|max:64";
         $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_categories@id:{$id}|?required|max:64";
-        $rules['parent_id'] = "?numeric|?required";
+        $rules['parent_id'] = "callback:checkSelfReference:{$wpdb_prefix}srvc_categories:parent_id:id";
 
         return $rules;
     }

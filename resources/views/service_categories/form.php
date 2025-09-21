@@ -41,9 +41,9 @@ $tabs->tab('Overview', 'admin-settings', [
             $form->row()
                 ->withColumn(
                     $form->select('parent_id')
-                        ->setLabel('Parent Category') // Use setLabel to set display label
+                        ->setLabel('Parent Category')
                         ->setHelp('Optional parent category for hierarchical organization')
-                        ->setModelOptions(ServiceCategory::class, 'name', 'id', 'Select A Category')
+                        ->setModelOptions(ServiceCategory::class, 'name', 'id', 'Top Level Category')
                 )
                 ->withColumn(),
         ]

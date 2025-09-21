@@ -18,7 +18,10 @@ $table->setColumns([
     ],
     'parentCategory.name' => [
         'label' => 'Parent',
-        'sort' => 'true'
+        'sort' => 'true',
+        'callback' => function ($item, $value) {
+            return $item ?? 'N/A';
+        }
     ],
     'slug' => [
         'label' => 'Slug',

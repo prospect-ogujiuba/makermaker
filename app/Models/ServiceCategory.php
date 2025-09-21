@@ -21,6 +21,10 @@ class ServiceCategory extends Model
         'deleted_at',
     ];
 
+    protected $format = [
+        'parent_id' => 'convertEmptyToNull'
+    ];
+
     /** ServiceCategory has many Services */
     public function services()
     {
