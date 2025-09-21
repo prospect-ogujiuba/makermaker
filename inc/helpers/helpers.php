@@ -38,21 +38,26 @@ function renderAdvancedSearchActions(string $resource): void
 <?php
 }
 
-// Convert CamelCase to kebab-case
-function mm_kebab(string $s): string
+// Convert strings to kebab_case or kebab-case
+function mm_kebab(string $s, string $separator = '_'): string
 {
-    // Split camelCase/PascalCase
-    $k = preg_replace('/([a-z])([A-Z])/', '$1-$2', $s);
+    // Normalize separator: only allow '-' or '_'
+    $sep = ($separator === '-') ? '-' : '_';
+
+    // Split camelCase / PascalCase with chosen separator
+    $k = preg_replace('/([a-z])([A-Z])/', '$1' . $sep . '$2', $s);
     $k = strtolower($k);
 
-    // Replace everything else non a-z/0-9/hyphen with hyphen
-    $k = preg_replace('/[^a-z0-9-]+/', '-', $k);
+    // Replace non-alphanumeric/separator characters with chosen separator
+    $k = preg_replace('/[^a-z0-9' . preg_quote($sep, '/') . ']+/', $sep, $k);
 
-    // Collapse multiple hyphens
-    $k = preg_replace('/-+/', '-', $k);
+    // Collapse multiple separators
+    $pattern = '/' . preg_quote($sep, '/') . '+/';
+    $k = preg_replace($pattern, $sep, $k);
 
-    return trim($k, '-');
+    return trim($k, $sep);
 }
+
 
 
 // Create TypeRocket resource page + REST endpoint
@@ -132,24 +137,24 @@ function checkIntRange($args)
  * @param array|\TypeRocket\Http\Fields &$fields Reference to fields array or Fields object
  * @param string $codeField The field name for the code (default: 'code')
  * @param string $sourceField The field name to generate from (default: 'name') 
- * @param bool $uppercase Whether to uppercase the result (default: true)
+ * @param string $separator Separator for kebab case and between addon and code (default: '-')
  * @param string|null $addon Optional text to add to the generated code
- * @param string $separator Separator between addon and code (default: '-')
  * @param string $placement Where to place the addon: 'prefix', 'suffix' (default: 'prefix')
+ * @param bool $uppercase Whether to uppercase the result (default: false)
  * @return void
  */
-function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', $uppercase = false, $addon = null, $separator = '-', $placement = 'prefix')
+function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', $separator = '-', $addon = null, $placement = 'prefix', $uppercase = false)
 {
     // Handle TypeRocket Fields objects
     if (is_object($fields) && method_exists($fields, 'getArrayCopy')) {
         $fieldsArray = $fields->getArrayCopy();
 
         if (!$fieldsArray[$codeField] || $fieldsArray[$codeField] == NULL) {
-            $generatedCode = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField])) : mm_kebab($fieldsArray[$sourceField]);
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField], $separator)) : mm_kebab($fieldsArray[$sourceField], $separator);
 
             // Add addon if provided
             if ($addon !== null && $addon !== '') {
-                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
+                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon, $separator)) : mm_kebab($addon, $separator);
 
                 $generatedCode = $placement === 'suffix'
                     ? $generatedCode . $separator . $processedAddon
@@ -164,11 +169,11 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
     // Handle regular arrays
     else {
         if (!$fields[$codeField] || $fields[$codeField] == NULL) {
-            $generatedCode = $uppercase ? strtoupper(mm_kebab($fields[$sourceField])) : mm_kebab($fields[$sourceField]);
+            $generatedCode = $uppercase ? strtoupper(mm_kebab($fields[$sourceField], $separator)) : mm_kebab($fields[$sourceField], $separator);
 
             // Add addon if provided
             if ($addon !== null && $addon !== '') {
-                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
+                $processedAddon = $uppercase ? strtoupper(mm_kebab($addon, $separator)) : mm_kebab($addon, $separator);
 
                 $generatedCode = $placement === 'suffix'
                     ? $generatedCode . $separator . $processedAddon
@@ -178,6 +183,8 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
             $fields[$codeField] = $generatedCode;
         }
     }
+
+    $fields[$codeField] = mm_kebab($fields[$codeField], $separator);
 }
 
 /**
