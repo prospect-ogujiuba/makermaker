@@ -143,39 +143,163 @@ function autoGenerateCode(&$fields, $codeField = 'code', $sourceField = 'name', 
     // Handle TypeRocket Fields objects
     if (is_object($fields) && method_exists($fields, 'getArrayCopy')) {
         $fieldsArray = $fields->getArrayCopy();
-        
+
         if (!$fieldsArray[$codeField] || $fieldsArray[$codeField] == NULL) {
             $generatedCode = $uppercase ? strtoupper(mm_kebab($fieldsArray[$sourceField])) : mm_kebab($fieldsArray[$sourceField]);
-            
+
             // Add addon if provided
             if ($addon !== null && $addon !== '') {
                 $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
-                
-                $generatedCode = $placement === 'suffix' 
+
+                $generatedCode = $placement === 'suffix'
                     ? $generatedCode . $separator . $processedAddon
                     : $processedAddon . $separator . $generatedCode;
             }
-            
+
             $fieldsArray[$codeField] = $generatedCode;
         }
-        
+
         $fields->exchangeArray($fieldsArray);
-    } 
+    }
     // Handle regular arrays
     else {
         if (!$fields[$codeField] || $fields[$codeField] == NULL) {
             $generatedCode = $uppercase ? strtoupper(mm_kebab($fields[$sourceField])) : mm_kebab($fields[$sourceField]);
-            
+
             // Add addon if provided
             if ($addon !== null && $addon !== '') {
                 $processedAddon = $uppercase ? strtoupper(mm_kebab($addon)) : mm_kebab($addon);
-                
-                $generatedCode = $placement === 'suffix' 
+
+                $generatedCode = $placement === 'suffix'
                     ? $generatedCode . $separator . $processedAddon
                     : $processedAddon . $separator . $generatedCode;
             }
-            
+
             $fields[$codeField] = $generatedCode;
         }
     }
+}
+
+/**
+ * Check for self-reference in parent-child relationships
+ * 
+ * This function prevents entities from referencing themselves as parents
+ * and can detect circular references in hierarchical data structures.
+ * 
+ * @param array $args - Standard TypeRocket validator args
+ * @return true|string - Returns true if valid, error message if invalid
+ */
+function checkSelfReference($args)
+{
+    /**
+     * @var $option - table name (required)
+     * @var $option2 - parent column name (default: 'parent_id')
+     * @var $option3 - primary key column name (default: 'id')
+     * @var $value - the parent_id value being validated
+     * @var $validator - TypeRocket Validator instance
+     * @var $weak - whether this is an optional field
+     */
+    extract($args);
+
+    // Check if this is an optional field and the value is considered "empty" by TypeRocket standards
+    if (isset($weak) && $weak && \TypeRocket\Utility\Data::emptyOrBlankRecursive($value)) {
+        return true;
+    }
+
+    // If no value provided, it's valid (nullable parent)
+    // Handle all possible "empty" states from select dropdowns
+    if (
+        $value === null || $value === '' || $value === 0 || $value === '0' ||
+        (is_string($value) && trim($value) === '') ||
+        (is_array($value) && empty($value))
+    ) {
+        return true;
+    }
+
+    // Get current record ID from route args
+    $request = \TypeRocket\Http\Request::new();
+    $route_args = $request->getDataGet('route_args');
+    $currentId = $route_args[0] ?? null;
+
+    // Convert to integer for comparison
+    $parentId = (int) $value;
+
+    // If no current ID (new record), no self-reference possible
+    if (!$currentId) {
+        return true;
+    }
+
+    // Convert current ID to integer for comparison
+    $currentId = (int) $currentId;
+
+    // Direct self-reference check
+    if ($currentId === $parentId) {
+        return ' cannot reference itself as parent';
+    }
+
+    // Check for circular reference by traversing up the hierarchy
+    $tableName = $option; // Required: table name
+    $parentColumn = $option2 ?? 'parent_id';
+    $idColumn = $option3 ?? 'id';
+
+    if (hasCircularReference($parentId, $currentId, $tableName, $parentColumn, $idColumn)) {
+        return ' would create a circular reference';
+    }
+
+    return true;
+}
+
+/**
+ * Detect circular references in hierarchical data
+ * 
+ * @param int $parentId - The proposed parent ID
+ * @param int $currentId - The current record ID
+ * @param string $tableName - Database table name
+ * @param string $parentColumn - Parent column name
+ * @param string $idColumn - Primary key column name
+ * @param array $visited - Track visited nodes to prevent infinite loops
+ * @return bool
+ */
+function hasCircularReference($parentId, $currentId, $tableName, $parentColumn, $idColumn, $visited = [])
+{
+    global $wpdb;
+
+    // Prevent infinite loops
+    if (in_array($parentId, $visited)) {
+        return true;
+    }
+
+    $visited[] = $parentId;
+
+    // Get the parent's parent
+    $query = $wpdb->prepare(
+        "SELECT {$parentColumn} FROM {$tableName} WHERE {$idColumn} = %d",
+        $parentId
+    );
+
+    $grandParentId = $wpdb->get_var($query);
+
+    // If no grandparent, no circular reference
+    if (!$grandParentId) {
+        return false;
+    }
+
+    // If grandparent is our current record, we have a circle
+    if ((int) $grandParentId === $currentId) {
+        return true;
+    }
+
+    // Recursively check up the chain
+    return hasCircularReference($grandParentId, $currentId, $tableName, $parentColumn, $idColumn, $visited);
+}
+
+/**
+ * Convert empty string to NULL
+ * 
+ * @param mixed $value
+ * @return mixed
+ */
+function convertEmptyToNull($value)
+{
+    return ($value === '' || $value === null) ? null : $value;
 }
