@@ -45,6 +45,8 @@ class ServiceAttributeDefinitionController extends Controller
             $response->unauthorized('Unauthorized: Service Attribute Definition not created')->abort();
         }
 
+        autoGenerateCode($fields, 'code', 'label', '_');
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -65,11 +67,12 @@ class ServiceAttributeDefinitionController extends Controller
     {
         $current_id = $service_attribute_definition->getID();
         $services = $service_attribute_definition->services;
+        $attribute_values = $service_attribute_definition->attributeValues;
         $createdBy = $service_attribute_definition->createdBy;
         $updatedBy = $service_attribute_definition->updatedBy;
 
         $form = tr_form($service_attribute_definition)->useErrors()->useOld()->useConfirm();
-        return View::new('service_attribute_definitions.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
+        return View::new('service_attribute_definitions.form', compact('form', 'current_id', 'services', 'attribute_values', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -87,8 +90,12 @@ class ServiceAttributeDefinitionController extends Controller
             $response->unauthorized('Unauthorized: ServiceAttributeDefinition not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        autoGenerateCode($fields, 'code', 'label', '_');
+        if (!$fields['enum_options']) {
+            $service_attribute_definition->enum_options = 'hey';
+        }
 
+        $fields['updated_by'] = $user->ID;
         $service_attribute_definition->save($fields);
 
         return tr_redirect()->toPage('serviceattributedefinition', 'edit', $service_attribute_definition->getID())

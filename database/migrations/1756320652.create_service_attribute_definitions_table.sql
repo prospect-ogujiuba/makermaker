@@ -4,7 +4,7 @@ CREATE TABLE `{!!prefix!!}srvc_attribute_definitions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_type_id` bigint(20) NOT NULL,
   `code` varchar(64) NOT NULL,
-  `label` varchar(128) NOT NULL,
+  `label` varchar(64) NOT NULL,
   `data_type` enum('int','decimal','bool','text','enum','date','datetime','json','url','email') NOT NULL,
   `enum_options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Valid options for enum data_type as JSON array' CHECK (json_valid(`enum_options`)),
   `unit` varchar(32) DEFAULT NULL COMMENT 'Unit of measurement: users, sites, ft, etc.',

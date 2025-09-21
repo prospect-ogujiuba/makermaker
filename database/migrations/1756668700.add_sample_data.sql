@@ -21,25 +21,25 @@ INSERT INTO `{!!prefix!!}srvc_complexities`
 -- Pricing Models
 INSERT INTO `{!!prefix!!}srvc_pricing_models`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Fixed Project',	'fixed-project',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Hourly Rate',	'hourly-rate',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Per Unit/Device',	'per-unit-or-device',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Monthly Subscription',	'monthly-subscription',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Annual Contract',	'annual-contract',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Per Square Foot',	'per-square-foot',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Tiered Pricing',	'tiered-pricing',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Usage-Based',	'usage-based',	'2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Pay-As-You-Go',	'pay-as-you-go',	'2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Hybrid Model',	'hybrid-model',	'2025-08-28 23:57:07', NOW(), NULL, 1, 1);
+('Fixed Project',	'fixed_project',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Hourly Rate',	'hourly_rate',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Per Unit/Device',	'per_unit_or_device',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Monthly Subscription',	'monthly_subscription',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Annual Contract',	'annual_contract',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Per Square Foot',	'per_square_foot',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Tiered Pricing',	'tiered_pricing',	'2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Usage-Based',	'usage_based',	'2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Pay-As-You-Go',	'pay_as_you_go',	'2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Hybrid Model',	'hybrid_model',	'2025-08-28 23:57:07', NOW(), NULL, 1, 1);
 
 -- Pricing Tiers
 INSERT INTO `{!!prefix!!}srvc_pricing_tiers`
 (`name`, `code`, `sort_order`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Small Business',	'small-business', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Mid-Market', 'mid-market', 2, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Small Business',	'small_business', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Mid-Market', 'mid_market', 2, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('Enterprise', 'enterprise', 3, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('Government', 'government', 4, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Non-Profit', 'non-profit', 5, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Non-Profit', 'non_profit', 5, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('Startups', 'startups', 6, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
 ('Education', 'education', 7, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
 ('Healthcare', 'healthcare', 8, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
@@ -47,33 +47,33 @@ INSERT INTO `{!!prefix!!}srvc_pricing_tiers`
 -- Delivery Methods
 INSERT INTO `{!!prefix!!}srvc_delivery_methods`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('On-Site Installation', 'on-site-installation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Remote Configuration', 'remote-configuration', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Hybrid (On-site + Remote)', 'hybrid-on-site-remote', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Client Self-Install', 'client-self-install', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('White Glove Service', 'white-glove', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('On-Site Installation', 'on_site_installation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Remote Configuration', 'remote_configuration', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Hybrid (On-site + Remote)', 'hybrid_on_site_remote', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Client Self-Install', 'client_self_install', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('White Glove Service', 'white_glove', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('Pickup', 'pickup', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Shipping/Delivery', 'shipping-delivery', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('In-Store Service', 'in-store-service', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Drop-Ship Partner', 'drop-ship-partner', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('24/7 Emergency Dispatch', '24-7-emergency-dispatch', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('Shipping/Delivery', 'shipping_delivery', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('In-Store Service', 'in_store_service', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Drop-Ship Partner', 'drop_ship_partner', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('24/7 Emergency Dispatch', '24_7_emergency_dispatch', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Coverage Areas
 INSERT INTO `{!!prefix!!}srvc_coverage_areas`
 (`code`, `name`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('local-area', 'Local Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('regional-coverage', 'Regional Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('national-coverage', 'National Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('international-coverage', 'International Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('greater-toronto-area', 'Greater Toronto Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('southwest-ontario', 'Southwest Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('central-ontario', 'Central Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('eastern-ontario', 'Eastern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('northern-ontario', 'Northern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('province-of-quebec', 'Province of Quebec', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('western-canada', 'Western Canada', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('united-states-coverage', 'United States Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('asia-pacific-coverage', 'Asia-Pacific Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('local_area', 'Local Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('regional_coverage', 'Regional Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('national_coverage', 'National Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('international_coverage', 'International Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('greater_toronto_area', 'Greater Toronto Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('southwest_ontario', 'Southwest Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('central_ontario', 'Central Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('eastern_ontario', 'Eastern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('northern_ontario', 'Northern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('province_of_quebec', 'Province of Quebec', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('western_canada', 'Western Canada', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('united_states_coverage', 'United States Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('asia_pacific_coverage', 'Asia-Pacific Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Deliverables
 INSERT INTO `{!!prefix!!}srvc_deliverables`
@@ -150,30 +150,30 @@ INSERT INTO `{!!prefix!!}srvc_equipment` (`sku`, `name`, `manufacturer`, `specs`
 -- Service Types
 INSERT INTO `{!!prefix!!}srvc_service_types`
 (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
-('Installation Services','installation-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Maintenance & Support','maintenance-support', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Consulting Services','consulting-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Training Services','training-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Configuration Services','configuration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Repair Services','repair-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Upgrade Services','upgrade-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Design & Planning','design-planning', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Monitoring Services','monitoring-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Emergency Services','emergency-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Managed Services','managed-services', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Cloud Migration Services','cloud-migration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Data Backup & Recovery','data-backup-recovery', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Security Audits','security-audits', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
-('Compliance Services','compliance-services', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Network Assessments','network-assessments', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Performance Optimization','performance-optimization', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Integration Services','integration-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Custom Development','custom-development', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
-('Project Management','project-management', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('Proactive Health Checks','proactive-health-checks', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('License Management','license-management', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
-('Vendor Coordination','vendor-coordination', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('IT Roadmap & Strategy','it-roadmap-strategy', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+('Installation Services','installation_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Maintenance & Support','maintenance_support', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Consulting Services','consulting_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Training Services','training_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Configuration Services','configuration_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Repair Services','repair_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Upgrade Services','upgrade_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Design & Planning','design_planning', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Monitoring Services','monitoring_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Emergency Services','emergency_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Managed Services','managed_services', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Cloud Migration Services','cloud_migration_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Data Backup & Recovery','data_backup_recovery', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Security Audits','security_audits', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Compliance Services','compliance_services', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Network Assessments','network_assessments', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Performance Optimization','performance_optimization', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Integration Services','integration_services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Custom Development','custom_development', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Project Management','project_management', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Proactive Health Checks','proactive_health_checks', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('License Management','license_management', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Vendor Coordination','vendor_coordination', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('IT Roadmap & Strategy','it_roadmap_strategy', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Service Categories
 INSERT INTO `{!!prefix!!}srvc_categories`
@@ -468,7 +468,7 @@ INSERT INTO `{!!prefix!!}srvc_service_addons` (`service_id`, `addon_service_id`,
 (13, 17, 1, 1.000, 1.000, NULL, 1.0000, '2025-08-28 23:57:07', NOW(), 1, 2);
 
 -- Service Attribute Values (Updated for single value field)
-INSERT INTO `{!!prefix!!}srvc_service_attribute_values` (`service_id`, `attribute_definition_id`, `value`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_attribute_values` (`service_id`, `attribute_definition_id`, `value`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1, 1, 'i:25;', '2025-08-28 23:57:07', NOW(), 1, 2),
 (1, 2, 'i:10;', '2025-08-28 23:57:07', NOW(), 1, 2),
 (1, 3, 'i:5;', '2025-08-28 23:57:07', NOW(), 1, 2),
@@ -800,7 +800,7 @@ DELETE FROM `{!!prefix!!}srvc_service_equipment_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 DELETE FROM `{!!prefix!!}srvc_service_coverage`;
-DELETE FROM `{!!prefix!!}srvc_service_attribute_values`;
+DELETE FROM `{!!prefix!!}srvc_attribute_values`;
 DELETE FROM `{!!prefix!!}srvc_service_addons`;
 DELETE FROM `{!!prefix!!}srvc_service_prices`;
 DELETE FROM `{!!prefix!!}srvc_services`;

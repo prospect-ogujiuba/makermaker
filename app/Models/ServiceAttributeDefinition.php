@@ -38,7 +38,7 @@ class ServiceAttributeDefinition extends Model
     /** Services using this attribute definition */
     public function services()
     {
-        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_attribute_values', 'attribute_definition_id', 'service_id');
+        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_attribute_values', 'attribute_definition_id', 'service_id');
     }
 
     /** ServiceAttributeDefinition belongs to a ServiceType */

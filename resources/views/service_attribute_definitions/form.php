@@ -25,7 +25,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('label')
                         ->setLabel('Attribute Name')
                         ->setHelp('Display name for this attribute')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Number of Phone Lines')
                         ->markLabelRequired()
                 )
@@ -43,7 +43,6 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Unique identifier code for system reference (uppercase)')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., PHONE_LINES')
-                        ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('unit')
@@ -51,7 +50,6 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Unit of measurement for this attribute (e.g., "lines", "GB", "users")')
                         ->setAttribute('maxlength', '32')
                         ->setAttribute('placeholder', 'e.g., lines')
-                        ->markLabelRequired()
                 ),
 
             $form->row()
@@ -65,6 +63,11 @@ $tabs->tab('Overview', 'admin-settings', [
                             'Bool' => 'bool',
                             'Text' => 'text',
                             'Enum' => 'enum',
+                            'Date' => 'date',
+                            'DateTime' => 'datetime',
+                            'Json' => 'json',
+                            'Url' => 'url',
+                            'Email' => 'email',
                         ])
                         ->markLabelRequired()
                 )
@@ -168,8 +171,6 @@ if (isset($current_id)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
-
-
     if ($services && count($services) > 0) {
         foreach ($services as $service) {
             $row = $form->row();
@@ -210,10 +211,52 @@ if (isset($current_id)) {
             ->setAttribute('name', false);
     }
 
-    $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
-        'Related Services',
-        'Services using this attribute definition',
-        $service_fields
+    if ($attribute_values && count($attribute_values) > 0) {
+        foreach ($attribute_values as $attribute_value) {
+            $row = $form->row();
+
+            $row->column(
+                $form->text("Service Name")
+                    ->setAttribute('value', $attribute_value->service->name ?? 'B2CNC-' . $attribute_value->id)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $row->column(
+                $form->text("Attribute Definition")
+                    ->setAttribute('value', $attribute_value->attributedefinition->label ?? "Attribute Value #{$attribute_value->id}")
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $row->column(
+                $form->text("Attribute Value")
+                    ->setAttribute('value', $attribute_value->value)
+                    ->setAttribute('readonly', true)
+                    ->setAttribute('name', false)
+
+            );
+
+            $attribute_value_fields[] = $row;
+        }
+    } else {
+        $attribute_value_fields[] = $form->text('No Attribute_values')
+            ->setAttribute('value', 'No attribute_values are currently associated with this deliverable');
+    }
+
+    
+        $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
+            'Related Services',
+            'Services using this attribute definition',
+            $service_fields
+        ));
+        
+    $relationshipNestedTabs->tab('Attribute Value', 'admin-post', $form->fieldset(
+        'Related Attribute Value',
+        'Attribute Value using this attribute definition',
+        $attribute_value_fields
     ));
 
 
