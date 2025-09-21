@@ -20,6 +20,10 @@ $table->setColumns([
         'label' => 'Short Description',
         'sort' => 'true'
     ],
+    'slug' => [
+        'label' => 'Slug',
+        'sort' => 'true'
+    ],
     'services' => [
         'label' => 'Services',
         'callback' => function ($value, $item) {

@@ -111,7 +111,7 @@ class ServiceAttributeDefinitionController extends Controller
      */
     public function show(ServiceAttributeDefinition $service_attribute_definition)
     {
-        return $service_attribute_definition->with(['services', 'serviceType', 'createdBy', 'updatedBy'])->get();
+        return $service_attribute_definition->with(['services', 'serviceType', 'attributeValues', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -138,14 +138,14 @@ class ServiceAttributeDefinitionController extends Controller
     public function destroy(ServiceAttributeDefinition $service_attribute_definition, Response $response)
     {
         if (!$service_attribute_definition->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceAttributeDefinition not deleted');
+            return $response->unauthorized('Unauthorized: Service Attribute Definition not deleted');
         }
 
         $service_count = $service_attribute_definition->serviceType()->count();
 
         if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$service_count} service Attribute Definition(s) still use this.")
+                ->error("Cannot delete: {$service_count} Service Type(s) still use this.")
                 ->setStatus(409);
         }
 
@@ -169,7 +169,7 @@ class ServiceAttributeDefinitionController extends Controller
     {
         try {
             $serviceAttributeDefinition = ServiceAttributeDefinition::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+                ->with(['services', 'serviceType', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($serviceAttributeDefinition)) {
@@ -184,10 +184,10 @@ class ServiceAttributeDefinitionController extends Controller
                 ->setMessage('Service Attribute Definition retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceAttributeDefinition indexRest error: ' . $e->getMessage());
+            error_log('Service Attribute Definition indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service Attribute Definition: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Attribute Definitions: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }

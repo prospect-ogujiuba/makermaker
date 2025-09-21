@@ -41,10 +41,10 @@ class ServiceBundleFields extends Fields
         
         $rules = [];
 
-        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_bundles@id:{$id}|required";
-        $rules['slug'] = "unique:slug:{GLOBAL_WPDB_PREFIX}srvc_bundles@id:{$id}|required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_bundles@id:{$id}|required|max:64";
+        $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_bundles@id:{$id}|?required|max:64";
         $rules['short_desc'] = "required";
-        $rules['is_active'] = "?required";
+        $rules['is_active'] = "?numeric";
 
 
 

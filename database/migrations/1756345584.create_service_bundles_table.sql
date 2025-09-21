@@ -2,8 +2,8 @@
 -- >>> Up >>>
 CREATE TABLE `{!!prefix!!}srvc_bundles` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
-  `slug` varchar(128) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `slug` varchar(64) NOT NULL,
   `short_desc` varchar(512) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),

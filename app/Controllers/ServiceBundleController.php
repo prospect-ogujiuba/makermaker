@@ -42,8 +42,10 @@ class ServiceBundleController extends Controller
     public function create(ServiceBundleFields $fields, ServiceBundle $service_bundle, Response $response, AuthUser $user)
     {
         if (!$service_bundle->can('create')) {
-            $response->unauthorized('Unauthorized: Service bundle not created')->abort();
+            $response->unauthorized('Unauthorized: Service Bundle not created')->abort();
         }
+
+        autoGenerateCode($fields, 'slug', 'name', '-');
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
@@ -51,7 +53,7 @@ class ServiceBundleController extends Controller
         $service_bundle->save($fields);
 
         return tr_redirect()->toPage('servicebundle', 'index')
-            ->withFlash('Service bundle created');
+            ->withFlash('Service Bundle created');
     }
 
     /**
@@ -84,15 +86,17 @@ class ServiceBundleController extends Controller
     public function update(ServiceBundle $service_bundle, ServiceBundleFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_bundle->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceBundle not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Bundle not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        autoGenerateCode($fields, 'slug', 'name', '-');
 
+        $fields['updated_by'] = $user->ID;
+        
         $service_bundle->save($fields);
 
         return tr_redirect()->toPage('servicebundle', 'edit', $service_bundle->getID())
-            ->withFlash('Service bundle updated');
+            ->withFlash('Service Bundle updated');
     }
 
     /**
@@ -104,7 +108,7 @@ class ServiceBundleController extends Controller
      */
     public function show(ServiceBundle $service_bundle)
     {
-        return $service_bundle->with(['services', 'serviceType', 'createdBy', 'updatedBy'])->get();
+        return $service_bundle->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -131,14 +135,14 @@ class ServiceBundleController extends Controller
     public function destroy(ServiceBundle $service_bundle, Response $response)
     {
         if (!$service_bundle->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceBundle not deleted');
+            return $response->unauthorized('Unauthorized: Service Bundle not deleted');
         }
 
-        $service_count = $service_bundle->services()->count();
+        $service_count = $service_bundle->services()->count('service_id');
 
         if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$service_count} service bundle(s) still use this.")
+                ->error("Cannot delete: {$service_count} Service Bundle(s) still use this.")
                 ->setStatus(409);
         }
 
@@ -150,7 +154,7 @@ class ServiceBundleController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service bundle deleted.')->setData('service_pricing_model', $service_bundle);
+        return $response->success('Service Bundle deleted.')->setData('service_pricing_model', $service_bundle);
     }
 
     /**
@@ -168,19 +172,19 @@ class ServiceBundleController extends Controller
             if (empty($serviceBundle)) {
                 return $response
                     ->setData('service_bundle', [])
-                    ->setMessage('No service bundles found', 'info')
+                    ->setMessage('No Service Bundles found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_bundle', $serviceBundle)
-                ->setMessage('Service bundle retrieved successfully', 'success')
+                ->setMessage('Service Bundles retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceBundle indexRest error: ' . $e->getMessage());
+            error_log('Service Bundle indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service bundle: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Bundles: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }
