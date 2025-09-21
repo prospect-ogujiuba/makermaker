@@ -206,7 +206,7 @@ if (isset($current_id)) {
         }
     } else {
         $service_fields[] = $form->text('No Services')
-            ->setAttribute('value', 'No services are currently associated with this attribute definition')
+            ->setAttribute('value', 'No Services are currently associated with this attribute definition')
             ->setAttribute('readonly', true)
             ->setAttribute('name', false);
     }
@@ -242,17 +242,19 @@ if (isset($current_id)) {
             $attribute_value_fields[] = $row;
         }
     } else {
-        $attribute_value_fields[] = $form->text('No Attribute_values')
-            ->setAttribute('value', 'No attribute_values are currently associated with this deliverable');
+        $attribute_value_fields[] = $form->text('No Attribute Values')
+            ->setAttribute('value', 'No Attribute Values are currently associated with this deliverable')
+            ->setAttribute('readonly', true)
+            ->setAttribute('name', false);
     }
 
-    
-        $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
-            'Related Services',
-            'Services using this attribute definition',
-            $service_fields
-        ));
-        
+
+    $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
+        'Related Services',
+        'Services using this attribute definition',
+        $service_fields
+    ));
+
     $relationshipNestedTabs->tab('Attribute Value', 'admin-post', $form->fieldset(
         'Related Attribute Value',
         'Attribute Value using this attribute definition',
