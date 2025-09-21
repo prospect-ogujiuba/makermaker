@@ -180,7 +180,7 @@ if (isset($current_id)) {
             $attributeDefinition_fields[] = $row;
         }
     } else {
-        $attributeDefinition_fields[] = $form->text('No attributeDefinitions')
+        $attributeDefinition_fields[] = $form->text('No Attribute Definitions')
             ->setAttribute('value', 'No attribute definitions are currently associated with this deliverable')
             ->setAttribute('readonly', true);
     }

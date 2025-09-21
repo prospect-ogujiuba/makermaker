@@ -1,6 +1,6 @@
 -- Description: Service Attribute Values
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_service_attribute_values` (
+CREATE TABLE `{!!prefix!!}srvc_attribute_values` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `attribute_definition_id` bigint(20) NOT NULL,
@@ -24,4 +24,4 @@ CREATE TABLE `{!!prefix!!}srvc_service_attribute_values` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Attribute values for services based on their type definitions';
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_service_attribute_values`;
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_attribute_values`;

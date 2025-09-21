@@ -468,8 +468,8 @@ BEGIN IF NEW.service_id = NEW.addon_service_id THEN SIGNAL SQLSTATE '45000' SET 
 
 DELIMITER ;
 
-DROP TABLE IF EXISTS `wp_srvc_service_attribute_values`;
-CREATE TABLE `wp_srvc_service_attribute_values` (
+DROP TABLE IF EXISTS `wp_srvc_attribute_values`;
+CREATE TABLE `wp_srvc_attribute_values` (
   `service_id` bigint(20) NOT NULL,
   `attribute_definition_id` bigint(20) NOT NULL,
   `int_val` bigint(20) DEFAULT NULL,
@@ -487,7 +487,7 @@ CREATE TABLE `wp_srvc_service_attribute_values` (
   CONSTRAINT `fk_service_attribute_value__service` FOREIGN KEY (`service_id`) REFERENCES `wp_srvc_services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci COMMENT='Attribute values for services based on their type definitions';
 
-INSERT INTO `wp_srvc_service_attribute_values` (`service_id`, `attribute_definition_id`, `int_val`, `decimal_val`, `bool_val`, `text_val`, `enum_val`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `wp_srvc_attribute_values` (`service_id`, `attribute_definition_id`, `int_val`, `decimal_val`, `bool_val`, `text_val`, `enum_val`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (1,	1,	25,	NULL,	NULL,	NULL,	NULL,	'2025-08-25 23:57:07',	'2025-09-02 00:12:26',	NULL,	NULL),
 (1,	2,	10,	NULL,	NULL,	NULL,	NULL,	'2025-08-25 23:57:07',	'2025-09-02 09:26:20',	NULL,	NULL),
 (1,	3,	5,	NULL,	NULL,	NULL,	NULL,	'2025-08-25 23:57:07',	'2025-09-02 22:34:24',	NULL,	NULL),

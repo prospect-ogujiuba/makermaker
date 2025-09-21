@@ -6,7 +6,7 @@ use TypeRocket\Models\Model;
 
 class ServiceAttributeValue extends Model
 {
-    protected $resource = 'srvc_service_attribute_values';
+    protected $resource = 'srvc_attribute_values';
 
     protected $fillable = [
         'service_id',
