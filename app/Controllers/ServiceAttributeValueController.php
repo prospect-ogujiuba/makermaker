@@ -182,7 +182,8 @@ class ServiceAttributeValueController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service Attribute Value(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_attribute_value', $service_attribute_value);
         }
 
         $deleted = $service_attribute_value->delete();
@@ -193,7 +194,7 @@ class ServiceAttributeValueController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Attribute Value deleted.')->setData('service_pricing_model', $service_attribute_value);
+        return $response->success('Service Attribute Value deleted.')->setData('service_attribute_value', $service_attribute_value);
     }
 
     /**

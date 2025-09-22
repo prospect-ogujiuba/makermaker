@@ -138,7 +138,8 @@ class ServiceCoverageController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service Coverage(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_coverage', $service_coverage);
         }
 
         $deleted = $service_coverage->delete();
@@ -149,7 +150,7 @@ class ServiceCoverageController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Coverage deleted.')->setData('service_pricing_model', $service_coverage);
+        return $response->success('Service Coverage deleted.')->setData('service_coverage', $service_coverage);
     }
 
     /**

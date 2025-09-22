@@ -67,7 +67,6 @@ class ServiceController extends Controller
     public function edit(Service $service, AuthUser $user)
     {
         $current_id = $service->getID();
-        // $services = $service->services;
         $createdBy = $service->createdBy;
         $updatedBy = $service->updatedBy;
 
@@ -145,7 +144,8 @@ class ServiceController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service', $service);
         }
 
         $deleted = $service->delete();
@@ -156,7 +156,7 @@ class ServiceController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service deleted.')->setData('service_pricing_model', $service);
+        return $response->success('Service deleted.')->setData('service', $service);
     }
 
     /**
@@ -168,25 +168,59 @@ class ServiceController extends Controller
     {
         try {
             $services = Service::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+                ->with(['createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($services)) {
                 return $response
-                    ->setData('service', [])
-                    ->setMessage('No services found', 'info')
+                    ->setData('services', [])
+                    ->setMessage('No Services found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service', $services)
-                ->setMessage('Service retrieved successfully', 'success')
+                ->setData('services', $services)
+                ->setMessage('Services retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service: ' . $e->getMessage())
+                ->error('Failed to retrieve Services: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param Service $service
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(Service $service, Response $response)
+    {
+        try {
+            $service = Service::new()
+                ->with(['createdBy', 'updatedBy'])
+                ->find($service->getID());
+
+            if (empty($service)) {
+                return $response
+                    ->setData('service', null)
+                    ->setMessage('Service not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service', $service)
+                ->setMessage('Service retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service', 'error')
                 ->setStatus(500);
         }
     }

@@ -146,7 +146,8 @@ class ServiceDeliveryMethodController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service(s) still use this delivery method.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_delivery_method', $service_delivery_method);
         }
 
         $deleted = $service_delivery_method->delete();

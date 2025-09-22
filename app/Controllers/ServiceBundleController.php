@@ -143,7 +143,8 @@ class ServiceBundleController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} Service Bundle(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_bundle', $service_bundle);
         }
 
         $deleted = $service_bundle->delete();
@@ -154,7 +155,7 @@ class ServiceBundleController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Bundle deleted.')->setData('service_pricing_model', $service_bundle);
+        return $response->success('Service Bundle deleted.')->setData('service_bundle', $service_bundle);
     }
 
     /**

@@ -140,7 +140,8 @@ class ServiceComplexityController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service(s) still use this Service Complexity.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_complexity', $service_complexity);
         }
 
         $deleted = $service_complexity->delete();

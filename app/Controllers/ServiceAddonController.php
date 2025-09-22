@@ -138,7 +138,8 @@ class ServiceAddonController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service Addon(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_addon', $service_addon);;
         }
 
         $deleted = $service_addon->delete();
@@ -149,7 +150,7 @@ class ServiceAddonController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Addon deleted.')->setData('service_pricing_model', $service_addon);
+        return $response->success('Service Addon deleted.')->setData('service_addon', $service_addon);
     }
 
     /**

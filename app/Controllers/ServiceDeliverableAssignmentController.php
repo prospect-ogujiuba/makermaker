@@ -39,35 +39,35 @@ class ServiceDeliverableAssignmentController extends Controller
      *
      * @return mixed
      */
-    public function create(ServiceDeliverableAssignmentFields $fields, ServiceDeliverableAssignment $service_deliverable_assingment, Response $response, AuthUser $user)
+    public function create(ServiceDeliverableAssignmentFields $fields, ServiceDeliverableAssignment $service_deliverable_assignment, Response $response, AuthUser $user)
     {
-        if (!$service_deliverable_assingment->can('create')) {
-            $response->unauthorized('Unauthorized: Service Coverage not created')->abort();
+        if (!$service_deliverable_assignment->can('create')) {
+            $response->unauthorized('Unauthorized: Service Deliverable Assignment not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
-        $service_deliverable_assingment->save($fields);
+        $service_deliverable_assignment->save($fields);
 
         return tr_redirect()->toPage('servicedeliverableassignment', 'index')
-            ->withFlash('Service Coverage created');
+            ->withFlash('Service Deliverable Assignment created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param ServiceDeliverableAssignment $service_deliverable_assingment
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
      *
      * @return mixed
      */
-    public function edit(ServiceDeliverableAssignment $service_deliverable_assingment, AuthUser $user)
+    public function edit(ServiceDeliverableAssignment $service_deliverable_assignment, AuthUser $user)
     {
-        $current_id = $service_deliverable_assingment->getID();
-        $createdBy = $service_deliverable_assingment->createdBy;
-        $updatedBy = $service_deliverable_assingment->updatedBy;
+        $current_id = $service_deliverable_assignment->getID();
+        $createdBy = $service_deliverable_assignment->createdBy;
+        $updatedBy = $service_deliverable_assignment->updatedBy;
 
-        $form = tr_form($service_deliverable_assingment)->useErrors()->useOld()->useConfirm();
+        $form = tr_form($service_deliverable_assignment)->useErrors()->useOld()->useConfirm();
         return View::new('service_deliverable_assignments.form', compact('form', 'current_id', 'createdBy', 'updatedBy', 'user'));
     }
 
@@ -76,44 +76,44 @@ class ServiceDeliverableAssignmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServiceDeliverableAssignment $service_deliverable_assingment
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
      *
      * @return mixed
      */
-    public function update(ServiceDeliverableAssignment $service_deliverable_assingment, ServiceDeliverableAssignmentFields $fields, Response $response, AuthUser $user)
+    public function update(ServiceDeliverableAssignment $service_deliverable_assignment, ServiceDeliverableAssignmentFields $fields, Response $response, AuthUser $user)
     {
-        if (!$service_deliverable_assingment->can('update')) {
+        if (!$service_deliverable_assignment->can('update')) {
             $response->unauthorized('Unauthorized: Service Deliverable Assignment not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
 
-        $service_deliverable_assingment->save($fields);
+        $service_deliverable_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliverableassignment', 'edit', $service_deliverable_assingment->getID())
-            ->withFlash('Service Coverage updated');
+        return tr_redirect()->toPage('servicedeliverableassignment', 'edit', $service_deliverable_assignment->getID())
+            ->withFlash('Service Deliverable Assignment updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param ServiceDeliverableAssignment $service_deliverable_assingment
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
      *
      * @return mixed
      */
-    public function show(ServiceDeliverableAssignment $service_deliverable_assingment)
+    public function show(ServiceDeliverableAssignment $service_deliverable_assignment)
     {
-        return $service_deliverable_assingment->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
+        return $service_deliverable_assignment->with(['service', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param ServiceDeliverableAssignment $service_deliverable_assingment
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
      *
      * @return mixed
      */
-    public function delete(ServiceDeliverableAssignment $service_deliverable_assingment)
+    public function delete(ServiceDeliverableAssignment $service_deliverable_assignment)
     {
         //
     }
@@ -123,25 +123,26 @@ class ServiceDeliverableAssignmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServiceDeliverableAssignment $service_deliverable_assingment
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
      *
      * @return mixed
      */
-    public function destroy(ServiceDeliverableAssignment $service_deliverable_assingment, Response $response)
+    public function destroy(ServiceDeliverableAssignment $service_deliverable_assignment, Response $response)
     {
-        if (!$service_deliverable_assingment->can('destroy')) {
+        if (!$service_deliverable_assignment->can('destroy')) {
             return $response->unauthorized('Unauthorized: Service Deliverable Assignment not deleted');
         }
 
-        $service_count = $service_deliverable_assingment->service()->count();
+        $service_count = $service_deliverable_assignment->service()->count();
 
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_deliverable_assignment', $service_deliverable_assignment);
         }
 
-        $deleted = $service_deliverable_assingment->delete();
+        $deleted = $service_deliverable_assignment->delete();
 
         if ($deleted === false) {
             return $response
@@ -149,7 +150,7 @@ class ServiceDeliverableAssignmentController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Coverage deleted.')->setData('service_pricing_model', $service_deliverable_assingment);
+        return $response->success('Service Deliverable Assignment deleted.')->setData('service_deliverable_assignment', $service_deliverable_assignment);
     }
 
     /**
@@ -160,26 +161,26 @@ class ServiceDeliverableAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDeliverableAssignment = ServiceDeliverableAssignment::new()
+            $service_deliverable_assignments = ServiceDeliverableAssignment::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceDeliverableAssignment)) {
+            if (empty($service_deliverable_assignments)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No Service Coverage Assignments found', 'info')
+                    ->setData('service_deliverable_assignments', [])
+                    ->setMessage('No Service Deliverable Assignments found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceDeliverableAssignment)
-                ->setMessage('Service Coverage retrieved successfully', 'success')
+                ->setData('service_deliverable_assignments', $service_deliverable_assignments)
+                ->setMessage('Service Deliverable Assignments retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceDeliverableAssignment indexRest error: ' . $e->getMessage());
+            error_log('Service Deliverable Assignment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Coverage: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Deliverable Assignments: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }

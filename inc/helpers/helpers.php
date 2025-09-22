@@ -81,7 +81,7 @@ function mm_create_custom_resource(
 
     // Register REST endpoint
     if ($registerRest) {
-        $slug = $restSlug ?: mm_kebab($resourceKey);
+        $slug = $restSlug ?: mm_kebab($resourceKey, '-');
         \TypeRocket\Register\Registry::addCustomResource($slug, ['controller' => $fqcn]);
     }
 

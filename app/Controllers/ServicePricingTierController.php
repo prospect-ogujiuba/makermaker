@@ -146,7 +146,8 @@ class ServicePricingTierController extends Controller
         if ($servicePricesCount > 0) {
             return $response
                 ->error("Cannot delete: {$servicePricesCount} service price(s) still use this pricing tier.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_pricing_tier', $service_pricing_tier);
         }
 
         $deleted = $service_pricing_tier->delete();

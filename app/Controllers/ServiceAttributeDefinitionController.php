@@ -146,7 +146,8 @@ class ServiceAttributeDefinitionController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} Service Type(s) still use this.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_attribute_definition', $service_attribute_definition);
         }
 
         $deleted = $service_attribute_definition->delete();
@@ -157,7 +158,7 @@ class ServiceAttributeDefinitionController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Attribute Definition deleted.')->setData('service_pricing_model', $service_attribute_definition);
+        return $response->success('Service Attribute Definition deleted.')->setData('service_attribute_definition', $service_attribute_definition);
     }
 
     /**
@@ -192,7 +193,7 @@ class ServiceAttributeDefinitionController extends Controller
         }
     }
 
-        /**
+    /**
      * The show function for API
      *
      * @param ServiceAttributeDefinition $service_attribute_definition

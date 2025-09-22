@@ -151,7 +151,8 @@ class ServiceDeliverableController extends Controller
         if ($service_count > 0) {
             return $response
                 ->error("Cannot delete: {$service_count} service(s) still use this Service Deliverable.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_deliverable', $service_deliverable);
         }
 
         $deleted = $service_deliverable->delete();

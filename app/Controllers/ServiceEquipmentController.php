@@ -143,7 +143,8 @@ class ServiceEquipmentController extends Controller
         if ($services > 0) {
             return $response
                 ->error("Cannot delete: {$services} service(s) still use this Service Equipment.")
-                ->setStatus(409);
+                ->setStatus(409)
+                ->setData('service_equipment', $service_equipment);
         }
 
         $deleted = $service_equipment->delete();

@@ -144,8 +144,9 @@ class ServicePricingModelController extends Controller
 
         if ($servicePricesCount > 0) {
             return $response
-                ->error("Cannot delete: {$servicePricesCount} service price(s) still use this pricing model.")
-                ->setStatus(409);
+                ->error("Cannot delete: {$servicePricesCount} Service Price(s) still use this pricing model.")
+                ->setStatus(409)
+                ->setData('service_pricing_model', $service_pricing_model);
         }
 
         $deleted = $service_pricing_model->delete();
@@ -174,19 +175,19 @@ class ServicePricingModelController extends Controller
             if (empty($service_pricing_models)) {
                 return $response
                     ->setData('service_pricing_models', [])
-                    ->setMessage('No service pricing models found', 'info')
+                    ->setMessage('No Service Pricing Models found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_pricing_models', $service_pricing_models)
-                ->setMessage('Service pricing models retrieved successfully', 'success')
+                ->setMessage('Service Pricing Models retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service Pricing Model indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service pricing models: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Pricing Models: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }
