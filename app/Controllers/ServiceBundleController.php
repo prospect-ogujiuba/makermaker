@@ -92,7 +92,7 @@ class ServiceBundleController extends Controller
         autoGenerateCode($fields, 'slug', 'name', '-');
 
         $fields['updated_by'] = $user->ID;
-        
+
         $service_bundle->save($fields);
 
         return tr_redirect()->toPage('servicebundle', 'edit', $service_bundle->getID())
@@ -165,19 +165,19 @@ class ServiceBundleController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceBundle = ServiceBundle::new()
+            $service_bundles = ServiceBundle::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceBundle)) {
+            if (empty($service_bundles)) {
                 return $response
-                    ->setData('service_bundle', [])
+                    ->setData('service_bundles', [])
                     ->setMessage('No Service Bundles found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_bundle', $serviceBundle)
+                ->setData('service_bundles', $service_bundles)
                 ->setMessage('Service Bundles retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
@@ -185,6 +185,40 @@ class ServiceBundleController extends Controller
 
             return $response
                 ->error('Failed to retrieve Service Bundles: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceBundle $service_bundle
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceBundle $service_bundle, Response $response)
+    {
+        try {
+            $service_bundle = ServiceBundle::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->find($service_bundle->getID());
+
+            if (empty($service_bundle)) {
+                return $response
+                    ->setData('service_bundle', null)
+                    ->setMessage('Service Bundle not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_bundle', $service_bundle)
+                ->setMessage('Service Bundle retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Bundle showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Bundle', 'error')
                 ->setStatus(500);
         }
     }
