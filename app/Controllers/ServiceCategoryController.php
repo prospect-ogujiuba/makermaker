@@ -44,7 +44,7 @@ class ServiceCategoryController extends Controller
         if (!$service_category->can('create')) {
             $response->unauthorized('Unauthorized: Service Category not created')->abort();
         }
-        
+
         autoGenerateCode($fields, 'slug', 'name', '-');
 
         $fields['created_by'] = $user->ID;
@@ -165,26 +165,60 @@ class ServiceCategoryController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceEquipServiceCategoryServiceCategorys = ServiceCategory::new()
+            $service_categories = ServiceCategory::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceEquipServiceCategoryServiceCategorys)) {
+            if (empty($service_categories)) {
                 return $response
-                    ->setData('service_category', [])
-                    ->setMessage('No service categories found', 'info')
+                    ->setData('service_categories', [])
+                    ->setMessage('No Service Categories found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_category', $serviceEquipServiceCategoryServiceCategorys)
-                ->setMessage('Service category retrieved successfully', 'success')
+                ->setData('service_categories', $service_categories)
+                ->setMessage('Service Categpries retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceCategory indexRest error: ' . $e->getMessage());
+            error_log('Service Category indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service category: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Categories: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceCategory $service_category
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceCategory $service_category, Response $response)
+    {
+        try {
+            $service_category = ServiceCategory::new()
+                ->with(['services', 'createdBy', 'updatedBy'])
+                ->find($service_category->getID());
+
+            if (empty($service_category)) {
+                return $response
+                    ->setData('service_category', null)
+                    ->setMessage('Service Category not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_category', $service_category)
+                ->setMessage('Service Category retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Category showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Category', 'error')
                 ->setStatus(500);
         }
     }

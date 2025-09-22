@@ -168,19 +168,19 @@ class ServiceAttributeDefinitionController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceAttributeDefinition = ServiceAttributeDefinition::new()
+            $service_attribute_definitions = ServiceAttributeDefinition::new()
                 ->with(['services', 'serviceType', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceAttributeDefinition)) {
+            if (empty($service_attribute_definitions)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
+                    ->setData('service_attribute_definitions', [])
                     ->setMessage('No service Attribute Definitions found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceAttributeDefinition)
+                ->setData('service_attribute_definitions', $service_attribute_definitions)
                 ->setMessage('Service Attribute Definition retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
@@ -188,6 +188,40 @@ class ServiceAttributeDefinitionController extends Controller
 
             return $response
                 ->error('Failed to retrieve Service Attribute Definitions: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+        /**
+     * The show function for API
+     *
+     * @param ServiceAttributeDefinition $service_attribute_definition
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceAttributeDefinition $service_attribute_definition, Response $response)
+    {
+        try {
+            $service_attribute_definition = ServiceAttributeDefinition::new()
+                ->with(['services', 'serviceType', 'createdBy', 'updatedBy'])
+                ->find($service_attribute_definition->getID());
+
+            if (empty($service_attribute_definition)) {
+                return $response
+                    ->setData('service_attribute_definition', null)
+                    ->setMessage('Service Attribute Definition not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_attribute_definition', $service_attribute_definition)
+                ->setMessage('Service Attribute Definition retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Attribute Definition showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Attribute Definition', 'error')
                 ->setStatus(500);
         }
     }
