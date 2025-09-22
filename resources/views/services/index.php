@@ -51,11 +51,6 @@ $table->setColumns([
         }
     ],
 
-    'default_unit' => [
-        'label' => 'Unit',
-        'sort' => true
-    ],
-
     'created_at' => [
         'label' => 'Created At',
         'sort' => 'true'

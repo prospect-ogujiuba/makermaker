@@ -27,7 +27,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('name')
                         ->setLabel('Service Name')
                         ->setHelp('Name for this service (e.g., "Advanced Network Setup")')
-                        ->setAttribute('maxlength', '255')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., VoIP Phone System Installation')
                         ->markLabelRequired()
                 )
@@ -43,28 +43,22 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('slug')
                         ->setLabel('Service Slug')
                         ->setHelp('URL-friendly identifier (auto-generated from name if empty)')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., voip-phone-system-installation')
-                        ->markLabelRequired()
                 )
-                ->withColumn(
-                    $form->text('default_unit')
-                        ->setLabel('Default Pricing Unit')
-                        ->setHelp('Default unit for pricing this service')
-                ),
-            $form->row()
                 ->withColumn(
                     $form->textarea('short_desc')
                         ->setLabel('Short Description')
                         ->setHelp('Brief summary for listings and previews (max 512 characters)')
                         ->setAttribute('maxlength', '512')
-                        ->setAttribute('rows', '3')
                         ->setAttribute('placeholder', 'Brief description of the service for listings...')
+                        ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->textarea('long_desc')
                         ->setLabel('Long Description')
+                        ->setAttribute('maxlength', '512')
                         ->setHelp('Detailed service description, requirements, and deliverables')
                         ->setAttribute('placeholder', 'Detailed description of the service, what\'s included, requirements...')
                 )
@@ -80,16 +74,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('category_id')
                         ->setLabel('Service Category')
                         ->setHelp('Primary category for this service')
-                        ->setOptions(['Select Category' => null])
-                        ->setModelOptions(ServiceCategory::class, 'name', 'id')
+                        ->setModelOptions(ServiceCategory::class, 'name', 'id', 'Select Category')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('service_type_id')
                         ->setLabel('Service Type')
                         ->setHelp('Type classification for this service')
-                        ->setOptions(['Select Service Type' => null])
-                        ->setModelOptions(ServiceType::class, 'name', 'id')
+                        ->setModelOptions(ServiceType::class, 'name', 'id', 'Select Service Type')
                         ->markLabelRequired()
                 ),
             $form->row()
@@ -97,31 +89,13 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('complexity_id')
                         ->setLabel('Complexity Level')
                         ->setHelp('Complexity classification for pricing and resource allocation')
-                        ->setOptions(['Select Complexity' => null])
-                        ->setModelOptions(ServiceComplexity::class, 'name', 'id')
+                        ->setModelOptions(ServiceComplexity::class, 'name', 'id', 'Service Complexity')
                         ->markLabelRequired()
                 )
-                ->withColumn(),
-        ]
-    ),
-
-    $form->fieldset(
-        'Service Status',
-        'Availability and add-on configuration',
-        [
-            $form->row()
-                ->withColumn(
-                    $form->toggle('is_active')
-                        ->setLabel('Active Service')
-                        ->setHelp('Whether this service is currently available for purchase')
-                        ->setText('Service is active and available')
-                )
-                ->withColumn(
-                    $form->toggle('is_addon')
-                        ->setLabel('Add-on Service')
-                        ->setHelp('Mark as an add-on service (requires a primary service)')
-                        ->setText('This is an add-on service')
-                )
+                ->withColumn($form->row($form->toggle('is_active')
+                    ->setLabel('Active Service')
+                    ->setHelp('Whether this service is currently available for purchase')
+                    ->setText('Service is active and available'))),
         ]
     ),
 
@@ -129,17 +103,22 @@ $tabs->tab('Overview', 'admin-settings', [
         'Service Metadata',
         'Additional configuration and properties',
         [
-            $form->row()
-                ->withColumn(
-                    $form->repeater('metadata')
-                        ->setLabel('Service Metadata (JSON)')
-                        ->setHelp('Additional service configuration in JSON format')
-                        ->setAttribute('rows', '8')
-                        ->setAttribute('placeholder', '{"pricing_rules": {}, "requirements": [], "deliverables": []}')
-                        ->setAttribute('data-format', 'json')
+            $form->repeater('metadata')
+                ->setLabel('Metadata')
+                ->setHelp('Additional service configuration in JSON format')
+                ->setFields(
+                    $form->row(
+                        $form->text('key')
+                            ->setLabel('Key'),
+                        $form->text('value')
+                            ->setLabel('Value'),
+                    )
                 )
+                ->setTitle('Attribute Options')
+                ->confirmRemove()
         ]
     )
+
 
 ])->setDescription('Service Details');
 

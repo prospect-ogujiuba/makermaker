@@ -45,6 +45,9 @@ class ServiceController extends Controller
             $response->unauthorized('Unauthorized: Service not created')->abort();
         }
 
+        autoGenerateCode($fields, 'sku', 'name', '-', NULL, NULL, true);
+        autoGenerateCode($fields, 'slug', 'name', '-');
+
         $fields['created_by'] = $user->ID;
         $fields['updated_by'] = $user->ID;
 
@@ -86,6 +89,9 @@ class ServiceController extends Controller
         if (!$service->can('update')) {
             $response->unauthorized('Unauthorized: Service not updated')->abort();
         }
+
+        autoGenerateCode($fields, 'sku', 'name', '-', NULL, 'NULL', true);
+        autoGenerateCode($fields, 'slug', 'name', '-');
 
         $fields['updated_by'] = $user->ID;
 
@@ -161,11 +167,11 @@ class ServiceController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service = Service::new()
+            $services = Service::new()
                 ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($service)) {
+            if (empty($services)) {
                 return $response
                     ->setData('service', [])
                     ->setMessage('No services found', 'info')
@@ -173,7 +179,7 @@ class ServiceController extends Controller
             }
 
             return $response
-                ->setData('service', $service)
+                ->setData('service', $services)
                 ->setMessage('Service retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {

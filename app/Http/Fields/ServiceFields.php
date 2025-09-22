@@ -42,22 +42,16 @@ class ServiceFields extends Fields
         $rules = [];
 
         // Core Required Fields
-        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}required";
-        $rules['slug'] = "unique:slug:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}|required";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_services@id:{$id}required|max:64";
+        $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_services@id:{$id}|?required|max:64";
+        $rules['sku'] = "unique:sku:{$wpdb_prefix}srvc_services@id:{$id}|?required|max:64";
         $rules['category_id'] = 'required|numeric';
         $rules['service_type_id'] = 'required|numeric';
         $rules['complexity_id'] = 'required|numeric';
-
-        // Optional Fields with Constraints
-        $rules['sku'] = "unique:sku:{GLOBAL_WPDB_PREFIX}srvc_services@id:{$id}";
         $rules['short_desc'] = 'max:512';
         $rules['long_desc'] = '?required';
-        $rules['default_unit'] = 'max:32';
-        $rules['metadata'] = '?required'; // JSON validation could be added with custom validator
-
-        // Boolean Fields
+        $rules['metadata'] = '?required';
         $rules['is_active'] = '?numeric';
-        $rules['is_addon'] = '?numeric';
 
         return $rules;
     }
