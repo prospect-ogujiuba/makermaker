@@ -29,16 +29,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service this delivery method applies to')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id','Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('delivery_method_id')
                         ->setLabel('Delivery Method')
                         ->setHelp('Select how this service will be delivered (e.g., On-site, Remote)')
-                        ->setOptions(['Select Delivery Method' => null])
-                        ->setModelOptions(ServiceDeliveryMethod::class, 'name', 'id')
+                        ->setModelOptions(ServiceDeliveryMethod::class, 'name', 'id', 'Select Delivery Method')
                         ->markLabelRequired()
                 ),
             $form->row()

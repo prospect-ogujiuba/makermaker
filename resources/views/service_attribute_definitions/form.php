@@ -32,8 +32,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn($form->select('service_type_id')
                     ->setLabel('Service Type')
                     ->setHelp('Service type this attribute applies to')
-                    ->setOptions(['Select Service Type' => NULL])
-                    ->setModelOptions(ServiceType::class, 'name', 'id')
+                    ->setModelOptions(ServiceType::class, 'name', 'id', 'Select Service Type')
                     ->markLabelRequired()),
 
             $form->row()

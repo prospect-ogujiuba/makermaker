@@ -25,16 +25,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Primary Service')
                         ->setHelp('Select the main service that this addon can be added to')
-                        ->setOptions(['Select Primary Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Primary Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('addon_service_id')
                         ->setLabel('Addon Service')
                         ->setHelp('Select the service that will be offered as an addon option')
-                        ->setOptions(['Select Addon Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Addon Service')
                         ->markLabelRequired()
                 )
         ]

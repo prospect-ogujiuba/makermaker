@@ -27,16 +27,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service this pricing applies to')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('pricing_tier_id')
                         ->setLabel('Pricing Tier')
                         ->setHelp('Select the pricing tier (e.g., Basic, Standard, Premium)')
-                        ->setOptions(['Select Pricing Tier' => null])
-                        ->setModelOptions(ServicePricingTier::class, 'name', 'id')
+                        ->setModelOptions(ServicePricingTier::class, 'name', 'id', 'Select Pricing Tier')
                         ->markLabelRequired()
                 ),
             $form->row()
@@ -44,8 +42,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('pricing_model_id')
                         ->setLabel('Pricing Model')
                         ->setHelp('Select how this service is priced (e.g., Fixed, Hourly, Monthly)')
-                        ->setOptions(['Select Pricing Model' => null])
-                        ->setModelOptions(ServicePricingModel::class, 'name', 'id')
+                        ->setModelOptions(ServicePricingModel::class, 'name', 'id', 'Select Pricing Model')
                         ->markLabelRequired()
                 )
                 ->withColumn(

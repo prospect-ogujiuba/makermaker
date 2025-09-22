@@ -29,8 +29,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Primary Service')
                         ->setHelp('Select the main service in this relationship')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
@@ -50,8 +49,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('related_service_id')
                         ->setLabel('Related Service')
                         ->setHelp('Select the service that has this relationship with the primary service')
-                        ->setOptions(['Select Related Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Related Service')
                         ->markLabelRequired()
                 ),
             $form->row()

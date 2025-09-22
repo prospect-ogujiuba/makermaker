@@ -27,16 +27,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service that will be available in this coverage area')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id','Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('coverage_area_id')
                         ->setLabel('Coverage Area')
                         ->setHelp('Select the geographic area where this service is available')
-                        ->setOptions(['Select Coverage Area' => null])
-                        ->setModelOptions(ServiceCoverageArea::class, 'name', 'id')
+                        ->setModelOptions(ServiceCoverageArea::class, 'name', 'id', 'Select Coverage Area')
                         ->markLabelRequired()
                 )
         ]

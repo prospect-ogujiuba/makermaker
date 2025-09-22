@@ -29,16 +29,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service that requires this equipment')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('equipment_id')
                         ->setLabel('Equipment')
                         ->setHelp('Select the equipment needed for this service')
-                        ->setOptions(['Select Equipment' => null])
-                        ->setModelOptions(ServiceEquipment::class, 'name', 'id')
+                        ->setModelOptions(ServiceEquipment::class, 'name', 'id', 'Select Equipment')
                         ->markLabelRequired()
                 ),
             $form->row()

@@ -29,16 +29,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('bundle_id')
                         ->setLabel('Bundle')
                         ->setHelp('Select the service bundle this item belongs to')
-                        ->setOptions(['Select Bundle' => null])
-                        ->setModelOptions(ServiceBundle::class, 'name', 'id')
+                        ->setModelOptions(ServiceBundle::class, 'name', 'id', 'Select Bundle')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service to include in this bundle')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 ),
             $form->row()

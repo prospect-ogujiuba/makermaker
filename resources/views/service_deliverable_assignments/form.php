@@ -29,16 +29,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service that will include this deliverable')
-                        ->setOptions(['Select Service' => null])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('deliverable_id')
                         ->setLabel('Deliverable')
                         ->setHelp('Select the deliverable that will be included with this service')
-                        ->setOptions(['Select Deliverable' => null])
-                        ->setModelOptions(ServiceDeliverable::class, 'name', 'id')
+                        ->setModelOptions(ServiceDeliverable::class, 'name', 'id', 'Select Deliverable')
                         ->markLabelRequired()
                 )
         ]

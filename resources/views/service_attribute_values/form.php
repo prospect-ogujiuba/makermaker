@@ -26,8 +26,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service this attribute value will be assigned to')
-                        ->setOptions(['Select Service' => NULL])
-                        ->setModelOptions(Service::class, 'name', 'id')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )->withColumn(),
             $form->row()->when('service_id', '!=', '')
