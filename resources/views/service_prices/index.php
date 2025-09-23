@@ -53,27 +53,6 @@ $table->setColumns([
             return $formatted;
         }
     ],
-    'effective_from' => [
-        'label' => 'Effective Period',
-        'sort' => true,
-        'callback' => function ($value, $item) {
-            $from = date('M j, Y', strtotime($value));
-            $to = $item->effective_to ? date('M j, Y', strtotime($item->effective_to)) : 'Ongoing';
-
-            $today = date('Y-m-d');
-            $status = '';
-
-            if ($item->effective_from > $today) {
-                $status = '<span style="color: #0073aa;">Future</span>';
-            } elseif ($item->effective_to && $item->effective_to < $today) {
-                $status = '<span style="color: #d63638;">Expired</span>';
-            } else {
-                $status = '<span style="color: #00a32a;">Active</span>';
-            }
-
-            return $from . ' - ' . $to . '<br>' . $status;
-        }
-    ],
     'currency' => [
         'label' => 'Currency',
         'sort' => true
@@ -96,4 +75,4 @@ $table->setColumns([
         'label' => 'ID',
         'sort' => true
     ]
-], 'service.name')->setOrder('effective_from', 'DESC')->render();
+], 'service.name')->setOrder('id', 'DESC')->render();

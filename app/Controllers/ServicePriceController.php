@@ -42,7 +42,7 @@ class ServicePriceController extends Controller
     public function create(ServicePriceFields $fields, ServicePrice $servicePrice, Response $response, AuthUser $user)
     {
         if (!$servicePrice->can('create')) {
-            $response->unauthorized('Unauthorized: ServicePrice not created')->abort();
+            $response->unauthorized('Unauthorized: Service Price not created')->abort();
         }
 
         $fields['created_by'] = $user->ID;
@@ -86,7 +86,7 @@ class ServicePriceController extends Controller
     public function update(ServicePrice $servicePrice, ServicePriceFields $fields, Response $response, AuthUser $user)
     {
         if (!$servicePrice->can('update')) {
-            $response->unauthorized('Unauthorized: ServicePrice not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Price not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -155,26 +155,60 @@ class ServicePriceController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $servicePrices = ServicePrice::new()
+            $service_prices = ServicePrice::new()
                 ->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($servicePrices)) {
+            if (empty($service_prices)) {
                 return $response
                     ->setData('service_prices', [])
-                    ->setMessage('No service prices found', 'info')
+                    ->setMessage('No Service Prices found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_prices', $servicePrices)
+                ->setData('service_prices', $service_prices)
                 ->setMessage('Service Prices retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServicePrice indexRest error: ' . $e->getMessage());
+            error_log('Service Price indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service prices: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Prices: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServicePrice $service_price
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServicePrice $service_price, Response $response)
+    {
+        try {
+            $service_price = ServicePrice::new()
+                ->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])
+                ->find($service_price->getID());
+
+            if (empty($service_price)) {
+                return $response
+                    ->setData('service_price', null)
+                    ->setMessage('Service Price not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_price', $service_price)
+                ->setMessage('Service Price retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Price showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Price', 'error')
                 ->setStatus(500);
         }
     }

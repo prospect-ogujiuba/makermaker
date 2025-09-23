@@ -8,6 +8,7 @@ use TypeRocket\Models\WPUser;
 class ServicePrice extends Model
 {
     protected $resource = 'srvc_service_prices';
+
     protected $fillable = [
         'service_id',
         'pricing_tier_id',
@@ -17,8 +18,6 @@ class ServicePrice extends Model
         'unit',
         'setup_fee',
         'notes',
-        'effective_from',
-        'effective_to',
         'created_by',
         'updated_by',
     ];
@@ -32,7 +31,6 @@ class ServicePrice extends Model
 
     protected $guard = [
         'id',
-        'version',
         'created_at',
         'updated_at',
         'deleted_at'

@@ -50,10 +50,11 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Currency')
                         ->setHelp('Currency for this pricing entry')
                         ->setOptions([
-                            'CAD' => 'CAD - Canadian Dollar',
-                            'USD' => 'USD - US Dollar',
-                            'EUR' => 'EUR - Euro',
-                            'GBP' => 'GBP - British Pound'
+                            'Select Currency' => NULL,
+                            'CAD - Canadian Dollar' => 'CAD',
+                            'USD - US Dollar' => 'USD',
+                            'EUR - Euro' => 'EUR',
+                            'GBP - British Pound' => 'GBP'
                         ])
                         ->setDefault('CAD')
                         ->markLabelRequired()
@@ -92,27 +93,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 )
                 ->withColumn()
         ]
-    ),
-
-    $form->fieldset(
-        'Effective Period',
-        'When this pricing is active',
-        [
-            $form->row()
-                ->withColumn(
-                    $form->date('effective_from')
-                        ->setLabel('Effective From')
-                        ->setHelp('Start date when this pricing becomes active')
-                        ->setDefault(date('Y-m-d'))
-                        ->markLabelRequired()
-                )
-                ->withColumn(
-                    $form->date('effective_to')
-                        ->setLabel('Effective To')
-                        ->setHelp('End date for this pricing (leave empty for no expiration)')
-                )
-        ]
-    ),
+                ),
 
     $form->fieldset(
         'Price Notes',
@@ -151,11 +132,6 @@ if (isset($current_id)) {
                             ->setAttribute('name', false)
                     )
                     ->withColumn(
-                        $form->text('version')
-                            ->setLabel('Version')
-                            ->setHelp('Optimistic locking version number')
-                            ->setAttribute('readonly', true)
-                            ->setAttribute('name', false)
                     ),
                 $form->row()
                     ->withColumn(

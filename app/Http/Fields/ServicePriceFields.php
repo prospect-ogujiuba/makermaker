@@ -41,22 +41,14 @@ class ServicePriceFields extends Fields
         
         $rules = [];
 
-        // Core Required Fields
         $rules['service_id'] = 'required|numeric';
         $rules['pricing_tier_id'] = 'required|numeric';
         $rules['pricing_model_id'] = 'required|numeric';
         $rules['currency'] = 'required';
-        $rules['effective_from'] = 'required';
-
-        // Amount validation - allow null for quote-based pricing
         $rules['amount'] = 'numeric|min:0';
-
-        // Unit validation
         $rules['unit'] = 'max:32';
-
-        // Setup fee validation
         $rules['setup_fee'] = '?required|numeric|min:0';
-        $rules['notes'] = 'max:512';
+        $rules['notes'] = '?required';
 
         return $rules;
     }
