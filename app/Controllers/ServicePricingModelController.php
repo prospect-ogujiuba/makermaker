@@ -221,7 +221,7 @@ class ServicePricingModelController extends Controller
         } catch (\Exception $e) {
             error_log('Service Pricing Model showRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving service pricing model', 'error')
+                ->setMessage('An error occurred while retrieving Service Pricing Model', 'error')
                 ->setStatus(500);
         }
     }
