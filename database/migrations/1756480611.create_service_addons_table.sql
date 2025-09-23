@@ -7,8 +7,6 @@ CREATE TABLE `{!!prefix!!}srvc_service_addons` (
   `required` tinyint(1) NOT NULL DEFAULT 0,
   `min_qty` decimal(12,3) NOT NULL DEFAULT 0.000,
   `max_qty` decimal(12,3) DEFAULT NULL,
-  `price_delta` decimal(12,2) DEFAULT NULL,
-  `multiplier` decimal(12,4) NOT NULL DEFAULT 1.0000,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

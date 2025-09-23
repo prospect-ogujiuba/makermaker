@@ -15,8 +15,6 @@ class ServiceAddon extends Model
         'required',
         'min_qty',
         'max_qty',
-        'price_delta',
-        'multiplier',
         'created_by',
         'updated_by',
     ];

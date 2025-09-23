@@ -46,8 +46,6 @@ class ServiceAddonFields extends Fields
         $rules['required'] = '?required|numeric';
         $rules['min_qty'] = 'required|numeric';
         $rules['max_qty'] = 'required|numeric';
-        $rules['price_delta'] = 'required|numeric';
-        $rules['multiplier'] = 'required|numeric';
 
         return $rules;
     }

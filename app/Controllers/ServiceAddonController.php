@@ -83,7 +83,7 @@ class ServiceAddonController extends Controller
     public function update(ServiceAddon $service_addon, ServiceAddonFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_addon->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceAddon not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Addon not updated')->abort();
         }
 
         $fields['updated_by'] = $user->ID;
@@ -130,14 +130,14 @@ class ServiceAddonController extends Controller
     public function destroy(ServiceAddon $service_addon, Response $response)
     {
         if (!$service_addon->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceAddon not deleted');
+            return $response->unauthorized('Unauthorized: Service Addon not deleted');
         }
 
         $service_count = $service_addon->service()->count();
 
         if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$service_count} service Addon(s) still use this.")
+                ->error("Cannot delete: {$service_count} Service(s) still use this.")
                 ->setStatus(409)
                 ->setData('service_addon', $service_addon);;
         }
@@ -161,26 +161,61 @@ class ServiceAddonController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceAddon = ServiceAddon::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $service_addons = ServiceAddon::new()
+                ->with(['services', 'addonService', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceAddon)) {
+            if (empty($service_addons)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Addons found', 'info')
+                    ->setData('service_addons', [])
+                    ->setMessage('No Service Addons found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceAddon)
+                ->setData('service_addons', $service_addons)
+                ->setMessage('Service Addons retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Addon indexRest error: ' . $e->getMessage());
+
+            return $response
+                ->error('Failed to retrieve Service Addons: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceAddon $service_addon
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceAddon $service_addon, Response $response)
+    {
+        try {
+            $service_addon = ServiceAddon::new()
+                ->with(['services', 'addonService', 'createdBy', 'updatedBy'])
+                ->find($service_addon->getID());
+
+            if (empty($service_addon)) {
+                return $response
+                    ->setData('service_addon', null)
+                    ->setMessage('Service Addon not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_addon', $service_addon)
                 ->setMessage('Service Addon retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceAddon indexRest error: ' . $e->getMessage());
-
+            error_log('Service Addon showRest error: ' . $e->getMessage());
             return $response
-                ->error('Failed to retrieve service Addon: ' . $e->getMessage())
+                ->setError('api', 'Failed to retrieve Service Addon')
+                ->setMessage('An error occurred while retrieving Service Addon', 'error')
                 ->setStatus(500);
         }
     }

@@ -37,16 +37,6 @@ $table->setColumns([
         'sort' => true
     ],
 
-    'price_delta' => [
-        'label' => 'Price Delta',
-        'sort' => true
-    ],
-
-    'multiplier' => [
-        'label' => 'Multiplier',
-        'sort' => true
-    ],
-
     'created_at' => [
         'label' => 'Created At',
         'sort' => 'true'

@@ -68,30 +68,6 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('min', '0')
                 )
         ]
-    ),
-
-    $form->fieldset(
-        'Pricing Adjustments',
-        'Price modifications for this addon relationship',
-        [
-            $form->row()
-                ->withColumn(
-                    $form->number('price_delta')
-                        ->setLabel('Price Delta')
-                        ->setHelp('Fixed amount to add/subtract from addon base price (use negative for discounts)')
-                        ->setAttribute('step', '0.01')
-                        ->setAttribute('placeholder', '0.00')
-                )
-                ->withColumn(
-                    $form->number('multiplier')
-                        ->setLabel('Price Multiplier')
-                        ->setHelp('Factor to multiply the addon base price by (1.0 = no change, 0.5 = 50% off)')
-                        ->setAttribute('step', '0.01')
-                        ->setAttribute('min', '0')
-                        ->setDefault('1.0')
-                        ->markLabelRequired()
-                )
-        ]
     )
 
 ])->setDescription('Service Addon Configuration');
