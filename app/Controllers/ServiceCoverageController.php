@@ -45,8 +45,8 @@ class ServiceCoverageController extends Controller
             $response->unauthorized('Unauthorized: Service Coverage not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_coverage->created_by = $user->ID;
+        $service_coverage->updated_by = $user->ID;
 
         $service_coverage->save($fields);
 

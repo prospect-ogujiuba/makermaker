@@ -79,8 +79,8 @@ class ServiceAttributeValueController extends Controller
             $response->unauthorized('Unauthorized: Service Attribute Value not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_attribute_value->created_by = $user->ID;
+        $service_attribute_value->updated_by = $user->ID;
 
         $service_attribute_value->save($fields);
 

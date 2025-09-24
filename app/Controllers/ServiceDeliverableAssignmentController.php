@@ -45,8 +45,8 @@ class ServiceDeliverableAssignmentController extends Controller
             $response->unauthorized('Unauthorized: Service Deliverable Assignment not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_deliverable_assignment->created_by = $user->ID;
+        $service_deliverable_assignment->updated_by = $user->ID;
 
         $service_deliverable_assignment->save($fields);
 

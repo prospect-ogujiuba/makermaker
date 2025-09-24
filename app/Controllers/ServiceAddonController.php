@@ -45,8 +45,8 @@ class ServiceAddonController extends Controller
             $response->unauthorized('Unauthorized: Service Addon not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_addon->created_by = $user->ID;
+        $service_addon->updated_by = $user->ID;
 
         $service_addon->save($fields);
 

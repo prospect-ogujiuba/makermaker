@@ -11,9 +11,7 @@ class ServiceCoverageArea extends Model
 
     protected $fillable = [
         'name',
-        'code',
-        'created_by',
-        'updated_by',
+        'code'
     ];
 
     protected $guard = [
@@ -21,6 +19,8 @@ class ServiceCoverageArea extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     public function serviceCoverages()

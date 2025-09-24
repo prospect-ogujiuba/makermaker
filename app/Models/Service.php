@@ -21,9 +21,7 @@ class Service extends Model
         'is_active',
         'is_addon',
         'default_unit',
-        'metadata',
-        'created_by',
-        'updated_by',
+        'metadata'
     ];
 
     protected $format = [
@@ -38,7 +36,9 @@ class Service extends Model
         'version',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** Service belongs to a ServiceType */

@@ -45,8 +45,8 @@ class ServiceBundleItemController extends Controller
             $response->unauthorized('Unauthorized: Service Bundle Item not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_bundle_item->created_by = $user->ID;
+        $service_bundle_item->updated_by = $user->ID;
 
         $service_bundle_item->save($fields);
 

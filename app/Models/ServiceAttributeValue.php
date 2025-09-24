@@ -11,16 +11,16 @@ class ServiceAttributeValue extends Model
     protected $fillable = [
         'service_id',
         'attribute_definition_id',
-        'value',
-        'created_by',
-        'updated_by',
+        'value'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceAttributeValue belongs to a Service */
@@ -93,7 +93,7 @@ class ServiceAttributeValue extends Model
 
         $convertedValue = $this->convertValueByType($rawValue, $definition->data_type);
         $this->value = $convertedValue; // This will trigger setValueAttribute()
-        
+
         return $this;
     }
 

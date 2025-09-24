@@ -45,8 +45,8 @@ class ServiceDeliveryMethodAssignmentController extends Controller
             $response->unauthorized('Unauthorized: Service Delivery Method Assignment not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_delivery_method_assignment->created_by = $user->ID;
+        $service_delivery_method_assignment->updated_by = $user->ID;
 
         $service_delivery_method_assignment->save($fields);
 
@@ -176,7 +176,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
         }
     }
 
-     /**
+    /**
      * The show function for API
      *
      * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment

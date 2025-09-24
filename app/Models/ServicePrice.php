@@ -17,9 +17,7 @@ class ServicePrice extends Model
         'amount',
         'unit',
         'setup_fee',
-        'notes',
-        'created_by',
-        'updated_by',
+        'notes'
     ];
 
     protected $format = [
@@ -33,7 +31,9 @@ class ServicePrice extends Model
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServicePrice belongs to a Service */

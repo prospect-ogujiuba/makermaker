@@ -11,16 +11,16 @@ class ServiceType extends Model
 
     protected $fillable = [
         'name',
-        'code',
-        'created_by',
-        'updated_by'
+        'code'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceType has many Services */

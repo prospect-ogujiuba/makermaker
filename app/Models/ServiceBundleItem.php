@@ -13,16 +13,16 @@ class ServiceBundleItem extends Model
         'bundle_id',
         'service_id',
         'quantity',
-        'discount_pct',
-        'created_by',
-        'updated_by',
+        'discount_pct'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceBundleItem belongs to a ServiceBundle */

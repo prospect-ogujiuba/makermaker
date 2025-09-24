@@ -13,9 +13,7 @@ class ServiceEquipment extends Model
         'sku',
         'name',
         'manufacturer',
-        'specs',
-        'created_by',
-        'updated_by',
+        'specs'
     ];
 
     protected $format = [
@@ -31,6 +29,8 @@ class ServiceEquipment extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by',
     ];
 
     public function services()

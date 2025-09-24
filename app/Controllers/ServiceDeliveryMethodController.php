@@ -48,8 +48,8 @@ class ServiceDeliveryMethodController extends Controller
         autoGenerateCode($fields, 'code', 'name');
         $fields['code'] = mm_kebab($fields['code']);
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_delivery_method->created_by = $user->ID;
+        $service_delivery_method->updated_by = $user->ID;
 
         $service_delivery_method->save($fields);
 

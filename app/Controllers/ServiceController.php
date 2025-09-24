@@ -48,8 +48,8 @@ class ServiceController extends Controller
         autoGenerateCode($fields, 'sku', 'name', '-', NULL, NULL, true);
         autoGenerateCode($fields, 'slug', 'name', '-');
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service->created_by = $user->ID;
+        $service->updated_by = $user->ID;
 
         $service->save($fields);
 

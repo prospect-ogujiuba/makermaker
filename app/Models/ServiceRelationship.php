@@ -13,16 +13,16 @@ class ServiceRelationship extends Model
         'service_id',
         'related_service_id',
         'relation_type',
-        'notes',
-        'created_by',
-        'updated_by',
+        'notes'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceRelationship belongs to a Service (the primary service) */

@@ -14,16 +14,16 @@ class ServiceDeliveryMethodAssignment extends Model
         'delivery_method_id',
         'lead_time_days',
         'sla_hours',
-        'surcharge',
-        'created_by',
-        'updated_by',
+        'surcharge'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceDeliveryMethodAssignment belongs to a Service */

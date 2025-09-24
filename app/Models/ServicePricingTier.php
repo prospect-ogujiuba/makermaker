@@ -12,9 +12,7 @@ class ServicePricingTier extends Model
     protected $fillable = [
         'name',
         'code',
-        'sort_order',
-        'created_by',
-        'updated_by',
+        'sort_order'
     ];
 
     protected $guard = [
@@ -22,6 +20,8 @@ class ServicePricingTier extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     // Service prices using this pricing tier

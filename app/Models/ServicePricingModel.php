@@ -11,9 +11,7 @@ class ServicePricingModel extends Model
 
     protected $fillable = [
         'name',
-        'code',
-        'created_by',
-        'updated_by',
+        'code'
     ];
 
     protected $guard = [
@@ -21,6 +19,8 @@ class ServicePricingModel extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     // Service prices using this pricing model

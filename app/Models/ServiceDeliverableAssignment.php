@@ -10,16 +10,16 @@ class ServiceDeliverableAssignment extends Model
 
     protected $fillable = [
         'service_id',
-        'deliverable_id',
-        'created_by',
-        'updated_by',
+        'deliverable_id'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceDeliverableAssignment belongs to a Service */

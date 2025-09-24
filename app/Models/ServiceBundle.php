@@ -13,16 +13,16 @@ class ServiceBundle extends Model
         'name',
         'slug',
         'short_desc',
-        'is_active',
-        'created_by',
-        'updated_by'
+        'is_active'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceBundle belongs to many Services */

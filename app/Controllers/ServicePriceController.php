@@ -45,8 +45,8 @@ class ServicePriceController extends Controller
             $response->unauthorized('Unauthorized: Service Price not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $servicePrice->created_by = $user->ID;
+        $servicePrice->updated_by = $user->ID;
 
         $servicePrice->save($fields);
 

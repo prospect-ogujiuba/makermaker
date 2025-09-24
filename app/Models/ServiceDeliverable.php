@@ -11,9 +11,7 @@ class ServiceDeliverable extends Model
 
     protected $fillable = [
         'name',
-        'description',
-        'created_by',
-        'updated_by',
+        'description'
     ];
 
     protected $guard = [
@@ -21,6 +19,8 @@ class ServiceDeliverable extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by',
     ];
 
     public function services()

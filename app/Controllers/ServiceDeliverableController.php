@@ -47,8 +47,8 @@ class ServiceDeliverableController extends Controller
             $response->unauthorized('Unauthorized: Service Deliverable not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_deliverable->created_by = $user->ID;
+        $service_deliverable->updated_by = $user->ID;
 
         $service_deliverable->save($fields);
 

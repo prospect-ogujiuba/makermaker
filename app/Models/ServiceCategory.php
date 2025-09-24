@@ -10,15 +10,15 @@ class ServiceCategory extends Model
     protected $fillable = [
         'parent_id',
         'name',
-        'slug',
-        'created_by',
-        'updated_by'
+        'slug'
     ];
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     protected $format = [

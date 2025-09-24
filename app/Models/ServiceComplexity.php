@@ -12,9 +12,7 @@ class ServiceComplexity extends Model
     protected $fillable = [
         'name',
         'level',
-        'price_multiplier',
-        'created_by',
-        'updated_by',
+        'price_multiplier'
     ];
 
     protected $guard = [
@@ -22,6 +20,8 @@ class ServiceComplexity extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     // Get all services using this complexity level

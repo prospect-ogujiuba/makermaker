@@ -16,9 +16,7 @@ class ServiceAttributeDefinition extends Model
         'data_type',
         'enum_options',
         'unit',
-        'required',
-        'created_by',
-        'updated_by'
+        'required'
     ];
 
     protected $format = [
@@ -32,7 +30,9 @@ class ServiceAttributeDefinition extends Model
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** Services using this attribute definition */

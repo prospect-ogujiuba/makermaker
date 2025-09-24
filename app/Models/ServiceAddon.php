@@ -14,16 +14,16 @@ class ServiceAddon extends Model
         'addon_service_id',
         'required',
         'min_qty',
-        'max_qty',
-        'created_by',
-        'updated_by',
+        'max_qty'
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceAddon belongs to a Service (the main service) */

@@ -45,8 +45,8 @@ class ServiceRelationshipController extends Controller
             $response->unauthorized('Unauthorized: Service Relationship not created')->abort();
         }
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_relationship->created_by = $user->ID;
+        $service_relationship->updated_by = $user->ID;
 
         $service_relationship->save($fields);
 

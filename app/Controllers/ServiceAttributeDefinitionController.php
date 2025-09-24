@@ -47,8 +47,8 @@ class ServiceAttributeDefinitionController extends Controller
 
         autoGenerateCode($fields, 'code', 'label', '_');
 
-        $fields['created_by'] = $user->ID;
-        $fields['updated_by'] = $user->ID;
+        $service_attribute_definition->created_by = $user->ID;
+        $service_attribute_definition->updated_by = $user->ID;
 
         $service_attribute_definition->save($fields);
 

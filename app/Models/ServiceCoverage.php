@@ -12,15 +12,15 @@ class ServiceCoverage extends Model
     protected $fillable = [
         'service_id',
         'coverage_area_id',
-        'created_by',
-        'updated_by',
     ];
 
     protected $guard = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
+        'updated_by'
     ];
 
     /** ServiceCoverage belongs to a Service */
