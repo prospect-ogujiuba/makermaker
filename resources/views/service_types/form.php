@@ -152,49 +152,10 @@ if (isset($current_id)) {
             ->setAttribute('readonly', true);
     }
 
-    if ($attributeDefinitions && count($attributeDefinitions) > 0) {
-        foreach ($attributeDefinitions as $attributeDefinition) {
-            $row = $form->row();
-
-            $row->column(
-                $form->text("Definition Name")
-                    ->setAttribute('value', $attributeDefinition->label ?? 'N/A')
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-            $row->column(
-                $form->text("Data Type")
-                    ->setAttribute('value', $attributeDefinition->data_type ?? 'N/A')
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-
-            );
-            $row->column(
-                $form->text("UOM")
-                    ->setAttribute('value', $attributeDefinition->unit ?? 'N/A')
-                    ->setAttribute('readonly', true)
-                    ->setAttribute('name', false)
-            );
-
-            $attributeDefinition_fields[] = $row;
-        }
-    } else {
-        $attributeDefinition_fields[] = $form->text('No Attribute Definitions')
-            ->setAttribute('value', 'No attribute definitions are currently associated with this deliverable')
-            ->setAttribute('readonly', true);
-    }
-
     $relationshipNestedTabs->tab('Services', 'admin-post', $form->fieldset(
         'Related Services',
         'Services using this service type',
         $service_fields
-    ));
-
-    $relationshipNestedTabs->tab('Attributes', 'admin-post', $form->fieldset(
-        'Attributes',
-        'Attributes Definitions of this service type',
-        $attributeDefinition_fields
     ));
 
 

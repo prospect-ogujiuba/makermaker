@@ -29,12 +29,6 @@ class ServiceType extends Model
         return $this->hasMany(Service::class, 'service_type_id');
     }
 
-    /** ServiceType has many AttributeDefinitions */
-    public function attributeDefinitions()
-    {
-        return $this->hasMany(ServiceAttributeDefinition::class, 'service_type_id');
-    }
-
     /** Created by WP user */
     public function createdBy()
     {

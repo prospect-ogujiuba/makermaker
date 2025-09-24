@@ -175,23 +175,6 @@
 
 ---
 
-## Attribute Definition
-
-[AttributeDefinition-Migration]: /database/migrations/1756320652.create_service_attribute_definitions_table.sql
-[AttributeDefinition-Model]: /app/Models/ServiceAttributeDefinition.php
-[AttributeDefinition-Policy]: /app/Auth/ServiceAttributeDefinitionPolicy.php
-[AttributeDefinition-Fields]: /app/Http/Fields/ServiceAttributeDefinitionFields.php
-[AttributeDefinition-Controller]: /app/Controllers/ServiceAttributeDefinitionController.php
-[AttributeDefinition-Form]: /resources/views/service_attribute_definitions/form.php
-[AttributeDefinition-Index]: /resources/views/service_attribute_definitions/index.php
-
-- [Migration][AttributeDefinition-Migration] - [Model][AttributeDefinition-Model] - [Policy][AttributeDefinition-Policy] - [Fields][AttributeDefinition-Fields] - [Controller][AttributeDefinition-Controller] - [Form][AttributeDefinition-Form] - [Index][AttributeDefinition-Index]
-
-### Todo
-- [ ] Task
-
----
-
 ## Service Bundle
 
 [ServiceBundle-Migration]: /database/migrations/1756345584.create_service_bundles_table.sql
@@ -254,23 +237,6 @@
 [ServiceAddon-Index]: /resources/views/service_addons/index.php
 
 - [Migration][ServiceAddon-Migration] - [Model][ServiceAddon-Model] - [Policy][ServiceAddon-Policy] - [Fields][ServiceAddon-Fields] - [Controller][ServiceAddon-Controller] - [Form][ServiceAddon-Form] - [Index][ServiceAddon-Index]
-
-### Todo
-- [ ] Task
-
----
-
-## Service Attribute Value
-
-[ServiceAttributeValue-Migration]: /database/migrations/1756509317.create_service_attribute_values_table.sql
-[ServiceAttributeValue-Model]: /app/Models/ServiceAttributeValue.php
-[ServiceAttributeValue-Policy]: /app/Auth/ServiceAttributeValuePolicy.php
-[ServiceAttributeValue-Fields]: /app/Http/Fields/ServiceAttributeValueFields.php
-[ServiceAttributeValue-Controller]: /app/Controllers/ServiceAttributeValueController.php
-[ServiceAttributeValue-Form]: /resources/views/service_attribute_values/form.php
-[ServiceAttributeValue-Index]: /resources/views/service_attribute_values/index.php
-
-- [Migration][ServiceAttributeValue-Migration] - [Model][ServiceAttributeValue-Model] - [Policy][ServiceAttributeValue-Policy] - [Fields][ServiceAttributeValue-Fields] - [Controller][ServiceAttributeValue-Controller] - [Form][ServiceAttributeValue-Form] - [Index][ServiceAttributeValue-Index]
 
 ### Todo
 - [ ] Task

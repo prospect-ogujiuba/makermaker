@@ -68,12 +68,11 @@ class ServiceTypeController extends Controller
     {
         $current_id = $service_type->getID();
         $services = $service_type->services;
-        $attributeDefinitions = $service_type->attributeDefinitions;
         $createdBy = $service_type->createdBy;
         $updatedBy = $service_type->updatedBy;
 
         $form = tr_form($service_type)->useErrors()->useOld()->useConfirm();
-        return View::new('service_types.form', compact('form', 'current_id', 'services', 'attributeDefinitions', 'createdBy', 'updatedBy', 'user'));
+        return View::new('service_types.form', compact('form', 'current_id', 'services', 'createdBy', 'updatedBy', 'user'));
     }
 
     /**
@@ -111,7 +110,7 @@ class ServiceTypeController extends Controller
      */
     public function show(ServiceType $service_type)
     {
-        return $service_type->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])->get();
+        return $service_type->with(['services', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -170,7 +169,7 @@ class ServiceTypeController extends Controller
     {
         try {
             $service_types = ServiceType::new()
-                ->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])
+                ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($service_types)) {
@@ -205,7 +204,7 @@ class ServiceTypeController extends Controller
     {
         try {
             $service_type = ServiceType::new()
-                ->with(['services', 'attributeDefinitions', 'createdBy', 'updatedBy'])
+                ->with(['services', 'createdBy', 'updatedBy'])
                 ->find($service_type->getID());
 
             if (empty($service_type)) {
