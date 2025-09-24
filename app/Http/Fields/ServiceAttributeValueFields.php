@@ -40,7 +40,7 @@ class ServiceAttributeValueFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         // Basic required fields
@@ -83,7 +83,7 @@ class ServiceAttributeValueFields extends Fields
                 $rule .= '|numeric';
                 break;
             case 'bool':
-                $rule .= '|numeric|max:1';
+                $rule .= '|?numeric|max:1|callback:checkIntRange:0:1';
                 break;
             case 'date':
                 $rule .= '|date';
@@ -102,9 +102,22 @@ class ServiceAttributeValueFields extends Fields
                 break;
             case 'enum':
                 if ($definition->enum_options) {
-                    $options = json_decode($definition->enum_options, true);
+                    // Handle both string (JSON) and array formats
+                    if (is_string($definition->enum_options)) {
+                        $options = json_decode($definition->enum_options, true);
+                    } else {
+                        $options = $definition->enum_options; // Already an array
+                    }
+
                     if (is_array($options) && !empty($options)) {
-                        $rule .= '|in:' . implode(',', $options);
+                        // Filter to only scalar values and convert to strings
+                        $validOptions = array_filter($options, function ($option) {
+                            return is_scalar($option);
+                        });
+
+                        if (!empty($validOptions)) {
+                            $rule .= '|in:' . implode(',', array_map('strval', $validOptions));
+                        }
                     }
                 }
                 break;

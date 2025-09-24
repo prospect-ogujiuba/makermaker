@@ -205,26 +205,61 @@ class ServiceAttributeValueController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceAttributeValue = ServiceAttributeValue::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
+            $service_attribute_values = ServiceAttributeValue::new()
+                ->with(['service', 'attributeDefinition', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceAttributeValue)) {
+            if (empty($service_attribute_values)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
+                    ->setData('service_attribute_values', [])
                     ->setMessage('No service Attribute Values found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_attribute_definition', $serviceAttributeValue)
-                ->setMessage('Service Attribute Value retrieved successfully', 'success')
+                ->setData('service_attribute_values', $service_attribute_values)
+                ->setMessage('Service Attribute Values retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceAttributeValue indexRest error: ' . $e->getMessage());
+            error_log('Service Attribute Value indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve service Attribute Value: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Attribute Value: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceAttributeValue $service_addon
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceAttributeValue $service_addon, Response $response)
+    {
+        try {
+            $service_addon = ServiceAttributeValue::new()
+                ->with(['service', 'attributeDefinition', 'createdBy', 'updatedBy'])
+                ->find($service_addon->getID());
+
+            if (empty($service_addon)) {
+                return $response
+                    ->setData('service_addon', null)
+                    ->setMessage('Service Addon not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_addon', $service_addon)
+                ->setMessage('Service Addon retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Addon showRest error: ' . $e->getMessage());
+            return $response
+                ->setError('api', 'Failed to retrieve Service Addon')
+                ->setMessage('An error occurred while retrieving Service Addon', 'error')
                 ->setStatus(500);
         }
     }
