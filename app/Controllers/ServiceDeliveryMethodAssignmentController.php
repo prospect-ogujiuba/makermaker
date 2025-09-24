@@ -86,7 +86,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
             $response->unauthorized('Unauthorized: Service Delivery Method Assignment not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_delivery_method_assignment->updated_by = $user->ID;
 
         $service_delivery_method_assignment->save($fields);
 

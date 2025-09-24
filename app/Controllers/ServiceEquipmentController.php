@@ -91,7 +91,7 @@ class ServiceEquipmentController extends Controller
 
         autoGenerateCode($fields, 'sku', 'name', '-', $fields['manufacturer'], 'prefix', true);
 
-        $fields['updated_by'] = $user->ID;
+        $service_equipment->updated_by = $user->ID;
 
         $service_equipment->save($fields);
 

@@ -91,7 +91,7 @@ class ServiceBundleController extends Controller
 
         autoGenerateCode($fields, 'slug', 'name', '-');
 
-        $fields['updated_by'] = $user->ID;
+        $service_bundle->updated_by = $user->ID;
 
         $service_bundle->save($fields);
 

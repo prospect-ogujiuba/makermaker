@@ -87,7 +87,7 @@ class ServiceComplexityController extends Controller
             $response->unauthorized('Unauthorized: Service Complexity not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_complexity->updated_by = $user->ID;
 
         $service_complexity->save($fields);
 

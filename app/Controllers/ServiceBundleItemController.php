@@ -87,7 +87,7 @@ class ServiceBundleItemController extends Controller
             $response->unauthorized('Unauthorized: Service Bundle Item not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_bundle_item->updated_by = $user->ID;
 
         $service_bundle_item->save($fields);
 

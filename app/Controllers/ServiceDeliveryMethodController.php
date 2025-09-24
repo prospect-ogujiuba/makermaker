@@ -94,7 +94,7 @@ class ServiceDeliveryMethodController extends Controller
         $fields['code'] = mm_kebab($fields['code']);
 
 
-        $fields['updated_by'] = $user->ID;
+        $service_delivery_method->updated_by = $user->ID;
 
         $service_delivery_method->save($fields);
 

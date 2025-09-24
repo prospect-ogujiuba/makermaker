@@ -94,7 +94,7 @@ class ServiceTypeController extends Controller
         autoGenerateCode($fields, 'code', 'name', true);
         $fields['code'] = mm_kebab($fields['code']);
 
-        $fields['updated_by'] = $user->ID;
+        $service_type->updated_by = $user->ID;
 
         $service_type->save($fields);
 

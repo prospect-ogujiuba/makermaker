@@ -99,7 +99,7 @@ class ServiceDeliverableController extends Controller
             $response->unauthorized('Unauthorized: Service Deliverable not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_deliverable->updated_by = $user->ID;
 
         $service_deliverable->save($fields);
 

@@ -86,7 +86,7 @@ class ServiceCoverageController extends Controller
             $response->unauthorized('Unauthorized: ServiceCoverage not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_coverage->updated_by = $user->ID;
 
         $service_coverage->save($fields);
 

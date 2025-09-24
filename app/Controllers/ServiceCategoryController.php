@@ -91,7 +91,7 @@ class ServiceCategoryController extends Controller
 
         autoGenerateCode($fields, 'slug', 'name', '-');
 
-        $fields['updated_by'] = $user->ID;
+        $service_category->updated_by = $user->ID;
 
         $service_category->save($fields);
 

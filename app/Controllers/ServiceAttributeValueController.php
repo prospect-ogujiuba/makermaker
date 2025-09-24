@@ -130,7 +130,7 @@ class ServiceAttributeValueController extends Controller
             $response->unauthorized('Unauthorized: ServiceAttributeValue not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_attribute_value->updated_by = $user->ID;
 
         $service_attribute_value->save($fields);
 

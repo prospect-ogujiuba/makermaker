@@ -93,7 +93,7 @@ class ServicePricingModelController extends Controller
         autoGenerateCode($fields, 'code', 'name');
         $fields['code'] = mm_kebab($fields['code']);
 
-        $fields['updated_by'] = $user->ID;
+        $service_pricing_model->updated_by = $user->ID;
 
         $service_pricing_model->save($fields);
 

@@ -39,16 +39,16 @@ class ServicePriceController extends Controller
      *
      * @return mixed
      */
-    public function create(ServicePriceFields $fields, ServicePrice $servicePrice, Response $response, AuthUser $user)
+    public function create(ServicePriceFields $fields, ServicePrice $service_price, Response $response, AuthUser $user)
     {
-        if (!$servicePrice->can('create')) {
+        if (!$service_price->can('create')) {
             $response->unauthorized('Unauthorized: Service Price not created')->abort();
         }
 
-        $servicePrice->created_by = $user->ID;
-        $servicePrice->updated_by = $user->ID;
+        $service_price->created_by = $user->ID;
+        $service_price->updated_by = $user->ID;
 
-        $servicePrice->save($fields);
+        $service_price->save($fields);
 
         return tr_redirect()->toPage('serviceprice', 'index')
             ->withFlash('Service Price created');
@@ -57,20 +57,20 @@ class ServicePriceController extends Controller
     /**
      * The edit page for admin
      *
-     * @param ServicePrice $servicePrice
+     * @param ServicePrice $service_price
      *
      * @return mixed
      */
-    public function edit(ServicePrice $servicePrice, AuthUser $user)
+    public function edit(ServicePrice $service_price, AuthUser $user)
     {
-        $current_id = $servicePrice->getID();
-        $service = $servicePrice->service;
-        $pricingTier = $servicePrice->pricingTier;
-        $pricingModel = $servicePrice->pricingModel;
-        $createdBy = $servicePrice->createdBy;
-        $updatedBy = $servicePrice->updatedBy;
+        $current_id = $service_price->getID();
+        $service = $service_price->service;
+        $pricingTier = $service_price->pricingTier;
+        $pricingModel = $service_price->pricingModel;
+        $createdBy = $service_price->createdBy;
+        $updatedBy = $service_price->updatedBy;
 
-        $form = tr_form($servicePrice)->useErrors()->useOld()->useConfirm();
+        $form = tr_form($service_price)->useErrors()->useOld()->useConfirm();
         return View::new('service_prices.form', compact('form', 'current_id', 'service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy', 'user'));
     }
 
@@ -79,44 +79,44 @@ class ServicePriceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServicePrice $servicePrice
+     * @param ServicePrice $service_price
      *
      * @return mixed
      */
-    public function update(ServicePrice $servicePrice, ServicePriceFields $fields, Response $response, AuthUser $user)
+    public function update(ServicePrice $service_price, ServicePriceFields $fields, Response $response, AuthUser $user)
     {
-        if (!$servicePrice->can('update')) {
+        if (!$service_price->can('update')) {
             $response->unauthorized('Unauthorized: Service Price not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_price->updated_by = $user->ID;
 
-        $servicePrice->save($fields);
+        $service_price->save($fields);
 
-        return tr_redirect()->toPage('serviceprice', 'edit', $servicePrice->getID())
+        return tr_redirect()->toPage('serviceprice', 'edit', $service_price->getID())
             ->withFlash('Service Price updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param ServicePrice $servicePrice
+     * @param ServicePrice $service_price
      *
      * @return mixed
      */
-    public function show(ServicePrice $servicePrice)
+    public function show(ServicePrice $service_price)
     {
-        return $servicePrice->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])->get();
+        return $service_price->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
      * The delete page for admin
      *
-     * @param ServicePrice $servicePrice
+     * @param ServicePrice $service_price
      *
      * @return mixed
      */
-    public function delete(ServicePrice $servicePrice)
+    public function delete(ServicePrice $service_price)
     {
         //
     }
@@ -126,17 +126,17 @@ class ServicePriceController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServicePrice $servicePrice
+     * @param ServicePrice $service_price
      *
      * @return mixed
      */
-    public function destroy(ServicePrice $servicePrice, Response $response)
+    public function destroy(ServicePrice $service_price, Response $response)
     {
-        if (!$servicePrice->can('destroy')) {
+        if (!$service_price->can('destroy')) {
             return $response->unauthorized('Unauthorized: ServicePrice not deleted');
         }
 
-        $deleted = $servicePrice->delete();
+        $deleted = $service_price->delete();
 
         if ($deleted === false) {
             return $response
@@ -144,7 +144,7 @@ class ServicePriceController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Price deleted.')->setData('serviceprice', $servicePrice);
+        return $response->success('Service Price deleted.')->setData('serviceprice', $service_price);
     }
 
     /**

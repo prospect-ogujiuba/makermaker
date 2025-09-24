@@ -95,7 +95,8 @@ class ServiceAttributeDefinitionController extends Controller
             $service_attribute_definition->enum_options = 'hey';
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_attribute_definition->updated_by = $user->ID;
+        
         $service_attribute_definition->save($fields);
 
         return tr_redirect()->toPage('serviceattributedefinition', 'edit', $service_attribute_definition->getID())

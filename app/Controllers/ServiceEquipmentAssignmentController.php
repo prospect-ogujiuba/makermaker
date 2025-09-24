@@ -87,7 +87,7 @@ class ServiceEquipmentAssignmentController extends Controller
             $response->unauthorized('Unauthorized: Service Equipment Assignment not updated')->abort();
         }
 
-        $fields['updated_by'] = $user->ID;
+        $service_equipment_assignment->updated_by = $user->ID;
 
         $service_equipment_assignment->save($fields);
 
