@@ -26,6 +26,11 @@ class ServiceDeliveryMethodAssignment extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'service',
+        'deliveryMethod'
+    ];
+
     /** ServiceDeliveryMethodAssignment belongs to a Service */
     public function service()
     {

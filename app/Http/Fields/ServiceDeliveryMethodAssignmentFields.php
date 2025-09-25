@@ -41,10 +41,10 @@ class ServiceDeliveryMethodAssignmentFields extends Fields
         
         $rules = [];
 
-        $rules['service_id'] = "numeric|?required";
-        $rules['delivery_method_id'] = "numeric|?required";
-        $rules['lead_time_days'] = "numeric|?required";
-        $rules['sla_hours'] = "numeric|?required";
+        $rules['service_id'] = "numeric|required";
+        $rules['delivery_method_id'] = "numeric|required";
+        $rules['lead_time_days'] = "?numeric|?required";
+        $rules['sla_hours'] = "?numeric|?required";
         $rules['surcharge'] = "?numeric";
 
         return $rules;

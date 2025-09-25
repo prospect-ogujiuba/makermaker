@@ -50,7 +50,6 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->number('sla_hours')
                         ->setLabel('Service Level Hours')
                         ->setHelp('Service level agreement response time in hours')
-                        ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(

@@ -103,7 +103,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      */
     public function show(ServiceDeliveryMethodAssignment $service_delivery_method_assignment)
     {
-        return $service_delivery_method_assignment->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])->get();
+        return $service_delivery_method_assignment;
     }
 
     /**
@@ -153,7 +153,6 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     {
         try {
             $serviceDeliveryMethodAssignment = ServiceDeliveryMethodAssignment::new()
-                ->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($serviceDeliveryMethodAssignment)) {
@@ -188,7 +187,6 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     {
         try {
             $service_delivery_method_assignment = ServiceDeliveryMethodAssignment::new()
-                ->with(['service', 'deliveryMethod', 'createdBy', 'updatedBy'])
                 ->find($service_delivery_method_assignment->getID());
 
             if (empty($service_delivery_method_assignment)) {
