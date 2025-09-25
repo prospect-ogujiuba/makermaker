@@ -4,7 +4,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `related_service_id` bigint(20) NOT NULL,
-  `relation_type` enum('prerequisite','dependency','incompatible_with','substitute_for') NOT NULL,
+  `relation_type` enum('prerequisite','dependency','incompatible_with','substitute_for', 'complements', 'replaces', 'requires', 'enables', 'conflicts_with') NOT NULL,
   `notes` varchar(512) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),

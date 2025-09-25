@@ -38,10 +38,15 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Select how these services relate to each other')
                         ->setOptions([
                             'Select Relation Type' => null,
-                            'Prerequisite' => 'prerequisite',
-                            'Dependency' => 'dependency',
-                            'Incompatible With' => 'incompatible_with',
-                            'Substitute For' => 'substitute_for'
+                            'Prerequisite - Must complete first' => 'prerequisite',
+                            'Dependency - Service relies on' => 'dependency',
+                            'Incompatible With - Cannot coexist' => 'incompatible_with',
+                            'Substitute For - Alternative solution' => 'substitute_for',
+                            'Complements - Work better together' => 'complements',
+                            'Replaces - Supersedes older service' => 'replaces',
+                            'Requires - Needs to function' => 'requires',
+                            'Enables - Makes other services possible' => 'enables',
+                            'Conflicts With - Technical conflicts' => 'conflicts_with'
                         ])
                         ->markLabelRequired()
                 )

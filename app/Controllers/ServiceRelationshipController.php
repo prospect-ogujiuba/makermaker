@@ -152,19 +152,19 @@ class ServiceRelationshipController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceRelationship = ServiceRelationship::new()
+            $service_relationships = ServiceRelationship::new()
                 ->with(['service', 'relatedService', 'createdBy', 'updatedBy'])
                 ->get();
 
-            if (empty($serviceRelationship)) {
+            if (empty($service_relationships)) {
                 return $response
-                    ->setData('service_relationship', [])
+                    ->setData('service_relationships', [])
                     ->setMessage('No Service Relationships found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_relationship', $serviceRelationship)
+                ->setData('service_relationships', $service_relationships)
                 ->setMessage('Service Relationships retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
@@ -176,7 +176,7 @@ class ServiceRelationshipController extends Controller
         }
     }
 
-    /**
+     /**
      * The show function for API
      *
      * @param ServiceRelationship $service_relationship
@@ -187,11 +187,13 @@ class ServiceRelationshipController extends Controller
     public function showRest(ServiceRelationship $service_relationship, Response $response)
     {
         try {
-            $service_relationship = $service_relationship->with(['service', 'relatedService', 'createdBy', 'updatedBy'])->first();
+            $service_relationship = ServiceRelationship::new()
+                ->find($service_relationship->getID());
 
-            if (!$service_relationship) {
+            if (empty($service_relationship)) {
                 return $response
-                    ->setMessage('Service Relationship not found', 'error')
+                    ->setData('service_relationship', null)
+                    ->setMessage('Service Relationship not found', 'info')
                     ->setStatus(404);
             }
 
@@ -202,7 +204,7 @@ class ServiceRelationshipController extends Controller
         } catch (\Exception $e) {
             error_log('Service Relationship showRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving the Service Relationship', 'error')
+                ->setMessage('An error occurred while retrieving Service Relationship', 'error')
                 ->setStatus(500);
         }
     }
