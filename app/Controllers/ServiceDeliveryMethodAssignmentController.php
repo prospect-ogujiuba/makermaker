@@ -152,18 +152,18 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceDeliveryMethodAssignment = ServiceDeliveryMethodAssignment::new()
+            $service_delivery_method_assignments = ServiceDeliveryMethodAssignment::new()
                 ->get();
 
-            if (empty($serviceDeliveryMethodAssignment)) {
+            if (empty($service_delivery_method_assignments)) {
                 return $response
-                    ->setData('service_delivery_method_assignment', [])
+                    ->setData('service_delivery_method_assignments', [])
                     ->setMessage('No Service Delivery Method Assignments found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_delivery_method_assignment', $serviceDeliveryMethodAssignment)
+                ->setData('service_delivery_method_assignments', $service_delivery_method_assignments)
                 ->setMessage('Service Delivery Method Assignments retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {

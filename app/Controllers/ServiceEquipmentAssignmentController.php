@@ -153,18 +153,18 @@ class ServiceEquipmentAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_equipment_assignment = ServiceEquipmentAssignment::new()
+            $service_equipment_assignments = ServiceEquipmentAssignment::new()
                 ->get();
 
-            if (empty($service_equipment_assignment)) {
+            if (empty($service_equipment_assignments)) {
                 return $response
-                    ->setData('service_equipment_assignment', [])
+                    ->setData('service_equipment_assignments', [])
                     ->setMessage('No Service Equipment Assignments found', 'info')
                     ->setStatus(200);
             }
 
             return $response
-                ->setData('service_equipment_assignment', $service_equipment_assignment)
+                ->setData('service_equipment_assignments', $service_equipment_assignments)
                 ->setMessage('Service Equipment Assignments retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
