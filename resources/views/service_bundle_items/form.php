@@ -49,6 +49,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('discount_pct')
                         ->setLabel('Discount %')
+                        ->setAttribute('max', 100)
+                        ->setAttribute('step', 0.01)
                         ->setHelp('Percentage discount applied to this service in the bundle (0-100)')
                         ->markLabelRequired()
                 )
@@ -123,7 +125,7 @@ if (isset($current_id)) {
     $relationshipNestedTabs = \TypeRocket\Elements\Tabs::new()
         ->layoutTop();
 
- 
+
 
     if ($services && count($services) > 0) {
         foreach ($services as $service) {

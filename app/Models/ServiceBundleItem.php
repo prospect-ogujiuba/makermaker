@@ -25,6 +25,11 @@ class ServiceBundleItem extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'bundle',
+        'service'
+    ];
+
     /** ServiceBundleItem belongs to a ServiceBundle */
     public function bundle()
     {

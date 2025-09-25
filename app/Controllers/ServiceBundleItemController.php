@@ -104,7 +104,7 @@ class ServiceBundleItemController extends Controller
      */
     public function show(ServiceBundleItem $service_bundle_item)
     {
-        return $service_bundle_item->with(['service', 'bundle', 'createdBy', 'updatedBy'])->get();
+        return $service_bundle_item;
     }
 
     /**
@@ -134,7 +134,7 @@ class ServiceBundleItemController extends Controller
             return $response->unauthorized('Unauthorized: Service Bundle Item not deleted');
         }
 
-        $deleted = $service_bundle_item->with(['bundle', 'service', 'createdBy', 'updatedBy'])->get()->delete();
+        $deleted = $service_bundle_item->delete();
 
         if ($deleted === false) {
             return $response
@@ -154,7 +154,6 @@ class ServiceBundleItemController extends Controller
     {
         try {
             $service_bundle_items = ServiceBundleItem::new()
-                ->with(['bundle', 'service', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($service_bundle_items)) {
@@ -189,7 +188,6 @@ class ServiceBundleItemController extends Controller
     {
         try {
             $service_bundle_item = ServiceBundleItem::new()
-                ->with(['bundle', 'service', 'createdBy', 'updatedBy'])
                 ->find($service_bundle_item->getID());
 
             if (empty($service_bundle_item)) {

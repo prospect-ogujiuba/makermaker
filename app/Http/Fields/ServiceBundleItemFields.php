@@ -38,13 +38,13 @@ class ServiceBundleItemFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         $rules['bundle_id'] = "numeric|required";
         $rules['service_id'] = "numeric|required";
         $rules['quantity'] = "?numeric|?required";
-        $rules['discount_pct'] = "?numeric|?required";
+        $rules['discount_pct'] = "?numeric|?required|callback:checkIntRange:0:100";
 
         return $rules;
     }
