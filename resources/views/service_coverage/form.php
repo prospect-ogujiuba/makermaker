@@ -5,7 +5,6 @@
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceCoverage;
 use MakerMaker\Models\ServiceCoverageArea;
 
 // Form instance
@@ -19,7 +18,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Coverage Configuration',
+        'Service Coverage',
         'Define coverage relationships between services',
         [
             $form->row()
@@ -40,7 +39,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-])->setDescription('Service Coverage Configuration');
+])->setDescription('Service Coverage');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

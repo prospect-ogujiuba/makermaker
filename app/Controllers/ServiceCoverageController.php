@@ -83,7 +83,7 @@ class ServiceCoverageController extends Controller
     public function update(ServiceCoverage $service_coverage, ServiceCoverageFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_coverage->can('update')) {
-            $response->unauthorized('Unauthorized: ServiceCoverage not updated')->abort();
+            $response->unauthorized('Unauthorized: Service Coverage not updated')->abort();
         }
 
         $service_coverage->updated_by = $user->ID;
@@ -103,7 +103,7 @@ class ServiceCoverageController extends Controller
      */
     public function show(ServiceCoverage $service_coverage)
     {
-        return $service_coverage->with(['service', 'createdBy', 'updatedBy'])->get();
+        return $service_coverage;
     }
 
     /**
@@ -192,7 +192,6 @@ class ServiceCoverageController extends Controller
     {
         try {
             $service_coverage = ServiceCoverage::new()
-                ->with(['createdBy', 'updatedBy'])
                 ->find($service_coverage->getID());
             if (empty($service_coverage)) {
                 return $response
@@ -211,4 +210,5 @@ class ServiceCoverageController extends Controller
                 ->setStatus(500);
         }
     }
+    
 }
