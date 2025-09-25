@@ -38,11 +38,11 @@ class ServiceCoverageFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
-        $rules['service_id'] = "required";
-        $rules['coverage_area_id'] = "required";
+        $rules['service_id'] = "numeric|required";
+        $rules['coverage_area_id'] = "numeric|required";
 
         return $rules;
     }

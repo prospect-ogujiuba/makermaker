@@ -41,8 +41,8 @@ class ServiceDeliverableAssignmentFields extends Fields
         
         $rules = [];
 
-        $rules['service_id'] = "numeric|?required";
-        $rules['deliverable_id'] = "numeric|?required";
+        $rules['service_id'] = "numeric|required";
+        $rules['deliverable_id'] = "numeric|required";
 
         return $rules;
     }

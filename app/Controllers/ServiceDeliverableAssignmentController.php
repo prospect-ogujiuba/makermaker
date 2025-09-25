@@ -103,7 +103,7 @@ class ServiceDeliverableAssignmentController extends Controller
      */
     public function show(ServiceDeliverableAssignment $service_deliverable_assignment)
     {
-        return $service_deliverable_assignment->with(['service', 'createdBy', 'updatedBy'])->get();
+        return $service_deliverable_assignment;
     }
 
     /**
@@ -162,7 +162,6 @@ class ServiceDeliverableAssignmentController extends Controller
     {
         try {
             $service_deliverable_assignments = ServiceDeliverableAssignment::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($service_deliverable_assignments)) {
@@ -181,6 +180,39 @@ class ServiceDeliverableAssignmentController extends Controller
 
             return $response
                 ->error('Failed to retrieve Service Deliverable Assignments: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceDeliverableAssignment $service_deliverable_assignment
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceDeliverableAssignment $service_deliverable_assignment, Response $response)
+    {
+        try {
+            $service_deliverable_assignment = ServiceDeliverableAssignment::new()
+                ->find($service_deliverable_assignment->getID());
+
+            if (empty($service_deliverable_assignment)) {
+                return $response
+                    ->setData('service_deliverable_assignment', null)
+                    ->setMessage('Service Delivaerable Assignment not found', 'info')
+                    ->setStatus(404);
+            }
+
+            return $response
+                ->setData('service_deliverable_assignment', $service_deliverable_assignment)
+                ->setMessage('Service Delivaerable Assignment retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Delivaerable Assignment showRest error: ' . $e->getMessage());
+            return $response
+                ->setMessage('An error occurred while retrieving Service Delivaerable Assignment', 'error')
                 ->setStatus(500);
         }
     }
