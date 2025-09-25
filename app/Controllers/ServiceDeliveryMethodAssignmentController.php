@@ -205,7 +205,6 @@ class ServiceDeliveryMethodAssignmentController extends Controller
         } catch (\Exception $e) {
             error_log('Service Delivery Method Assignment showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve Service Delivery Method Assignment')
                 ->setMessage('An error occurred while retrieving Service Delivery Method Assignment', 'error')
                 ->setStatus(500);
         }

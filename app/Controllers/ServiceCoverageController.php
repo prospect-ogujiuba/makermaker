@@ -103,7 +103,7 @@ class ServiceCoverageController extends Controller
      */
     public function show(ServiceCoverage $service_coverage)
     {
-        return $service_coverage->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
+        return $service_coverage->with(['service', 'createdBy', 'updatedBy'])->get();
     }
 
     /**
@@ -130,14 +130,14 @@ class ServiceCoverageController extends Controller
     public function destroy(ServiceCoverage $service_coverage, Response $response)
     {
         if (!$service_coverage->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServiceCoverage not deleted');
+            return $response->unauthorized('Unauthorized: Service Coverage not deleted');
         }
 
         $service_count = $service_coverage->service()->count();
 
         if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$service_count} service Coverage(s) still use this.")
+                ->error("Cannot delete: {$service_count} Service(s) still use this.")
                 ->setStatus(409)
                 ->setData('service_coverage', $service_coverage);
         }
@@ -161,26 +161,53 @@ class ServiceCoverageController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $serviceCoverage = ServiceCoverage::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
-                ->get();
-
-            if (empty($serviceCoverage)) {
+            $service_coverage = ServiceCoverage::new()->get();
+            if (empty($service_coverage)) {
                 return $response
-                    ->setData('service_attribute_definition', [])
-                    ->setMessage('No service Coverages found', 'info')
+                    ->setData('service_coverage', [])
+                    ->setMessage('No Service Coverages found', 'info')
                     ->setStatus(200);
             }
-
             return $response
-                ->setData('service_attribute_definition', $serviceCoverage)
+                ->setData('service_coverage', $service_coverage)
+                ->setMessage('Service Coverages retrieved successfully', 'success')
+                ->setStatus(200);
+        } catch (\Exception $e) {
+            error_log('Service Coverage indexRest error: ' . $e->getMessage());
+            return $response
+                ->error('Failed to retrieve Service Coverages: ' . $e->getMessage())
+                ->setStatus(500);
+        }
+    }
+
+    /**
+     * The show function for API
+     *
+     * @param ServiceCoverage $service_coverage
+     * @param Response $response
+     *
+     * @return \TypeRocket\Http\Response
+     */
+    public function showRest(ServiceCoverage $service_coverage, Response $response)
+    {
+        try {
+            $service_coverage = ServiceCoverage::new()
+                ->with(['createdBy', 'updatedBy'])
+                ->find($service_coverage->getID());
+            if (empty($service_coverage)) {
+                return $response
+                    ->setData('service_coverage', null)
+                    ->setMessage('Service Coverage not found', 'info')
+                    ->setStatus(404);
+            }
+            return $response
+                ->setData('service_coverage', $service_coverage)
                 ->setMessage('Service Coverage retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('ServiceCoverage indexRest error: ' . $e->getMessage());
-
+            error_log('Service Coverage showRest error: ' . $e->getMessage());
             return $response
-                ->error('Failed to retrieve service Coverage: ' . $e->getMessage())
+                ->setMessage('An error occurred while retrieving Service Coverage', 'error')
                 ->setStatus(500);
         }
     }

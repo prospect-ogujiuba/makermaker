@@ -23,6 +23,11 @@ class ServiceCoverage extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'service',
+        'coverageArea',
+    ];
+
     /** ServiceCoverage belongs to a Service */
     public function service()
     {

@@ -215,7 +215,6 @@ class ServiceComplexityController extends Controller
         } catch (\Exception $e) {
             error_log('Service Complexity showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve Service Complexity')
                 ->setMessage('An error occurred while retrieving Service Complexity', 'error')
                 ->setStatus(500);
         }

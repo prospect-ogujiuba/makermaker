@@ -214,7 +214,6 @@ class ServiceAddonController extends Controller
         } catch (\Exception $e) {
             error_log('Service Addon showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve Service Addon')
                 ->setMessage('An error occurred while retrieving Service Addon', 'error')
                 ->setStatus(500);
         }

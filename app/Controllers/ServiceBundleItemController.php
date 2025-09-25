@@ -206,7 +206,6 @@ class ServiceBundleItemController extends Controller
         } catch (\Exception $e) {
             error_log('Service Bundle Item showRest error: ' . $e->getMessage());
             return $response
-                ->setError('api', 'Failed to retrieve Service Bundle Item')
                 ->setMessage('An error occurred while retrieving Service Bundle Item', 'error')
                 ->setStatus(500);
         }
