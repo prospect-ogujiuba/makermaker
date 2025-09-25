@@ -13,7 +13,6 @@ class ServiceEquipmentAssignment extends Model
         'equipment_id',
         'required',
         'quantity',
-        'substitute_ok'
     ];
 
     protected $guard = [
@@ -23,6 +22,11 @@ class ServiceEquipmentAssignment extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+    protected $with = [
+        'service',
+        'equipment'
     ];
 
     /** ServiceEquipmentAssignment belongs to a Service */

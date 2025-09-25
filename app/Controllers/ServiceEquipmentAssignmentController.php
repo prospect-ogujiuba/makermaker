@@ -104,7 +104,7 @@ class ServiceEquipmentAssignmentController extends Controller
      */
     public function show(ServiceEquipmentAssignment $service_equipment_assignment)
     {
-        return $service_equipment_assignment->with(['service', 'equipment', 'createdBy', 'updatedBy'])->get();
+        return $service_equipment_assignment;
     }
 
     /**
@@ -154,13 +154,12 @@ class ServiceEquipmentAssignmentController extends Controller
     {
         try {
             $service_equipment_assignment = ServiceEquipmentAssignment::new()
-                ->with(['service', 'equipment', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($service_equipment_assignment)) {
                 return $response
                     ->setData('service_equipment_assignment', [])
-                    ->setMessage('No service Equipment Assignments found', 'info')
+                    ->setMessage('No Service Equipment Assignments found', 'info')
                     ->setStatus(200);
             }
 
@@ -188,11 +187,13 @@ class ServiceEquipmentAssignmentController extends Controller
     public function showRest(ServiceEquipmentAssignment $service_equipment_assignment, Response $response)
     {
         try {
-            $service_equipment_assignment = $service_equipment_assignment->with(['service', 'equipment', 'createdBy', 'updatedBy'])->first();
+            $service_equipment_assignment = ServiceEquipmentAssignment::new()
+                ->find($service_equipment_assignment->getID());
 
-            if (!$service_equipment_assignment) {
+            if (empty($service_equipment_assignment)) {
                 return $response
-                    ->setMessage('Service Equipment Assignment not found', 'error')
+                    ->setData('service_equipment_assignment', null)
+                    ->setMessage('Service Equipment Assignment not found', 'info')
                     ->setStatus(404);
             }
 
@@ -203,7 +204,7 @@ class ServiceEquipmentAssignmentController extends Controller
         } catch (\Exception $e) {
             error_log('Service Equipment Assignment showRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving the Service Equipment Assignment', 'error')
+                ->setMessage('An error occurred while retrieving Service Equipment Assignment', 'error')
                 ->setStatus(500);
         }
     }

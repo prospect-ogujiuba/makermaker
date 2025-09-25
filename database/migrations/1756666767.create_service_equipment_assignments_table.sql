@@ -6,7 +6,6 @@ CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
   `equipment_id` bigint(20) NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT 1,
   `quantity` decimal(12,3) NOT NULL DEFAULT 1.000,
-  `substitute_ok` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

@@ -43,6 +43,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('quantity')
                         ->setLabel('Quantity')
+                        ->setAttribute('step', '0.01')
+                        ->setAttribute('min', '0')
                         ->setHelp('Number of units required for this service')
                         ->markLabelRequired()
                 )
