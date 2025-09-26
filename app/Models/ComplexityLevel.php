@@ -24,6 +24,10 @@ class ComplexityLevel extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'services'
+    ];
+
     // Get all services using this complexity level
     public function services()
     {

@@ -21,7 +21,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexity_levels` (
   CONSTRAINT `chk_complexity__valid_level` CHECK (`level` >= 0 AND `level` <= 255),
   CONSTRAINT `fk_complexity__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
   CONSTRAINT `fk_complexity__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service complexity levels with price multipliers - CHECK constraints added for valid ranges';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Service complexity levels with price multipliers';
 
 -- >>> Down >>>
 DROP TABLE IF EXISTS `{!!prefix!!}srvc_complexity_levels`;

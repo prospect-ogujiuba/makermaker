@@ -104,7 +104,7 @@ class ComplexityLevelController extends Controller
      */
     public function show(ComplexityLevel $complexity_level)
     {
-        return $complexity_level->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $complexity_level;
     }
 
     /**
@@ -164,7 +164,6 @@ class ComplexityLevelController extends Controller
     {
         try {
             $complexity_levels = ComplexityLevel::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
                 ->get();
 
             if (empty($complexity_levels)) {
@@ -198,7 +197,6 @@ class ComplexityLevelController extends Controller
     {
         try {
             $complexity_level = ComplexityLevel::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
                 ->find($complexity_level->getID());
 
             if (empty($complexity_level)) {
