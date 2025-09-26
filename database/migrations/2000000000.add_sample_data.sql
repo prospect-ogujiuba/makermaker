@@ -204,53 +204,53 @@ INSERT INTO `{!!prefix!!}srvc_currency_rates`
 -- ('Vendor Coordination','vendor_coordination', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 -- ('IT Roadmap & Strategy','it_roadmap_strategy', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
--- -- Service Categories
--- INSERT INTO `{!!prefix!!}srvc_categories`
--- (`parent_id`, `name`, `slug`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- (NULL, 'Telecommunications', 'telecommunications', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Network & Infrastructure', 'network-infrastructure', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Security Systems', 'security-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Business Solutions', 'business-solutions', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Cloud & Hosting', 'cloud-hosting', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Managed Services', 'managed-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Software Development', 'software-development', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (NULL, 'Facilities & Power', 'facilities-power', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (2, 'VoIP Systems', 'voip-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (2, 'Phone Systems', 'phone-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (2, 'Unified Communications', 'unified-communications', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (2, 'Video Conferencing', 'video-conferencing', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (2, 'Contact Center Solutions', 'contact-center-solutions', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (3, 'Network Cabling', 'network-cabling', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (3, 'Wireless Networks', 'wireless-networks', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (3, 'Network Equipment', 'network-equipment', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (3, 'Fiber Optic Solutions', 'fiber-optic-solutions', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (3, 'Data Center Infrastructure', 'data-center-infrastructure', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (4, 'Camera Systems', 'camera-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (4, 'Access Control', 'access-control', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (4, 'Alarm Systems', 'alarm-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (4, 'Integrated Security', 'integrated-security', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (4, 'Fire & Life Safety', 'fire-life-safety', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (5, 'IT Support', 'it-support', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (5, 'Consulting Services', 'consulting-services', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (5, 'Training', 'training', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (5, 'Maintenance Plans', 'maintenance-plans', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (5, 'Project Management', 'project-management', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (6, 'Cloud Migration', 'cloud-migration', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- (6, 'Web Hosting', 'web-hosting', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (6, 'Virtualization', 'virtualization', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- (6, 'Disaster Recovery', 'disaster-recovery', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (7, 'Proactive Monitoring', 'proactive-monitoring', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (7, 'Patch Management', 'patch-management', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (7, 'Backup as a Service', 'backup-as-a-service', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- (7, 'Endpoint Management', 'endpoint-management', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- (8, 'Custom Applications', 'custom-applications', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (8, 'ERP & CRM Integration', 'erp-crm-integration', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- (8, 'API Development', 'api-development', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- (8, 'Web & Mobile Apps', 'web-mobile-apps', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (8, 'Power Systems', 'power-systems', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (9, 'UPS & Battery Backup', 'ups-battery-backup', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- (9, 'Environmental Monitoring', 'environmental-monitoring', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- (9, 'Rack & Enclosures', 'rack-enclosures', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+-- Service Categories
+INSERT INTO `{!!prefix!!}srvc_categories`
+(`parent_id`, `name`, `slug`, `icon`, `description`, `sort_order`, `is_active`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+(NULL, 'Telecommunications', 'telecommunications', 'phone', 'Communication systems and telephony services', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Network & Infrastructure', 'network-infrastructure', 'network-wired', 'Network setup, cabling and infrastructure services', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Security Systems', 'security-systems', 'shield', 'Physical and digital security solutions', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Business Solutions', 'business-solutions', 'briefcase', 'General business and IT support services', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Cloud & Hosting', 'cloud-hosting', 'cloud', 'Cloud services and web hosting solutions', 5, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Managed Services', 'managed-services', 'settings', 'Ongoing managed IT and monitoring services', 6, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Software Development', 'software-development', 'code', 'Custom software and application development', 7, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(NULL, 'Facilities & Power', 'facilities-power', 'zap', 'Power systems and facility infrastructure', 8, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(1, 'VoIP Systems', 'voip-systems', 'phone-call', 'Voice over IP telephony solutions', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(1, 'Phone Systems', 'phone-systems', 'phone-outgoing', 'Traditional and hybrid phone systems', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(1, 'Unified Communications', 'unified-communications', 'message-circle', 'Integrated communication platforms', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(1, 'Video Conferencing', 'video-conferencing', 'video', 'Video meeting and conferencing systems', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(1, 'Contact Center Solutions', 'contact-center-solutions', 'headphones', 'Call center and customer service systems', 5, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(2, 'Network Cabling', 'network-cabling', 'cable', 'Structured cabling and wiring services', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(2, 'Wireless Networks', 'wireless-networks', 'wifi', 'WiFi and wireless networking solutions', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(2, 'Network Equipment', 'network-equipment', 'router', 'Switches, routers and networking hardware', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(2, 'Fiber Optic Solutions', 'fiber-optic-solutions', 'zap', 'Fiber optic cabling and high-speed connections', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(2, 'Data Center Infrastructure', 'data-center-infrastructure', 'server', 'Data center setup and infrastructure services', 5, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(3, 'Camera Systems', 'camera-systems', 'camera', 'CCTV and surveillance camera installations', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(3, 'Access Control', 'access-control', 'lock', 'Door access and entry control systems', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(3, 'Alarm Systems', 'alarm-systems', 'alert-triangle', 'Security alarms and monitoring systems', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(3, 'Integrated Security', 'integrated-security', 'shield-check', 'Comprehensive integrated security solutions', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(3, 'Fire & Life Safety', 'fire-life-safety', 'flame', 'Fire detection and life safety systems', 5, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(4, 'IT Support', 'it-support', 'help-circle', 'Technical support and troubleshooting services', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(4, 'Consulting Services', 'consulting-services', 'users', 'IT consulting and advisory services', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(4, 'Training', 'training', 'book-open', 'Technical training and education services', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(4, 'Maintenance Plans', 'maintenance-plans', 'tool', 'Ongoing maintenance and support plans', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(4, 'Project Management', 'project-management', 'clipboard', 'IT project management and coordination', 5, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(5, 'Cloud Migration', 'cloud-migration', 'upload-cloud', 'Migration to cloud platforms and services', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+(5, 'Web Hosting', 'web-hosting', 'globe', 'Web hosting and domain management services', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(5, 'Virtualization', 'virtualization', 'layers', 'Server and desktop virtualization solutions', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+(5, 'Disaster Recovery', 'disaster-recovery', 'shield', 'Backup and disaster recovery solutions', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(6, 'Proactive Monitoring', 'proactive-monitoring', 'activity', '24/7 system monitoring and alerting', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(6, 'Patch Management', 'patch-management', 'download', 'Software patching and update management', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(6, 'Backup as a Service', 'backup-as-a-service', 'hard-drive', 'Managed backup and data protection services', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+(6, 'Endpoint Management', 'endpoint-management', 'monitor', 'Device and endpoint security management', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+(7, 'Custom Applications', 'custom-applications', 'smartphone', 'Bespoke software application development', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(7, 'ERP & CRM Integration', 'erp-crm-integration', 'link', 'Enterprise system integration services', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+(7, 'API Development', 'api-development', 'git-branch', 'API design and development services', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+(7, 'Web & Mobile Apps', 'web-mobile-apps', 'tablet', 'Web and mobile application development', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(8, 'Power Systems', 'power-systems', 'battery', 'Electrical power and distribution systems', 1, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(8, 'UPS & Battery Backup', 'ups-battery-backup', 'battery-charging', 'Uninterruptible power supply systems', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+(8, 'Environmental Monitoring', 'environmental-monitoring', 'thermometer', 'Temperature and environmental monitoring', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+(8, 'Rack & Enclosures', 'rack-enclosures', 'box', 'Server racks and equipment enclosures', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- -- Service Bundles
 -- INSERT INTO `{!!prefix!!}srvc_bundles` (`name`, `slug`, `short_desc`, `is_active`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
@@ -689,12 +689,13 @@ INSERT INTO `{!!prefix!!}srvc_currency_rates`
 -- DELETE FROM `{!!prefix!!}srvc_service_prices`;
 -- DELETE FROM `{!!prefix!!}srvc_services`;
 -- DELETE FROM `{!!prefix!!}srvc_bundles`;
--- DELETE FROM `{!!prefix!!}srvc_categories`;
 -- DELETE FROM `{!!prefix!!}srvc_service_types`;
 -- DELETE FROM `{!!prefix!!}srvc_equipment`;
 -- DELETE FROM `{!!prefix!!}srvc_deliverables`;
 -- DELETE FROM `{!!prefix!!}srvc_coverage_areas`;
 -- DELETE FROM `{!!prefix!!}srvc_delivery_methods`;
--- DELETE FROM `{!!prefix!!}srvc_pricing_tiers`;
+DELETE FROM `{!!prefix!!}srvc_categories`;
+DELETE FROM `{!!prefix!!}srvc_pricing_tiers`;
+DELETE FROM `{!!prefix!!}srvc_currency_rates`;
 DELETE FROM `{!!prefix!!}srvc_pricing_models`;
 DELETE FROM `{!!prefix!!}srvc_complexity_levels`;

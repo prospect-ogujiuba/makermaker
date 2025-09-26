@@ -18,8 +18,8 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Category',
-        'Define the category characteristics and pricing impact',
+        'Category Information',
+        'Define the category characteristics and organization',
         [
             $form->row()
                 ->withColumn(
@@ -35,6 +35,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Slug')
                         ->setHelp('URL-friendly version of the name (lowercase, hyphens only)')
                         ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., voip-systems')
                         ->markLabelRequired()
                 ),
 
@@ -45,11 +46,44 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Optional parent category for hierarchical organization')
                         ->setModelOptions(ServiceCategory::class, 'name', 'id', 'Top Level Category')
                 )
-                ->withColumn(),
+                ->withColumn(
+                    $form->text('icon')
+                        ->setLabel('Icon')
+                        ->setHelp('Icon name for UI display (e.g., phone, shield, cloud)')
+                        ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., phone-call')
+                ),
+
+            $form->row()
+                ->withColumn(
+                    $form->number('sort_order')
+                        ->setLabel('Sort Order')
+                        ->setHelp('Numeric order for category display (lower numbers appear first)')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('max', '4294967295')
+                        ->setAttribute('step', '1')
+                        ->setAttribute('placeholder', '0')
+                )
+                ->withColumn(
+                    $form->toggle('is_active')
+                        ->setLabel('Active')
+                        ->setHelp('Whether this category is available for use')
+                        ->setAttribute('value', '1')
+                ),
+
+            $form->row()
+                ->withColumn(
+                    $form->textarea('description')
+                        ->setLabel('Description')
+                        ->setHelp('Detailed description of what services belong in this category')
+                        ->setAttribute('placeholder', 'e.g., Communication systems and telephony services')
+                        ->setAttribute('rows', '3')
+                )
+                ->withColumn()
         ]
     )
 
-])->setDescription('Category information');
+])->setDescription('Category Configuration');
 
 // Conditional
 if (isset($current_id)) {
