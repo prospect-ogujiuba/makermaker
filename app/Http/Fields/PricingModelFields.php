@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServicePricingModelFields extends Fields
+class PricingModelFields extends Fields
 {
     /**
      * Run On Import
@@ -43,6 +43,8 @@ class ServicePricingModelFields extends Fields
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_pricing_models@id:{$id}|required|max:64";
         $rules['code'] = "unique:code:{$wpdb_prefix}srvc_pricing_models@id:{$id}|?required|max:64";
+        $rules['description'] = "max:255";
+        $rules['is_time_based'] = "?numeric|?required|callback:checkIntRange:0:1";
 
         return $rules;
     }

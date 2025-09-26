@@ -6,7 +6,7 @@ use \App\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
-class ServicePricingModelPolicy extends Policy
+class PricingModelPolicy extends Policy
 {
     public function update(AuthUser $auth, $object)
     {

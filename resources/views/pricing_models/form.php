@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ServicePricingModel Form
+ * PricingModel Form
  */
 
 // Form instance
@@ -33,6 +33,20 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->textarea('description')
+                        ->setLabel('Description')
+                        ->setHelp('Description of this pricing model')
+                        ->setAttribute('maxlength', '255')
+                        ->setAttribute('placeholder', 'e.g., This pricing model...')
+                        ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->toggle('is_time_based')
+                        ->setLabel('Time Based')
+                        ->setHelp('Toggle for time-based pricing model')
                 )
         ]
     )

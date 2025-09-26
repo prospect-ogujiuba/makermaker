@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServicePricingModel Index View
+ * PricingModel Index View
  */
 
-use MakerMaker\Models\ServicePricingModel;
+use MakerMaker\Models\PricingModel;
 
-$table = tr_table(ServicePricingModel::class);
+$table = tr_table(PricingModel::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -19,6 +19,16 @@ $table->setColumns([
 
     'code' => [
         'label' => 'Code',
+        'sort' => true,
+    ],
+
+    'description' => [
+        'label' => 'Description',
+        'sort' => true,
+    ],
+
+    'is_time_based' => [
+        'label' => 'Time Based',
         'sort' => true,
     ],
     'created_at' => [

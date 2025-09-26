@@ -5,13 +5,15 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServicePricingModel extends Model
+class PricingModel extends Model
 {
     protected $resource = 'srvc_pricing_models';
 
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'description',
+        'is_time_based',
     ];
 
     protected $guard = [
@@ -21,6 +23,10 @@ class ServicePricingModel extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+    protected $with = [
+        'servicePrices'
     ];
 
     // Service prices using this pricing model

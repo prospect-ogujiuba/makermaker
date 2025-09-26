@@ -6,7 +6,7 @@
 
 use MakerMaker\Models\Service;
 use MakerMaker\Models\ServicePricingTier;
-use MakerMaker\Models\ServicePricingModel;
+use MakerMaker\Models\PricingModel;
 
 // Form instance
 echo $form->open();
@@ -42,7 +42,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('pricing_model_id')
                         ->setLabel('Pricing Model')
                         ->setHelp('Select how this service is priced (e.g., Fixed, Hourly, Monthly)')
-                        ->setModelOptions(ServicePricingModel::class, 'name', 'id', 'Select Pricing Model')
+                        ->setModelOptions(PricingModel::class, 'name', 'id', 'Select Pricing Model')
                         ->markLabelRequired()
                 )
                 ->withColumn(
@@ -93,7 +93,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 )
                 ->withColumn()
         ]
-                ),
+    ),
 
     $form->fieldset(
         'Price Notes',
@@ -131,8 +131,7 @@ if (isset($current_id)) {
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)
                     )
-                    ->withColumn(
-                    ),
+                    ->withColumn(),
                 $form->row()
                     ->withColumn(
                         $form->text('created_at')

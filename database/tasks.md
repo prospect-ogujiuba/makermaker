@@ -37,17 +37,17 @@
 
 ---
 
-## Service Pricing Model
+## Pricing Model
 
-[ServicePricingModel-Migration]: /database/migrations/1756230789.create_service_pricing_models_table.sql
-[ServicePricingModel-Model]: /app/Models/ServicePricingModel.php
-[ServicePricingModel-Policy]: /app/Auth/ServicePricingModelPolicy.php
-[ServicePricingModel-Fields]: /app/Http/Fields/ServicePricingModelFields.php
-[ServicePricingModel-Controller]: /app/Controllers/ServicePricingModelController.php
-[ServicePricingModel-Form]: /resources/views/service_pricing_models/form.php
-[ServicePricingModel-Index]: /resources/views/service_pricing_models/index.php
+[PricingModel-Migration]: /database/migrations/1758855155.create_pricing_models_table.sql
+[PricingModel-Model]: /app/Models/PricingModel.php
+[PricingModel-Policy]: /app/Auth/PricingModelPolicy.php
+[PricingModel-Fields]: /app/Http/Fields/PricingModelFields.php
+[PricingModel-Controller]: /app/Controllers/PricingModelController.php
+[PricingModel-Form]: /resources/views/service_pricing_models/form.php
+[PricingModel-Index]: /resources/views/service_pricing_models/index.php
 
-- [Migration][ServicePricingModel-Migration] - [Model][ServicePricingModel-Model] - [Policy][ServicePricingModel-Policy] - [Fields][ServicePricingModel-Fields] - [Controller][ServicePricingModel-Controller] - [Form][ServicePricingModel-Form] - [Index][ServicePricingModel-Index]
+- [Migration][PricingModel-Migration] - [Model][PricingModel-Model] - [Policy][PricingModel-Policy] - [Fields][PricingModel-Fields] - [Controller][PricingModel-Controller] - [Form][PricingModel-Form] - [Index][PricingModel-Index]
 
 ### Todo
 
