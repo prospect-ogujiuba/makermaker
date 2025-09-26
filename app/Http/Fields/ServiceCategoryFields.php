@@ -38,12 +38,14 @@ class ServiceCategoryFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_categories@id:{$id}|required|max:64";
         $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_categories@id:{$id}|?required|max:64";
         $rules['parent_id'] = "callback:checkSelfReference:{$wpdb_prefix}srvc_categories:parent_id:id";
+
+ 
 
         return $rules;
     }
