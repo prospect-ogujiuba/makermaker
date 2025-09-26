@@ -76,6 +76,6 @@ $table->setColumns([
         'label' => 'ID',
         'sort' => 'true'
     ]
-], 'sort_order')->setOrder('sort_order', 'ASC')->render();
+], 'sort_order')->setOrder('id', 'DESC')->render();
 
 $table;

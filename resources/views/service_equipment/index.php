@@ -42,4 +42,4 @@ $table->setColumns([
         'label' => 'ID',
         'sort' => 'true'
     ]
-], 'name')->setOrder('ID', 'DESC')->render();
+], 'name')->setOrder('id', 'DESC')->render();

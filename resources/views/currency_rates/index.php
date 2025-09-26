@@ -53,6 +53,6 @@ $table->setColumns([
         'label' => 'ID',
         'sort' => 'true'
     ]
-], 'from_currency')->setOrder('effective_date', 'DESC')->render();
+], 'from_currency')->setOrder('id', 'DESC')->render();
 
 $table;
