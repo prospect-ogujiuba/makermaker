@@ -38,11 +38,15 @@ class ServiceTypeFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_service_types@id:{$id}|required|max:64";
         $rules['code'] = "unique:code:{$wpdb_prefix}srvc_service_types@id:{$id}|?required|max:64";
+        $rules['description'] = "max:2000";
+        $rules['requires_site_visit'] = "numeric|callback:checkIntRange:0:1";
+        $rules['supports_remote'] = "numeric|callback:checkIntRange:0:1";
+        $rules['estimated_duration_hours'] = "numeric|callback:checkIntRange:0:9999.99";
 
         return $rules;
     }

@@ -15,8 +15,8 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Type',
-        'Define the service type characteristics and pricing impact',
+        'Service Type Information',
+        'Define the service type characteristics and delivery options',
         [
             $form->row()
                 ->withColumn(
@@ -30,14 +30,54 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->text('code')
                         ->setLabel('Type Code')
-                        ->setHelp('Unique identifier code in uppercase')
+                        ->setHelp('Unique identifier code (auto-generated from name if left empty)')
                         ->setAttribute('maxlength', '64')
-                        ->setAttribute('placeholder', 'Auto-generated from name if left empty')
+                        ->setAttribute('placeholder', 'e.g., INSTALLATION')
+                ),
+
+            $form->row()
+                ->withColumn(
+                    $form->textarea('description')
+                        ->setLabel('Description')
+                        ->setHelp('Detailed description of this service type and what it includes')
+                        ->setAttribute('placeholder', 'e.g., On-site installation and configuration services')
+                        ->setAttribute('rows', '3')
                 )
+                ->withColumn()
+        ]
+    ),
+
+    $form->fieldset(
+        'Delivery Characteristics',
+        'Define how this service type is delivered and estimated timing',
+        [
+            $form->row()
+                ->withColumn(
+                    $form->toggle('requires_site_visit')
+                        ->setLabel('Requires Site Visit')
+                        ->setHelp('Whether this service type requires physical presence at customer location')
+                )
+                ->withColumn(
+                    $form->toggle('supports_remote')
+                        ->setLabel('Supports Remote Delivery')
+                        ->setHelp('Whether this service can be delivered remotely')
+                        ->setAttribute('value', '1')
+                ),
+
+            $form->row()
+                ->withColumn(
+                    $form->number('estimated_duration_hours')
+                        ->setLabel('Estimated Duration (Hours)')
+                        ->setHelp('Average time in hours to complete this type of service')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('step', '0.25')
+                        ->setAttribute('placeholder', 'e.g., 4.50')
+                )
+                ->withColumn()
         ]
     )
 
-])->setDescription('Service Type information');
+])->setDescription('Service Type Configuration');
 
 // Conditional
 if (isset($current_id)) {

@@ -11,7 +11,11 @@ class ServiceType extends Model
 
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'description',
+        'requires_site_visit',
+        'supports_remote',
+        'estimated_duration_hours'
     ];
 
     protected $guard = [
@@ -21,6 +25,10 @@ class ServiceType extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+    protected $with = [
+        'services'
     ];
 
     /** ServiceType has many Services */

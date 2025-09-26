@@ -110,7 +110,7 @@ class ServiceTypeController extends Controller
      */
     public function show(ServiceType $service_type)
     {
-        return $service_type->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_type;
     }
 
     /**
@@ -144,7 +144,7 @@ class ServiceTypeController extends Controller
 
         if ($service_count > 0) {
             return $response
-                ->error("Cannot delete: {$service_count} service type(s) still use this.")
+                ->error("Cannot delete: {$service_count} Service(s) still use this.")
                 ->setStatus(409)
                 ->setData('service_type', $service_type);
         }
@@ -168,9 +168,7 @@ class ServiceTypeController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_types = ServiceType::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
-                ->get();
+            $service_types = ServiceType::new()->get();
 
             if (empty($service_types)) {
                 return $response
@@ -203,9 +201,7 @@ class ServiceTypeController extends Controller
     public function showRest(ServiceType $service_type, Response $response)
     {
         try {
-            $service_type = ServiceType::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
-                ->find($service_type->getID());
+            $service_type = ServiceType::new()->find($service_type->getID());
 
             if (empty($service_type)) {
                 return $response

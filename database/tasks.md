@@ -147,7 +147,7 @@
 
 ## Service Type
 
-[ServiceType-Migration]: /database/migrations/1756309963.create_service_types_table.sql
+[ServiceType-Migration]: /database/migrations/1758889989.create_service_types_table.sql
 [ServiceType-Model]: /app/Models/ServiceType.php
 [ServiceType-Policy]: /app/Auth/ServiceTypePolicy.php
 [ServiceType-Fields]: /app/Http/Fields/ServiceTypeFields.php
