@@ -72,25 +72,38 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // TODO: Add your TypeRocket policies here
         return [
-            '\MakerMaker\Models\ComplexityLevel' => '\MakerMaker\Auth\ComplexityLevelPolicy',
-            '\MakerMaker\Models\ServicePricingModel' => '\MakerMaker\Auth\ServicePricingModelPolicy',
-            '\MakerMaker\Models\ServicePricingTier' => '\MakerMaker\Auth\ServicePricingTierPolicy',
-            '\MakerMaker\Models\ServiceDeliveryMethod' => '\MakerMaker\Auth\ServiceDeliveryMethodPolicy',
-            '\MakerMaker\Models\ServiceCoverageArea' => '\MakerMaker\Auth\ServiceCoverageAreaPolicy',
-            '\MakerMaker\Models\ServiceDeliverable' => '\MakerMaker\Auth\ServiceDeliverablePolicy',
-            '\MakerMaker\Models\ServiceEquipment' => '\MakerMaker\Auth\ServiceEquipmentPolicy',
-            '\MakerMaker\Models\ServiceType' => '\MakerMaker\Auth\ServiceTypePolicy',
-            '\MakerMaker\Models\ServiceCategory' => '\MakerMaker\Auth\ServiceCategoryPolicy',
-            '\MakerMaker\Models\ServiceBundle' => '\MakerMaker\Auth\ServiceBundlePolicy',
+            // Core Service Management
             '\MakerMaker\Models\Service' => '\MakerMaker\Auth\ServicePolicy',
+            '\MakerMaker\Models\ServiceCategory' => '\MakerMaker\Auth\ServiceCategoryPolicy',
+            '\MakerMaker\Models\ServiceType' => '\MakerMaker\Auth\ServiceTypePolicy',
+            '\MakerMaker\Models\ComplexityLevel' => '\MakerMaker\Auth\ComplexityLevelPolicy',
+
+            // Pricing Management
+            '\MakerMaker\Models\PricingModel' => '\MakerMaker\Auth\PricingModelPolicy',
+            '\MakerMaker\Models\PricingTier' => '\MakerMaker\Auth\PricingTierPolicy',
             '\MakerMaker\Models\ServicePrice' => '\MakerMaker\Auth\ServicePricePolicy',
+            '\MakerMaker\Models\CurrencyRate' => '\MakerMaker\Auth\CurrencyRatePolicy',
+            '\MakerMaker\Models\PriceHistory' => '\MakerMaker\Auth\PriceHistoryPolicy',
+
+            // Service Relationships & Configuration
             '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',
-            '\MakerMaker\Models\ServiceCoverage' => '\MakerMaker\Auth\ServiceCoveragePolicy',
-            '\MakerMaker\Models\ServiceDeliverableAssignment' => '\MakerMaker\Auth\ServiceDeliverableAssignmentPolicy',
-            '\MakerMaker\Models\ServiceDeliveryMethodAssignment' => '\MakerMaker\Auth\ServiceDeliveryMethodAssignmentPolicy',
-            '\MakerMaker\Models\ServiceEquipmentAssignment' => '\MakerMaker\Auth\ServiceEquipmentAssignmentPolicy',
             '\MakerMaker\Models\ServiceRelationship' => '\MakerMaker\Auth\ServiceRelationshipPolicy',
-            '\MakerMaker\Models\ServiceBundleItem' => '\MakerMaker\Auth\ServiceBundleItemPolicy',
+
+            // Service Delivery & Operations
+            '\MakerMaker\Models\DeliveryMethod' => '\MakerMaker\Auth\DeliveryMethodPolicy',
+            '\MakerMaker\Models\ServiceDelivery' => '\MakerMaker\Auth\ServiceDeliveryPolicy',
+            '\MakerMaker\Models\CoverageArea' => '\MakerMaker\Auth\CoverageAreaPolicy',
+            '\MakerMaker\Models\ServiceCoverage' => '\MakerMaker\Auth\ServiceCoveragePolicy',
+
+            // Resources & Assets
+            '\MakerMaker\Models\Equipment' => '\MakerMaker\Auth\EquipmentPolicy',
+            '\MakerMaker\Models\ServiceEquipment' => '\MakerMaker\Auth\ServiceEquipmentPolicy',
+            '\MakerMaker\Models\Deliverable' => '\MakerMaker\Auth\DeliverablePolicy',
+            '\MakerMaker\Models\ServiceDeliverable' => '\MakerMaker\Auth\ServiceDeliverablePolicy',
+
+            // Package & Bundle Management
+            '\MakerMaker\Models\ServiceBundle' => '\MakerMaker\Auth\ServiceBundlePolicy',
+            '\MakerMaker\Models\BundleItem' => '\MakerMaker\Auth\BundleItemPolicy',
         ];
     }
 
