@@ -168,8 +168,7 @@ class PricingModelController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $pricing_models = PricingModel::new()
-                ->get();
+            $pricing_models = PricingModel::new()->get();
 
             if (empty($pricing_models)) {
                 return $response

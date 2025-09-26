@@ -161,8 +161,7 @@ class CurrencyRateController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $currency_rates = CurrencyRate::new()
-                ->get();
+            $currency_rates = CurrencyRate::new()->get();
 
             if (empty($currency_rates)) {
                 return $response

@@ -163,8 +163,7 @@ class ComplexityLevelController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $complexity_levels = ComplexityLevel::new()
-                ->get();
+            $complexity_levels = ComplexityLevel::new()->get();
 
             if (empty($complexity_levels)) {
                 return $response

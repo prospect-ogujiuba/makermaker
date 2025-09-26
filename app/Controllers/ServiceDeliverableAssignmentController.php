@@ -161,8 +161,7 @@ class ServiceDeliverableAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_deliverable_assignments = ServiceDeliverableAssignment::new()
-                ->get();
+            $service_deliverable_assignments = ServiceDeliverableAssignment::new()->get();
 
             if (empty($service_deliverable_assignments)) {
                 return $response

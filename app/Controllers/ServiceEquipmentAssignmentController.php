@@ -153,8 +153,7 @@ class ServiceEquipmentAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_equipment_assignments = ServiceEquipmentAssignment::new()
-                ->get();
+            $service_equipment_assignments = ServiceEquipmentAssignment::new()->get();
 
             if (empty($service_equipment_assignments)) {
                 return $response

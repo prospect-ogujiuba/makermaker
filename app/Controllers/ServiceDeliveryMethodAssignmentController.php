@@ -152,8 +152,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_delivery_method_assignments = ServiceDeliveryMethodAssignment::new()
-                ->get();
+            $service_delivery_method_assignments = ServiceDeliveryMethodAssignment::new()->get();
 
             if (empty($service_delivery_method_assignments)) {
                 return $response

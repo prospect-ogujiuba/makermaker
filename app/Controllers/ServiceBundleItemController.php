@@ -153,8 +153,7 @@ class ServiceBundleItemController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_bundle_items = ServiceBundleItem::new()
-                ->get();
+            $service_bundle_items = ServiceBundleItem::new()->get();
 
             if (empty($service_bundle_items)) {
                 return $response
