@@ -24,14 +24,15 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('from_currency')
                         ->setLabel('From Currency')
                         ->setOptions([
-                            'CAD - Canadian Dollar' => 'CAD',
-                            'USD - US Dollar'       => 'USD',
-                            'EUR - Euro'            => 'EUR',
-                            'GBP - British Pound'   => 'GBP',
+                            'Select a Currency' => NULL,
+                            'CAD - Canadian Dollar'   => 'CAD',
+                            'USD - US Dollar'         => 'USD',
+                            'EUR - Euro'              => 'EUR',
+                            'GBP - British Pound'     => 'GBP',
                             'AUD - Australian Dollar' => 'AUD',
-                            'JPY - Japanese Yen'    => 'JPY',
-                            'CHF - Swiss Franc'     => 'CHF',
-                            'MXN - Mexican Peso'    => 'MXN',
+                            'JPY - Japanese Yen'      => 'JPY',
+                            'CHF - Swiss Franc'       => 'CHF',
+                            'MXN - Mexican Peso'      => 'MXN',
                         ])
 
                         ->setHelp('Source currency for conversion (3-letter ISO code)')
@@ -41,14 +42,15 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('to_currency')
                         ->setLabel('To Currency')
                         ->setOptions([
-                            'CAD - Canadian Dollar' => 'CAD',
-                            'USD - US Dollar'       => 'USD',
-                            'EUR - Euro'            => 'EUR',
-                            'GBP - British Pound'   => 'GBP',
+                            'Select a Currency' => NULL,
+                            'CAD - Canadian Dollar'   => 'CAD',
+                            'USD - US Dollar'         => 'USD',
+                            'EUR - Euro'              => 'EUR',
+                            'GBP - British Pound'     => 'GBP',
                             'AUD - Australian Dollar' => 'AUD',
-                            'JPY - Japanese Yen'    => 'JPY',
-                            'CHF - Swiss Franc'     => 'CHF',
-                            'MXN - Mexican Peso'    => 'MXN',
+                            'JPY - Japanese Yen'      => 'JPY',
+                            'CHF - Swiss Franc'       => 'CHF',
+                            'MXN - Mexican Peso'      => 'MXN',
                         ])
 
                         ->setHelp('Target currency for conversion (3-letter ISO code)')
@@ -69,6 +71,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->date('effective_date')
                         ->setLabel('Effective Date')
                         ->setHelp('Date when this exchange rate becomes effective')
+                        ->setAttribute('placeholder', 'e.g., ' . date('Y-m-d'))
                         ->markLabelRequired()
                 ),
 
@@ -77,6 +80,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('source')
                         ->setLabel('Rate Source')
                         ->setOptions([
+                            'Select Source'          => NULL,
                             'Manual Entry'           => 'manual',
                             'Bank of Canada'         => 'bank_of_canada',
                             'Federal Reserve'        => 'federal_reserve',
@@ -86,7 +90,6 @@ $tabs->tab('Overview', 'admin-settings', [
                             'Fixer.io API'           => 'fixer_api',
                             'Open Exchange Rates'    => 'openexchange_api',
                         ])
-
                         ->setHelp('Source of the exchange rate data')
                         ->setAttribute('value', 'manual')
                 )
