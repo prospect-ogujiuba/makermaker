@@ -1,9 +1,9 @@
 # Example Advanced Search + Model Filters
 
-Example from "ServiceComplexity"
+Example from "ComplexityLevel"
 
     $table->addSearchFormFilter(function () {
-        renderAdvancedSearchActions('servicecomplexity'); ?>
+        renderAdvancedSearchActions('ComplexityLevel'); ?>
 
         <?php
 

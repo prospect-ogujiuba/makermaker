@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceComplexity Index View
+ * ComplexityLevel Index View
  */
 
-use MakerMaker\Models\ServiceComplexity;
+use MakerMaker\Models\ComplexityLevel;
 
-$table = tr_table(ServiceComplexity::class);
+$table = tr_table(ComplexityLevel::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 

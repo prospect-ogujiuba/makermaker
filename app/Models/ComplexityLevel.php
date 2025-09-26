@@ -5,9 +5,9 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceComplexity extends Model
+class ComplexityLevel extends Model
 {
-    protected $resource = 'srvc_complexities';
+    protected $resource = 'srvc_complexity_levels';
 
     protected $fillable = [
         'name',

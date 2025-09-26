@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceComplexityFields extends Fields
+class ComplexityLevelFields extends Fields
 {
     /**
      * Run On Import
@@ -41,8 +41,8 @@ class ServiceComplexityFields extends Fields
 
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_complexities@id:{$id}|required|max:64";
-        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexities@id:{$id}|numeric|required|min:1|max:3|callback:checkIntRange:0:255";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_complexity_levels@id:{$id}|required|max:64";
+        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexity_levels@id:{$id}|numeric|required|min:1|max:3|callback:checkIntRange:0:255";
         $rules['price_multiplier'] = "?numeric";
 
         return $rules;

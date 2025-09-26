@@ -6,7 +6,7 @@ use \App\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
-class ServiceComplexityPolicy extends Policy
+class ComplexityLevelPolicy extends Policy
 {
     public function update(AuthUser $auth, $object)
     {

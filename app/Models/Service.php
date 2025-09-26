@@ -53,10 +53,10 @@ class Service extends Model
         return $this->belongsTo(ServiceCategory::class, 'category_id');
     }
 
-    /** Service belongs to a ServiceComplexity */
+    /** Service belongs to a ComplexityLevel */
     public function complexity()
     {
-        return $this->belongsTo(ServiceComplexity::class, 'complexity_id');
+        return $this->belongsTo(ComplexityLevel::class, 'complexity_id');
     }
 
     /** Service has many ServicePrices */

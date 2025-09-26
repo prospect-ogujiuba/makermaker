@@ -6,7 +6,7 @@
 
 use MakerMaker\Models\ServiceCategory;
 use MakerMaker\Models\ServiceType;
-use MakerMaker\Models\ServiceComplexity;
+use MakerMaker\Models\ComplexityLevel;
 
 // Form instance
 echo $form->open();
@@ -89,7 +89,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('complexity_id')
                         ->setLabel('Complexity Level')
                         ->setHelp('Complexity classification for pricing and resource allocation')
-                        ->setModelOptions(ServiceComplexity::class, 'name', 'id', 'Service Complexity')
+                        ->setModelOptions(ComplexityLevel::class, 'name', 'id', 'Service Complexity')
                         ->markLabelRequired()
                 )
                 ->withColumn($form->row($form->toggle('is_active')
