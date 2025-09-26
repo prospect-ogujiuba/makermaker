@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServicePricingTier Index View
+ * PricingTier Index View
  */
 
-use MakerMaker\Models\ServicePricingTier;
+use MakerMaker\Models\PricingTier;
 
-$table = tr_table(ServicePricingTier::class);
+$table = tr_table(PricingTier::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 

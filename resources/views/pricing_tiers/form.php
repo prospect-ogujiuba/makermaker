@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ServicePricingTier Form - Complete Data Management
+ * PricingTier Form - Complete Data Management
  */
 
 // Form instance

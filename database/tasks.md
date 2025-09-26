@@ -55,17 +55,17 @@
 
 ---
 
-## Service Pricing Tier
+## Pricing Tier
 
-[ServicePricingTier-Migration]: /database/migrations/1756251629.create_service_pricing_tiers_table.sql
-[ServicePricingTier-Model]: /app/Models/ServicePricingTier.php
-[ServicePricingTier-Policy]: /app/Auth/ServicePricingTierPolicy.php
-[ServicePricingTier-Fields]: /app/Http/Fields/ServicePricingTierFields.php
-[ServicePricingTier-Controller]: /app/Controllers/ServicePricingTierController.php
-[ServicePricingTier-Form]: /resources/views/service_pricing_tiers/form.php
-[ServicePricingTier-Index]: /resources/views/service_pricing_tiers/index.php
+[PricingTier-Migration]: /database/migrations/1758858074.create_pricing_tiers_table.sql
+[PricingTier-Model]: /app/Models/PricingTier.php
+[PricingTier-Policy]: /app/Auth/PricingTierPolicy.php
+[PricingTier-Fields]: /app/Http/Fields/PricingTierFields.php
+[PricingTier-Controller]: /app/Controllers/PricingTierController.php
+[PricingTier-Form]: /resources/views/service_pricing_tiers/form.php
+[PricingTier-Index]: /resources/views/service_pricing_tiers/index.php
 
-- [Migration][ServicePricingTier-Migration] - [Model][ServicePricingTier-Model] - [Policy][ServicePricingTier-Policy] - [Fields][ServicePricingTier-Fields] - [Controller][ServicePricingTier-Controller] - [Form][ServicePricingTier-Form] - [Index][ServicePricingTier-Index]
+- [Migration][PricingTier-Migration] - [Model][PricingTier-Model] - [Policy][PricingTier-Policy] - [Fields][PricingTier-Fields] - [Controller][PricingTier-Controller] - [Form][PricingTier-Form] - [Index][PricingTier-Index]
 
 ### Todo
 

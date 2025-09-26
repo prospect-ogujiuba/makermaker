@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServicePricingTierFields extends Fields
+class PricingTierFields extends Fields
 {
     /**
      * Run On Import

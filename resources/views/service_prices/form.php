@@ -5,7 +5,7 @@
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServicePricingTier;
+use MakerMaker\Models\PricingTier;
 use MakerMaker\Models\PricingModel;
 
 // Form instance
@@ -34,7 +34,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('pricing_tier_id')
                         ->setLabel('Pricing Tier')
                         ->setHelp('Select the pricing tier (e.g., Basic, Standard, Premium)')
-                        ->setModelOptions(ServicePricingTier::class, 'name', 'id', 'Select Pricing Tier')
+                        ->setModelOptions(PricingTier::class, 'name', 'id', 'Select Pricing Tier')
                         ->markLabelRequired()
                 ),
             $form->row()

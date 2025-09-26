@@ -7,7 +7,7 @@
 // $serviceSubpages = [
 //     mm_create_custom_resource('ComplexityLevel', 'ComplexityLevelController', 'Complexities'),
 //     mm_create_custom_resource('PricingModel', 'PricingModelController', 'Pricing Models'),
-//     mm_create_custom_resource('ServicePricingTier', 'ServicePricingTierController', 'Pricing Tiers'),
+//     mm_create_custom_resource('PricingTier', 'PricingTierController', 'Pricing Tiers'),
 //     mm_create_custom_resource('ServiceDeliveryMethod', 'ServiceDeliveryMethodController', 'Delivery Methods'),
 //     mm_create_custom_resource('ServiceCoverageArea', 'ServiceCoverageAreaController', 'Coverage Areas'),
 //     mm_create_custom_resource('ServiceDeliverable', 'ServiceDeliverableController', 'Deliverables'),

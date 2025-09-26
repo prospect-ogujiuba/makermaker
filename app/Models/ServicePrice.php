@@ -42,10 +42,10 @@ class ServicePrice extends Model
         return $this->belongsTo(Service::class, 'service_id');
     }
 
-    /** ServicePrice belongs to a ServicePricingTier */
+    /** ServicePrice belongs to a PricingTier */
     public function pricingTier()
     {
-        return $this->belongsTo(ServicePricingTier::class, 'pricing_tier_id');
+        return $this->belongsTo(PricingTier::class, 'pricing_tier_id');
     }
 
     /** ServicePrice belongs to a PricingModel */

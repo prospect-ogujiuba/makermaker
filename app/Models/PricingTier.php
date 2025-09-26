@@ -5,14 +5,17 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServicePricingTier extends Model
+class PricingTier extends Model
 {
     protected $resource = 'srvc_pricing_tiers';
 
     protected $fillable = [
         'name',
         'code',
-        'sort_order'
+        'sort_order',
+        'discount_pct',
+        'min_volume',
+        'max_volume'
     ];
 
     protected $guard = [
@@ -22,6 +25,10 @@ class ServicePricingTier extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+        protected $with = [
+        'servicePrices'
     ];
 
     // Service prices using this pricing tier
