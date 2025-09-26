@@ -19,13 +19,22 @@ class Service extends Model
         'service_type_id',
         'complexity_id',
         'is_active',
-        'is_addon',
-        'default_unit',
-        'metadata'
+        'is_featured',
+        'minimum_quantity',
+        'maximum_quantity',
+        'estimated_hours',
+        'skill_level',
+        'metadata',
+        'version'
     ];
 
+
     protected $format = [
-        'metadata' => 'json_encode'
+        'metadata' => 'json_encode',
+        'minimum_quantity' => 'convertEmptyToNull',
+        'maximum_quantity' => 'convertEmptyToNull',
+        'estimated_hours' => 'convertEmptyToNull',
+
     ];
     protected $cast = [
         'metadata' => 'array'
@@ -40,6 +49,22 @@ class Service extends Model
         'created_by',
         'updated_by'
     ];
+
+    // protected $with = [
+    //     'serviceType',
+    //     'category',
+    //     'complexity',
+    //     'prices',
+    //     'coverages',
+    //     'addonServices',
+    //     'parentServices',
+    //     'relatedServices',
+    //     'reverseRelatedServices',
+    //     'equipment',
+    //     'deliverables',
+    //     'deliveryMethods',
+    //     'bundles',
+    // ];
 
     /** Service belongs to a ServiceType */
     public function serviceType()

@@ -46,20 +46,21 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., voip-phone-system-installation')
                 )
+                ->withColumn(),
+            $form->row()
                 ->withColumn(
-                    $form->textarea('short_desc')
+                    $form->text('short_desc')
                         ->setLabel('Short Description')
                         ->setHelp('Brief summary for listings and previews (max 512 characters)')
                         ->setAttribute('maxlength', '512')
                         ->setAttribute('placeholder', 'Brief description of the service for listings...')
                         ->markLabelRequired()
-                ),
-            $form->row()
+                )
                 ->withColumn(
                     $form->textarea('long_desc')
                         ->setLabel('Long Description')
-                        ->setAttribute('maxlength', '512')
                         ->setHelp('Detailed service description, requirements, and deliverables')
+                        ->setAttribute('maxlength', '2000')
                         ->setAttribute('placeholder', 'Detailed description of the service, what\'s included, requirements...')
                 )
         ]
@@ -92,10 +93,66 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setModelOptions(ComplexityLevel::class, 'name', 'id', 'Service Complexity')
                         ->markLabelRequired()
                 )
-                ->withColumn($form->row($form->toggle('is_active')
-                    ->setLabel('Active Service')
-                    ->setHelp('Whether this service is currently available for purchase')
-                    ->setText('Service is active and available'))),
+                ->withColumn(
+                    $form->select('skill_level')
+                        ->setLabel('Skill Level Required')
+                        ->setHelp('Minimum skill level required to deliver this service')
+                        ->setOptions([
+                            'Select Skill Level' => NULL,
+                            'Entry Level' => 'entry',
+                            'Intermediate' => 'intermediate',
+                            'Advanced' => 'advanced',
+                            'Expert' => 'expert',
+                            'Specialist' => 'specialist'
+                        ])
+                        ->setAttribute('placeholder', 'Select skill level')
+                )
+        ]
+    ),
+
+    $form->fieldset(
+        'Service Configuration',
+        'Quantity limits, timing, and service flags',
+        [
+            $form->row()
+                ->withColumn(
+                    $form->toggle('is_active')
+                        ->setLabel('Active Service')
+                        ->setHelp('Whether this service is currently available for purchase')
+                )
+                ->withColumn(
+                    $form->toggle('is_featured')
+                        ->setLabel('Featured Service')
+                        ->setHelp('Mark as featured service for highlighted display')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->number('minimum_quantity')
+                        ->setLabel('Minimum Quantity')
+                        ->setHelp('Minimum order quantity for this service')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('step', '0.01')
+                        ->setDefault('1')
+                        ->setAttribute('placeholder', '1.000')
+                )
+                ->withColumn(
+                    $form->number('maximum_quantity')
+                        ->setLabel('Maximum Quantity')
+                        ->setHelp('Maximum order quantity (leave empty for unlimited)')
+                        ->setAttribute('min', '1')
+                        ->setAttribute('step', '0.01')
+                        ->setAttribute('placeholder', 'e.g., 100.000')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->number('estimated_hours')
+                        ->setLabel('Estimated Hours')
+                        ->setHelp('Estimated time to complete this service')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('step', '0.25')
+                        ->setAttribute('placeholder', 'e.g., 8.50')
+                )
+                ->withColumn()
         ]
     ),
 
@@ -119,8 +176,7 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     )
 
-
-])->setDescription('Service Details');
+])->setDescription('Service Configuration');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

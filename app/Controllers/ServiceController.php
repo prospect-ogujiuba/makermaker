@@ -51,10 +51,20 @@ class ServiceController extends Controller
         $service->created_by = $user->ID;
         $service->updated_by = $user->ID;
 
-        $service->save($fields);
+        $success = tryDatabaseOperation(
+            fn() => $service->save($fields),
+            $response,
+            'Service created successfully',
+            $fields
+        );
 
-        return tr_redirect()->toPage('service', 'index')
-            ->withFlash('Service created');
+        if ($success) {
+            return tr_redirect()->toPage('service', 'index')->withFlash('Service created');
+        } else {
+            // TypeRocket will preserve form data automatically via $response->getErrors()
+            return tr_redirect()->back()
+                ->withErrors($response->getErrors());
+        }
     }
 
     /**
@@ -94,10 +104,19 @@ class ServiceController extends Controller
 
         $service->updated_by = $user->ID;
 
-        $service->save($fields);
+        $success = tryDatabaseOperation(
+            fn() => $service->save($fields),
+            $response,
+            'Service updated successfully',
+            $fields
+        );
 
-        return tr_redirect()->toPage('service', 'edit', $service->getID())
-            ->withFlash('Service updated');
+        if ($success) {
+            return tr_redirect()->toPage('service', 'edit', $service->getID())->withFlash('Service updated');
+        } else {
+            return tr_redirect()->back()
+                ->withErrors($response->getErrors());
+        }
     }
 
     /**
@@ -109,7 +128,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return $service->with(['createdBy', 'updatedBy'])->get();
+        return $service;
     }
 
     /**
@@ -167,9 +186,7 @@ class ServiceController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $services = Service::new()
-                ->with(['createdBy', 'updatedBy'])
-                ->get();
+            $services = Service::new()->get();
 
             if (empty($services)) {
                 return $response
@@ -202,9 +219,7 @@ class ServiceController extends Controller
     public function showRest(Service $service, Response $response)
     {
         try {
-            $service = Service::new()
-                ->with(['createdBy', 'updatedBy'])
-                ->find($service->getID());
+            $service = Service::new()->find($service->getID());
 
             if (empty($service)) {
                 return $response
