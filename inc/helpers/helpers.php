@@ -342,20 +342,20 @@ function convertEmptyToNull($value)
     return ($value === '' || $value === null) ? null : $value;
 }
 
- /**
-     * Custom validation callback for enum options
-     *
-     * @param mixed $value The value being validated
-     * @param string $encodedOptions Base64 encoded JSON array of valid options
-     * @return bool
-     */
-     function validateEnumOption($value, $encodedOptions)
-    {
-        $validOptions = json_decode(base64_decode($encodedOptions), true);
-        
-        if (!is_array($validOptions)) {
-            return false;
-        }
-        
-        return in_array((string)$value, $validOptions, true);
+/**
+ * Custom validation callback for enum options
+ *
+ * @param mixed $value The value being validated
+ * @param string $encodedOptions Base64 encoded JSON array of valid options
+ * @return bool
+ */
+function validateEnumOption($value, $encodedOptions)
+{
+    $validOptions = json_decode(base64_decode($encodedOptions), true);
+
+    if (!is_array($validOptions)) {
+        return false;
     }
+
+    return in_array((string)$value, $validOptions, true);
+}
