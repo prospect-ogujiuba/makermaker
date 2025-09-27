@@ -371,29 +371,29 @@ function validateEnumOption($value, $encodedOptions)
 function tryDatabaseOperation(callable $operation, $response, $successMessage = 'Operation completed successfully')
 {
     global $wpdb;
-    
+
     // Clear any previous errors
     $wpdb->last_error = '';
-    
+
     try {
         $result = $operation();
-        
+
         // Check for WordPress database errors first
         if (!empty($wpdb->last_error)) {
             error_log("WordPress database error: " . $wpdb->last_error);
-            
+
             // Clean up the error message to hide database/table names
             $cleanError = cleanDatabaseError($wpdb->last_error);
             $response->flashNext("Database error: " . $cleanError, 'error');
             return false;
         }
-        
+
         // TypeRocket models return the model instance on success, false/null on failure
         if ($result === false || $result === null) {
             $response->flashNext('Database operation failed - unknown error', 'error');
             return false;
         }
-        
+
         // Check if the model has errors
         if (is_object($result) && method_exists($result, 'getErrors') && $result->getErrors()) {
             $errors = $result->getErrors();
@@ -401,16 +401,14 @@ function tryDatabaseOperation(callable $operation, $response, $successMessage = 
             $response->flashNext("Error: " . $errorMessage, 'error');
             return false;
         }
-        
+
         $response->flashNext($successMessage, 'success');
         return true;
-        
     } catch (\TypeRocket\Exceptions\ModelException $e) {
         // TypeRocket model validation or database errors
         error_log("TypeRocket ModelException: " . $e->getMessage());
         $response->flashNext("Model error: " . $e->getMessage(), 'error');
         return false;
-        
     } catch (\Exception $e) {
         // Any other unexpected errors
         error_log("Unexpected error: " . $e->getMessage());
@@ -429,9 +427,63 @@ function cleanDatabaseError($error)
 {
     // Remove database and table name patterns like `database`.`table_name`
     $cleaned = preg_replace('/`[^`]+`\.`[^`]+`/', 'Entity', $error);
-    
+
     // Remove "for `database`.`table`" patterns entirely
     $cleaned = preg_replace('/\s+for\s+`[^`]+`\.`[^`]+`/', '', $cleaned);
-    
+
     return $cleaned;
+}
+
+/**
+ * Validate currency is exactly 3 uppercase letters
+ */
+function validateCurrency($value, $field_name)
+{
+    if (!preg_match('/^[A-Z]{3}$/', $value)) {
+        return 'Currency must be exactly 3 uppercase letters (e.g., CAD, USD)';
+    }
+    return true;
+}
+
+/**
+ * Validate approval status enum
+ */
+function validateApprovalStatus($value, $field_name)
+{
+    $valid_statuses = ['draft', 'pending', 'approved', 'rejected'];
+    if (!in_array($value, $valid_statuses)) {
+        return 'Approval status must be one of: ' . implode(', ', $valid_statuses);
+    }
+    return true;
+}
+
+/**
+ * Validate date range - valid_to must be after valid_from
+ */
+function validateDateRange($value, $field_name)
+{
+    $request = Request::new();
+    $fields = $request->getFields();
+    $valid_from = $fields['valid_from'] ?? null;
+
+    if ($value && $valid_from) {
+        $from_time = strtotime($valid_from);
+        $to_time = strtotime($value);
+
+        if ($to_time <= $from_time) {
+            return 'Valid to date must be after valid from date';
+        }
+    }
+    return true;
+}
+
+/**
+ * Check minimum numeric value
+ */
+function checkMinValue($value, $field_name, $min_value)
+{
+    if ($value !== null && $value !== '' && (float)$value < (float)$min_value) {
+        return "must be greater than or equal to {$min_value}";
+    }
+    return true;
 }

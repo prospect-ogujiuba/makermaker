@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Enhanced Service Price Form
+ * Service Price Form
  */
 
 use MakerMaker\Models\Service;
@@ -50,21 +50,23 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Currency')
                         ->setHelp('Currency for this pricing entry')
                         ->setOptions([
-                            'Select Currency' => NULL,
-                            'CAD - Canadian Dollar' => 'CAD',
-                            'USD - US Dollar' => 'USD',
-                            'EUR - Euro' => 'EUR',
-                            'GBP - British Pound' => 'GBP'
+                            'Select a Currency' => NULL,
+                            'CAD - Canadian Dollar'   => 'CAD',
+                            'USD - US Dollar'         => 'USD',
+                            'EUR - Euro'              => 'EUR',
+                            'GBP - British Pound'     => 'GBP',
+                            'AUD - Australian Dollar' => 'AUD',
+                            'JPY - Japanese Yen'      => 'JPY',
+                            'CHF - Swiss Franc'       => 'CHF',
+                            'MXN - Mexican Peso'      => 'MXN',
                         ])
-                        ->setDefault('CAD')
-                        ->markLabelRequired()
                 )
         ]
     ),
 
     $form->fieldset(
         'Pricing Configuration',
-        'Amount, unit, and quantity settings',
+        'Amount, unit, and pricing details',
         [
             $form->row()
                 ->withColumn(
@@ -74,46 +76,74 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                         ->setAttribute('placeholder', '0.00')
+                        ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('unit')
                         ->setLabel('Pricing Unit')
-                        ->setHelp('Unit of measurement for pricing (e.g., "per hour", "per device", "flat rate")')
+                        ->setHelp('Unit of measurement for pricing (e.g., "hour", "device", "month")')
                         ->setAttribute('maxlength', '32')
+                        ->setAttribute('placeholder', 'e.g., hour, device, project')
+                        ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->number('setup_fee')
                         ->setLabel('Setup Fee')
-                        ->setHelp('One-time initial setup fee (enter 0 if no setup fee applies)')
+                        ->setHelp('One-time initial setup fee')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
-                        ->setDefault('0.00')
-                        ->markLabelRequired()
+                        ->setAttribute('placeholder', 'e.g., hour, device, project')
                 )
                 ->withColumn()
         ]
     ),
 
     $form->fieldset(
-        'Price Notes',
-        'Informational price details and properties',
+        'Validity & Approval',
+        'Effective dates and approval workflow',
         [
             $form->row()
                 ->withColumn(
-                    $form->repeater('notes')
-                        ->setLabel('Service Notes')
-                        ->setHelp('Additional notes about pricing terms, conditions, or special considerations')
-                        ->setTitle('Note')
-
-                        ->setFields($form->row()
-                            ->withColumn(
-                                $form->text('Service Note')->setName('note')->setHelp('Enter pricing note or condition')
-                            ))
+                    $form->date('valid_from')
+                        ->setLabel('Valid From')
+                        ->setHelp('Date when this pricing becomes effective')
+                        ->setFormat('yy-mm-dd')
+                        ->setAttribute('placeholder', 'Format: ' . date('Y-m-d H:i:s'))
+                        ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->date('valid_to')
+                        ->setLabel('Valid To')
+                        ->setHelp('Date when this pricing expires (leave empty for no expiration)')
+                        ->setFormat('yy-mm-dd')
+                        ->setAttribute('placeholder', 'Format: ' . date('Y-m-d H:i:s'))
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('is_current')
+                        ->setLabel('Current Pricing')
+                        ->setHelp('Mark as the current active pricing for this service/tier/model combination')
+                        ->setAttribute('value', '1')
+                )
+                ->withColumn(
+                    $form->select('approval_status')
+                        ->setLabel('Approval Status')
+                        ->setHelp('Current approval status of this pricing')
+                        ->setOptions([
+                            'Select Status' => NULL,
+                            'Draft' => 'draft',
+                            'Pending Approval' => 'pending',
+                            'Approved' => 'approved',
+                            'Rejected' => 'rejected'
+                        ])
+                        ->setDefault('draft')
+                        ->markLabelRequired()
                 )
         ]
     )
-])->setDescription('Service Price Details');
+
+])->setDescription('Service Price Configuration');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

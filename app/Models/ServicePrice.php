@@ -13,18 +13,20 @@ class ServicePrice extends Model
         'service_id',
         'pricing_tier_id',
         'pricing_model_id',
-        'current',
+        'currency',
         'amount',
         'unit',
         'setup_fee',
-        'notes'
+        'valid_from',
+        'valid_to',
+        'is_current',
+        'approval_status',
+        'approved_by',
+        'approved_at',
     ];
 
     protected $format = [
-        'notes' => 'json_encode'
-    ];
-    protected $cast = [
-        'notes' => 'array'
+        'valid_to' => 'convertEmptyToNull',
     ];
 
     protected $guard = [
@@ -34,6 +36,12 @@ class ServicePrice extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+    protected $with = [
+        'service',
+        'pricingTier',
+        'pricingModel'
     ];
 
     /** ServicePrice belongs to a Service */

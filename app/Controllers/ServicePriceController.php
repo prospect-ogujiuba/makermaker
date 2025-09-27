@@ -106,7 +106,7 @@ class ServicePriceController extends Controller
      */
     public function show(ServicePrice $service_price)
     {
-        return $service_price->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])->get();
+        return $service_price;
     }
 
     /**
@@ -155,9 +155,7 @@ class ServicePriceController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_prices = ServicePrice::new()
-                ->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])
-                ->get();
+            $service_prices = ServicePrice::new()->get();
 
             if (empty($service_prices)) {
                 return $response
@@ -190,9 +188,7 @@ class ServicePriceController extends Controller
     public function showRest(ServicePrice $service_price, Response $response)
     {
         try {
-            $service_price = ServicePrice::new()
-                ->with(['service', 'pricingTier', 'pricingModel', 'createdBy', 'updatedBy'])
-                ->find($service_price->getID());
+            $service_price = ServicePrice::new()->find($service_price->getID());
 
             if (empty($service_price)) {
                 return $response

@@ -18,18 +18,24 @@ $table->setColumns([
     ],
     'pricingTier.name' => [
         'label' => 'Tier',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<span class=\"badge badge-info\">{$value}</span>";
+        }
     ],
     'pricingModel.name' => [
         'label' => 'Model',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<span class=\"badge badge-secondary\">{$value}</span>";
+        }
     ],
     'amount' => [
         'label' => 'Price',
         'sort' => true,
         'callback' => function ($value, $item) {
             if ($value === null || $value == 0) {
-                return '<em style="color: #666;">Quote Required</em>';
+                return '<span class="badge badge-warning">Quote Required</span>';
             }
 
             $symbol = match ($item->currency) {
@@ -37,25 +43,60 @@ $table->setColumns([
                 'CAD' => 'C$',
                 'EUR' => '€',
                 'GBP' => '£',
+                'AUD' => 'A$',
+                'JPY' => '¥',
                 default => $item->currency . ' '
             };
 
             $formatted = $symbol . number_format($value, 2);
 
             if ($item->unit) {
-                $formatted .= ' <small style="color: #666;">per ' . $item->unit . '</small>';
+                $formatted .= ' <small class="text-muted">/ ' . $item->unit . '</small>';
             }
 
             if ($item->setup_fee && $item->setup_fee > 0) {
-                $formatted .= '<br><small style="color: #0073aa;">Setup: ' . $symbol . number_format($item->setup_fee, 2) . '</small>';
+                $formatted .= '<br><small class="text-info">Setup: ' . $symbol . number_format($item->setup_fee, 2) . '</small>';
             }
 
             return $formatted;
         }
     ],
+    'validity_period' => [
+        'label' => 'Validity',
+        'callback' => function ($value, $item) {
+            $from = date('M j, Y', strtotime($item->valid_from));
+            $to = $item->valid_to ? date('M j, Y', strtotime($item->valid_to)) : 'No expiry';
+            return "{$from} - {$to}";
+        }
+    ],
+    'status_flags' => [
+        'label' => 'Status',
+        'callback' => function ($value, $item) {
+            $badges = [];
+
+            // Current status
+            if ($item->is_current) {
+                $badges[] = '<span class="badge badge-success">Current</span>';
+            }
+
+            // Approval status
+            $statusBadges = [
+                'draft' => '<span class="badge badge-light">Draft</span>',
+                'pending' => '<span class="badge badge-warning">Pending</span>',
+                'approved' => '<span class="badge badge-success">Approved</span>',
+                'rejected' => '<span class="badge badge-danger">Rejected</span>'
+            ];
+            $badges[] = $statusBadges[$item->approval_status] ?? $item->approval_status;
+
+            return implode(' ', $badges);
+        }
+    ],
     'currency' => [
         'label' => 'Currency',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'created_at' => [
         'label' => 'Created At',
@@ -76,3 +117,5 @@ $table->setColumns([
         'sort' => true
     ]
 ], 'service.name')->setOrder('id', 'DESC')->render();
+
+$table;

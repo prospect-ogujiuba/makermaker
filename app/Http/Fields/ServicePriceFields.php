@@ -38,17 +38,22 @@ class ServicePriceFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         $rules['service_id'] = 'required|numeric';
         $rules['pricing_tier_id'] = 'required|numeric';
         $rules['pricing_model_id'] = 'required|numeric';
-        $rules['currency'] = 'required';
-        $rules['amount'] = 'numeric|min:0';
+        $rules['currency'] = '?required|max:3';
+        $rules['amount'] = 'numeric';
         $rules['unit'] = 'max:32';
-        $rules['setup_fee'] = '?required|numeric|min:0';
-        $rules['notes'] = '?required';
+        $rules['setup_fee'] = '?numeric';
+        $rules['valid_from'] = 'required';
+        $rules['valid_to'] = '';
+        $rules['is_current'] = 'numeric|callback:checkIntRange:0:1';
+        $rules['approval_status'] = 'required';
+        $rules['approved_by'] = '?numeric';
+        $rules['approved_at'] = '';
 
         return $rules;
     }
