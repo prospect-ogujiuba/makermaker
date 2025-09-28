@@ -7,6 +7,8 @@
 // Form instance
 echo $form->open();
 
+echo to_resource('CurrencyRate', 'index', 'Back To Currency Rates');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

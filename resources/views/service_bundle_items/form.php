@@ -13,6 +13,8 @@ use MakerMaker\Models\Service;
 // Form instance
 echo $form->open();
 
+echo to_resource('ServiceBundleItem', 'index', 'Back To Service Bundle Items');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

@@ -9,6 +9,8 @@ use MakerMaker\Models\Service;
 // Form instance
 echo $form->open();
 
+echo to_resource('ServiceAddon', 'index', 'Back To Service Addons');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

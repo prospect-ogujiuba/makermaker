@@ -1,11 +1,13 @@
 <?php
 
 /**
- * PricingTier Form - Complete Data Management
+ * PricingTier Form
  */
 
 // Form instance
 echo $form->open();
+
+echo to_resource('PricingTier', 'index', 'Back To Pricing Tiers');
 
 // Tab Layout
 $tabs = tr_tabs()

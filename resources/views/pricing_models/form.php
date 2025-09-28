@@ -7,6 +7,8 @@
 // Form instance
 echo $form->open();
 
+echo to_resource('PricingModel', 'index', 'Back To Pricing Models');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

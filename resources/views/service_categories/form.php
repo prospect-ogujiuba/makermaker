@@ -10,6 +10,8 @@ use MakerMaker\Models\ServiceCategory;
 // Form instance
 echo $form->open();
 
+echo to_resource('ServiceCategory', 'index', 'Back To Service Categories');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

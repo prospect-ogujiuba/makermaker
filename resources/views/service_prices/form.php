@@ -11,6 +11,8 @@ use MakerMaker\Models\PricingModel;
 // Form instance
 echo $form->open();
 
+echo to_resource('ServicePrice', 'index', 'Back To Service Pricing');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

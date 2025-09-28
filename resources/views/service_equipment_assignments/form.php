@@ -13,6 +13,8 @@ use MakerMaker\Models\ServiceEquipment;
 // Form instance
 echo $form->open();
 
+echo to_resource('ServiceEquipment', 'index', 'Back To Service Equipment');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

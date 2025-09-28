@@ -7,6 +7,8 @@
 // Form instance
 echo $form->open();
 
+echo to_resource('Equipment', 'index', 'Back To Equipment');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())

@@ -7,6 +7,8 @@
 // Form instance
 echo $form->open();
 
+echo to_resource('ServiceType', 'index', 'Back To Service Types');
+
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())
