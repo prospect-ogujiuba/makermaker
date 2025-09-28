@@ -487,3 +487,54 @@ function checkMinValue($value, $field_name, $min_value)
     }
     return true;
 }
+
+/**
+ * Generate a link to a TypeRocket resource page
+ *
+ * @param string $resource The resource name (e.g., 'PriceHistory', 'Service')
+ * @param string $action The action (index, add, edit, show, delete)
+ * @param string $text The link text to display
+ * @param int|null $id The resource ID (required for edit, show, delete actions)
+ * @param string $icon The icon class (default: 'bi bi-arrow-up-right')
+ * @return string The complete HTML link
+ */
+function toResourceUrl($resource, $action = 'index', $text = 'Back', $id = null, $icon = 'box-arrow-up-right') {
+    // Convert resource name to lowercase with underscores for TypeRocket convention
+    $resource_slug = strtolower(preg_replace('/([A-Z])/', '$1', lcfirst($resource)));
+    
+    // Build the page parameter
+    $page = $resource_slug . '_' . $action;
+    
+    // Start building the URL
+    $url_params = ['page' => $page];
+    
+    // Add route_args for actions that need an ID
+    if (in_array($action, ['edit', 'show', 'delete']) && $id !== null) {
+        $url_params['route_args'] = [$id];
+    }
+    
+    // Build the admin URL
+    $admin_url = admin_url('admin.php?' . http_build_query($url_params));
+    
+    // Generate the HTML link
+    $icon_html = $icon ? "<i class='bi bi-{$icon}'></i> " : '';
+    
+    return "<a href='{$admin_url}'>{$icon_html}{$text}</a>";
+}
+
+/**
+ * Global helper function for easy access
+ */
+if (!function_exists('to_resource')) {
+    function to_resource($resource, $action = 'index', $text = null, $id = null, $icon = null, $class = 'button')
+    {
+        return \MakerMaker\Helpers\SmartResourceHelper::link($resource, $action, $text, $id, $icon, $class);
+    }
+}
+
+if (!function_exists('resource_url')) {
+    function resource_url($resource, $action = 'index', $id = null)
+    {
+        return \MakerMaker\Helpers\SmartResourceHelper::url($resource, $action, $id);
+    }
+}
