@@ -88,7 +88,7 @@ class PriceHistory extends Model
      * Smart price history recorder - Complete compliance version
      * Tracks ALL fields from ServicePrice for full audit trail
      */
-    public static function recordChange($servicePriceId, $changeType, $oldData = [], $newData = [], $reason = null, $userID)
+    public static function recordChange($servicePriceId, $changeType, $oldData = [], $newData = [], $reason = 'update', $userID = 1)
     {
         // Detect actual changes
         $changes = self::detectChanges($oldData, $newData);
@@ -113,20 +113,16 @@ class PriceHistory extends Model
 
         // Map ALL trackable fields (old and new values)
         $trackableFields = [
-            // Financial
             'amount' => ['old_amount', 'new_amount'],
             'setup_fee' => ['old_setup_fee', 'new_setup_fee'],
             'currency' => ['old_currency', 'new_currency'],
             'unit' => ['old_unit', 'new_unit'],
-            // Temporal
             'valid_from' => ['old_valid_from', 'new_valid_from'],
             'valid_to' => ['old_valid_to', 'new_valid_to'],
             'is_current' => ['old_is_current', 'new_is_current'],
-            // Relationships
             'service_id' => ['old_service_id', 'new_service_id'],
             'pricing_tier_id' => ['old_pricing_tier_id', 'new_pricing_tier_id'],
             'pricing_model_id' => ['old_pricing_model_id', 'new_pricing_model_id'],
-            // Approval
             'approval_status' => ['old_approval_status', 'new_approval_status'],
             'approved_by' => ['old_approved_by', 'new_approved_by'],
             'approved_at' => ['old_approved_at', 'new_approved_at'],
@@ -184,73 +180,73 @@ class PriceHistory extends Model
         return $changes;
     }
 
-/**
- * Determine specific change type based on what changed
- */
-private static function determineChangeType($providedType, $changes)
-{
-    // If specific type provided and it's create/delete, use it
-    if (in_array($providedType, ['created', 'deleted'])) {
-        return $providedType;
-    }
+    /**
+     * Determine specific change type based on what changed
+     */
+    private static function determineChangeType($providedType, $changes)
+    {
+        // If specific type provided and it's create/delete, use it
+        if (in_array($providedType, ['created', 'deleted'])) {
+            return $providedType;
+        }
 
-    // If no changes detected, return generic updated
-    if (empty($changes)) {
-        return 'updated';
-    }
+        // If no changes detected, return generic updated
+        if (empty($changes)) {
+            return 'updated';
+        }
 
-    // Multiple fields changed = multi_update
-    if (count($changes) > 1) {
+        // Multiple fields changed = multi_update
+        if (count($changes) > 1) {
+            return 'multi_update';
+        }
+
+        // Single field changes - determine specific type
+        if (isset($changes['amount'])) {
+            return 'amount_changed';
+        }
+        if (isset($changes['setup_fee'])) {
+            return 'amount_changed';
+        }
+        if (isset($changes['currency'])) {
+            return 'currency_changed';
+        }
+        if (isset($changes['unit'])) {
+            return 'unit_changed';
+        }
+        if (isset($changes['pricing_tier_id'])) {
+            return 'tier_changed';
+        }
+        if (isset($changes['pricing_model_id'])) {
+            return 'model_changed';
+        }
+        if (isset($changes['service_id'])) {
+            return 'tier_changed';
+        }
+        if (isset($changes['approval_status'])) {
+            return 'status_changed';
+        }
+        if (isset($changes['approved_by'])) {
+            return 'approval_changed';
+        }
+        if (isset($changes['approved_at'])) {
+            return 'approval_changed';
+        }
+        if (isset($changes['valid_from'])) {
+            return 'dates_changed';
+        }
+        if (isset($changes['valid_to'])) {
+            return 'dates_changed';
+        }
+        if (isset($changes['is_current'])) {
+            return 'dates_changed';
+        }
+
+        // Fallback
         return 'multi_update';
     }
 
-    // Single field changes - determine specific type
-    if (isset($changes['amount'])) {
-        return 'amount_changed';
-    }
-    if (isset($changes['setup_fee'])) {
-        return 'amount_changed';
-    }
-    if (isset($changes['currency'])) {
-        return 'currency_changed';
-    }
-    if (isset($changes['unit'])) {
-        return 'unit_changed';
-    }
-    if (isset($changes['pricing_tier_id'])) {
-        return 'tier_changed';
-    }
-    if (isset($changes['pricing_model_id'])) {
-        return 'model_changed';
-    }
-    if (isset($changes['service_id'])) {
-        return 'tier_changed';
-    }
-    if (isset($changes['approval_status'])) {
-        return 'status_changed';
-    }
-    if (isset($changes['approved_by'])) {
-        return 'approval_changed';
-    }
-    if (isset($changes['approved_at'])) {
-        return 'approval_changed';
-    }
-    if (isset($changes['valid_from'])) {
-        return 'dates_changed';
-    }
-    if (isset($changes['valid_to'])) {
-        return 'dates_changed';
-    }
-    if (isset($changes['is_current'])) {
-        return 'dates_changed';
-    }
-
-    // Fallback
-    return 'multi_update';
-}
-
     /**
-     * Generate smart description based on changes - Complete version
+     * Generate smart description based on changes - with entity names
      */
     private static function generateDescription($changeType, $changes, $oldData, $newData, $customReason)
     {
@@ -301,24 +297,32 @@ private static function determineChangeType($providedType, $changes)
 
             // Relationship changes
             if (isset($changes['service_id'])) {
-                $parts[] = sprintf('Service ID: %s → %s', $changes['service_id']['old'] ?: 'N/A', $changes['service_id']['new'] ?: 'N/A');
+                $oldName = getEntityName(\MakerMaker\Models\Service::class, $changes['service_id']['old']);
+                $newName = getEntityName(\MakerMaker\Models\Service::class, $changes['service_id']['new']);
+                $parts[] = sprintf('Service: %s → %s', $oldName, $newName);
             }
 
             if (isset($changes['pricing_tier_id'])) {
-                $parts[] = sprintf('Pricing Tier ID: %s → %s', $changes['pricing_tier_id']['old'] ?: 'N/A', $changes['pricing_tier_id']['new'] ?: 'N/A');
+                $oldName = getEntityName(\MakerMaker\Models\PricingTier::class, $changes['pricing_tier_id']['old']);
+                $newName = getEntityName(\MakerMaker\Models\PricingTier::class, $changes['pricing_tier_id']['new']);
+                $parts[] = sprintf('Pricing Tier: %s → %s', $oldName, $newName);
             }
 
             if (isset($changes['pricing_model_id'])) {
-                $parts[] = sprintf('Pricing Model ID: %s → %s', $changes['pricing_model_id']['old'] ?: 'N/A', $changes['pricing_model_id']['new'] ?: 'N/A');
+                $oldName = getEntityName(\MakerMaker\Models\PricingModel::class, $changes['pricing_model_id']['old']);
+                $newName = getEntityName(\MakerMaker\Models\PricingModel::class, $changes['pricing_model_id']['new']);
+                $parts[] = sprintf('Pricing Model: %s → %s', $oldName, $newName);
             }
 
-            // Approval changes
+            // Approval changes - WITH USER NAMES
             if (isset($changes['approval_status'])) {
                 $parts[] = sprintf('Status: %s → %s', $changes['approval_status']['old'] ?: 'N/A', $changes['approval_status']['new'] ?: 'N/A');
             }
 
             if (isset($changes['approved_by'])) {
-                $parts[] = sprintf('Approved By: User #%s → User #%s', $changes['approved_by']['old'] ?: 'N/A', $changes['approved_by']['new'] ?: 'N/A');
+                $oldName = getUserName($changes['approved_by']['old']);
+                $newName = getUserName($changes['approved_by']['new']);
+                $parts[] = sprintf('Approved By: %s → %s', $oldName, $newName);
             }
 
             if (isset($changes['approved_at'])) {

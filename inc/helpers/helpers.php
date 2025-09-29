@@ -498,27 +498,28 @@ function checkMinValue($value, $field_name, $min_value)
  * @param string $icon The icon class (default: 'bi bi-arrow-up-right')
  * @return string The complete HTML link
  */
-function toResourceUrl($resource, $action = 'index', $text = 'Back', $id = null, $icon = 'box-arrow-up-right') {
+function toResourceUrl($resource, $action = 'index', $text = 'Back', $id = null, $icon = 'box-arrow-up-right')
+{
     // Convert resource name to lowercase with underscores for TypeRocket convention
     $resource_slug = strtolower(preg_replace('/([A-Z])/', '$1', lcfirst($resource)));
-    
+
     // Build the page parameter
     $page = $resource_slug . '_' . $action;
-    
+
     // Start building the URL
     $url_params = ['page' => $page];
-    
+
     // Add route_args for actions that need an ID
     if (in_array($action, ['edit', 'show', 'delete']) && $id !== null) {
         $url_params['route_args'] = [$id];
     }
-    
+
     // Build the admin URL
     $admin_url = admin_url('admin.php?' . http_build_query($url_params));
-    
+
     // Generate the HTML link
     $icon_html = $icon ? "<i class='bi bi-{$icon}'></i> " : '';
-    
+
     return "<a href='{$admin_url}'>{$icon_html}{$text}</a>";
 }
 
@@ -537,4 +538,47 @@ if (!function_exists('resource_url')) {
     {
         return \MakerMaker\Helpers\SmartResourceHelper::url($resource, $action, $id);
     }
+}
+
+/**
+ * Get entity name by ID for better descriptions
+ */
+function getEntityName($modelClass, $id)
+{
+    if (!$id) {
+        return 'N/A';
+    }
+
+    try {
+        $entity = $modelClass::new()->findById($id);
+        if ($entity) {
+            // Try common name fields
+            return $entity->name ?? $entity->title ?? "ID: $id";
+        }
+    } catch (\Exception $e) {
+        // If lookup fails, just return the ID
+    }
+
+    return "ID: $id";
+}
+
+/**
+ * Get user display name
+ */
+function getUserName($userId)
+{
+    if (!$userId) {
+        return 'N/A';
+    }
+
+    try {
+        $user = \TypeRocket\Models\WPUser::new()->findById($userId);
+        if ($user) {
+            return $user->display_name ?? $user->user_login ?? "User #$userId";
+        }
+    } catch (\Exception $e) {
+        // If lookup fails, just return the ID
+    }
+
+    return "User #$userId";
 }
