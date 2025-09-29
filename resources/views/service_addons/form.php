@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceAddon Form
+ * ServiceAddon Form - Overview Tab
  */
 
 use MakerMaker\Models\Service;
 
-// Form instance
+
 echo $form->open();
 
 echo to_resource('ServiceAddon', 'index', 'Back To Service Addons');
@@ -19,7 +19,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Addon Configuration',
+        'Service Addon',
         'Define addon relationships between services',
         [
             $form->row()
@@ -56,7 +56,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('min_qty')
                         ->setLabel('Minimum Quantity')
-                        ->setHelp('Minimum quantity required when this addon is selected (0 = optional)')
+                        ->setHelp('Minimum quantity required when this addon is selected')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
                         ->setDefault('0.000')
@@ -68,11 +68,27 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Maximum quantity allowed (leave empty for no limit)')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('min', '0')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->number('default_qty')
+                        ->setLabel('Default Quantity')
+                        ->setHelp('Default quantity pre-selected when adding this addon')
+                        ->setAttribute('step', '0.01')
+                        ->setAttribute('min', '0')
+                        ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->number('sort_order')
+                        ->setLabel('Sort Order')
+                        ->setHelp('Display order for this addon (lower numbers appear first)')
+                        ->setAttribute('min', '0')
+                        ->setDefault('0')
                 )
         ]
     )
 
-])->setDescription('Service Addon Configuration');
+])->setDescription('Service Addon');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

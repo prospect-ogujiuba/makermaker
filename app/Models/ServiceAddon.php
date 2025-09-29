@@ -14,7 +14,9 @@ class ServiceAddon extends Model
         'addon_service_id',
         'required',
         'min_qty',
-        'max_qty'
+        'max_qty',
+        'default_qty',
+        'sort_order'
     ];
 
     protected $guard = [
@@ -24,6 +26,18 @@ class ServiceAddon extends Model
         'deleted_at',
         'created_by',
         'updated_by'
+    ];
+
+    protected $with = [
+        'service',
+        'addonService'
+    ];
+
+        protected $format = [
+        'metadata' => 'json_encode',
+        'min_qty' => 'convertEmptyToNull',
+        'max_qty' => 'convertEmptyToNull',
+        'default_qty' => 'convertEmptyToNull',
     ];
 
     /** ServiceAddon belongs to a Service (the main service) */

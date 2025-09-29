@@ -566,6 +566,122 @@ VALUES
  'Price created at CAD $0.00 | Quote-based pricing for specialized support services', 
  '2025-09-27 21:46:04', 2);
 
+-- Service Addons (Corrected and Expanded)
+INSERT INTO `{!!prefix!!}srvc_service_addons` (`service_id`, `addon_service_id`, `required`, `min_qty`, `max_qty`, `default_qty`, `sort_order`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+
+-- Basic VoIP System (ID 1) addons
+(1, 4, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (optional)
+(1, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Basic Technical Support
+(1, 24, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- End-User Training Session
+
+-- Professional VoIP System (ID 2) addons
+(2, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (required)
+(2, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Premium Technical Support
+(2, 25, 0, 0.000, 5.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
+(2, 20, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), -- Cloud Backup as a Service
+
+-- Enterprise VoIP System (ID 3) addons
+(3, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (required)
+(3, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Premium Technical Support (required)
+(3, 25, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
+(3, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), -- Proactive Monitoring
+(3, 20, 0, 0.000, 1.000, 1.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2), -- Cloud Backup as a Service
+
+-- VoIP System Installation (ID 4) addons
+(4, 24, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
+(4, 16, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
+
+-- Cat6 Network Cabling (ID 5) addons
+(5, 16, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
+(5, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Rack & Enclosure Installation
+
+-- Cat6A Network Cabling (ID 6) addons
+(6, 16, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
+(6, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Rack & Enclosure Installation
+
+-- Fiber Optic Installation (ID 7) addons
+(7, 16, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment (required)
+(7, 30, 0, 0.000, 5.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Rack & Enclosure Installation
+(7, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+
+-- Basic IP Camera System (ID 8) addons
+(8, 32, 0, 0.000, 20.000, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
+(8, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Basic Technical Support
+(8, 31, 0, 0.000, NULL, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
+(8, 24, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
+
+-- Professional Camera System (ID 9) addons
+(9, 32, 0, 0.000, 50.000, 5.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
+(9, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+(9, 20, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service
+(9, 25, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
+(9, 31, 0, 0.000, NULL, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
+
+-- Enterprise Camera System (ID 10) addons
+(10, 32, 0, 0.000, 50.000, 10.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
+(10, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Premium Technical Support (required)
+(10, 20, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Cloud Backup as a Service (required)
+(10, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Proactive Monitoring
+(10, 25, 0, 0.000, 5.000, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Administrator Training
+(10, 31, 0, 0.000, NULL, 5.000, 60, '2025-08-28 23:57:07', NOW(), 1, 2),    -- Additional Backup Storage
+
+-- Basic Access Control (ID 11) addons
+(11, 14, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Basic Technical Support
+(11, 24, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
+
+-- Multi-Door Access Control (ID 12) addons
+(12, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+(12, 25, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
+(12, 17, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Security System Audit
+
+-- Enterprise Access Control (ID 13) addons
+(13, 15, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support (required)
+(13, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
+(13, 17, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Security System Audit (required)
+(13, 27, 0, 0.000, 1.000, 0.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Compliance Consulting
+
+-- Network Assessment (ID 16) addons
+(16, 26, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- IT Strategy Workshop
+(16, 15, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+
+-- Security System Audit (ID 17) addons
+(17, 28, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Penetration Testing Service
+(17, 29, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Vulnerability Assessment
+(17, 27, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Compliance Consulting
+
+-- Cloud Migration Basic (ID 18) addons
+(18, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service (required)
+(18, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
+(18, 15, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+
+-- Enterprise Cloud Migration (ID 19) addons
+(19, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service (required)
+(19, 21, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring (required)
+(19, 25, 0, 0.000, 10.000, 3.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
+(19, 15, 1, 1.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support (required)
+
+-- Cloud Backup as a Service (ID 20) addons
+(20, 31, 0, 0.000, NULL, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
+(20, 21, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
+
+-- Proactive Monitoring (ID 21) addons
+(21, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+(21, 23, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Patch Management Service
+
+-- Endpoint Management (ID 22) addons
+(22, 23, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Patch Management Service
+(22, 21, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
+(22, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
+
+-- Patch Management Service (ID 23) addons
+(23, 21, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
+(23, 29, 0, 0.000, 2.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Vulnerability Assessment
+
+-- UPS Installation Service (ID 29) addons
+(29, 30, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Rack & Enclosure Installation
+(29, 24, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
+(29, 14, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2);  -- Basic Technical Support
+
 -- >>> Down >>>
 -- DELETE FROM `{!!prefix!!}srvc_bundle_items`;
 -- DELETE FROM `{!!prefix!!}srvc_service_relationships`;
@@ -573,7 +689,7 @@ VALUES
 -- DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
--- DELETE FROM `{!!prefix!!}srvc_service_addons`;
+DELETE FROM `{!!prefix!!}srvc_service_addons`;
 DELETE FROM `{!!prefix!!}srvc_price_history`;
 DELETE FROM `{!!prefix!!}srvc_service_prices`;
 DELETE FROM `{!!prefix!!}srvc_services`;

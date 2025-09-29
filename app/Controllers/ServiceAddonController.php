@@ -48,10 +48,20 @@ class ServiceAddonController extends Controller
         $service_addon->created_by = $user->ID;
         $service_addon->updated_by = $user->ID;
 
-        $service_addon->save($fields);
+        $success = tryDatabaseOperation(
+            fn() => $service_addon->save($fields),
+            $response,
+            'Service Addon created successfully',
+            $fields
+        );
 
-        return tr_redirect()->toPage('serviceaddon', 'index')
-            ->withFlash('Service Addon created');
+
+        if ($success) {
+            return tr_redirect()->toPage('serviceaddon', 'index')->withFlash('Service Addon created');
+        } else {
+            return tr_redirect()->back()
+                ->withErrors($response->getErrors());
+        }
     }
 
     /**
@@ -88,7 +98,23 @@ class ServiceAddonController extends Controller
 
         $service_addon->updated_by = $user->ID;
 
-        $service_addon->save($fields);
+        $success = tryDatabaseOperation(
+            fn() => $service_addon->save($fields),
+            $response,
+            'Service Addon updated successfully',
+            $fields
+        );
+
+
+        if ($success) {
+            return tr_redirect()->toPage('serviceaddon', 'edit', $service_addon->getID())->withFlash('Service Addon updated');
+        } else {
+            return tr_redirect()->back()
+                ->withErrors($response->getErrors());
+        }
+
+
+
 
         return tr_redirect()->toPage('serviceaddon', 'edit', $service_addon->getID())
             ->withFlash('Service Addon updated');
@@ -103,7 +129,7 @@ class ServiceAddonController extends Controller
      */
     public function show(ServiceAddon $service_addon)
     {
-        return $service_addon->with(['service', 'addonService', 'createdBy', 'updatedBy'])->get();
+        return $service_addon;
     }
 
     /**
@@ -161,9 +187,7 @@ class ServiceAddonController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_addons = ServiceAddon::new()
-                ->with(['services', 'addonService', 'createdBy', 'updatedBy'])
-                ->get();
+            $service_addons = ServiceAddon::new()->get();
 
             if (empty($service_addons)) {
                 return $response
@@ -196,9 +220,7 @@ class ServiceAddonController extends Controller
     public function showRest(ServiceAddon $service_addon, Response $response)
     {
         try {
-            $service_addon = ServiceAddon::new()
-                ->with(['services', 'addonService', 'createdBy', 'updatedBy'])
-                ->find($service_addon->getID());
+            $service_addon = ServiceAddon::new()->find($service_addon->getID());
 
             if (empty($service_addon)) {
                 return $response
