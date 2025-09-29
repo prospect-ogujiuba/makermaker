@@ -184,101 +184,70 @@ class PriceHistory extends Model
         return $changes;
     }
 
-    /**
-     * Determine specific change type based on what changed
-     */
-    private static function determineChangeType($providedType, $changes)
-    {
-        // If specific type provided and it's create/delete, use it
-        if (in_array($providedType, ['created', 'deleted'])) {
-            return $providedType;
-        }
+/**
+ * Determine specific change type based on what changed
+ */
+private static function determineChangeType($providedType, $changes)
+{
+    // If specific type provided and it's create/delete, use it
+    if (in_array($providedType, ['created', 'deleted'])) {
+        return $providedType;
+    }
 
-        // If no changes detected, return generic updated
-        if (empty($changes)) {
-            return 'updated';
-        }
-
-        // Auto-determine based on priority (most specific first)
-
-        // Single field changes (highest priority for specific tracking)
-        if (count($changes) == 1) {
-            if (isset($changes['amount'])) {
-                return 'amount_changed';
-            }
-            if (isset($changes['setup_fee'])) {
-                return 'amount_changed'; // Setup fee is still financial
-            }
-            if (isset($changes['currency'])) {
-                return 'currency_changed';
-            }
-            if (isset($changes['unit'])) {
-                return 'unit_changed';
-            }
-            if (isset($changes['pricing_tier_id'])) {
-                return 'tier_changed';
-            }
-            if (isset($changes['pricing_model_id'])) {
-                return 'model_changed';
-            }
-            if (isset($changes['service_id'])) {
-                return 'tier_changed'; // Service reassignment is similar to tier change
-            }
-            if (isset($changes['approval_status'])) {
-                return 'status_changed';
-            }
-            if (isset($changes['approved_by'])) {
-                return 'approval_changed';
-            }
-            if (isset($changes['approved_at'])) {
-                return 'approval_changed';
-            }
-            if (isset($changes['valid_from'])) {
-                return 'dates_changed';
-            }
-            if (isset($changes['valid_to'])) {
-                return 'dates_changed';
-            }
-            if (isset($changes['is_current'])) {
-                return 'dates_changed'; // Current status is temporal
-            }
-        }
-
-        // Multi-field changes (categorize by dominant theme)
-
-        // Currency change with other fields
-        if (isset($changes['currency'])) {
-            return 'currency_changed';
-        }
-
-        // Unit change (pricing model shift)
-        if (isset($changes['unit'])) {
-            return 'unit_changed';
-        }
-
-        // Tier or model changes
-        if (isset($changes['pricing_tier_id']) || isset($changes['pricing_model_id']) || isset($changes['service_id'])) {
-            return 'tier_changed';
-        }
-
-        // Approval workflow changes
-        if (isset($changes['approval_status']) || isset($changes['approved_by']) || isset($changes['approved_at'])) {
-            return 'approval_changed';
-        }
-
-        // Financial changes (amount or setup fee)
-        if (isset($changes['amount']) || isset($changes['setup_fee'])) {
-            return 'amount_changed';
-        }
-
-        // Temporal changes (dates or current status)
-        if (isset($changes['valid_from']) || isset($changes['valid_to']) || isset($changes['is_current'])) {
-            return 'dates_changed';
-        }
-
-        // Multiple unrelated fields changed
+    // If no changes detected, return generic updated
+    if (empty($changes)) {
         return 'updated';
     }
+
+    // Multiple fields changed = multi_update
+    if (count($changes) > 1) {
+        return 'multi_update';
+    }
+
+    // Single field changes - determine specific type
+    if (isset($changes['amount'])) {
+        return 'amount_changed';
+    }
+    if (isset($changes['setup_fee'])) {
+        return 'amount_changed';
+    }
+    if (isset($changes['currency'])) {
+        return 'currency_changed';
+    }
+    if (isset($changes['unit'])) {
+        return 'unit_changed';
+    }
+    if (isset($changes['pricing_tier_id'])) {
+        return 'tier_changed';
+    }
+    if (isset($changes['pricing_model_id'])) {
+        return 'model_changed';
+    }
+    if (isset($changes['service_id'])) {
+        return 'tier_changed';
+    }
+    if (isset($changes['approval_status'])) {
+        return 'status_changed';
+    }
+    if (isset($changes['approved_by'])) {
+        return 'approval_changed';
+    }
+    if (isset($changes['approved_at'])) {
+        return 'approval_changed';
+    }
+    if (isset($changes['valid_from'])) {
+        return 'dates_changed';
+    }
+    if (isset($changes['valid_to'])) {
+        return 'dates_changed';
+    }
+    if (isset($changes['is_current'])) {
+        return 'dates_changed';
+    }
+
+    // Fallback
+    return 'multi_update';
+}
 
     /**
      * Generate smart description based on changes - Complete version
