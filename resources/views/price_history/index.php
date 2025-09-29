@@ -20,7 +20,10 @@ $table->setColumns([
         'sort' => true,
         'actions' => ['view']
     ],
-
+    'change_type' => [
+        'label' => 'Change',
+        'sort' => true
+    ],
     'change_description' => [
         'label' => 'Summary',
         'callback' => function ($value) {
