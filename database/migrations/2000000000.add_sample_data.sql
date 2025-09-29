@@ -73,109 +73,6 @@ INSERT INTO `{!!prefix!!}srvc_currency_rates`
 ('GBP', 'USD', 1.275862, '2025-09-26', 'bank_of_england', '2025-08-28 23:57:07', NOW(), 2, 2),
 ('GBP', 'EUR', 1.155172, '2025-09-26', 'bank_of_england', '2025-08-28 23:57:07', NOW(), 2, 2);
 
--- -- Delivery Methods
--- INSERT INTO `{!!prefix!!}srvc_delivery_methods`
--- (`name`, `code`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- ('On-Site Installation', 'on_site_installation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Remote Configuration', 'remote_configuration', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Hybrid (On-site + Remote)', 'hybrid_on_site_remote', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Client Self-Install', 'client_self_install', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('White Glove Service', 'white_glove', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Pickup', 'pickup', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Shipping/Delivery', 'shipping_delivery', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('In-Store Service', 'in_store_service', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Drop-Ship Partner', 'drop_ship_partner', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('24/7 Emergency Dispatch', '24_7_emergency_dispatch', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
-
--- -- Coverage Areas
--- INSERT INTO `{!!prefix!!}srvc_coverage_areas`
--- (`code`, `name`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- ('local_area', 'Local Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('regional_coverage', 'Regional Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('national_coverage', 'National Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('international_coverage', 'International Coverage', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('greater_toronto_area', 'Greater Toronto Area', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('southwest_ontario', 'Southwest Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('central_ontario', 'Central Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('eastern_ontario', 'Eastern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('northern_ontario', 'Northern Ontario', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('province_of_quebec', 'Province of Quebec', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('western_canada', 'Western Canada', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('united_states_coverage', 'United States Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('asia_pacific_coverage', 'Asia-Pacific Coverage', '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
-
--- -- Deliverables
--- INSERT INTO `{!!prefix!!}srvc_deliverables`
--- (`name`, `description`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- ('System Design Document', 'Detailed technical design and architecture documentation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Installation Plan', 'Step-by-step installation and deployment plan', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Network Diagram', 'Complete network topology and connection diagrams', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Equipment List', 'Detailed bill of materials and equipment specifications', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Configuration Documentation', 'System configuration settings and parameters', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Testing Report', 'Comprehensive system testing and validation results', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('User Manual', 'End-user operation and maintenance documentation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Training Materials', 'Training guides, videos, and reference materials', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Warranty Documentation', 'Equipment warranties and service agreements', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('As-Built Documentation', 'Final installation documentation with actual configurations', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Performance Baseline', 'Initial system performance metrics and benchmarks', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Security Assessment', 'Security configuration review and recommendations', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Compliance Certificate', 'Industry compliance and certification documentation', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Maintenance Schedule', 'Recommended maintenance tasks and schedules', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Emergency Procedures', 'Troubleshooting and emergency contact procedures', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Change Log', 'Record of all changes, updates, and version history', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Deployment Checklist', 'Checklist of pre-deployment, during deployment, and post-deployment tasks', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Acceptance Test Plan', 'Formal customer acceptance testing documentation', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Project Charter', 'High-level scope, objectives, and responsibilities document', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Project Closure Report', 'Summary of deliverables, outcomes, and lessons learned', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Disaster Recovery Plan', 'Procedures and documentation for restoring services after failure', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Backup Procedures', 'Documentation of data backup policies and schedules', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Service Level Agreement (SLA)', 'Defined service expectations, uptime guarantees, and penalties', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Operations Handbook', 'Day-to-day operational procedures and escalation processes', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Monitoring & Alerts Setup', 'Configuration of system monitoring tools and alert thresholds', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('API Documentation', 'Reference documentation for developers integrating with the system', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Knowledge Base Articles', 'Support-focused documentation for frequently asked questions and troubleshooting', '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
-
--- -- Equipment
--- INSERT INTO `{!!prefix!!}srvc_equipment` (`sku`, `name`, `manufacturer`, `specs`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- ('CISCO-VOIP-PBX-SYSTEM', 'VoIP PBX System', 'Cisco', '[{"specification_name": "Model", "specification_value": "UC560"}, {"specification_name": "Ports", "specification_value": "24"}, {"specification_name": "Max Users", "specification_value": "50"}, {"specification_name": "Protocols", "specification_value": "SIP, H.323, PoE"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-IP-DESK-PHONE', 'IP Desk Phone', 'Cisco', '[{"specification_name": "Model", "specification_value": "CP-7841"}, {"specification_name": "Lines", "specification_value": "4"}, {"specification_name": "Display", "specification_value": "3.5 inch"}, {"specification_name": "Power", "specification_value": "PoE"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-EXECUTIVE-IP-PHONE', 'Executive IP Phone', 'Cisco', '[{"specification_name": "Model", "specification_value": "CP-8851"}, {"specification_name": "Lines", "specification_value": "5"}, {"specification_name": "Display", "specification_value": "5 inch color"}, {"specification_name": "Power", "specification_value": "PoE+"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-CORDLESS-IP-PHONE', 'Cordless IP Phone', 'Cisco', '[{"specification_name": "Model", "specification_value": "CP-8821"}, {"specification_name": "Type", "specification_value": "Wireless"}, {"specification_name": "Battery", "specification_value": "Li-Ion"}, {"specification_name": "Range", "specification_value": "150m"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('AUDIOCODES-VOIP-GATEWAY', 'VoIP Gateway', 'AudioCodes', '[{"specification_name": "Model", "specification_value": "MP-114"}, {"specification_name": "FXS Ports", "specification_value": "4"}, {"specification_name": "Protocols", "specification_value": "SIP, H.323"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-MANAGED-SWITCH-24-PORT', 'Managed Switch 24-Port', 'Cisco', '[{"specification_name": "Model", "specification_value": "SG350-28"}, {"specification_name": "Ports", "specification_value": "24"}, {"specification_name": "Uplinks", "specification_value": "4"}, {"specification_name": "PoE Support", "specification_value": "Yes"}, {"specification_name": "Power Budget", "specification_value": "185W"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-CORE-SWITCH-48-PORT', 'Core Switch 48-Port', 'Cisco', '[{"specification_name": "Model", "specification_value": "SG500-52P"}, {"specification_name": "Ports", "specification_value": "48"}, {"specification_name": "Uplinks", "specification_value": "4"}, {"specification_name": "PoE+ Support", "specification_value": "Yes"}, {"specification_name": "Power Budget", "specification_value": "370W"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-BUSINESS-ROUTER', 'Business Router', 'Cisco', '[{"specification_name": "Model", "specification_value": "RV340"}, {"specification_name": "WAN Ports", "specification_value": "2"}, {"specification_name": "LAN Ports", "specification_value": "4"}, {"specification_name": "VPN Tunnels", "specification_value": "50"}, {"specification_name": "Throughput", "specification_value": "500Mbps"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-WIRELESS-ACCESS-POINT', 'Wireless Access Point', 'Cisco', '[{"specification_name": "Model", "specification_value": "WAP371"}, {"specification_name": "Standard", "specification_value": "802.11ac"}, {"specification_name": "Antennas", "specification_value": "4"}, {"specification_name": "Power", "specification_value": "PoE+"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CISCO-HIGH-DENSITY-ACCESS-POINT', 'High-Density Access Point', 'Cisco', '[{"specification_name": "Model", "specification_value": "WAP581"}, {"specification_name": "Standard", "specification_value": "802.11ac Wave 2"}, {"specification_name": "MU-MIMO", "specification_value": "Yes"}, {"specification_name": "Power", "specification_value": "PoE++"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('BELDEN-CAT6-CABLE-1000FT', 'Cat6 Cable - 1000ft', 'Belden', '[{"specification_name": "Category", "specification_value": "Cat6"}, {"specification_name": "Length", "specification_value": "1000ft"}, {"specification_name": "Conductor", "specification_value": "23AWG"}, {"specification_name": "Jacket", "specification_value": "CMR"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('BELDEN-CAT6A-CABLE-1000FT', 'Cat6A Cable - 1000ft', 'Belden', '[{"specification_name": "Category", "specification_value": "Cat6A"}, {"specification_name": "Length", "specification_value": "1000ft"}, {"specification_name": "Conductor", "specification_value": "23AWG"}, {"specification_name": "Jacket", "specification_value": "CMR"}, {"specification_name": "Shielded", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CORNING-FIBER-OPTIC-CABLE-SM', 'Fiber Optic Cable SM', 'Corning', '[{"specification_name": "Type", "specification_value": "Single Mode"}, {"specification_name": "Fiber Count", "specification_value": "12"}, {"specification_name": "Length", "specification_value": "1000ft"}, {"specification_name": "Jacket", "specification_value": "OFNR"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('PANDUIT-CAT6-PATCH-CABLE', 'Cat6 Patch Cable', 'Panduit', '[{"specification_name": "Category", "specification_value": "Cat6"}, {"specification_name": "Length", "specification_value": "3ft"}, {"specification_name": "Color", "specification_value": "Blue"}, {"specification_name": "Connectors", "specification_value": "RJ45"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('AXIS-IP-SECURITY-CAMERA', 'IP Security Camera', 'Axis', '[{"specification_name": "Model", "specification_value": "P3245-LVE"}, {"specification_name": "Resolution", "specification_value": "1920x1080"}, {"specification_name": "Night Vision", "specification_value": "Yes"}, {"specification_name": "Power", "specification_value": "PoE+"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('AXIS-PTZ-SECURITY-CAMERA', 'PTZ Security Camera', 'Axis', '[{"specification_name": "Model", "specification_value": "P5635-E"}, {"specification_name": "Resolution", "specification_value": "1920x1080"}, {"specification_name": "Zoom", "specification_value": "32x"}, {"specification_name": "Outdoor Rated", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('AXIS-16-CHANNEL-NVR', '16-Channel NVR', 'Axis', '[{"specification_name": "Model", "specification_value": "S2216"}, {"specification_name": "Channels", "specification_value": "16"}, {"specification_name": "Storage", "specification_value": "16TB"}, {"specification_name": "Recording", "specification_value": "H.264/H.265"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('HID-ACCESS-CONTROL-PANEL', 'Access Control Panel', 'HID', '[{"specification_name": "Model", "specification_value": "VertX V2000"}, {"specification_name": "Doors", "specification_value": "2"}, {"specification_name": "Readers", "specification_value": "4"}, {"specification_name": "Max Users", "specification_value": "50000"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('HID-CARD-READER', 'Card Reader', 'HID', '[{"specification_name": "Model", "specification_value": "R40"}, {"specification_name": "Technology", "specification_value": "125kHz"}, {"specification_name": "Format", "specification_value": "Wiegand"}, {"specification_name": "LED Indicator", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('HID-KEYPAD-READER', 'Keypad Reader', 'HID', '[{"specification_name": "Model", "specification_value": "RPK40"}, {"specification_name": "Technology", "specification_value": "125kHz + PIN"}, {"specification_name": "Keys", "specification_value": "12"}, {"specification_name": "Backlit", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('DELL-RACKMOUNT-SERVER', 'Rackmount Server', 'Dell', '[{"specification_name": "Model", "specification_value": "PowerEdge R740"}, {"specification_name": "CPU", "specification_value": "Xeon Silver 4214"}, {"specification_name": "RAM", "specification_value": "64GB DDR4"}, {"specification_name": "Storage", "specification_value": "4x1TB SSD RAID10"}, {"specification_name": "PSU", "specification_value": "Dual Redundant"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('HPE-TOWER-SERVER', 'Tower Server', 'HPE', '[{"specification_name": "Model", "specification_value": "ProLiant ML350"}, {"specification_name": "CPU", "specification_value": "Xeon Gold 5220"}, {"specification_name": "RAM", "specification_value": "128GB DDR4"}, {"specification_name": "Storage", "specification_value": "8x2TB SAS"}, {"specification_name": "RAID Controller", "specification_value": "P408i-p"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('SYNOLOGY-NETWORK-ATTACHED-STORAGE', 'Network Attached Storage', 'Synology', '[{"specification_name": "Model", "specification_value": "RS3618xs"}, {"specification_name": "Drive Bays", "specification_value": "12"}, {"specification_name": "Max Capacity", "specification_value": "192TB"}, {"specification_name": "RAID Support", "specification_value": "RAID5, RAID6, SHR"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('NETAPP-SAN-STORAGE-ARRAY', 'SAN Storage Array', 'NetApp', '[{"specification_name": "Model", "specification_value": "AFF A220"}, {"specification_name": "Protocols", "specification_value": "iSCSI, FC, NFS, SMB"}, {"specification_name": "Capacity", "specification_value": "50TB SSD"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('APC-RACKMOUNT-UPS-3KVA', 'Rackmount UPS 3kVA', 'APC', '[{"specification_name": "Model", "specification_value": "Smart-UPS SRT3000RMXLT"}, {"specification_name": "Capacity", "specification_value": "3000VA"}, {"specification_name": "Runtime", "specification_value": "8min full load"}, {"specification_name": "Network Card", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('EATON-TOWER-UPS-1-5KVA', 'Tower UPS 1.5kVA', 'Eaton', '[{"specification_name": "Model", "specification_value": "9PX1500RT"}, {"specification_name": "Capacity", "specification_value": "1500VA"}, {"specification_name": "Runtime", "specification_value": "12min"}, {"specification_name": "Voltage", "specification_value": "120V"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('FORTINET-NEXT-GEN-FIREWALL', 'Next-Gen Firewall', 'Fortinet', '[{"specification_name": "Model", "specification_value": "FortiGate 100F"}, {"specification_name": "Throughput", "specification_value": "20Gbps"}, {"specification_name": "VPN Throughput", "specification_value": "10Gbps"}, {"specification_name": "Max Users", "specification_value": "500"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('SOPHOS-UTM-APPLIANCE', 'UTM Appliance', 'Sophos', '[{"specification_name": "Model", "specification_value": "XGS 2100"}, {"specification_name": "Throughput", "specification_value": "12Gbps"}, {"specification_name": "Features", "specification_value": "IPS, AV, Web Filtering, VPN"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('CISCO-WIRELESS-LAN-CONTROLLER', 'Wireless LAN Controller', 'Cisco', '[{"specification_name": "Model", "specification_value": "9800-L-C"}, {"specification_name": "AP Support", "specification_value": "250"}, {"specification_name": "Throughput", "specification_value": "5Gbps"}, {"specification_name": "Redundancy", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('POLY-VIDEO-CONFERENCING-SYSTEM', 'Video Conferencing System', 'Poly', '[{"specification_name": "Model", "specification_value": "Polycom RealPresence Group 500"}, {"specification_name": "Resolution", "specification_value": "1080p"}, {"specification_name": "Protocols", "specification_value": "SIP, H.323"}, {"specification_name": "Camera", "specification_value": "EagleEye IV"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('SAMSUNG-CONFERENCE-ROOM-DISPLAY', 'Conference Room Display', 'Samsung', '[{"specification_name": "Model", "specification_value": "QB75R"}, {"specification_name": "Size", "specification_value": "75 inch"}, {"specification_name": "Resolution", "specification_value": "4K UHD"}, {"specification_name": "Brightness", "specification_value": "350 nits"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('HP-LASER-PRINTER', 'Laser Printer', 'HP', '[{"specification_name": "Model", "specification_value": "LaserJet M608dn"}, {"specification_name": "PPM", "specification_value": "55"}, {"specification_name": "Duplex", "specification_value": "Yes"}, {"specification_name": "Network", "specification_value": "Yes"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('CANON-MULTIFUNCTION-PRINTER', 'Multifunction Printer', 'Canon', '[{"specification_name": "Model", "specification_value": "imageRUNNER ADVANCE 4525i"}, {"specification_name": "Functions", "specification_value": "Print, Copy, Scan, Fax"}, {"specification_name": "PPM", "specification_value": "25"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('LENOVO-BUSINESS-LAPTOP', 'Business Laptop', 'Lenovo', '[{"specification_name": "Model", "specification_value": "ThinkPad T14"}, {"specification_name": "CPU", "specification_value": "i7-1260P"}, {"specification_name": "RAM", "specification_value": "32GB DDR4"}, {"specification_name": "Storage", "specification_value": "1TB NVMe"}, {"specification_name": "OS", "specification_value": "Windows 11 Pro"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('DELL-ENGINEERING-WORKSTATION-LAPTOP', 'Engineering Workstation Laptop', 'Dell', '[{"specification_name": "Model", "specification_value": "Precision 5570"}, {"specification_name": "CPU", "specification_value": "Xeon W-11855M"}, {"specification_name": "RAM", "specification_value": "64GB DDR5"}, {"specification_name": "GPU", "specification_value": "RTX A3000"}, {"specification_name": "Storage", "specification_value": "2TB NVMe"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('HP-OFFICE-DESKTOP-PC', 'Office Desktop PC', 'HP', '[{"specification_name": "Model", "specification_value": "EliteDesk 800 G6"}, {"specification_name": "CPU", "specification_value": "i5-10500"}, {"specification_name": "RAM", "specification_value": "16GB"}, {"specification_name": "Storage", "specification_value": "512GB SSD"}, {"specification_name": "OS", "specification_value": "Windows 11 Pro"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('DELL-LED-MONITOR-27', 'LED Monitor 27"', 'Dell', '[{"specification_name": "Model", "specification_value": "U2722DE"}, {"specification_name": "Resolution", "specification_value": "2560x1440"}, {"specification_name": "Panel", "specification_value": "IPS"}, {"specification_name": "Refresh Rate", "specification_value": "60Hz"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('LG-CURVED-MONITOR-34', 'Curved Monitor 34"', 'LG', '[{"specification_name": "Model", "specification_value": "34WN80C-B"}, {"specification_name": "Resolution", "specification_value": "3440x1440"}, {"specification_name": "Panel", "specification_value": "IPS"}, {"specification_name": "Refresh Rate", "specification_value": "75Hz"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
-
 -- Service Types
 INSERT INTO `{!!prefix!!}srvc_service_types`
 (`name`, `code`, `description`, `requires_site_visit`, `supports_remote`, `estimated_duration_hours`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
@@ -251,37 +148,6 @@ INSERT INTO `{!!prefix!!}srvc_categories`
 (8, 'UPS & Battery Backup', 'ups-battery-backup', 'battery-charging', 'Uninterruptible power supply systems', 2, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 (8, 'Environmental Monitoring', 'environmental-monitoring', 'thermometer', 'Temperature and environmental monitoring', 3, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
 (8, 'Rack & Enclosures', 'rack-enclosures', 'box', 'Server racks and equipment enclosures', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
-
--- -- Service Bundles
--- INSERT INTO `{!!prefix!!}srvc_bundles` (`name`, `slug`, `short_desc`, `is_active`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
--- ('Small Office Complete', 'small-office-complete', 'Complete IT solution for small offices (5-15 employees)', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Medium Business Package', 'medium-business-package', 'Comprehensive IT infrastructure for growing businesses (15-50 employees)', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Enterprise Security Suite', 'enterprise-security-suite', 'Complete security solution with cameras, access control, and monitoring', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Network Infrastructure Bundle', 'network-infrastructure-bundle', 'Complete network setup with cabling, equipment, and wireless', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Communication Package', 'communication-package', 'VoIP system with professional installation and training', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Managed Services Starter', 'managed-services-starter', 'Proactive monitoring, patching, and helpdesk for up to 25 endpoints', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Managed Services Growth', 'managed-services-growth', 'MSP bundle with endpoint management, backup, and quarterly reviews (25–150 endpoints)', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Cloud Readiness Kit', 'cloud-readiness-kit', 'Assessment, migration plan, and pilot workload to AWS/Azure/GCP', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Disaster Recovery & Backup', 'dr-backup-suite', 'Cloud backup, on-prem NAS, and DR runbook with quarterly restore tests', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Secure Remote Work', 'secure-remote-work', 'VPN, MFA, endpoint hardening, and collaboration enablement for hybrid teams', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Retail Security Package', 'retail-security-package', '8–16 IP cameras, NVR, POS-view zones, and alerting for storefronts', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Warehouse Ops Bundle', 'warehouse-ops-bundle', 'Industrial Wi-Fi, handheld scanner network, and camera coverage for aisles/docks', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Access Control Upgrade', 'access-control-upgrade', '4–12 door controllers, readers, credentials, and scheduling with HR integration', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Office Move IT Pack', 'office-move-it-pack', 'Structured cabling, rack setup, ISP cutover, and desktop moves in one weekend', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Conference Room Pro', 'conference-room-pro', 'UC room system with 4K display, PTZ camera, ceiling mic array, and Teams/Zoom config', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Branch-in-a-Box', 'branch-in-a-box', 'Pre-staged router, switch, APs, and VoIP with zero-touch deployment for new sites', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Network Refresh Essentials', 'network-refresh-essentials', 'Core/edge switch refresh, VLAN redesign, and PoE budgeting with cutover plan', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Compliance Readiness (PCI/HIPAA)', 'compliance-readiness', 'Gap assessment, policy pack, hardening baseline, and evidence collection templates', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('PenTest & Remediation', 'pentest-remediation', 'External + internal penetration test with prioritized remediation sprints', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Smart Building Starter', 'smart-building-starter', 'IP cameras, access control, and environmental sensors with single-pane monitoring', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Education Campus Kit', 'education-campus-kit', 'High-density Wi-Fi, content filtering, lab imaging, and classroom AV basics', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Healthcare Clinic IT', 'healthcare-clinic-it', 'Secure EHR-ready network, segmented Wi-Fi, IP cameras, and backup with encryption', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Construction Site Rapid-Deploy', 'construction-site-rapid', 'Temporary site network with LTE backup, cameras, and access control in rugged enclosures', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
--- ('Executive Protection IT', 'executive-protection-it', 'Hardened endpoints, secure comms, travel kits, and managed identity monitoring', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
--- ('Data Center Mini-Refresh', 'datacenter-mini-refresh', 'Rack consolidation, UPS refresh, virtualization upgrade, and monitoring overhaul', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('VoIP Launch FastTrack', 'voip-launch-fasttrack', '50–150 user VoIP deployment with number porting, IVR, training, and QoS tuning', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
--- ('Cabling Turnkey (Cat6A)', 'cabling-turnkey-cat6a', 'Design, install, certify Cat6A with patch panels and labeling up to 96 drops', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
--- ('Video Analytics Suite', 'video-analytics-suite', 'CCTV upgrade with AI analytics (line-crossing, object detection, LPR) and alerting', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1);
 
 -- Services
 INSERT INTO `{!!prefix!!}srvc_services` (`sku`, `slug`, `name`, `short_desc`, `long_desc`, `category_id`, `service_type_id`, `complexity_id`, `is_active`, `minimum_quantity`, `maximum_quantity`, `estimated_hours`, `skill_level`, `metadata`, `version`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
@@ -407,277 +273,298 @@ INSERT INTO `{!!prefix!!}srvc_service_prices`
 (33, 1, 3, 'CAD', 185.00, 'camera', 150.00, '2025-01-01 00:00:00', NULL, 1, 'approved', 2, '2025-08-29 11:00:00', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 (33, 2, 3, 'CAD', 165.00, 'camera', 120.00, '2025-01-01 00:00:00', NULL, 1, 'approved', 2, '2025-08-29 11:00:00', '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
 
--- -- Service Addons
--- INSERT INTO `{!!prefix!!}srvc_service_addons` (`service_id`, `addon_service_id`, `required`, `min_qty`, `max_qty`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 4, 1, 1, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 14, 0, 0.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 4, 1, 1.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 15, 0, 0.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 4, 1, 1.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 15, 0, 0.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 5, 0, 0.000, NULL, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 6, 0, 0.000, NULL, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 7, 0, 0.000, NULL, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 16, 0, 0.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 17, 0, 0.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 17, 1, 1.000, 1.000, '2025-08-28 23:57:07', NOW(), 1, 2);
 
--- -- Service Coverage
--- INSERT INTO `{!!prefix!!}srvc_service_coverage` (`service_id`, `coverage_area_id`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (14, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (14, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (14, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 3, '2025-08-28 23:57:07', NOW(), 1, 2);
+INSERT INTO `{!!prefix!!}srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `new_amount`, `new_setup_fee`, `new_currency`, `new_unit`, 
+ `new_valid_from`, `new_valid_to`, `new_is_current`,
+ `new_service_id`, `new_pricing_tier_id`, `new_pricing_model_id`,
+ `new_approval_status`, `new_approved_by`, `new_approved_at`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(1, 'created', 
+ 45.00, 500.00, 'CAD', 'hour',
+ '2025-01-01 00:00:00', NULL, 1,
+ 1, 1, 1,
+ 'approved', 1, '2025-01-01 00:00:00',
+ 'Price created at $45.00 | Initial price creation', '2025-08-28 23:57:07', 1),
 
--- -- Service Deliverable Assignments
--- INSERT INTO `{!!prefix!!}srvc_service_deliverable_assignments` (`service_id`, `deliverable_id`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 11, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 11, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 14, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 6, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 6, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 13, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 3, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 4, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 6, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 13, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 14, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 15, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 2, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 5, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 7, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 8, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 9, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 13, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 14, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 15, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 1, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 11, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 12, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 13, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 15, '2025-08-28 23:57:07', NOW(), 1, 2);
+(2, 'created', 
+ 42.00, 400.00, 'CAD', 'hour',
+ '2025-01-01 00:00:00', NULL, 1,
+ 1, 2, 1,
+ 'approved', 1, '2025-01-01 00:00:00',
+ 'Price created at CAD $42.00 | Initial price creation', '2025-08-28 23:57:07', 1),
 
--- -- Service Delivery Method Assignments
--- INSERT INTO `{!!prefix!!}srvc_service_delivery_method_assignments` (`service_id`, `delivery_method_id`, `lead_time_days`, `sla_hours`, `surcharge`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 1, 5, 48, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 3, 7, 72, 200.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 1, 7, 72, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 3, 10, 96, 500.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 1, 14, 120, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 5, 21, 168, 2000.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 1, 2, 24, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 5, 3, 48, 300.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 1, 3, 48, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (6, 1, 5, 72, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 1, 10, 120, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (7, 5, 14, 168, 1000.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (8, 1, 5, 72, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 1, 10, 120, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (9, 5, 14, 168, 800.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 1, 21, 240, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (10, 5, 28, 336, 2500.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (11, 1, 3, 48, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (12, 1, 7, 96, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 1, 14, 168, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (13, 5, 21, 240, 1500.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (14, 1, 1, 24, 50.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (14, 2, 0, 4, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 1, 0, 4, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 2, 0, 2, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (15, 5, 0, 1, 100.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 1, 5, 72, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 2, 2, 48, -25.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (16, 3, 3, 56, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 1, 7, 96, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (17, 3, 10, 120, 0.00, '2025-08-28 23:57:07', NOW(), 1, 2);
+(3, 'created', 
+ 480.00, 1000.00, 'CAD', 'month',
+ '2025-01-01 00:00:00', NULL, 1,
+ 1, 3, 2,
+ 'approved', 1, '2025-01-01 00:00:00',
+ 'Price created at CAD $480.00 | Initial price creation', '2025-08-28 23:57:07', 1),
 
--- INSERT INTO `{!!prefix!!}srvc_service_equipment_assignments` (`service_id`, `equipment_id`, `required`, `quantity`, `substitute_ok`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 3, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (1, 4, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (1, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (1, 7, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (1, 8, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (2, 2, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (2, 5, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (2, 9, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:33', 1, 2),
--- (3, 3, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:33', 1, 2),
--- (3, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (3, 9, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (4, 1, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (4, 4, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (4, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (5, 2, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (5, 3, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (5, 8, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (6, 1, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (6, 4, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (6, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (7, 4, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (7, 12, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (8, 2, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (8, 5, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (8, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
--- (9, 5, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (10, 6, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (11, 7, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (12, 8, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
--- (17, 7, 1, 12.000, 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2);
+(10, 'created', 
+ 125.00, 0.00, 'CAD', 'hour',
+ '2025-01-01 00:00:00', NULL, 1,
+ 2, 1, 1,
+ 'approved', 1, '2025-01-01 00:00:00',
+ 'Price created at CAD $125.00 | Initial price creation', '2025-08-28 23:57:07', 1),
 
--- -- Service Relationships
--- INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `notes`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 2, 'substitute_for', 'Professional VoIP can substitute for Basic VoIP with additional features', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (1, 4, 'prerequisite', 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (1, 5, 'prerequisite', 'Cat6 cabling required for VoIP phone connectivity', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (2, 3, 'substitute_for', 'Enterprise VoIP can substitute for Professional VoIP in large deployments', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (2, 4, 'prerequisite', 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (2, 6, 'prerequisite', 'Cat6A cabling recommended for professional VoIP systems', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (2, 15, 'dependency', 'Professional VoIP systems typically require premium support', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (3, 4, 'prerequisite', 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (3, 7, 'prerequisite', 'Fiber backbone required for enterprise VoIP redundancy', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (3, 15, 'prerequisite', 'Enterprise VoIP requires premium support contract', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (5, 6, 'incompatible_with', 'Cat6 and Cat6A cabling are alternative solutions', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (6, 7, 'incompatible_with', 'Cat6A and Fiber are typically alternative backbone solutions', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (8, 9, 'substitute_for', 'Professional cameras can substitute for Basic cameras', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (9, 6, 'prerequisite', 'Cat6A cabling required for professional camera systems', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (9, 10, 'substitute_for', 'Enterprise cameras can substitute for Professional cameras', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (10, 7, 'prerequisite', 'Fiber backbone required for enterprise camera systems', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (10, 15, 'prerequisite', 'Enterprise camera systems require premium support', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (10, 17, 'prerequisite', 'Security audit recommended for enterprise camera systems', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (11, 12, 'substitute_for', 'Multi-door access can substitute for Basic access control', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (12, 13, 'substitute_for', 'Enterprise access can substitute for Multi-door access control', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (13, 15, 'prerequisite', 'Enterprise access control requires premium support', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (13, 17, 'prerequisite', 'Security audit required before enterprise access control implementation', '2025-08-25 23:57:12', NOW(), 1, 2),
--- (14, 15, 'incompatible_with', 'Basic and Premium support are mutually exclusive', '2025-08-25 23:57:12', NOW(), 1, 2);
+(27, 'created', 
+ 25000.00, 3000.00, 'CAD', 'project',
+ '2025-01-01 00:00:00', NULL, 1,
+ 5, 2, 3,
+ 'approved', 1, '2025-01-01 00:00:00',
+ 'Price created at CAD $25000.00 | Initial price creation', '2025-08-28 23:57:07', 1);
 
--- -- Bundle Items
--- INSERT INTO `{!!prefix!!}srvc_bundle_items` (`bundle_id`, `service_id`, `quantity`, `discount_pct`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- (1, 1, 1.000, 15.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 5, 1.000, 10.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 8, 1.000, 12.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 11, 1.000, 8.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (1, 14, 1.000, 20.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 2, 1.000, 18.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 6, 1.000, 12.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 9, 1.000, 15.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 12, 1.000, 10.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (2, 15, 1.000, 25.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 10, 1.000, 8.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 13, 1.000, 12.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 15, 1.000, 20.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (3, 17, 1.000, 15.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 6, 1.000, 15.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 7, 1.000, 10.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (4, 16, 1.000, 12.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 2, 1.000, 12.00, '2025-08-28 23:57:07', NOW(), 1, 2),
--- (5, 4, 1.000, 20.00, '2025-08-28 23:57:07', NOW(), 1, 2);
+-- ============================================
+-- AMOUNT CHANGES (with currency tracking)
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, `old_currency`, `new_currency`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(1, 'amount_changed', 
+ 40.00, 45.00, 450.00, 500.00, 'CAD', 'CAD',
+ 'Amount: $40.00 → $45.00 | Setup Fee: $450.00 → $500.00 | Price increase due to increased infrastructure costs', 
+ '2025-09-15 14:30:00', 2),
+
+(10, 'amount_changed', 
+ 120.00, 125.00, 0.00, 0.00, 'CAD', 'CAD',
+ 'Amount: $120.00 → $125.00 | Annual rate adjustment for technical consulting services', 
+ '2025-09-10 09:15:00', 2),
+
+(27, 'amount_changed', 
+ 24000.00, 25000.00, 2500.00, 3000.00, 'CAD', 'CAD',
+ 'Amount: $24000.00 → $25000.00 | Setup Fee: $2500.00 → $3000.00 | Price adjustment for enhanced security features', 
+ '2025-09-20 16:45:00', 1);
+
+-- ============================================
+-- CURRENCY CHANGES
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_amount`, `new_amount`, `old_currency`, `new_currency`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(33, 'currency_changed', 
+ 1650.00, 1237.50, 'CAD', 'USD',
+ 'Currency: CAD → USD | Amount: $1650.00 → $1237.50 | Currency conversion with rate adjustment', 
+ '2025-09-27 15:30:00', 2),
+
+(52, 'currency_changed',
+ 100.00, 75.00, 'CAD', 'USD',
+ 'Currency: CAD → USD | Amount: $100.00 → $75.00 | Expanding to US market pricing',
+ '2025-09-15 10:00:00', 1);
+
+-- ============================================
+-- UNIT CHANGES
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_unit`, `new_unit`, `old_amount`, `new_amount`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(15, 'unit_changed',
+ 'hour', 'user', 40.00, 250.00,
+ 'Unit: hour → user | Amount: $40.00 → $250.00 | Changed pricing model from hourly to per-user',
+ '2025-09-12 14:00:00', 2),
+
+(22, 'unit_changed',
+ 'device', 'site', 15.00, 150.00,
+ 'Unit: device → site | Amount: $15.00 → $150.00 | Simplified pricing to site-based model',
+ '2025-09-18 11:30:00', 1);
+
+-- ============================================
+-- APPROVAL WORKFLOW CHANGES
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(49, 'approval_changed', 
+ 'draft', 'pending', NULL, NULL, NULL, NULL,
+ 'Status: draft → pending | Submitted for approval - new enterprise video streaming pricing', 
+ '2025-09-25 10:00:00', 2),
+
+(49, 'approval_changed', 
+ 'pending', 'approved', NULL, 1, NULL, '2025-09-26 14:30:00',
+ 'Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-26 14:30:00 | Approved by finance team after review', 
+ '2025-09-26 14:30:00', 1),
+
+(65, 'approval_changed', 
+ 'pending', 'rejected', NULL, NULL, NULL, NULL,
+ 'Status: pending → rejected | Price too high compared to market rates - needs revision', 
+ '2025-09-22 11:15:00', 1),
+
+(81, 'approval_changed', 
+ NULL, 'draft', NULL, NULL, NULL, NULL,
+ 'Status: N/A → draft | New draft pricing created for training services', 
+ '2025-09-27 21:32:38', 2),
+
+(82, 'approval_changed', 
+ NULL, 'draft', NULL, NULL, NULL, NULL,
+ 'Status: N/A → draft | New draft pricing created for support services', 
+ '2025-09-27 21:46:04', 2);
+
+-- ============================================
+-- DATE & STATUS CHANGES (with is_current)
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_valid_from`, `new_valid_from`, `old_valid_to`, `new_valid_to`, `old_is_current`, `new_is_current`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(33, 'dates_changed', 
+ '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-12-31 23:59:59', 1, 1,
+ 'Valid To: N/A → 2025-12-31 23:59:59 | Added end date for promotional pricing period', 
+ '2025-09-27 21:47:21', 2),
+
+(84, 'dates_changed', 
+ '2025-09-27 00:00:00', '2025-09-29 00:00:00', NULL, NULL, 1, 1,
+ 'Valid From: 2025-09-27 00:00:00 → 2025-09-29 00:00:00 | Adjusted start date for new training pricing', 
+ '2025-09-27 21:45:19', 2),
+
+(45, 'dates_changed',
+ '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-06-30 23:59:59', 1, 0,
+ 'Valid To: N/A → 2025-06-30 23:59:59 | Is Current: Yes → No | Price expiring - new tier structure coming',
+ '2025-06-25 09:00:00', 1);
+
+-- ============================================
+-- RELATIONSHIP CHANGES (tier/model changes)
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_pricing_tier_id`, `new_pricing_tier_id`, `old_amount`, `new_amount`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(28, 'tier_changed',
+ 1, 2, 100.00, 150.00,
+ 'Pricing Tier ID: 1 → 2 | Amount: $100.00 → $150.00 | Customer upgraded from Basic to Standard tier',
+ '2025-09-20 13:15:00', 2),
+
+(35, 'tier_changed',
+ 3, 2, 500.00, 300.00,
+ 'Pricing Tier ID: 3 → 2 | Amount: $500.00 → $300.00 | Customer downgraded from Premium to Standard tier',
+ '2025-09-22 16:45:00', 1);
+
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_pricing_model_id`, `new_pricing_model_id`, `old_unit`, `new_unit`, `old_amount`, `new_amount`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(42, 'model_changed',
+ 1, 2, 'hour', 'month', 50.00, 1000.00,
+ 'Pricing Model ID: 1 → 2 | Unit: hour → month | Amount: $50.00 → $1000.00 | Switched from hourly to monthly billing model',
+ '2025-09-24 10:30:00', 2);
+
+-- ============================================
+-- COMPLEX MULTI-FIELD CHANGES
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, 
+ `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`,
+ `old_valid_from`, `new_valid_from`, `old_is_current`, `new_is_current`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(33, 'updated', 
+ 1600.00, 1500.00, 700.00, 600.00,
+ 'pending', 'approved', NULL, 1, NULL, '2025-09-27 21:47:21',
+ '2025-01-01 00:00:00', '2025-01-01 00:00:00', 1, 1,
+ 'Amount: $1600.00 → $1500.00 | Setup Fee: $700.00 → $600.00 | Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-27 21:47:21 | Price reduction and approval following competitive analysis', 
+ '2025-09-27 21:47:21', 2);
+
+-- ============================================
+-- BULK ANNUAL PRICING UPDATES
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_amount`, `new_amount`, `old_currency`, `new_currency`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(52, 'amount_changed', 0.12, 0.15, 'CAD', 'CAD',
+ 'Amount: $0.12 → $0.15 | Annual price adjustment for data storage services', 
+ '2025-09-01 08:00:00', 1),
+
+(53, 'amount_changed', 0.10, 0.12, 'CAD', 'CAD',
+ 'Amount: $0.10 → $0.12 | Annual price adjustment for data storage services', 
+ '2025-09-01 08:00:00', 1),
+
+(54, 'amount_changed', 0.08, 0.10, 'CAD', 'CAD',
+ 'Amount: $0.08 → $0.10 | Annual price adjustment for data storage services', 
+ '2025-09-01 08:00:00', 1);
+
+-- ============================================
+-- SETUP FEE ONLY ADJUSTMENTS
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_setup_fee`, `new_setup_fee`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(29, 'updated', 
+ 250.00, 300.00,
+ 'Setup Fee: $250.00 → $300.00 | Increased setup fee due to additional hardware requirements', 
+ '2025-09-18 13:20:00', 2),
+
+(30, 'updated', 
+ 200.00, 250.00,
+ 'Setup Fee: $200.00 → $250.00 | Increased setup fee due to additional hardware requirements', 
+ '2025-09-18 13:20:00', 2);
+
+-- ============================================
+-- DELETION RECORDS (with all old values)
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `old_amount`, `old_setup_fee`, `old_currency`, `old_unit`,
+ `old_approval_status`, `old_is_current`,
+ `old_service_id`, `old_pricing_tier_id`, `old_pricing_model_id`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(43, 'deleted', 
+ 150.00, 50.00, 'CAD', 'month',
+ 'approved', 1,
+ 3, 2, 2,
+ 'Price deleted | Service discontinued - migrating customers to new pricing model', 
+ '2025-09-20 16:00:00', 1),
+
+(32, 'deleted', 
+ 200.00, 75.00, 'CAD', 'user',
+ 'approved', 0,
+ 2, 1, 1,
+ 'Price deleted | Legacy pricing tier removed', 
+ '2025-09-19 14:30:00', 1);
+
+-- ============================================
+-- NEW DRAFT PRICES (recent activity)
+-- ============================================
+INSERT INTO `wp_srvc_price_history` 
+(`service_price_id`, `change_type`, 
+ `new_amount`, `new_setup_fee`, `new_currency`, `new_unit`,
+ `new_valid_from`, `new_is_current`,
+ `new_service_id`, `new_pricing_tier_id`, `new_pricing_model_id`,
+ `new_approval_status`,
+ `change_description`, `changed_at`, `changed_by`) 
+VALUES
+(83, 'created', 
+ 6200.00, 12.00, 'CAD', 'seat',
+ '2025-09-29 00:00:00', 1,
+ 7, 3, 4,
+ 'draft',
+ 'Price created at CAD $6200.00 | New pricing structure for bulk training services', 
+ '2025-09-27 21:32:38', 2),
+
+(84, 'created', 
+ 0.00, 0.00, 'CAD', 'quote',
+ '2025-09-28 00:00:00', 1,
+ 8, 2, 5,
+ 'draft',
+ 'Price created at CAD $0.00 | Quote-based pricing for specialized support services', 
+ '2025-09-27 21:46:04', 2);
 
 -- >>> Down >>>
 -- DELETE FROM `{!!prefix!!}srvc_bundle_items`;
@@ -687,7 +574,8 @@ INSERT INTO `{!!prefix!!}srvc_service_prices`
 -- DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
 -- DELETE FROM `{!!prefix!!}srvc_service_addons`;
--- DELETE FROM `{!!prefix!!}srvc_service_prices`;
+DELETE FROM `{!!prefix!!}srvc_price_history`;
+DELETE FROM `{!!prefix!!}srvc_service_prices`;
 DELETE FROM `{!!prefix!!}srvc_services`;
 -- DELETE FROM `{!!prefix!!}srvc_bundles`;
 DELETE FROM `{!!prefix!!}srvc_service_types`;

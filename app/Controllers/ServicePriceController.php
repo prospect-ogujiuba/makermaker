@@ -3,6 +3,7 @@
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServicePriceFields;
+use MakerMaker\Models\PriceHistory;
 use MakerMaker\Models\ServicePrice;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
@@ -33,7 +34,7 @@ class ServicePriceController extends Controller
     }
 
     /**
-     * Create item
+     * Create item - Complete tracking version
      *
      * AJAX requests and normal requests can be made to this action
      *
@@ -49,6 +50,30 @@ class ServicePriceController extends Controller
         $service_price->updated_by = $user->ID;
 
         $service_price->save($fields);
+
+        // Capture ALL new values for compliance tracking
+        $newData = [
+            'amount' => $fields['amount'],
+            'setup_fee' => $fields['setup_fee'],
+            'currency' => $fields['currency'],
+            'unit' => $fields['unit'],
+            'valid_from' => $fields['valid_from'],
+            'valid_to' => $fields['valid_to'],
+            'is_current' => $fields['is_current'],
+            'service_id' => $fields['service_id'],
+            'pricing_tier_id' => $fields['pricing_tier_id'],
+            'pricing_model_id' => $fields['pricing_model_id'],
+            'approval_status' => $fields['approval_status'],
+        ];
+
+        PriceHistory::recordChange(
+            $service_price->getID(),
+            'created',
+            [],  // No old data on creation
+            $newData,
+            'Initial price creation',
+            $user->ID
+        );
 
         return tr_redirect()->toPage('serviceprice', 'index')
             ->withFlash('Service Price created');
@@ -75,7 +100,7 @@ class ServicePriceController extends Controller
     }
 
     /**
-     * Update item
+     * Update item - Complete tracking version
      *
      * AJAX requests and normal requests can be made to this action
      *
@@ -89,9 +114,55 @@ class ServicePriceController extends Controller
             $response->unauthorized('Unauthorized: Service Price not updated')->abort();
         }
 
+        // Capture ALL old values BEFORE update
+        $oldData = [
+            'amount' => $service_price->amount,
+            'setup_fee' => $service_price->setup_fee,
+            'currency' => $service_price->currency,
+            'unit' => $service_price->unit,
+            'valid_from' => $service_price->valid_from,
+            'valid_to' => $service_price->valid_to,
+            'is_current' => $service_price->is_current,
+            'service_id' => $service_price->service_id,
+            'pricing_tier_id' => $service_price->pricing_tier_id,
+            'pricing_model_id' => $service_price->pricing_model_id,
+            'approval_status' => $service_price->approval_status,
+            'approved_by' => $service_price->approved_by,
+            'approved_at' => $service_price->approved_at,
+        ];
+
         $service_price->updated_by = $user->ID;
 
         $service_price->save($fields);
+
+        // Refresh to get updated values
+        $updated_service_price = ServicePrice::new()->findById($service_price->id);
+
+        // Capture ALL new values AFTER update
+        $newData = [
+            'amount' => $updated_service_price->amount,
+            'setup_fee' => $updated_service_price->setup_fee,
+            'currency' => $updated_service_price->currency,
+            'unit' => $updated_service_price->unit,
+            'valid_from' => $updated_service_price->valid_from,
+            'valid_to' => $updated_service_price->valid_to,
+            'is_current' => $updated_service_price->is_current,
+            'service_id' => $updated_service_price->service_id,
+            'pricing_tier_id' => $updated_service_price->pricing_tier_id,
+            'pricing_model_id' => $updated_service_price->pricing_model_id,
+            'approval_status' => $updated_service_price->approval_status,
+            'approved_by' => $updated_service_price->approved_by,
+            'approved_at' => $updated_service_price->approved_at,
+        ];
+
+        PriceHistory::recordChange(
+            $service_price->getID(),
+            'updated',
+            $oldData,
+            $newData,
+            'Price record updated',
+            $user->ID
+        );
 
         return tr_redirect()->toPage('serviceprice', 'edit', $service_price->getID())
             ->withFlash('Service Price updated');
@@ -122,7 +193,7 @@ class ServicePriceController extends Controller
     }
 
     /**
-     * Destroy item
+     * Destroy item - With complete tracking
      *
      * AJAX requests and normal requests can be made to this action
      *
@@ -130,11 +201,43 @@ class ServicePriceController extends Controller
      *
      * @return mixed
      */
-    public function destroy(ServicePrice $service_price, Response $response)
+    public function destroy(ServicePrice $service_price, Response $response, AuthUser $user)
     {
         if (!$service_price->can('destroy')) {
-            return $response->unauthorized('Unauthorized: ServicePrice not deleted');
+            return $response->unauthorized('Unauthorized: Service Price not deleted');
         }
+
+        $service_count = $service_price->service()->count();
+
+        if ($service_count > 0) {
+            return $response
+                ->error("Cannot delete: {$service_price->service->name} uses this price.")
+                ->setStatus(409)
+                ->setData('service_price', $service_price);
+        }
+
+        // Capture ALL values before deletion for compliance
+        $oldData = [
+            // Financial
+            'amount' => $service_price->amount,
+            'setup_fee' => $service_price->setup_fee,
+            'currency' => $service_price->currency,
+            'unit' => $service_price->unit,
+            // Temporal
+            'valid_from' => $service_price->valid_from,
+            'valid_to' => $service_price->valid_to,
+            'is_current' => $service_price->is_current,
+            // Relationships
+            'service_id' => $service_price->service_id,
+            'pricing_tier_id' => $service_price->pricing_tier_id,
+            'pricing_model_id' => $service_price->pricing_model_id,
+            // Approval
+            'approval_status' => $service_price->approval_status,
+            'approved_by' => $service_price->approved_by,
+            'approved_at' => $service_price->approved_at,
+        ];
+
+        $servicePriceId = $service_price->getID();
 
         $deleted = $service_price->delete();
 
@@ -144,7 +247,17 @@ class ServicePriceController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Price deleted.')->setData('serviceprice', $service_price);
+        // Record deletion with all previous values
+        PriceHistory::recordChange(
+            $servicePriceId,
+            'deleted',
+            $oldData,
+            [],  // No new data on deletion
+            'Price record deleted',
+            $user->ID
+        );
+
+        return $response->success('Service Price deleted.')->setData('service_price', $service_price);
     }
 
     /**
