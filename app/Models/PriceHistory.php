@@ -194,37 +194,90 @@ class PriceHistory extends Model
             return $providedType;
         }
 
-        // Auto-determine based on priority
-        if (isset($changes['amount']) && count($changes) == 1) {
-            return 'amount_changed';
+        // If no changes detected, return generic updated
+        if (empty($changes)) {
+            return 'updated';
         }
 
+        // Auto-determine based on priority (most specific first)
+
+        // Single field changes (highest priority for specific tracking)
+        if (count($changes) == 1) {
+            if (isset($changes['amount'])) {
+                return 'amount_changed';
+            }
+            if (isset($changes['setup_fee'])) {
+                return 'amount_changed'; // Setup fee is still financial
+            }
+            if (isset($changes['currency'])) {
+                return 'currency_changed';
+            }
+            if (isset($changes['unit'])) {
+                return 'unit_changed';
+            }
+            if (isset($changes['pricing_tier_id'])) {
+                return 'tier_changed';
+            }
+            if (isset($changes['pricing_model_id'])) {
+                return 'model_changed';
+            }
+            if (isset($changes['service_id'])) {
+                return 'tier_changed'; // Service reassignment is similar to tier change
+            }
+            if (isset($changes['approval_status'])) {
+                return 'status_changed';
+            }
+            if (isset($changes['approved_by'])) {
+                return 'approval_changed';
+            }
+            if (isset($changes['approved_at'])) {
+                return 'approval_changed';
+            }
+            if (isset($changes['valid_from'])) {
+                return 'dates_changed';
+            }
+            if (isset($changes['valid_to'])) {
+                return 'dates_changed';
+            }
+            if (isset($changes['is_current'])) {
+                return 'dates_changed'; // Current status is temporal
+            }
+        }
+
+        // Multi-field changes (categorize by dominant theme)
+
+        // Currency change with other fields
         if (isset($changes['currency'])) {
             return 'currency_changed';
         }
 
+        // Unit change (pricing model shift)
         if (isset($changes['unit'])) {
             return 'unit_changed';
         }
 
-        if (isset($changes['pricing_tier_id'])) {
+        // Tier or model changes
+        if (isset($changes['pricing_tier_id']) || isset($changes['pricing_model_id']) || isset($changes['service_id'])) {
             return 'tier_changed';
         }
 
-        if (isset($changes['pricing_model_id'])) {
-            return 'model_changed';
-        }
-
+        // Approval workflow changes
         if (isset($changes['approval_status']) || isset($changes['approved_by']) || isset($changes['approved_at'])) {
             return 'approval_changed';
         }
 
+        // Financial changes (amount or setup fee)
+        if (isset($changes['amount']) || isset($changes['setup_fee'])) {
+            return 'amount_changed';
+        }
+
+        // Temporal changes (dates or current status)
         if (isset($changes['valid_from']) || isset($changes['valid_to']) || isset($changes['is_current'])) {
             return 'dates_changed';
         }
 
-        // Multiple fields or other changes
-        return 'multi_update';
+        // Multiple unrelated fields changed
+        return 'updated';
     }
 
     /**
