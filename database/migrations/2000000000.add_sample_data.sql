@@ -47,7 +47,6 @@ INSERT INTO `{!!prefix!!}srvc_pricing_tiers`
 -- Currency Exchange Rates
 INSERT INTO `{!!prefix!!}srvc_currency_rates`
 (`from_currency`, `to_currency`, `exchange_rate`, `effective_date`, `source`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
--- CAD to other currencies
 ('CAD', 'USD', 0.740000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('CAD', 'EUR', 0.670000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('CAD', 'GBP', 0.580000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
@@ -55,20 +54,14 @@ INSERT INTO `{!!prefix!!}srvc_currency_rates`
 ('CAD', 'JPY', 110.500000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('CAD', 'CHF', 0.660000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('CAD', 'MXN', 12.800000, '2025-09-26', 'bank_of_canada', '2025-08-28 23:57:07', NOW(), 1, 1),
-
--- USD to other currencies (for cross-rate calculations)
 ('USD', 'CAD', 1.351351, '2025-09-26', 'federal_reserve', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('USD', 'EUR', 0.905405, '2025-09-26', 'federal_reserve', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('USD', 'GBP', 0.783784, '2025-09-26', 'federal_reserve', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('USD', 'AUD', 1.513514, '2025-09-26', 'federal_reserve', '2025-08-28 23:57:07', NOW(), 1, 1),
 ('USD', 'JPY', 149.324324, '2025-09-26', 'federal_reserve', '2025-08-28 23:57:07', NOW(), 1, 1),
-
--- EUR to major currencies
 ('EUR', 'CAD', 1.492537, '2025-09-26', 'ecb', '2025-08-28 23:57:07', NOW(), 2, 2),
 ('EUR', 'USD', 1.104478, '2025-09-26', 'ecb', '2025-08-28 23:57:07', NOW(), 2, 2),
 ('EUR', 'GBP', 0.865672, '2025-09-26', 'ecb', '2025-08-28 23:57:07', NOW(), 2, 2),
-
--- GBP to major currencies
 ('GBP', 'CAD', 1.724138, '2025-09-26', 'bank_of_england', '2025-08-28 23:57:07', NOW(), 2, 2),
 ('GBP', 'USD', 1.275862, '2025-09-26', 'bank_of_england', '2025-08-28 23:57:07', NOW(), 2, 2),
 ('GBP', 'EUR', 1.155172, '2025-09-26', 'bank_of_england', '2025-08-28 23:57:07', NOW(), 2, 2);
@@ -150,7 +143,8 @@ INSERT INTO `{!!prefix!!}srvc_categories`
 (8, 'Rack & Enclosures', 'rack-enclosures', 'box', 'Server racks and equipment enclosures', 4, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Services
-INSERT INTO `{!!prefix!!}srvc_services` (`sku`, `slug`, `name`, `short_desc`, `long_desc`, `category_id`, `service_type_id`, `complexity_id`, `is_active`, `minimum_quantity`, `maximum_quantity`, `estimated_hours`, `skill_level`, `metadata`, `version`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+INSERT INTO `{!!prefix!!}srvc_services` 
+(`sku`, `slug`, `name`, `short_desc`, `long_desc`, `category_id`, `service_type_id`, `complexity_id`, `is_active`, `minimum_quantity`, `maximum_quantity`, `estimated_hours`, `skill_level`, `metadata`, `version`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
 ('BASIC-VOIP-SYSTEM', 'basic-voip-system', 'Basic VoIP System', 'Entry-level VoIP phone system for small offices', 'Complete VoIP phone system including IP PBX, desk phones, and basic features like voicemail, call forwarding, and auto-attendant. Perfect for small businesses with up to 25 users.', 5, 1, 1, 1, 1.00, 5.00, 16.00, 'intermediate', '{"1758748375":{"key":"user_count","value":"25"},"1758748376":{"key":"concurrent_calls","value":"10"},"1758748377":{"key":"sip_trunks","value":"5"},"1758748378":{"key":"auto_attendant","value":"1"},"1758748379":{"key":"voicemail_to_email","value":"1"},"1758748380":{"key":"call_recording","value":"0"}}', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('PROFESSIONAL-VOIP-SYSTEM', 'professional-voip-system', 'Professional VoIP System', 'Advanced VoIP solution for growing businesses', 'Comprehensive VoIP system with advanced features including call recording, unified messaging, mobile integration, and detailed reporting. Suitable for businesses with 25-100 users.', 5, 1, 3, 1, 1.00, 3.00, 32.00, 'advanced', '{"1758748381":{"key":"user_count","value":"100"},"1758748382":{"key":"concurrent_calls","value":"4"},"1758748383":{"key":"sip_trunks","value":"20"},"1758748384":{"key":"auto_attendant","value":"1"},"1758748385":{"key":"voicemail_to_email","value":"1"},"1758748386":{"key":"call_recording","value":"1"}}', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('ENTERPRISE-VOIP-SYSTEM', 'enterprise-voip-system', 'Enterprise VoIP System', 'Full-featured enterprise communication platform', 'Enterprise-grade unified communications platform with advanced call routing, conference bridging, CRM integration, and redundancy. Supports 100+ users with 99.99% uptime SLA.', 5, 1, 4, 1, 1.00, 10.00, 80.00, 'expert', '{"1758748387":{"key":"user_count","value":"500"},"1758748388":{"key":"concurrent_calls","value":"200"},"1758748389":{"key":"sip_trunks","value":"100"},"1758748390":{"key":"auto_attendant","value":"1"},"1758748391":{"key":"voicemail_to_email","value":"1"},"1758748392":{"key":"call_recording","value":"1"}}', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
@@ -273,433 +267,240 @@ INSERT INTO `{!!prefix!!}srvc_service_prices`
 (33, 1, 3, 'CAD', 185.00, 'camera', 150.00, '2025-01-01 00:00:00', NULL, 1, 'approved', 2, '2025-08-29 11:00:00', '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 (33, 2, 3, 'CAD', 165.00, 'camera', 120.00, '2025-01-01 00:00:00', NULL, 1, 'approved', 2, '2025-08-29 11:00:00', '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
 
-
+-- Service Price History
 INSERT INTO `{!!prefix!!}srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `new_amount`, `new_setup_fee`, `new_currency`, `new_unit`, 
- `new_valid_from`, `new_valid_to`, `new_is_current`,
- `new_service_id`, `new_pricing_tier_id`, `new_pricing_model_id`,
- `new_approval_status`, `new_approved_by`, `new_approved_at`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(1, 'created', 
- 45.00, 500.00, 'CAD', 'hour',
- '2025-01-01 00:00:00', NULL, 1,
- 1, 1, 1,
- 'approved', 1, '2025-01-01 00:00:00',
- 'Price created at $45.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(`id`, `service_price_id`, `change_type`, `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, `old_currency`, `new_currency`, `old_unit`, `new_unit`, `old_valid_from`, `new_valid_from`, `old_valid_to`, `new_valid_to`, `old_is_current`, `new_is_current`, `old_service_id`, `new_service_id`, `old_pricing_tier_id`, `new_pricing_tier_id`, `old_pricing_model_id`, `new_pricing_model_id`, `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`, `change_description`, `changed_at`, `changed_by`) VALUES
+(1, 1, 'created', NULL, 45.00, NULL, 500.00, NULL, 'CAD', NULL, 'hour', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 1, NULL, 1, NULL, 1, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at $45.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(2, 2, 'created', NULL, 42.00, NULL, 400.00, NULL, 'CAD', NULL, 'hour', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 1, NULL, 2, NULL, 1, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at CAD $42.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(3, 3, 'created', NULL, 480.00, NULL, 1000.00, NULL, 'CAD', NULL, 'month', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 1, NULL, 3, NULL, 2, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at CAD $480.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(4, 10, 'created', NULL, 125.00, NULL, 0.00, NULL, 'CAD', NULL, 'hour', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 2, NULL, 1, NULL, 1, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at CAD $125.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(5, 27, 'created', NULL, 25000.00, NULL, 3000.00, NULL, 'CAD', NULL, 'project', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 5, NULL, 2, NULL, 3, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at CAD $25000.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+(6, 1, 'amount_changed', 40.00, 45.00, 450.00, 500.00, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $40.00 → $45.00 | Setup Fee: $450.00 → $500.00 | Price increase due to increased infrastructure costs', '2025-09-15 14:30:00', 2),
+(7, 10, 'amount_changed', 120.00, 125.00, 0.00, 0.00, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $120.00 → $125.00 | Annual rate adjustment for technical consulting services', '2025-09-10 09:15:00', 2),
+(8, 27, 'amount_changed', 24000.00, 25000.00, 2500.00, 3000.00, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $24000.00 → $25000.00 | Setup Fee: $2500.00 → $3000.00 | Price adjustment for enhanced security features', '2025-09-20 16:45:00', 1),
+(9, 33, 'currency_changed', 1650.00, 1237.50, NULL, NULL, 'CAD', 'USD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Currency: CAD → USD | Amount: $1650.00 → $1237.50 | Currency conversion with rate adjustment', '2025-09-27 15:30:00', 2),
+(10, 52, 'currency_changed', 100.00, 75.00, NULL, NULL, 'CAD', 'USD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Currency: CAD → USD | Amount: $100.00 → $75.00 | Expanding to US market pricing', '2025-09-15 10:00:00', 1),
+(11, 15, 'unit_changed', 40.00, 250.00, NULL, NULL, NULL, NULL, 'hour', 'user', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Unit: hour → user | Amount: $40.00 → $250.00 | Changed pricing model from hourly to per-user', '2025-09-12 14:00:00', 2),
+(12, 22, 'unit_changed', 15.00, 150.00, NULL, NULL, NULL, NULL, 'device', 'site', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Unit: device → site | Amount: $15.00 → $150.00 | Simplified pricing to site-based model', '2025-09-18 11:30:00', 1),
+(13, 49, 'approval_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'draft', 'pending', NULL, NULL, NULL, NULL, 'Status: draft → pending | Submitted for approval - new enterprise video streaming pricing', '2025-09-25 10:00:00', 2),
+(14, 49, 'approval_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'pending', 'approved', NULL, 1, NULL, '2025-09-26 14:30:00', 'Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-26 14:30:00 | Approved by finance team after review', '2025-09-26 14:30:00', 1),
+(15, 65, 'approval_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'pending', 'rejected', NULL, NULL, NULL, NULL, 'Status: pending → rejected | Price too high compared to market rates - needs revision', '2025-09-22 11:15:00', 1),
+(16, 81, 'approval_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'draft', NULL, NULL, NULL, NULL, 'Status: N/A → draft | New draft pricing created for training services', '2025-09-27 21:32:38', 2),
+(17, 82, 'approval_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'draft', NULL, NULL, NULL, NULL, 'Status: N/A → draft | New draft pricing created for support services', '2025-09-27 21:46:04', 2),
+(18, 33, 'dates_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-12-31 23:59:59', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Valid To: N/A → 2025-12-31 23:59:59 | Added end date for promotional pricing period', '2025-09-27 21:47:21', 2),
+(19, 84, 'dates_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 00:00:00', '2025-09-29 00:00:00', NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Valid From: 2025-09-27 00:00:00 → 2025-09-29 00:00:00 | Adjusted start date for new training pricing', '2025-09-27 21:45:19', 2),
+(20, 45, 'dates_changed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-06-30 23:59:59', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Valid To: N/A → 2025-06-30 23:59:59 | Is Current: Yes → No | Price expiring - new tier structure coming', '2025-06-25 09:00:00', 1),
+(21, 28, 'tier_changed', 100.00, 150.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pricing Tier ID: 1 → 2 | Amount: $100.00 → $150.00 | Customer upgraded from Basic to Standard tier', '2025-09-20 13:15:00', 2),
+(22, 35, 'tier_changed', 500.00, 300.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pricing Tier ID: 3 → 2 | Amount: $500.00 → $300.00 | Customer downgraded from Premium to Standard tier', '2025-09-22 16:45:00', 1),
+(23, 42, 'model_changed', 50.00, 1000.00, NULL, NULL, NULL, NULL, 'hour', 'month', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'Pricing Model ID: 1 → 2 | Unit: hour → month | Amount: $50.00 → $1000.00 | Switched from hourly to monthly billing model', '2025-09-24 10:30:00', 2),
+(24, 33, 'updated', 1600.00, 1500.00, 700.00, 600.00, NULL, NULL, NULL, NULL, '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'pending', 'approved', NULL, 1, NULL, '2025-09-27 21:47:21', 'Amount: $1600.00 → $1500.00 | Setup Fee: $700.00 → $600.00 | Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-27 21:47:21 | Price reduction and approval following competitive analysis', '2025-09-27 21:47:21', 2),
+(25, 52, 'amount_changed', 0.12, 0.15, NULL, NULL, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $0.12 → $0.15 | Annual price adjustment for data storage services', '2025-09-01 08:00:00', 1),
+(26, 53, 'amount_changed', 0.10, 0.12, NULL, NULL, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $0.10 → $0.12 | Annual price adjustment for data storage services', '2025-09-01 08:00:00', 1),
+(27, 54, 'amount_changed', 0.08, 0.10, NULL, NULL, 'CAD', 'CAD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Amount: $0.08 → $0.10 | Annual price adjustment for data storage services', '2025-09-01 08:00:00', 1),
+(28, 29, 'updated', NULL, NULL, 250.00, 300.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Setup Fee: $250.00 → $300.00 | Increased setup fee due to additional hardware requirements', '2025-09-18 13:20:00', 2),
+(29, 30, 'updated', NULL, NULL, 200.00, 250.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Setup Fee: $200.00 → $250.00 | Increased setup fee due to additional hardware requirements', '2025-09-18 13:20:00', 2),
+(30, 43, 'deleted', 150.00, NULL, 50.00, NULL, 'CAD', NULL, 'month', NULL, NULL, NULL, NULL, NULL, 1, NULL, 3, NULL, 2, NULL, 2, NULL, 'approved', NULL, NULL, NULL, NULL, NULL, 'Price deleted | Service discontinued - migrating customers to new pricing model', '2025-09-20 16:00:00', 1),
+(31, 32, 'deleted', 200.00, NULL, 75.00, NULL, 'CAD', NULL, 'user', NULL, NULL, NULL, NULL, NULL, 0, NULL, 2, NULL, 1, NULL, 1, NULL, 'approved', NULL, NULL, NULL, NULL, NULL, 'Price deleted | Legacy pricing tier removed', '2025-09-19 14:30:00', 1),
+(32, 83, 'created', NULL, 6200.00, NULL, 12.00, NULL, 'CAD', NULL, 'seat', NULL, '2025-09-29 00:00:00', NULL, NULL, NULL, 1, NULL, 7, NULL, 3, NULL, 4, NULL, 'draft', NULL, NULL, NULL, NULL, 'Price created at CAD $6200.00 | New pricing structure for bulk training services', '2025-09-27 21:32:38', 2),
+(33, 84, 'created', NULL, 0.00, NULL, 0.00, NULL, 'CAD', NULL, 'quote', NULL, '2025-09-28 00:00:00', NULL, NULL, NULL, 1, NULL, 8, NULL, 2, NULL, 5, NULL, 'draft', NULL, NULL, NULL, NULL, 'Price created at CAD $0.00 | Quote-based pricing for specialized support services', '2025-09-27 21:46:04', 2);
 
-(2, 'created', 
- 42.00, 400.00, 'CAD', 'hour',
- '2025-01-01 00:00:00', NULL, 1,
- 1, 2, 1,
- 'approved', 1, '2025-01-01 00:00:00',
- 'Price created at CAD $42.00 | Initial price creation', '2025-08-28 23:57:07', 1),
+-- Service Relationships
+INSERT INTO `{!!prefix!!}srvc_service_relationships` (`service_id`, `related_service_id`, `relation_type`, `strength`, `notes`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+(1, 2, 'substitute_for', 4, 'Professional VoIP can substitute for Basic VoIP with additional features', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(1, 4, 'prerequisite', 10, 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(1, 5, 'prerequisite', 9, 'Cat6 cabling required for VoIP phone connectivity', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(1, 14, 'complements', 7, 'Basic support recommended for basic VoIP systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(1, 24, 'complements', 6, 'End-user training helps adoption of new phone system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(1, 16, 'complements', 5, 'Network assessment recommended before VoIP installation', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 3, 'substitute_for', 5, 'Enterprise VoIP can substitute for Professional VoIP in large deployments', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 4, 'prerequisite', 10, 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 6, 'prerequisite', 8, 'Cat6A cabling recommended for professional VoIP systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 15, 'dependency', 8, 'Professional VoIP systems typically require premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 25, 'complements', 7, 'Administrator training recommended for professional systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 21, 'complements', 7, 'Proactive monitoring recommended for business-critical systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(2, 16, 'prerequisite', 7, 'Network assessment required before professional VoIP deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 4, 'prerequisite', 10, 'VoIP installation required for system deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 7, 'prerequisite', 9, 'Fiber backbone required for enterprise VoIP redundancy', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 15, 'prerequisite', 10, 'Enterprise VoIP requires premium support contract', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 21, 'prerequisite', 9, 'Proactive monitoring required for enterprise uptime SLA', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 25, 'prerequisite', 8, 'Administrator training required for enterprise systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 16, 'prerequisite', 9, 'Network assessment required before enterprise deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(3, 30, 'complements', 8, 'UPS recommended for enterprise VoIP systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(5, 6, 'incompatible_with', 9, 'Cat6 and Cat6A cabling are alternative solutions', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(5, 31, 'complements', 6, 'Rack installation often needed with cabling projects', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(6, 7, 'substitute_for', 4, 'Cat6A suitable for short-distance high-speed vs fiber', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(6, 31, 'complements', 6, 'Rack installation often needed with cabling projects', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(7, 31, 'complements', 7, 'Fiber installations typically require rack infrastructure', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 9, 'substitute_for', 5, 'Professional cameras can substitute for Basic cameras', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 5, 'prerequisite', 8, 'Cat6 cabling required for IP camera connectivity', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 31, 'complements', 6, 'Rack enclosure recommended for NVR equipment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 33, 'enables', 8, 'Additional cameras can expand basic system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 14, 'complements', 6, 'Basic support recommended for camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(8, 30, 'complements', 7, 'UPS recommended for continuous recording', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 6, 'prerequisite', 9, 'Cat6A cabling required for professional camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 10, 'substitute_for', 6, 'Enterprise cameras can substitute for Professional cameras', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 33, 'enables', 8, 'Additional cameras can expand professional system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 15, 'complements', 7, 'Premium support recommended for professional systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 31, 'complements', 7, 'Rack enclosure required for professional NVR setup', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(9, 30, 'complements', 8, 'UPS recommended for professional camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 7, 'prerequisite', 9, 'Fiber backbone required for enterprise camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 15, 'prerequisite', 10, 'Enterprise camera systems require premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 17, 'prerequisite', 8, 'Security audit recommended for enterprise camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 21, 'prerequisite', 9, 'Proactive monitoring required for enterprise systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 33, 'enables', 9, 'Additional cameras enable enterprise system expansion', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 31, 'prerequisite', 9, 'Rack enclosure required for redundant NVR setup', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 30, 'prerequisite', 9, 'UPS required for enterprise camera systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(10, 20, 'complements', 7, 'Cloud backup complements enterprise recording storage', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(11, 12, 'substitute_for', 6, 'Multi-door access can substitute for Basic access control', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(11, 5, 'prerequisite', 7, 'Cat6 cabling required for access control readers', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(11, 14, 'complements', 6, 'Basic support recommended for access control', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(11, 24, 'complements', 7, 'End-user training for badge system usage', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(12, 13, 'substitute_for', 7, 'Enterprise access can substitute for Multi-door access control', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(12, 6, 'prerequisite', 8, 'Cat6A cabling recommended for multi-door systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(12, 15, 'complements', 7, 'Premium support recommended for multi-door systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(12, 25, 'complements', 7, 'Administrator training for access control management', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(12, 31, 'complements', 6, 'Rack enclosure for access control panel equipment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 7, 'prerequisite', 8, 'Fiber backbone recommended for enterprise access control', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 15, 'prerequisite', 10, 'Enterprise access control requires premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 17, 'prerequisite', 9, 'Security audit required before enterprise access control implementation', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 25, 'prerequisite', 8, 'Administrator training required for enterprise systems', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 27, 'complements', 7, 'Compliance consulting for access control policies', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 31, 'prerequisite', 8, 'Rack enclosure required for enterprise access panels', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(13, 30, 'complements', 8, 'UPS recommended for fail-secure access control', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(14, 15, 'incompatible_with', 10, 'Basic and Premium support are mutually exclusive', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(16, 26, 'complements', 8, 'Network assessment feeds into IT strategy planning', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(16, 29, 'complements', 7, 'Network assessment often combined with vulnerability assessment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(17, 28, 'complements', 8, 'Security audit often followed by penetration testing', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(17, 29, 'complements', 7, 'Security audit combined with vulnerability assessment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(17, 27, 'complements', 8, 'Security audit supports compliance requirements', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(18, 19, 'substitute_for', 6, 'Enterprise migration can substitute for basic migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(18, 20, 'complements', 8, 'Cloud backup complements cloud migration strategy', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(18, 16, 'prerequisite', 7, 'Network assessment recommended before cloud migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(18, 26, 'complements', 7, 'IT strategy workshop helps plan cloud migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(19, 20, 'prerequisite', 9, 'Enterprise cloud backup required for enterprise migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(19, 15, 'prerequisite', 9, 'Premium support required for enterprise cloud projects', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(19, 26, 'prerequisite', 8, 'IT strategy workshop required before enterprise migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(19, 16, 'prerequisite', 8, 'Network assessment required before enterprise migration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(19, 21, 'complements', 8, 'Proactive monitoring recommended for cloud infrastructure', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(20, 32, 'enables', 9, 'Additional storage expands backup capacity', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(20, 21, 'complements', 7, 'Monitoring ensures backup job success', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(21, 15, 'complements', 8, 'Proactive monitoring complements premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(21, 22, 'complements', 9, 'Proactive monitoring works with endpoint management', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(21, 23, 'complements', 8, 'Monitoring tracks patch deployment success', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(22, 23, 'enables', 9, 'Endpoint management enables centralized patch deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(22, 21, 'complements', 8, 'Endpoint management enhanced by proactive monitoring', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(22, 15, 'complements', 7, 'Endpoint management benefits from premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(23, 29, 'complements', 7, 'Patch management addresses vulnerability findings', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(23, 21, 'complements', 8, 'Monitoring verifies patch deployment', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(24, 25, 'substitute_for', 3, 'Administrator training covers more than end-user training', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(25, 15, 'complements', 6, 'Administrator training complements premium support', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(26, 16, 'requires', 7, 'Strategy workshop benefits from network assessment data', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(26, 27, 'complements', 7, 'IT strategy considers compliance requirements', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(27, 28, 'complements', 8, 'Compliance often requires penetration testing', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(27, 29, 'complements', 8, 'Compliance requires vulnerability assessments', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(27, 17, 'complements', 7, 'Compliance benefits from security audit', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(28, 29, 'complements', 9, 'Penetration testing validates vulnerability remediation', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(28, 17, 'requires', 7, 'Penetration testing follows security audit recommendations', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(29, 23, 'complements', 7, 'Vulnerability assessment guides patch priorities', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(29, 28, 'complements', 8, 'Vulnerability assessment precedes penetration testing', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(30, 31, 'complements', 7, 'UPS installation often paired with rack installation', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(31, 30, 'complements', 8, 'Rack installation often includes UPS integration', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(32, 20, 'dependency', 10, 'Additional storage requires active backup subscription', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(33, 8, 'dependency', 10, 'Additional cameras require existing basic system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(33, 9, 'dependency', 10, 'Additional cameras require existing professional system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2),
+(33, 10, 'dependency', 10, 'Additional cameras require existing enterprise system', '2025-08-25 23:57:12', NOW(), NULL, 1, 2);
 
-(3, 'created', 
- 480.00, 1000.00, 'CAD', 'month',
- '2025-01-01 00:00:00', NULL, 1,
- 1, 3, 2,
- 'approved', 1, '2025-01-01 00:00:00',
- 'Price created at CAD $480.00 | Initial price creation', '2025-08-28 23:57:07', 1),
-
-(10, 'created', 
- 125.00, 0.00, 'CAD', 'hour',
- '2025-01-01 00:00:00', NULL, 1,
- 2, 1, 1,
- 'approved', 1, '2025-01-01 00:00:00',
- 'Price created at CAD $125.00 | Initial price creation', '2025-08-28 23:57:07', 1),
-
-(27, 'created', 
- 25000.00, 3000.00, 'CAD', 'project',
- '2025-01-01 00:00:00', NULL, 1,
- 5, 2, 3,
- 'approved', 1, '2025-01-01 00:00:00',
- 'Price created at CAD $25000.00 | Initial price creation', '2025-08-28 23:57:07', 1);
-
--- ============================================
--- AMOUNT CHANGES (with currency tracking)
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, `old_currency`, `new_currency`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(1, 'amount_changed', 
- 40.00, 45.00, 450.00, 500.00, 'CAD', 'CAD',
- 'Amount: $40.00 → $45.00 | Setup Fee: $450.00 → $500.00 | Price increase due to increased infrastructure costs', 
- '2025-09-15 14:30:00', 2),
-
-(10, 'amount_changed', 
- 120.00, 125.00, 0.00, 0.00, 'CAD', 'CAD',
- 'Amount: $120.00 → $125.00 | Annual rate adjustment for technical consulting services', 
- '2025-09-10 09:15:00', 2),
-
-(27, 'amount_changed', 
- 24000.00, 25000.00, 2500.00, 3000.00, 'CAD', 'CAD',
- 'Amount: $24000.00 → $25000.00 | Setup Fee: $2500.00 → $3000.00 | Price adjustment for enhanced security features', 
- '2025-09-20 16:45:00', 1);
-
--- ============================================
--- CURRENCY CHANGES
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_amount`, `new_amount`, `old_currency`, `new_currency`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(33, 'currency_changed', 
- 1650.00, 1237.50, 'CAD', 'USD',
- 'Currency: CAD → USD | Amount: $1650.00 → $1237.50 | Currency conversion with rate adjustment', 
- '2025-09-27 15:30:00', 2),
-
-(52, 'currency_changed',
- 100.00, 75.00, 'CAD', 'USD',
- 'Currency: CAD → USD | Amount: $100.00 → $75.00 | Expanding to US market pricing',
- '2025-09-15 10:00:00', 1);
-
--- ============================================
--- UNIT CHANGES
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_unit`, `new_unit`, `old_amount`, `new_amount`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(15, 'unit_changed',
- 'hour', 'user', 40.00, 250.00,
- 'Unit: hour → user | Amount: $40.00 → $250.00 | Changed pricing model from hourly to per-user',
- '2025-09-12 14:00:00', 2),
-
-(22, 'unit_changed',
- 'device', 'site', 15.00, 150.00,
- 'Unit: device → site | Amount: $15.00 → $150.00 | Simplified pricing to site-based model',
- '2025-09-18 11:30:00', 1);
-
--- ============================================
--- APPROVAL WORKFLOW CHANGES
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(49, 'approval_changed', 
- 'draft', 'pending', NULL, NULL, NULL, NULL,
- 'Status: draft → pending | Submitted for approval - new enterprise video streaming pricing', 
- '2025-09-25 10:00:00', 2),
-
-(49, 'approval_changed', 
- 'pending', 'approved', NULL, 1, NULL, '2025-09-26 14:30:00',
- 'Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-26 14:30:00 | Approved by finance team after review', 
- '2025-09-26 14:30:00', 1),
-
-(65, 'approval_changed', 
- 'pending', 'rejected', NULL, NULL, NULL, NULL,
- 'Status: pending → rejected | Price too high compared to market rates - needs revision', 
- '2025-09-22 11:15:00', 1),
-
-(81, 'approval_changed', 
- NULL, 'draft', NULL, NULL, NULL, NULL,
- 'Status: N/A → draft | New draft pricing created for training services', 
- '2025-09-27 21:32:38', 2),
-
-(82, 'approval_changed', 
- NULL, 'draft', NULL, NULL, NULL, NULL,
- 'Status: N/A → draft | New draft pricing created for support services', 
- '2025-09-27 21:46:04', 2);
-
--- ============================================
--- DATE & STATUS CHANGES (with is_current)
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_valid_from`, `new_valid_from`, `old_valid_to`, `new_valid_to`, `old_is_current`, `new_is_current`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(33, 'dates_changed', 
- '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-12-31 23:59:59', 1, 1,
- 'Valid To: N/A → 2025-12-31 23:59:59 | Added end date for promotional pricing period', 
- '2025-09-27 21:47:21', 2),
-
-(84, 'dates_changed', 
- '2025-09-27 00:00:00', '2025-09-29 00:00:00', NULL, NULL, 1, 1,
- 'Valid From: 2025-09-27 00:00:00 → 2025-09-29 00:00:00 | Adjusted start date for new training pricing', 
- '2025-09-27 21:45:19', 2),
-
-(45, 'dates_changed',
- '2025-01-01 00:00:00', '2025-01-01 00:00:00', NULL, '2025-06-30 23:59:59', 1, 0,
- 'Valid To: N/A → 2025-06-30 23:59:59 | Is Current: Yes → No | Price expiring - new tier structure coming',
- '2025-06-25 09:00:00', 1);
-
--- ============================================
--- RELATIONSHIP CHANGES (tier/model changes)
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_pricing_tier_id`, `new_pricing_tier_id`, `old_amount`, `new_amount`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(28, 'tier_changed',
- 1, 2, 100.00, 150.00,
- 'Pricing Tier ID: 1 → 2 | Amount: $100.00 → $150.00 | Customer upgraded from Basic to Standard tier',
- '2025-09-20 13:15:00', 2),
-
-(35, 'tier_changed',
- 3, 2, 500.00, 300.00,
- 'Pricing Tier ID: 3 → 2 | Amount: $500.00 → $300.00 | Customer downgraded from Premium to Standard tier',
- '2025-09-22 16:45:00', 1);
-
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_pricing_model_id`, `new_pricing_model_id`, `old_unit`, `new_unit`, `old_amount`, `new_amount`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(42, 'model_changed',
- 1, 2, 'hour', 'month', 50.00, 1000.00,
- 'Pricing Model ID: 1 → 2 | Unit: hour → month | Amount: $50.00 → $1000.00 | Switched from hourly to monthly billing model',
- '2025-09-24 10:30:00', 2);
-
--- ============================================
--- COMPLEX MULTI-FIELD CHANGES
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, 
- `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`,
- `old_valid_from`, `new_valid_from`, `old_is_current`, `new_is_current`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(33, 'updated', 
- 1600.00, 1500.00, 700.00, 600.00,
- 'pending', 'approved', NULL, 1, NULL, '2025-09-27 21:47:21',
- '2025-01-01 00:00:00', '2025-01-01 00:00:00', 1, 1,
- 'Amount: $1600.00 → $1500.00 | Setup Fee: $700.00 → $600.00 | Status: pending → approved | Approved By: N/A → User #1 | Approved At: N/A → 2025-09-27 21:47:21 | Price reduction and approval following competitive analysis', 
- '2025-09-27 21:47:21', 2);
-
--- ============================================
--- BULK ANNUAL PRICING UPDATES
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_amount`, `new_amount`, `old_currency`, `new_currency`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(52, 'amount_changed', 0.12, 0.15, 'CAD', 'CAD',
- 'Amount: $0.12 → $0.15 | Annual price adjustment for data storage services', 
- '2025-09-01 08:00:00', 1),
-
-(53, 'amount_changed', 0.10, 0.12, 'CAD', 'CAD',
- 'Amount: $0.10 → $0.12 | Annual price adjustment for data storage services', 
- '2025-09-01 08:00:00', 1),
-
-(54, 'amount_changed', 0.08, 0.10, 'CAD', 'CAD',
- 'Amount: $0.08 → $0.10 | Annual price adjustment for data storage services', 
- '2025-09-01 08:00:00', 1);
-
--- ============================================
--- SETUP FEE ONLY ADJUSTMENTS
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_setup_fee`, `new_setup_fee`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(29, 'updated', 
- 250.00, 300.00,
- 'Setup Fee: $250.00 → $300.00 | Increased setup fee due to additional hardware requirements', 
- '2025-09-18 13:20:00', 2),
-
-(30, 'updated', 
- 200.00, 250.00,
- 'Setup Fee: $200.00 → $250.00 | Increased setup fee due to additional hardware requirements', 
- '2025-09-18 13:20:00', 2);
-
--- ============================================
--- DELETION RECORDS (with all old values)
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `old_amount`, `old_setup_fee`, `old_currency`, `old_unit`,
- `old_approval_status`, `old_is_current`,
- `old_service_id`, `old_pricing_tier_id`, `old_pricing_model_id`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(43, 'deleted', 
- 150.00, 50.00, 'CAD', 'month',
- 'approved', 1,
- 3, 2, 2,
- 'Price deleted | Service discontinued - migrating customers to new pricing model', 
- '2025-09-20 16:00:00', 1),
-
-(32, 'deleted', 
- 200.00, 75.00, 'CAD', 'user',
- 'approved', 0,
- 2, 1, 1,
- 'Price deleted | Legacy pricing tier removed', 
- '2025-09-19 14:30:00', 1);
-
--- ============================================
--- NEW DRAFT PRICES (recent activity)
--- ============================================
-INSERT INTO `wp_srvc_price_history` 
-(`service_price_id`, `change_type`, 
- `new_amount`, `new_setup_fee`, `new_currency`, `new_unit`,
- `new_valid_from`, `new_is_current`,
- `new_service_id`, `new_pricing_tier_id`, `new_pricing_model_id`,
- `new_approval_status`,
- `change_description`, `changed_at`, `changed_by`) 
-VALUES
-(83, 'created', 
- 6200.00, 12.00, 'CAD', 'seat',
- '2025-09-29 00:00:00', 1,
- 7, 3, 4,
- 'draft',
- 'Price created at CAD $6200.00 | New pricing structure for bulk training services', 
- '2025-09-27 21:32:38', 2),
-
-(84, 'created', 
- 0.00, 0.00, 'CAD', 'quote',
- '2025-09-28 00:00:00', 1,
- 8, 2, 5,
- 'draft',
- 'Price created at CAD $0.00 | Quote-based pricing for specialized support services', 
- '2025-09-27 21:46:04', 2);
-
--- Service Addons (Corrected and Expanded)
-INSERT INTO `{!!prefix!!}srvc_service_addons` (`service_id`, `addon_service_id`, `required`, `min_qty`, `max_qty`, `default_qty`, `sort_order`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
-
--- Basic VoIP System (ID 1) addons
-(1, 4, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (optional)
-(1, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Basic Technical Support
-(1, 24, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- End-User Training Session
-
--- Professional VoIP System (ID 2) addons
-(2, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (required)
-(2, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Premium Technical Support
-(2, 25, 0, 0.000, 5.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
-(2, 20, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), -- Cloud Backup as a Service
-
--- Enterprise VoIP System (ID 3) addons
-(3, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- VoIP System Installation (required)
-(3, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Premium Technical Support (required)
-(3, 25, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
-(3, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), -- Proactive Monitoring
-(3, 20, 0, 0.000, 1.000, 1.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2), -- Cloud Backup as a Service
-
--- VoIP System Installation (ID 4) addons
-(4, 24, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
-(4, 16, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
-
--- Cat6 Network Cabling (ID 5) addons
-(5, 16, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
-(5, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Rack & Enclosure Installation
-
--- Cat6A Network Cabling (ID 6) addons
-(6, 16, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment
-(6, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), -- Rack & Enclosure Installation
-
--- Fiber Optic Installation (ID 7) addons
-(7, 16, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Network Assessment (required)
-(7, 30, 0, 0.000, 5.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Rack & Enclosure Installation
-(7, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-
--- Basic IP Camera System (ID 8) addons
-(8, 32, 0, 0.000, 20.000, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
-(8, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Basic Technical Support
-(8, 31, 0, 0.000, NULL, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
-(8, 24, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
-
--- Professional Camera System (ID 9) addons
-(9, 32, 0, 0.000, 50.000, 5.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
-(9, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-(9, 20, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service
-(9, 25, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
-(9, 31, 0, 0.000, NULL, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
-
--- Enterprise Camera System (ID 10) addons
-(10, 32, 0, 0.000, 50.000, 10.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), -- Additional IP Camera
-(10, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Premium Technical Support (required)
-(10, 20, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Cloud Backup as a Service (required)
-(10, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Proactive Monitoring
-(10, 25, 0, 0.000, 5.000, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Administrator Training
-(10, 31, 0, 0.000, NULL, 5.000, 60, '2025-08-28 23:57:07', NOW(), 1, 2),    -- Additional Backup Storage
-
--- Basic Access Control (ID 11) addons
-(11, 14, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Basic Technical Support
-(11, 24, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
-
--- Multi-Door Access Control (ID 12) addons
-(12, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-(12, 25, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
-(12, 17, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Security System Audit
-
--- Enterprise Access Control (ID 13) addons
-(13, 15, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support (required)
-(13, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
-(13, 17, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Security System Audit (required)
-(13, 27, 0, 0.000, 1.000, 0.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Compliance Consulting
-
--- Network Assessment (ID 16) addons
-(16, 26, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- IT Strategy Workshop
-(16, 15, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-
--- Security System Audit (ID 17) addons
-(17, 28, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Penetration Testing Service
-(17, 29, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Vulnerability Assessment
-(17, 27, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Compliance Consulting
-
--- Cloud Migration Basic (ID 18) addons
-(18, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service (required)
-(18, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Administrator Training
-(18, 15, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-
--- Enterprise Cloud Migration (ID 19) addons
-(19, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Cloud Backup as a Service (required)
-(19, 21, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring (required)
-(19, 25, 0, 0.000, 10.000, 3.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), -- Administrator Training
-(19, 15, 1, 1.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support (required)
-
--- Cloud Backup as a Service (ID 20) addons
-(20, 31, 0, 0.000, NULL, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),   -- Additional Backup Storage
-(20, 21, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
-
--- Proactive Monitoring (ID 21) addons
-(21, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-(21, 23, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Patch Management Service
-
--- Endpoint Management (ID 22) addons
-(22, 23, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Patch Management Service
-(22, 21, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
-(22, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Premium Technical Support
-
--- Patch Management Service (ID 23) addons
-(23, 21, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Proactive Monitoring
-(23, 29, 0, 0.000, 2.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Vulnerability Assessment
-
--- UPS Installation Service (ID 29) addons
-(29, 30, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  -- Rack & Enclosure Installation
-(29, 24, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  -- End-User Training Session
-(29, 14, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2);  -- Basic Technical Support
+-- Service Addons
+INSERT INTO `{!!prefix!!}srvc_service_addons` 
+(`service_id`, `addon_service_id`, `required`, `min_qty`, `max_qty`, `default_qty`, `sort_order`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+(1, 4, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
+(1, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),
+(1, 24, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),
+(2, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
+(2, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),
+(2, 25, 0, 0.000, 5.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),
+(2, 20, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),
+(3, 4, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(3, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),
+(3, 25, 0, 0.000, 10.000, 2.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),
+(3, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),
+(3, 20, 0, 0.000, 1.000, 1.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),
+(4, 24, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(4, 16, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(5, 16, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(5, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),
+(6, 16, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(6, 30, 0, 0.000, 10.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),
+(7, 16, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(7, 30, 0, 0.000, 5.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(7, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(8, 32, 0, 0.000, 20.000, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
+(8, 14, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(8, 31, 0, 0.000, NULL, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(8, 24, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(9, 32, 0, 0.000, 50.000, 5.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
+(9, 15, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(9, 20, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(9, 25, 0, 0.000, 3.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(9, 31, 0, 0.000, NULL, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(10, 32, 0, 0.000, 50.000, 10.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),
+(10, 15, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(10, 20, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(10, 21, 0, 0.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(10, 25, 0, 0.000, 5.000, 2.000, 50, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(10, 31, 0, 0.000, NULL, 5.000, 60, '2025-08-28 23:57:07', NOW(), 1, 2),   
+(11, 14, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(11, 24, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(12, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(12, 25, 0, 0.000, 3.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(12, 17, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(13, 15, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(13, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(13, 17, 1, 1.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(13, 27, 0, 0.000, 1.000, 0.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(16, 26, 0, 0.000, 1.000, 0.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(16, 15, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(17, 28, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(17, 29, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(17, 27, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(18, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(18, 25, 0, 0.000, 5.000, 2.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(18, 15, 0, 0.000, 1.000, 1.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(19, 20, 1, 1.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(19, 21, 1, 1.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(19, 25, 0, 0.000, 10.000, 3.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2),
+(19, 15, 1, 1.000, 1.000, 1.000, 40, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(20, 31, 0, 0.000, NULL, 2.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2),  
+(20, 21, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(21, 15, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(21, 23, 0, 0.000, 1.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(22, 23, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(22, 21, 0, 0.000, 1.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(22, 15, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(23, 21, 0, 0.000, 1.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(23, 29, 0, 0.000, 2.000, 0.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(29, 30, 0, 0.000, 5.000, 1.000, 10, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(29, 24, 0, 0.000, 2.000, 1.000, 20, '2025-08-28 23:57:07', NOW(), 1, 2), 
+(29, 14, 0, 0.000, 1.000, 0.000, 30, '2025-08-28 23:57:07', NOW(), 1, 2); 
 
 -- >>> Down >>>
 -- DELETE FROM `{!!prefix!!}srvc_bundle_items`;
--- DELETE FROM `{!!prefix!!}srvc_service_relationships`;
 -- DELETE FROM `{!!prefix!!}srvc_service_equipment_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
-DELETE FROM `{!!prefix!!}srvc_service_addons`;
-DELETE FROM `{!!prefix!!}srvc_price_history`;
-DELETE FROM `{!!prefix!!}srvc_service_prices`;
-DELETE FROM `{!!prefix!!}srvc_services`;
 -- DELETE FROM `{!!prefix!!}srvc_bundles`;
-DELETE FROM `{!!prefix!!}srvc_service_types`;
-DELETE FROM `{!!prefix!!}srvc_categories`;
 -- DELETE FROM `{!!prefix!!}srvc_equipment`;
 -- DELETE FROM `{!!prefix!!}srvc_deliverables`;
 -- DELETE FROM `{!!prefix!!}srvc_coverage_areas`;
 -- DELETE FROM `{!!prefix!!}srvc_delivery_methods`;
+DELETE FROM `{!!prefix!!}srvc_service_addons`;
+DELETE FROM `{!!prefix!!}srvc_service_relationships`;
+DELETE FROM `{!!prefix!!}srvc_price_history`;
+DELETE FROM `{!!prefix!!}srvc_service_prices`;
+DELETE FROM `{!!prefix!!}srvc_services`;
+DELETE FROM `{!!prefix!!}srvc_service_types`;
+DELETE FROM `{!!prefix!!}srvc_categories`;
 DELETE FROM `{!!prefix!!}srvc_pricing_tiers`;
 DELETE FROM `{!!prefix!!}srvc_currency_rates`;
 DELETE FROM `{!!prefix!!}srvc_pricing_models`;
