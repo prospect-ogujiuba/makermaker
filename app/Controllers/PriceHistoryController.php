@@ -48,9 +48,6 @@ class PriceHistoryController extends Controller
             $response->unauthorized('Unauthorized: Price History not created')->abort();
         }
 
-        $price_history->changed_by = $user->ID;
-
-
         $price_history->save($fields);
 
         return tr_redirect()->toPage('pricehistory', 'index')
@@ -89,8 +86,6 @@ class PriceHistoryController extends Controller
         if (!$price_history->can('update')) {
             $response->unauthorized('Unauthorized: Price History not updated')->abort();
         }
-
-        $price_history->changed_by = $user->ID;
 
         $price_history->save($fields);
 

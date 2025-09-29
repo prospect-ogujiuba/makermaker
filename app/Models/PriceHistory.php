@@ -39,12 +39,12 @@ class PriceHistory extends Model
         'old_approved_at',
         'new_approved_at',
         'change_description',
+        'changed_by'
     ];
 
     protected $guard = [
         'id',
         'changed_at',
-        'changed_by',
     ];
 
     protected $format = [
