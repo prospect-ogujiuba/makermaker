@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceMethodOfDeliveryTempFields extends Fields
+class ServiceDeliveryFields extends Fields
 {
     /**
      * Run On Import
@@ -32,23 +32,23 @@ class ServiceMethodOfDeliveryTempFields extends Fields
      *
      * @return array
      */
-    protected function rules()
-    {
-        $request = Request::new();
-        $route_args = $request->getDataGet('route_args');
-        $id = $route_args[0] ?? null;
-        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
+protected function rules()
+{
+    $request = Request::new();
+    $route_args = $request->getDataGet('route_args');
+    $id = $route_args[0] ?? null;
 
-        $rules = [];
+    $rules = [];
 
-        $rules['service_id'] = "numeric|required";
-        $rules['delivery_method_id'] = "numeric|required";
-        $rules['lead_time_days'] = "?numeric|?required";
-        $rules['sla_hours'] = "?numeric|?required";
-        $rules['surcharge'] = "?numeric";
+    $rules['service_id'] = "numeric|required";
+    $rules['delivery_method_id'] = "numeric|required";
+    $rules['lead_time_days'] = "?numeric|?required|min:0";
+    $rules['sla_hours'] = "?numeric|min:0";
+    $rules['surcharge'] = "?numeric|?required|min:0";
+    $rules['is_default'] = "?numeric|callback:checkIntRange:0:1";
 
-        return $rules;
-    }
+    return $rules;
+}
 
     /**
      * Custom Error Messages

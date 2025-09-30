@@ -289,17 +289,17 @@
 
 ---
 
-## Service Delivery Method Assignment
+## Service Delivery
 
-[ServiceMethodOfDeliveryTemp-Migration]: /database/migrations/1756666041.create_service_delivery_method_assignments_table.sql
-[ServiceMethodOfDeliveryTemp-Model]: /app/Models/ServiceMethodOfDeliveryTemp.php
-[ServiceMethodOfDeliveryTemp-Policy]: /app/Auth/ServiceMethodOfDeliveryTempPolicy.php
-[ServiceMethodOfDeliveryTemp-Fields]: /app/Http/Fields/ServiceMethodOfDeliveryTempFields.php
-[ServiceMethodOfDeliveryTemp-Controller]: /app/Controllers/ServiceMethodOfDeliveryTempController.php
-[ServiceMethodOfDeliveryTemp-Form]: /resources/views/service_delivery_method_assignments/form.php
-[ServiceMethodOfDeliveryTemp-Index]: /resources/views/service_delivery_method_assignments/index.php
+[ServiceDelivery-Migration]: /database/migrations/1756666041.create_service_delivery_method_assignments_table.sql
+[ServiceDelivery-Model]: /app/Models/ServiceDelivery.php
+[ServiceDelivery-Policy]: /app/Auth/ServiceDeliveryPolicy.php
+[ServiceDelivery-Fields]: /app/Http/Fields/ServiceDeliveryFields.php
+[ServiceDelivery-Controller]: /app/Controllers/ServiceDeliveryController.php
+[ServiceDelivery-Form]: /resources/views/service_delivery_method_assignments/form.php
+[ServiceDelivery-Index]: /resources/views/service_delivery_method_assignments/index.php
 
-- [Migration][ServiceMethodOfDeliveryTemp-Migration] - [Model][ServiceMethodOfDeliveryTemp-Model] - [Policy][ServiceMethodOfDeliveryTemp-Policy] - [Fields][ServiceMethodOfDeliveryTemp-Fields] - [Controller][ServiceMethodOfDeliveryTemp-Controller] - [Form][ServiceMethodOfDeliveryTemp-Form] - [Index][ServiceMethodOfDeliveryTemp-Index]
+- [Migration][ServiceDelivery-Migration] - [Model][ServiceDelivery-Model] - [Policy][ServiceDelivery-Policy] - [Fields][ServiceDelivery-Fields] - [Controller][ServiceDelivery-Controller] - [Form][ServiceDelivery-Form] - [Index][ServiceDelivery-Index]
 
 ### Todo
 

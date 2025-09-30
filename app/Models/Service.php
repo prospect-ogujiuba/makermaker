@@ -135,7 +135,7 @@ class Service extends Model
     /** Service belongs to many DeliveryMethods */
     public function deliveryMethods()
     {
-        return $this->belongsToMany(DeliveryMethod::class, GLOBAL_WPDB_PREFIX . 'srvc_service_delivery_method_assignments', 'service_id', 'delivery_method_id');
+        return $this->belongsToMany(DeliveryMethod::class, GLOBAL_WPDB_PREFIX . 'srvc_service_delivery_methods', 'service_id', 'delivery_method_id');
     }
 
     /** Service belongs to many Bundles */

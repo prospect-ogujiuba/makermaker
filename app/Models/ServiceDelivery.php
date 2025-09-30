@@ -5,16 +5,24 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceMethodOfDeliveryTemp extends Model
+class ServiceDelivery extends Model
 {
-    protected $resource = 'srvc_service_delivery_method_assignments';
+    protected $resource = 'srvc_service_delivery';
 
     protected $fillable = [
         'service_id',
         'delivery_method_id',
         'lead_time_days',
         'sla_hours',
-        'surcharge'
+        'surcharge',
+        'is_default'
+    ];
+
+    protected $cast = [
+        'lead_time_days' => 'int',
+        'sla_hours' => 'int',
+        'surcharge' => 'float',
+        'is_default' => 'bool'
     ];
 
     protected $guard = [
@@ -31,13 +39,13 @@ class ServiceMethodOfDeliveryTemp extends Model
         'deliveryMethod'
     ];
 
-    /** ServiceMethodOfDeliveryTemp belongs to a Service */
+    /** ServiceDelivery belongs to a Service */
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
 
-    /** ServiceMethodOfDeliveryTemp belongs to a DeliveryMethod */
+    /** ServiceDelivery belongs to a DeliveryMethod */
     public function deliveryMethod()
     {
         return $this->belongsTo(DeliveryMethod::class, 'delivery_method_id');

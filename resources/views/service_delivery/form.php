@@ -1,9 +1,9 @@
 <?php
 
 /**
- * ServiceMethodOfDeliveryTemp Form View
+ * ServiceDelivery Form View
  * 
- * This view displays a form for creating/editing ServiceMethodOfDeliveryTemp.
+ * This view displays a form for creating/editing ServiceDelivery.
  * Add your form fields and functionality here.
  */
 
@@ -23,7 +23,7 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Delivery Method Assignment',
+        'Service Delivery',
         'Define how this service will be delivered',
         [
             $form->row()
@@ -44,26 +44,39 @@ $tabs->tab('Overview', 'admin-settings', [
             $form->row()
                 ->withColumn(
                     $form->number('lead_time_days')
-                        ->setLabel('Lead Time (days)')
+                        ->setLabel('Lead Time (Days)')
                         ->setHelp('Number of days required to prepare and start service delivery')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 1)
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('sla_hours')
-                        ->setLabel('Service Level Hours')
+                        ->setLabel('SLA Hours')
                         ->setHelp('Service level agreement response time in hours')
-                ),
-            $form->row()
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 1)
+                )
                 ->withColumn(
                     $form->number('surcharge')
                         ->setLabel('Delivery Surcharge')
-                        ->setHelp('Additional cost for this delivery method (enter 0 if no surcharge)')
+                        ->setHelp('Additional cost for this delivery method')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 0.01)
                         ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('is_default')
+                        ->setLabel('Default Method')
+                        ->setHelp('Check if this is the default delivery method for this service')
+                        ->setText('Yes', 'No')
                 )
+                ->withColumn()
                 ->withColumn()
         ]
     )
-])->setDescription('Service Delivery Method Assignment');
+])->setDescription('Service Delivery');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
