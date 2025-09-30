@@ -177,7 +177,10 @@ INSERT INTO `{!!prefix!!}srvc_services`
 ('UPS-INSTALLATION-SERVICE', 'ups-installation-service', 'UPS Installation Service', 'On-site UPS system setup', 'Installation and commissioning of single-phase or three-phase UPS systems including electrical integration, testing, and user training.', 40, 5, 2, 1, 1.00, 10.00, 4.00, 'intermediate', NULL, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
 ('RACK-ENCLOSURE-INSTALLATION', 'rack-enclosure-installation', 'Rack & Enclosure Installation', 'Professional rack and enclosure setup', 'Physical installation of racks and enclosures in data center or server rooms, including cable management and grounding compliance.', 41, 5, 2, 1, 1.00, 20.00, 2.00, 'intermediate', NULL, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
 ('ADDITIONAL-BACKUP-STORAGE', 'additional-backup-storage', 'Additional Backup Storage', 'Expandable cloud backup storage add-on', 'Additional 500GB increments of secure cloud backup storage. Requires active backup subscription.', 22, 13, 1, 1, 1.00, NULL, 0.25, 'entry', NULL, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
-('ADDITIONAL-IP-CAMERA', 'additional-ip-camera', 'Additional IP Camera', 'Add-on for IP camera systems', 'Optional add-on to expand an existing IP camera system with extra cameras. Includes mounting and system integration.', 13, 3, 1, 1, 1.00, 50.00, 1.00, 'intermediate', NULL, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1);
+('ADDITIONAL-IP-CAMERA', 'additional-ip-camera', 'Additional IP Camera', 'Add-on for IP camera systems', 'Optional add-on to expand an existing IP camera system with extra cameras. Includes mounting and system integration.', 13, 3, 1, 1, 1.00, 50.00, 1.00, 'intermediate', NULL, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('MANAGED-SERVICE-PROVIDER', 'managed-service-provider', 'Managed Service Provider (MSP)', 'Ongoing managed IT services with continuous monitoring', 'Comprehensive managed services including 24/7 monitoring, proactive maintenance, patch management, security updates, and dedicated support team. Includes monthly health reports, SLA guarantees, and strategic IT planning.', 25, 9, 3, 1, 1.00, NULL, 160.00, 'expert', '{"monitoring_24x7":"1","proactive_maintenance":"1","security_updates":"1","monthly_reports":"1","sla_guarantee":"99.9"}', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('DEPOT-REPAIR-SERVICE', 'depot-repair-service', 'Depot Repair Service', 'Equipment repair at our certified facility', 'Send-in repair service for hardware and equipment. Customer ships device to our repair depot for diagnosis, repair, and testing. Includes return shipping and warranty. Advanced replacement units available for critical equipment.', 24, 10, 2, 1, 1.00, NULL, 8.00, 'advanced', '{"turnaround_days":"3-5","warranty_days":"90","advance_replacement":"available","diagnostic_included":"1"}', 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('EMERGENCY-DISPATCH-SERVICE', 'emergency-dispatch-service', '24/7 Emergency Dispatch Service', 'Round-the-clock emergency support with immediate response', 'Premium emergency service with guaranteed technician dispatch within 4 hours, 24 hours a day, 365 days a year. For mission-critical systems and infrastructure requiring immediate attention. Includes emergency parts inventory access and priority escalation.', 17, 6, 4, 1, 1.00, NULL, 4.00, 'expert', '{{"key":"response_time_hours", "value" : "4" ,"availability":"24x7x365","priority_level":"critical","parts_inventory":"emergency_stock"}}', 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
 
 -- Service Prices
 INSERT INTO `{!!prefix!!}srvc_service_prices`
@@ -557,6 +560,27 @@ INSERT INTO `{!!prefix!!}srvc_service_equipment` (`service_id`, `equipment_id`, 
 (12, 8, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
 (17, 7, 1, 2.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2);
 
+-- Delivery Methods
+INSERT INTO `{!!prefix!!}srvc_delivery_methods`
+(`name`, `code`, `description`, `requires_site_access`, `supports_remote`, `default_lead_time_days`, `default_sla_hours`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+('On-Site Installation', 'on-site-installation', 'Technician visits customer location to perform full installation and configuration. Includes testing and basic training.', 1, 0, 3, 8, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Remote Configuration', 'remote-configuration', 'Complete setup performed remotely via VPN or remote access tools. Requires customer to have equipment physically installed.', 0, 1, 1, 4, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Hybrid (On-site + Remote)', 'hybrid-on-site-remote', 'Initial on-site installation followed by remote configuration and optimization. Combines benefits of both approaches.', 1, 1, 2, 6, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Client Self-Install', 'client-self-install', 'Customer performs installation using provided documentation and support hotline. Equipment ships pre-configured when possible.', 0, 1, 0, NULL, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('White Glove Service', 'white-glove', 'Premium full-service installation with project management, custom configuration, extended testing, and comprehensive training.', 1, 0, 5, 24, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Pickup', 'pickup', 'Customer picks up equipment from our location. Basic configuration assistance available on-site.', 0, 0, 0, NULL, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Shipping/Delivery', 'shipping-delivery', 'Equipment shipped directly to customer location via standard or expedited carrier. No installation included.', 0, 0, 2, NULL, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('In-Store Service', 'in-store-service', 'Service performed at our retail location. Customer drops off equipment or receives service in our workshop.', 0, 0, 1, 24, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Drop-Ship Partner', 'drop-ship-partner', 'Equipment ships directly from manufacturer or distributor to customer. We coordinate and provide remote support.', 0, 1, 5, NULL, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Scheduled Maintenance Window', 'scheduled-maintenance-window', 'Service performed during pre-approved off-hours maintenance windows to minimize business disruption. Requires advance scheduling.', 1, 0, 14, NULL, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Break-Fix On-Demand', 'break-fix-on-demand', 'Reactive service dispatched when issues occur. No scheduled maintenance. Technician arrives within agreed response time.', 1, 0, 0, 8, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Cloud-Based Provisioning', 'cloud-based-provisioning', 'Services delivered entirely through cloud platforms. No physical installation required. Access via web portal or API.', 0, 1, 0, 2, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Vendor Direct Fulfillment', 'vendor-direct-fulfillment', 'We coordinate directly with equipment vendors for specialized installation. Manufacturer-certified technicians perform work.', 1, 0, 10, NULL, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Turnkey Project Delivery', 'turnkey-project-delivery', 'Complete end-to-end project including design, procurement, installation, testing, and cutover. Single point of contact.', 1, 1, 30, NULL, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Swing Shift Service', 'swing-shift-service', 'Installation performed during evening or overnight hours to avoid disrupting business operations. Premium scheduling option.', 1, 0, 5, 12, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Site Survey & Pre-Staging', 'site-survey-pre-staging', 'Initial site assessment followed by equipment pre-configuration in our lab before final on-site installation.', 1, 0, 7, 16, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Multi-Site Rollout', 'multi-site-rollout', 'Coordinated deployment across multiple locations using standardized procedures. Includes project management and reporting.', 1, 1, 21, NULL, '2025-08-28 23:57:07', NOW(), NULL, 2, 2);
+
 -- >>> Down >>>
 -- DELETE FROM `{!!prefix!!}srvc_bundle_items`;
 -- DELETE FROM `{!!prefix!!}srvc_bundles`;
@@ -565,7 +589,7 @@ INSERT INTO `{!!prefix!!}srvc_service_equipment` (`service_id`, `equipment_id`, 
 -- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
 -- DELETE FROM `{!!prefix!!}srvc_coverage_areas`;
 -- DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
--- DELETE FROM `{!!prefix!!}srvc_delivery_methods`;
+DELETE FROM `{!!prefix!!}srvc_delivery_methods`;
 DELETE FROM `{!!prefix!!}srvc_service_equipment`;
 DELETE FROM `{!!prefix!!}srvc_equipment`;
 DELETE FROM `{!!prefix!!}srvc_service_addons`;

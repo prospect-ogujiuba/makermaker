@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceDeliveryMethodAssignmentFields extends Fields
+class ServiceMethodOfDeliveryTempFields extends Fields
 {
     /**
      * Run On Import
@@ -38,7 +38,7 @@ class ServiceDeliveryMethodAssignmentFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
         $rules['service_id'] = "numeric|required";

@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceDeliveryMethodFields extends Fields
+class DeliveryMethodFields extends Fields
 {
     /**
      * Run On Import
@@ -42,7 +42,12 @@ class ServiceDeliveryMethodFields extends Fields
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_delivery_methods@id:{$id}|required|max:64";
-        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_delivery_methods@id:{$id}|?required|max:64";
+        $rules['code'] = "unique:code:{$wpdb_prefix}srvc_delivery_methods@id:{$id}|required|max:64";
+        $rules['description'] = "max:2000";
+        $rules['requires_site_access'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['supports_remote'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['default_lead_time_days'] = "?numeric";
+        $rules['default_sla_hours'] = "?numeric";
 
         return $rules;
     }

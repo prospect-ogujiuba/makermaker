@@ -5,13 +5,25 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceDeliveryMethod extends Model
+class DeliveryMethod extends Model
 {
     protected $resource = 'srvc_delivery_methods';
 
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'description',
+        'requires_site_access',
+        'supports_remote',
+        'default_lead_time_days',
+        'default_sla_hours'
+    ];
+
+    protected $cast = [
+        'requires_site_access' => 'bool',
+        'supports_remote' => 'bool',
+        'default_lead_time_days' => 'int',
+        'default_sla_hours' => 'int'
     ];
 
     protected $guard = [

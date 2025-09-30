@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ServiceDeliveryMethod Form
+ * DeliveryMethod Form
  */
 
 // Form instance
@@ -35,10 +35,48 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')
+                        ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->textarea('description')
+                        ->setLabel('Description')
+                        ->setHelp('Detailed description of this delivery method')
+                        ->setAttribute('rows', '4')
                 )
+                ->withColumn(),
+            $form->row()
+                ->withColumn(
+                    $form->number('default_lead_time_days')
+                        ->setLabel('Default Lead Time (Days)')
+                        ->setHelp('Standard lead time in days')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 1)
+                )
+                ->withColumn(
+                    $form->number('default_sla_hours')
+                        ->setLabel('Default SLA (Hours)')
+                        ->setHelp('Service level agreement in hours')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 1)
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('requires_site_access')
+                        ->setLabel('Requires Site Access')
+                        ->setHelp('Check if this method requires physical site access')
+                        ->setText('Yes', 'No')
+                )
+                ->withColumn(
+                    $form->toggle('supports_remote')
+                        ->setLabel('Supports Remote')
+                        ->setHelp('Check if this method can be delivered remotely')
+                        ->setText('Yes', 'No')
+                )
+                ->withColumn(),
+
         ]
     )
-
 ])->setDescription('Delivery Method');
 
 // Conditional
