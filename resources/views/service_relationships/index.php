@@ -12,20 +12,24 @@ $table->setBulkActions(tr_form()->useConfirm(), []);
 
 $table->setColumns([
     'service.name' => [
-        'label' => 'Service  Name',
+        'label' => 'Service Name',
         'sort' => true,
         'actions' => ['edit', 'view', 'delete']
     ],
     'relation_type' => [
-        'label' => 'Relation',
+        'label' => 'Relation Type',
         'sort' => true
     ],
     'relatedservice.name' => [
-        'label' => 'Service Name'
+        'label' => 'Related Service',
+        'sort' => true
+    ],
+    'strength' => [
+        'label' => 'Strength',
+        'sort' => true
     ],
     'notes' => [
-        'label' => 'Notes',
-        'sort' => true
+        'label' => 'Notes'
     ],
     'created_at' => [
         'label' => 'Created',

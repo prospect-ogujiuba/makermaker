@@ -8,7 +8,6 @@
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceDeliverable;
 
 // Form instance
 echo $form->open();
@@ -61,6 +60,17 @@ $tabs->tab('Overview', 'admin-settings', [
                 ),
             $form->row()
                 ->withColumn(
+                    $form->number('strength')
+                        ->setLabel('Relationship Strength')
+                        ->setHelp('Strength indicator: 1=weak, 10=critical')
+                        ->setAttribute('min', 1)
+                        ->setAttribute('max', 10)
+                        ->setAttribute('step', 1)
+                        ->setDefault(5)
+                )
+                ->withColumn(),
+            $form->row()
+                ->withColumn(
                     $form->textarea('notes')
                         ->setLabel('Relationship Notes')
                         ->setHelp('Additional details about this service relationship')
@@ -81,7 +91,7 @@ if (isset($current_id)) {
                 $form->row()
                     ->withColumn(
                         $form->text('id')
-                            ->setLabel('Service Deliverable Assignment ID')
+                            ->setLabel('Service Relationship ID')
                             ->setHelp('System generated unique identifier')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)

@@ -37,13 +37,13 @@ class ServiceRelationshipFields extends Fields
         $request = Request::new();
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
-        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
-        $rules['service_id'] = "numeric|?required";
-        $rules['related_service_id'] = "numeric|?required";
+        $rules['service_id'] = "numeric|required";
+        $rules['related_service_id'] = "numeric|required";
         $rules['relation_type'] = "required";
+        $rules['strength'] = "?numeric|callback:checkIntRange:1:10";
 
         return $rules;
     }
