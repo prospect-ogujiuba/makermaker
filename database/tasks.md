@@ -129,15 +129,15 @@
 
 ## Service Equipment
 
-[ServiceEquipment-Migration]: /database/migrations/1756309210.create_service_equipment_table.sql
-[ServiceEquipment-Model]: /app/Models/ServiceEquipment.php
-[ServiceEquipment-Policy]: /app/Auth/ServiceEquipmentPolicy.php
-[ServiceEquipment-Fields]: /app/Http/Fields/ServiceEquipmentFields.php
-[ServiceEquipment-Controller]: /app/Controllers/ServiceEquipmentController.php
-[ServiceEquipment-Form]: /resources/views/service_equipment/form.php
-[ServiceEquipment-Index]: /resources/views/service_equipment/index.php
+[Equipment-Migration]: /database/migrations/1756309210.create_service_equipment_table.sql
+[Equipment-Model]: /app/Models/Equipment.php
+[Equipment-Policy]: /app/Auth/EquipmentPolicy.php
+[Equipment-Fields]: /app/Http/Fields/EquipmentFields.php
+[Equipment-Controller]: /app/Controllers/EquipmentController.php
+[Equipment-Form]: /resources/views/service_equipment/form.php
+[Equipment-Index]: /resources/views/service_equipment/index.php
 
-- [Migration][ServiceEquipment-Migration] - [Model][ServiceEquipment-Model] - [Policy][ServiceEquipment-Policy] - [Fields][ServiceEquipment-Fields] - [Controller][ServiceEquipment-Controller] - [Form][ServiceEquipment-Form] - [Index][ServiceEquipment-Index]
+- [Migration][Equipment-Migration] - [Model][Equipment-Model] - [Policy][Equipment-Policy] - [Fields][Equipment-Fields] - [Controller][Equipment-Controller] - [Form][Equipment-Form] - [Index][Equipment-Index]
 
 ### Todo
 
@@ -309,15 +309,15 @@
 
 ## Service Equipment Assignment
 
-[ServiceEquipmentAssignment-Migration]: /database/migrations/1756666767.create_service_equipment_assignments_table.sql
-[ServiceEquipmentAssignment-Model]: /app/Models/ServiceEquipmentAssignment.php
-[ServiceEquipmentAssignment-Policy]: /app/Auth/ServiceEquipmentAssignmentPolicy.php
-[ServiceEquipmentAssignment-Fields]: /app/Http/Fields/ServiceEquipmentAssignmentFields.php
-[ServiceEquipmentAssignment-Controller]: /app/Controllers/ServiceEquipmentAssignmentController.php
-[ServiceEquipmentAssignment-Form]: /resources/views/service_equipment_assignments/form.php
-[ServiceEquipmentAssignment-Index]: /resources/views/service_equipment_assignments/index.php
+[EquipmentForServicesTemp-Migration]: /database/migrations/1756666767.create_service_equipment_assignments_table.sql
+[EquipmentForServicesTemp-Model]: /app/Models/EquipmentForServicesTemp.php
+[EquipmentForServicesTemp-Policy]: /app/Auth/EquipmentForServicesTempPolicy.php
+[EquipmentForServicesTemp-Fields]: /app/Http/Fields/EquipmentForServicesTempFields.php
+[EquipmentForServicesTemp-Controller]: /app/Controllers/EquipmentForServicesTempController.php
+[EquipmentForServicesTemp-Form]: /resources/views/service_equipment_assignments/form.php
+[EquipmentForServicesTemp-Index]: /resources/views/service_equipment_assignments/index.php
 
-- [Migration][ServiceEquipmentAssignment-Migration] - [Model][ServiceEquipmentAssignment-Model] - [Policy][ServiceEquipmentAssignment-Policy] - [Fields][ServiceEquipmentAssignment-Fields] - [Controller][ServiceEquipmentAssignment-Controller] - [Form][ServiceEquipmentAssignment-Form] - [Index][ServiceEquipmentAssignment-Index]
+- [Migration][EquipmentForServicesTemp-Migration] - [Model][EquipmentForServicesTemp-Model] - [Policy][EquipmentForServicesTemp-Policy] - [Fields][EquipmentForServicesTemp-Fields] - [Controller][EquipmentForServicesTemp-Controller] - [Form][EquipmentForServicesTemp-Form] - [Index][EquipmentForServicesTemp-Index]
 
 ### Todo
 

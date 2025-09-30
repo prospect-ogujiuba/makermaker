@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ServiceEquipment Form
+ * Equipment Form
  */
 
 // Form instance
@@ -35,6 +35,12 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('maxlength', '64')
                         ->setHelp('Company or brand name that produces this equipment')
                         ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->text('model')
+                        ->setLabel('Model')
+                        ->setAttribute('maxlength', '64')
+                        ->setHelp('Specific model identifier')
                 ),
             $form->row()
                 ->withColumn(
@@ -45,6 +51,27 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')
                         ->markLabelRequired()
                 )
+                ->withColumn(
+                    $form->text('category')
+                        ->setLabel('Category')
+                        ->setAttribute('maxlength', '64')
+                        ->setHelp('Equipment category or classification')
+                )
+                ->withColumn(
+                    $form->number('unit_cost')
+                        ->setLabel('Unit Cost')
+                        ->setHelp('Cost per unit in dollars')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 0.01)
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('is_consumable')
+                        ->setLabel('Is Consumable')
+                        ->setHelp('Check if this equipment is a consumable item')
+                        ->setText('Yes', 'No')
+                )
+                ->withColumn()
                 ->withColumn(),
 
             $form->repeater('specs')
@@ -62,10 +89,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 )
                 ->setTitle('Equipment Specification')
                 ->confirmRemove()
-                ->markLabelRequired()
         ]
     )
-
 ])->setDescription('Service Equipment');
 
 // Conditional

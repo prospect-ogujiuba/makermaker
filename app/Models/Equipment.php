@@ -5,7 +5,7 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceEquipment extends Model
+class Equipment extends Model
 {
     protected $resource = 'srvc_equipment';
 
@@ -13,6 +13,10 @@ class ServiceEquipment extends Model
         'sku',
         'name',
         'manufacturer',
+        'model',
+        'category',
+        'unit_cost',
+        'is_consumable',
         'specs'
     ];
 
@@ -21,7 +25,9 @@ class ServiceEquipment extends Model
     ];
 
     protected $cast = [
-        'specs' => 'array'
+        'specs' => 'array',
+        'is_consumable' => 'bool',
+        'unit_cost' => 'float'
     ];
 
     protected $guard = [

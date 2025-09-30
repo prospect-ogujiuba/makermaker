@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceEquipmentFields extends Fields
+class EquipmentFields extends Fields
 {
     /**
      * Run On Import
@@ -42,9 +42,13 @@ class ServiceEquipmentFields extends Fields
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:64";
-        $rules['sku'] = "unique:sku:{$wpdb_prefix}srvc_equipment@id:{$id}|?required|max:64";
+        $rules['sku'] = "?unique:sku:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:64";
         $rules['manufacturer'] = "required|max:64";
-        $rules['specs'] = "?required";
+        $rules['model'] = "max:64";
+        $rules['category'] = "max:64";
+        $rules['unit_cost'] = "numeric|min:0";
+        $rules['is_consumable'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['specs'] = "";
 
         return $rules;
     }

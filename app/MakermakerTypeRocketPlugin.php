@@ -27,8 +27,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             include MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $resource . '.php';
         }
 
-
-
         // Plugin Settings
         $page = $this->pluginSettingsPage([
             'view' => View::new('settings', [

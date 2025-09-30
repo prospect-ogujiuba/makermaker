@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceEquipment Index View
+ * Equipment Index View
  */
 
-use MakerMaker\Models\ServiceEquipment;
+use MakerMaker\Models\Equipment;
 
-$table = tr_table(ServiceEquipment::class);
+$table = tr_table(Equipment::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -20,8 +20,24 @@ $table->setColumns([
         'label' => 'Manufacturer',
         'sort' => true
     ],
+    'model' => [
+        'label' => 'Model',
+        'sort' => true
+    ],
+    'category' => [
+        'label' => 'Category',
+        'sort' => true
+    ],
     'sku' => [
         'label' => 'SKU',
+        'sort' => true
+    ],
+    'unit_cost' => [
+        'label' => 'Unit Cost',
+        'sort' => true
+    ],
+    'is_consumable' => [
+        'label' => 'Consumable',
         'sort' => true
     ],
     'created_at' => [
@@ -40,6 +56,6 @@ $table->setColumns([
     ],
     'id' => [
         'label' => 'ID',
-        'sort' => 'true'
+        'sort' => true
     ]
 ], 'name')->setOrder('id', 'DESC')->render();

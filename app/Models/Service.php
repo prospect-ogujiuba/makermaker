@@ -123,7 +123,7 @@ class Service extends Model
     /** Service belongs to many Equipment */
     public function equipment()
     {
-        return $this->belongsToMany(ServiceEquipment::class, GLOBAL_WPDB_PREFIX . 'srvc_service_equipment_assignments', 'service_id', 'equipment_id');
+        return $this->belongsToMany(Equipment::class, GLOBAL_WPDB_PREFIX . 'srvc_service_equipment_assignments', 'service_id', 'equipment_id');
     }
 
     /** Service belongs to many Deliverables */
