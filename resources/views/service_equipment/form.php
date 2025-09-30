@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ServiceEquipmentAssignment Form View
+ * ServiceEquipment Form View
  * 
- * This view displays a form for creating/editing ServiceEquipmentAssignment.
+ * This view displays a form for creating/editing ServiceEquipment.
  * Add your form fields and functionality here.
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceEquipment;
+use MakerMaker\Models\Equipment;
 
 // Form instance
 echo $form->open();
@@ -38,35 +38,41 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('equipment_id')
                         ->setLabel('Equipment')
                         ->setHelp('Select the equipment needed for this service')
-                        ->setModelOptions(ServiceEquipment::class, 'name', 'id', 'Select Equipment')
+                        ->setModelOptions(Equipment::class, 'name', 'id', 'Select Equipment')
                         ->markLabelRequired()
                 ),
             $form->row()
                 ->withColumn(
                     $form->number('quantity')
                         ->setLabel('Quantity')
-                        ->setAttribute('step', '0.01')
-                        ->setAttribute('min', '0')
-                        ->setHelp('Number of units required for this service')
+                        ->setAttribute('step', '0.001')
+                        ->setAttribute('min', '0.001')
+                        ->setAttribute('max', '10000')
+                        ->setHelp('Number of units required (0.001 - 10,000)')
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->toggle('required')
-                        ->setLabel('Required')
-                        ->setHelp('Check if this equipment is mandatory for the service')
-                        ->markLabelRequired()
+                    $form->text('quantity_unit')
+                        ->setLabel('Quantity Unit')
+                        ->setAttribute('maxlength', '16')
+                        ->setAttribute('placeholder', 'e.g., each, feet, meters')
+                        ->setHelp('Unit of measurement for quantity')
                 ),
             $form->row()
                 ->withColumn(
-                    $form->toggle('substitute_ok')
-                        ->setLabel('Substitute OK')
-                        ->setHelp('Check if equivalent equipment can be substituted')
-                        ->markLabelRequired()
+                    $form->toggle('cost_included')
+                        ->setLabel('Cost Included')
+                        ->setHelp('Check if equipment cost is included in service price')
+                        ->setText('Yes', 'No')
                 )
-                ->withColumn()
+                ->withColumn( $form->toggle('required')
+                        ->setLabel('Required')
+                        ->setHelp('Check if this equipment is mandatory for the service')
+                        ->setText('Yes', 'No'))
+
         ]
     )
-])->setDescription('Service Equipment Assignment');
+])->setDescription('Service Equipment');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
@@ -135,12 +141,12 @@ if (isset($current_id)) {
         ->layoutTop();
 
     if ($equipment && count($equipment) > 0) {
-        foreach ($equipment as $serviceEquipment) {
+        foreach ($equipment as $Equipment) {
             $row = $form->row();
 
             $row->column(
                 $form->text("Equipment Name")
-                    ->setAttribute('value', $serviceEquipment->name ?? 'B2CNC-' . $serviceEquipment->id)
+                    ->setAttribute('value', $Equipment->name ?? 'B2CNC-' . $Equipment->id)
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
@@ -148,7 +154,7 @@ if (isset($current_id)) {
 
             $row->column(
                 $form->text("Equipment Manufacturer")
-                    ->setAttribute('value', $serviceEquipment->manufacturer ?? "Service #{$serviceEquipment->id}")
+                    ->setAttribute('value', $Equipment->manufacturer ?? "Service #{$Equipment->id}")
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 
@@ -156,7 +162,7 @@ if (isset($current_id)) {
 
             $row->column(
                 $form->text("SKU")
-                    ->setAttribute('value', $serviceEquipment->sku)
+                    ->setAttribute('value', $Equipment->sku)
                     ->setAttribute('readonly', true)
                     ->setAttribute('name', false)
 

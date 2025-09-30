@@ -524,16 +524,49 @@ INSERT INTO `{!!prefix!!}srvc_equipment` (`sku`, `name`, `manufacturer`, `model`
 ('DELL-LED-MONITOR-27', 'LED Monitor 27"', 'Dell', 'U2722DE', 'Monitors', 450.00, 0, '[{"specification_name": "Resolution", "specification_value": "2560x1440"}, {"specification_name": "Panel", "specification_value": "IPS"}, {"specification_name": "Refresh Rate", "specification_value": "60Hz"}]', '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
 ('LG-CURVED-MONITOR-34', 'Curved Monitor 34"', 'LG', '34WN80C-B', 'Monitors', 650.00, 0, '[{"specification_name": "Resolution", "specification_value": "3440x1440"}, {"specification_name": "Panel", "specification_value": "IPS"}, {"specification_name": "Refresh Rate", "specification_value": "75Hz"}]', '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
 
+-- Service Equipment
+INSERT INTO `{!!prefix!!}srvc_service_equipment` (`service_id`, `equipment_id`, `required`, `quantity`, `quantity_unit`, `cost_included`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
+(1, 3, 1, 12.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(1, 4, 1, 12.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(1, 6, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(1, 7, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(1, 8, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(2, 2, 1, 8.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(2, 5, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(2, 9, 1, 4.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:33', 1, 2),
+(3, 3, 1, 6.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:33', 1, 2),
+(3, 6, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(3, 9, 1, 2.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(4, 1, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(4, 4, 1, 24.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(4, 6, 1, 2.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(5, 2, 1, 4.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(5, 3, 1, 4.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(5, 8, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(6, 1, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(6, 4, 1, 50.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(6, 6, 1, 3.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(7, 4, 1, 8.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(7, 12, 0, 500.000, 'feet', 0, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(8, 2, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(8, 5, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(8, 6, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2),
+(9, 5, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(10, 6, 1, 2.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(11, 7, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(12, 8, 1, 1.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:18:38', 1, 2),
+(17, 7, 1, 2.000, 'each', 1, '2025-09-05 23:13:26', '2025-09-05 23:13:26', 1, 2);
+
 -- >>> Down >>>
 -- DELETE FROM `{!!prefix!!}srvc_bundle_items`;
--- DELETE FROM `{!!prefix!!}srvc_service_equipment_assignments`;
--- DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
--- DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
--- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
 -- DELETE FROM `{!!prefix!!}srvc_bundles`;
+-- DELETE FROM `{!!prefix!!}srvc_service_deliverable_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_deliverables`;
+-- DELETE FROM `{!!prefix!!}srvc_service_coverage`;
 -- DELETE FROM `{!!prefix!!}srvc_coverage_areas`;
+-- DELETE FROM `{!!prefix!!}srvc_service_delivery_method_assignments`;
 -- DELETE FROM `{!!prefix!!}srvc_delivery_methods`;
+DELETE FROM `{!!prefix!!}srvc_service_equipment`;
 DELETE FROM `{!!prefix!!}srvc_equipment`;
 DELETE FROM `{!!prefix!!}srvc_service_addons`;
 DELETE FROM `{!!prefix!!}srvc_service_relationships`;

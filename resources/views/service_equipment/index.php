@@ -1,18 +1,18 @@
 <?php
 
 /**
- * ServiceEquipmentAssignment Index View
+ * ServiceEquipment Index View
  */
 
-use MakerMaker\Models\ServiceEquipmentAssignment;
+use MakerMaker\Models\ServiceEquipment;
 
-$table = tr_table(ServiceEquipmentAssignment::class);
+$table = tr_table(ServiceEquipment::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
 $table->setColumns([
     'service.name' => [
-        'label' => 'Service  Name',
+        'label' => 'Service Name',
         'sort' => true,
         'actions' => ['edit', 'view', 'delete']
     ],
@@ -20,13 +20,27 @@ $table->setColumns([
         'label' => 'Equipment Name',
         'sort' => true
     ],
-    'required' => [
-        'label' => 'Required',
-        'sort' => true
-    ],
     'quantity' => [
         'label' => 'Quantity',
         'sort' => true
+    ],
+    'quantity_unit' => [
+        'label' => 'Unit',
+        'sort' => true
+    ],
+    'required' => [
+        'label' => 'Required',
+        'sort' => true,
+        'callback' => function ($item, $value) {
+            return $item ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
+    ],
+    'cost_included' => [
+        'label' => 'Cost Included',
+        'sort' => true,
+        'callback' => function ($item, $value) {
+            return $item ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
     ],
     'created_at' => [
         'label' => 'Created',

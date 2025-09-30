@@ -4,17 +4,18 @@ namespace MakerMaker\Models;
 
 use TypeRocket\Models\Model;
 
-class ServiceEquipmentAssignment extends Model
+class ServiceEquipment extends Model
 {
-    protected $resource = 'srvc_service_equipment_assignments';
+    protected $resource = 'srvc_service_equipment';
 
     protected $fillable = [
         'service_id',
         'equipment_id',
         'required',
         'quantity',
+        'quantity_unit',
+        'cost_included'
     ];
-
     protected $guard = [
         'id',
         'created_at',
@@ -29,16 +30,16 @@ class ServiceEquipmentAssignment extends Model
         'equipment'
     ];
 
-    /** ServiceEquipmentAssignment belongs to a Service */
+    /** ServiceEquipment belongs to a Service */
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
 
-    /** ServiceEquipmentAssignment belongs to a ServiceEquipment */
+    /** ServiceEquipment belongs to a Equipment */
     public function equipment()
     {
-        return $this->belongsTo(ServiceEquipment::class, 'equipment_id');
+        return $this->belongsTo(Equipment::class, 'equipment_id');
     }
 
     /** Created by WP user */

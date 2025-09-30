@@ -46,7 +46,7 @@ class EquipmentFields extends Fields
         $rules['manufacturer'] = "required|max:64";
         $rules['model'] = "max:64";
         $rules['category'] = "max:64";
-        $rules['unit_cost'] = "numeric|min:0";
+        $rules['unit_cost'] = "?numeric|min:0";
         $rules['is_consumable'] = "?numeric|callback:checkIntRange:0:1";
         $rules['specs'] = "";
 

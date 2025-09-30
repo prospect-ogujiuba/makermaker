@@ -42,7 +42,7 @@ class EquipmentController extends Controller
     public function create(EquipmentFields $fields, Equipment $equipment, Response $response, AuthUser $user)
     {
         if (!$equipment->can('create')) {
-            $response->unauthorized('Unauthorized: Service Equipment not created')->abort();
+            $response->unauthorized('Unauthorized: Equipment not created')->abort();
         }
 
         autoGenerateCode($fields, 'sku', 'name', '-', $fields['manufacturer'], 'prefix', true);
@@ -53,7 +53,7 @@ class EquipmentController extends Controller
         $equipment->save($fields);
 
         return tr_redirect()->toPage('equipment', 'index')
-            ->withFlash('Service Equipment created');
+            ->withFlash('Equipment created');
     }
 
     /**
@@ -86,7 +86,7 @@ class EquipmentController extends Controller
     public function update(Equipment $equipment, EquipmentFields $fields, Response $response, AuthUser $user)
     {
         if (!$equipment->can('update')) {
-            $response->unauthorized('Unauthorized: Service Equipment not updated')->abort();
+            $response->unauthorized('Unauthorized: Equipment not updated')->abort();
         }
 
         autoGenerateCode($fields, 'sku', 'name', '-', $fields['manufacturer'], 'prefix', true);
@@ -96,7 +96,7 @@ class EquipmentController extends Controller
         $equipment->save($fields);
 
         return tr_redirect()->toPage('equipment', 'edit', $equipment->getID())
-            ->withFlash('Service Equipment updated');
+            ->withFlash('Equipment updated');
     }
 
     /**
@@ -135,14 +135,14 @@ class EquipmentController extends Controller
     public function destroy(Equipment $equipment, Response $response)
     {
         if (!$equipment->can('destroy')) {
-            return $response->unauthorized('Unauthorized: Service Equipment not deleted');
+            return $response->unauthorized('Unauthorized: Equipment not deleted');
         }
 
         $services = $equipment->services()->count('service_id');
 
         if ($services > 0) {
             return $response
-                ->error("Cannot delete: {$services} service(s) still use this Service Equipment.")
+                ->error("Cannot delete: {$services} service(s) still use this Equipment.")
                 ->setStatus(409)
                 ->setData('equipment', $equipment);
         }
@@ -155,7 +155,7 @@ class EquipmentController extends Controller
                 ->setStatus(500);
         }
 
-        return $response->success('Service Equipment deleted.')->setData('equipment', $equipment);
+        return $response->success('Equipment deleted.')->setData('equipment', $equipment);
     }
 
     /**
@@ -173,19 +173,19 @@ class EquipmentController extends Controller
             if (empty($equipment)) {
                 return $response
                     ->setData('equipment', [])
-                    ->setMessage('No Service Equipment found', 'info')
+                    ->setMessage('No Equipment found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('equipment', $equipment)
-                ->setMessage('Service Equipment retrieved successfully', 'success')
+                ->setMessage('Equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('Service Equipment indexRest error: ' . $e->getMessage());
+            error_log('Equipment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Equipment: ' . $e->getMessage())
+                ->error('Failed to retrieve Equipment: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }
@@ -208,18 +208,18 @@ class EquipmentController extends Controller
             if (empty($equipment)) {
                 return $response
                     ->setData('equipment', null)
-                    ->setMessage('Service Equipment not found', 'info')
+                    ->setMessage('Equipment not found', 'info')
                     ->setStatus(404);
             }
 
             return $response
                 ->setData('equipment', $equipment)
-                ->setMessage('Service Equipment retrieved successfully', 'success')
+                ->setMessage('Equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
-            error_log('Service Equipment showRest error: ' . $e->getMessage());
+            error_log('Equipment showRest error: ' . $e->getMessage());
             return $response
-                ->setMessage('An error occurred while retrieving Service Equipment', 'error')
+                ->setMessage('An error occurred while retrieving Equipment', 'error')
                 ->setStatus(500);
         }
     }

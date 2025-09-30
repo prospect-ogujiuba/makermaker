@@ -41,7 +41,7 @@ class Equipment extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_equipment_assignments', 'equipment_id', 'service_id');
+        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_equipment', 'equipment_id', 'service_id');
     }
 
     /** Created by WP user */

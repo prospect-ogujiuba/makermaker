@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceEquipmentAssignmentFields extends Fields
+class ServiceEquipmentFields extends Fields
 {
     /**
      * Run On Import
@@ -32,22 +32,23 @@ class ServiceEquipmentAssignmentFields extends Fields
      *
      * @return array
      */
-    protected function rules()
-    {
-        $request = Request::new();
-        $route_args = $request->getDataGet('route_args');
-        $id = $route_args[0] ?? null;
-        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
-        $rules = [];
+protected function rules()
+{
+    $request = Request::new();
+    $route_args = $request->getDataGet('route_args');
+    $id = $route_args[0] ?? null;
 
-        $rules['service_id'] = "numeric|required";
-        $rules['equipment_id'] = "numeric|required";
-        $rules['required'] = "numeric";
-        $rules['quantity'] = "?numeric";
+    $rules = [];
 
-        return $rules;
-    }
+    $rules['service_id'] = "numeric|required";
+    $rules['equipment_id'] = "numeric|required";
+    $rules['required'] = "?numeric|?callback:checkIntRange:0:1";
+    $rules['quantity'] = "numeric|required|min:0.001|max:10000";
+    $rules['quantity_unit'] = "max:16";
+    $rules['cost_included'] = "?numeric|?callback:checkIntRange:0:1";
+
+    return $rules;
+}
 
     /**
      * Custom Error Messages
