@@ -1,11 +1,12 @@
 <?php
+
 namespace MakerMaker\Auth;
 
 use \App\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
-class ServiceDeliveryMethodAssignmentPolicy extends Policy
+class ServiceMethodOfDeliveryTempPolicy extends Policy
 {
     public function update(AuthUser $auth, $object)
     {

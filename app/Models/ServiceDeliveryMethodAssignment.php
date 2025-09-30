@@ -5,7 +5,7 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceDeliveryMethodAssignment extends Model
+class ServiceMethodOfDeliveryTemp extends Model
 {
     protected $resource = 'srvc_service_delivery_method_assignments';
 
@@ -31,16 +31,16 @@ class ServiceDeliveryMethodAssignment extends Model
         'deliveryMethod'
     ];
 
-    /** ServiceDeliveryMethodAssignment belongs to a Service */
+    /** ServiceMethodOfDeliveryTemp belongs to a Service */
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
 
-    /** ServiceDeliveryMethodAssignment belongs to a ServiceDeliveryMethod */
+    /** ServiceMethodOfDeliveryTemp belongs to a DeliveryMethod */
     public function deliveryMethod()
     {
-        return $this->belongsTo(ServiceDeliveryMethod::class, 'delivery_method_id');
+        return $this->belongsTo(DeliveryMethod::class, 'delivery_method_id');
     }
 
     /** Created by WP user */

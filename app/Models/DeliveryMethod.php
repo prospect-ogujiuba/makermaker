@@ -38,7 +38,7 @@ class DeliveryMethod extends Model
     // Service prices using this pricing tier
     public function services()
     {
-        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_delivery_method_assignments', 'delivery_method_id', 'service_id');
+        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_delivery_method', 'delivery_method_id', 'service_id');
     }
 
     // User who created this record

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ServiceDeliveryMethodAssignment Form View
+ * ServiceMethodOfDeliveryTemp Form View
  * 
- * This view displays a form for creating/editing ServiceDeliveryMethodAssignment.
+ * This view displays a form for creating/editing ServiceMethodOfDeliveryTemp.
  * Add your form fields and functionality here.
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceDeliveryMethod;
+use MakerMaker\Models\DeliveryMethod;
 
 // Form instance
 echo $form->open();
@@ -31,14 +31,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service this delivery method applies to')
-                        ->setModelOptions(Service::class, 'name', 'id','Select Service')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('delivery_method_id')
                         ->setLabel('Delivery Method')
                         ->setHelp('Select how this service will be delivered (e.g., On-site, Remote)')
-                        ->setModelOptions(ServiceDeliveryMethod::class, 'name', 'id', 'Select Delivery Method')
+                        ->setModelOptions(DeliveryMethod::class, 'name', 'id', 'Select Delivery Method')
                         ->markLabelRequired()
                 ),
             $form->row()

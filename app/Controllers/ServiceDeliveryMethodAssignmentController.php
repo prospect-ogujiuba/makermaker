@@ -2,14 +2,14 @@
 
 namespace MakerMaker\Controllers;
 
-use MakerMaker\Http\Fields\ServiceDeliveryMethodAssignmentFields;
-use MakerMaker\Models\ServiceDeliveryMethodAssignment;
+use MakerMaker\Http\Fields\ServiceMethodOfDeliveryTempFields;
+use MakerMaker\Models\ServiceMethodOfDeliveryTemp;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
 use TypeRocket\Http\Response;
 use TypeRocket\Models\AuthUser;
 
-class ServiceDeliveryMethodAssignmentController extends Controller
+class ServiceMethodOfDeliveryTempController extends Controller
 {
     /**
      * The index page for admin
@@ -28,7 +28,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      */
     public function add(AuthUser $user)
     {
-        $form = tr_form(ServiceDeliveryMethodAssignment::class)->useErrors()->useOld()->useConfirm();
+        $form = tr_form(ServiceMethodOfDeliveryTemp::class)->useErrors()->useOld()->useConfirm();
         return View::new('service_delivery_method_assignments.form', compact('form', 'user'));
     }
 
@@ -39,7 +39,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      *
      * @return mixed
      */
-    public function create(ServiceDeliveryMethodAssignmentFields $fields, ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response, AuthUser $user)
+    public function create(ServiceMethodOfDeliveryTempFields $fields, ServiceMethodOfDeliveryTemp $service_delivery_method_assignment, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method_assignment->can('create')) {
             $response->unauthorized('Unauthorized: Service Delivery Method Assignment not created')->abort();
@@ -50,18 +50,18 @@ class ServiceDeliveryMethodAssignmentController extends Controller
 
         $service_delivery_method_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliverymethodassignment', 'index')
+        return tr_redirect()->toPage('ServiceMethodOfDeliveryTemp', 'index')
             ->withFlash('Service Delivery Method Assignment created');
     }
 
     /**
      * The edit page for admin
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      *
      * @return mixed
      */
-    public function edit(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, AuthUser $user)
+    public function edit(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment, AuthUser $user)
     {
         $current_id = $service_delivery_method_assignment->getID();
         $createdBy = $service_delivery_method_assignment->createdBy;
@@ -76,11 +76,11 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      *
      * @return mixed
      */
-    public function update(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, ServiceDeliveryMethodAssignmentFields $fields, Response $response, AuthUser $user)
+    public function update(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment, ServiceMethodOfDeliveryTempFields $fields, Response $response, AuthUser $user)
     {
         if (!$service_delivery_method_assignment->can('update')) {
             $response->unauthorized('Unauthorized: Service Delivery Method Assignment not updated')->abort();
@@ -90,18 +90,18 @@ class ServiceDeliveryMethodAssignmentController extends Controller
 
         $service_delivery_method_assignment->save($fields);
 
-        return tr_redirect()->toPage('servicedeliverymethodassignment', 'edit', $service_delivery_method_assignment->getID())
+        return tr_redirect()->toPage('ServiceMethodOfDeliveryTemp', 'edit', $service_delivery_method_assignment->getID())
             ->withFlash('Service Delivery Method Assignment updated');
     }
 
     /**
      * The show page for admin
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      *
      * @return mixed
      */
-    public function show(ServiceDeliveryMethodAssignment $service_delivery_method_assignment)
+    public function show(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment)
     {
         return $service_delivery_method_assignment;
     }
@@ -109,11 +109,11 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     /**
      * The delete page for admin
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      *
      * @return mixed
      */
-    public function delete(ServiceDeliveryMethodAssignment $service_delivery_method_assignment)
+    public function delete(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment)
     {
         //
     }
@@ -123,11 +123,11 @@ class ServiceDeliveryMethodAssignmentController extends Controller
      *
      * AJAX requests and normal requests can be made to this action
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      *
      * @return mixed
      */
-    public function destroy(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response)
+    public function destroy(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment, Response $response)
     {
         if (!$service_delivery_method_assignment->can('destroy')) {
             return $response->unauthorized('Unauthorized: Service Delivery Method Assignment not deleted');
@@ -152,7 +152,7 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_delivery_method_assignments = ServiceDeliveryMethodAssignment::new()->get();
+            $service_delivery_method_assignments = ServiceMethodOfDeliveryTemp::new()->get();
 
             if (empty($service_delivery_method_assignments)) {
                 return $response
@@ -177,15 +177,15 @@ class ServiceDeliveryMethodAssignmentController extends Controller
     /**
      * The show function for API
      *
-     * @param ServiceDeliveryMethodAssignment $service_delivery_method_assignment
+     * @param ServiceMethodOfDeliveryTemp $service_delivery_method_assignment
      * @param Response $response
      *
      * @return \TypeRocket\Http\Response
      */
-    public function showRest(ServiceDeliveryMethodAssignment $service_delivery_method_assignment, Response $response)
+    public function showRest(ServiceMethodOfDeliveryTemp $service_delivery_method_assignment, Response $response)
     {
         try {
-            $service_delivery_method_assignment = ServiceDeliveryMethodAssignment::new()
+            $service_delivery_method_assignment = ServiceMethodOfDeliveryTemp::new()
                 ->find($service_delivery_method_assignment->getID());
 
             if (empty($service_delivery_method_assignment)) {

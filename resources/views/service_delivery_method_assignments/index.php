@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceDeliveryMethodAssignment Index View
+ * ServiceMethodOfDeliveryTemp Index View
  */
 
-use MakerMaker\Models\ServiceDeliveryMethodAssignment;
+use MakerMaker\Models\ServiceMethodOfDeliveryTemp;
 
-$table = tr_table(ServiceDeliveryMethodAssignment::class);
+$table = tr_table(ServiceMethodOfDeliveryTemp::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
