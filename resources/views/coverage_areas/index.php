@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceCoverageArea Index View
+ * CoverageArea Index View
  */
 
-use MakerMaker\Models\ServiceCoverageArea;
+use MakerMaker\Models\CoverageArea;
 
-$table = tr_table(ServiceCoverageArea::class);
+$table = tr_table(CoverageArea::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -18,6 +18,18 @@ $table->setColumns([
     ],
     'code' => [
         'label' => 'Code',
+        'sort' => true
+    ],
+    'country_code' => [
+        'label' => 'Country',
+        'sort' => true
+    ],
+    'region_type' => [
+        'label' => 'Region Type',
+        'sort' => true
+    ],
+    'timezone' => [
+        'label' => 'Timezone',
         'sort' => true
     ],
     'created_at' => [

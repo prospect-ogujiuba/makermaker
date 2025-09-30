@@ -34,10 +34,10 @@ class ServiceCoverage extends Model
         return $this->belongsTo(Service::class, 'service_id');
     }
 
-    /** ServiceCoverage belongs to a ServiceCoverageArea */
+    /** ServiceCoverage belongs to a CoverageArea */
     public function coverageArea()
     {
-        return $this->belongsTo(ServiceCoverageArea::class, 'coverage_area_id');
+        return $this->belongsTo(CoverageArea::class, 'coverage_area_id');
     }
 
     /** Created by WP user */

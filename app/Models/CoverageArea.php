@@ -5,13 +5,17 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceCoverageArea extends Model
+class CoverageArea extends Model
 {
     protected $resource = 'srvc_coverage_areas';
 
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'country_code',
+        'region_type',
+        'timezone',
+        'postal_code_pattern'
     ];
 
     protected $guard = [

@@ -5,7 +5,7 @@
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceCoverageArea;
+use MakerMaker\Models\CoverageArea;
 
 // Form instance
 echo $form->open();
@@ -28,14 +28,14 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('service_id')
                         ->setLabel('Service')
                         ->setHelp('Select the service that will be available in this coverage area')
-                        ->setModelOptions(Service::class, 'name', 'id','Select Service')
+                        ->setModelOptions(Service::class, 'name', 'id', 'Select Service')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->select('coverage_area_id')
                         ->setLabel('Coverage Area')
                         ->setHelp('Select the geographic area where this service is available')
-                        ->setModelOptions(ServiceCoverageArea::class, 'name', 'id', 'Select Coverage Area')
+                        ->setModelOptions(CoverageArea::class, 'name', 'id', 'Select Coverage Area')
                         ->markLabelRequired()
                 )
         ]

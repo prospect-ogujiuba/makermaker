@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceCoverageAreaFields extends Fields
+class CoverageAreaFields extends Fields
 {
     /**
      * Run On Import
@@ -43,6 +43,10 @@ class ServiceCoverageAreaFields extends Fields
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|required|max:64";
         $rules['code'] = "unique:code:{$wpdb_prefix}srvc_coverage_areas@id:{$id}|?required|max:64";
+        $rules['country_code'] = "max:2|?required";
+        $rules['region_type'] = "";
+        $rules['timezone'] = "max:64|?required";
+        $rules['postal_code_pattern'] = "max:32|?required";
 
         return $rules;
     }

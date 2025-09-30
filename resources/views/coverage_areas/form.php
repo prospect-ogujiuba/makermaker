@@ -1,19 +1,20 @@
 <?php
 
 /**
- * ServiceCoverageArea Form
+ * CoverageArea Form
  */
 
 // Form instance
 echo $form->open();
 
-echo to_resource('ServiceCoverageArea', 'index', 'Back To Service Coverage Area');
+echo to_resource('CoverageArea', 'index', 'Back To Coverage Area');
 
 // Tab Layout
 $tabs = tr_tabs()
     ->setFooter($form->save())
     ->layoutLeft();
 
+// Main Tab
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
@@ -35,6 +36,45 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Computer friendly code/slug')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Auto-generated from name if left empty')
+                        ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->text('country_code')
+                        ->setLabel('Country Code')
+                        ->setHelp('Two-letter ISO country code (e.g., US, CA, GB)')
+                        ->setAttribute('maxlength', '2')
+                        ->setAttribute('placeholder', 'e.g., US')
+                        ->setAttribute('style', 'text-transform: uppercase;')
+                )
+                ->withColumn(
+                    $form->select('region_type')
+                        ->setLabel('Region Type')
+                        ->setHelp('Type of geographic region')
+                        ->setOptions([
+                            'Select Region Type' => NULL,
+                            'City' => 'city',
+                            'Province' => 'province',
+                            'State' => 'state',
+                            'Country' => 'country',
+                            'Continent' => 'continent',
+                            'Global' => 'global'
+                        ])
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->text('timezone')
+                        ->setLabel('Timezone')
+                        ->setHelp('IANA timezone identifier (e.g., America/New_York)')
+                        ->setAttribute('maxlength', '64')
+                        ->setAttribute('placeholder', 'e.g., America/New_York')
+                )
+                ->withColumn(
+                    $form->text('postal_code_pattern')
+                        ->setLabel('Postal Code Pattern')
+                        ->setHelp('Regex pattern for validating postal codes in this area')
+                        ->setAttribute('maxlength', '32')
+                        ->setAttribute('placeholder', 'e.g., ^\d{5}(-\d{4})?$')
                 )
         ]
     )

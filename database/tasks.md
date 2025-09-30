@@ -91,17 +91,17 @@
 
 ---
 
-## Service Coverage Area
+## Coverage Area
 
-[ServiceCoverageArea-Migration]: /database/migrations/1756253851.create_service_coverage_areas_table.sql
-[ServiceCoverageArea-Model]: /app/Models/ServiceCoverageArea.php
-[ServiceCoverageArea-Policy]: /app/Auth/ServiceCoverageAreaPolicy.php
-[ServiceCoverageArea-Fields]: /app/Http/Fields/ServiceCoverageAreaFields.php
-[ServiceCoverageArea-Controller]: /app/Controllers/ServiceCoverageAreaController.php
-[ServiceCoverageArea-Form]: /resources/views/service_coverage_areas/form.php
-[ServiceCoverageArea-Index]: /resources/views/service_coverage_areas/index.php
+[CoverageArea-Migration]: /database/migrations/1756253851.create_coverage_areas_table.sql
+[CoverageArea-Model]: /app/Models/CoverageArea.php
+[CoverageArea-Policy]: /app/Auth/CoverageAreaPolicy.php
+[CoverageArea-Fields]: /app/Http/Fields/CoverageAreaFields.php
+[CoverageArea-Controller]: /app/Controllers/CoverageAreaController.php
+[CoverageArea-Form]: /resources/views/coverage_areas/form.php
+[CoverageArea-Index]: /resources/views/coverage_areas/index.php
 
-- [Migration][ServiceCoverageArea-Migration] - [Model][ServiceCoverageArea-Model] - [Policy][ServiceCoverageArea-Policy] - [Fields][ServiceCoverageArea-Fields] - [Controller][ServiceCoverageArea-Controller] - [Form][ServiceCoverageArea-Form] - [Index][ServiceCoverageArea-Index]
+- [Migration][CoverageArea-Migration] - [Model][CoverageArea-Model] - [Policy][CoverageArea-Policy] - [Fields][CoverageArea-Fields] - [Controller][CoverageArea-Controller] - [Form][CoverageArea-Form] - [Index][CoverageArea-Index]
 
 ### Todo
 
