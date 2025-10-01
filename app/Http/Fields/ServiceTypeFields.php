@@ -44,9 +44,9 @@ class ServiceTypeFields extends Fields
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_service_types@id:{$id}|required|max:64";
         $rules['code'] = "unique:code:{$wpdb_prefix}srvc_service_types@id:{$id}|?required|max:64";
         $rules['description'] = "max:2000";
-        $rules['requires_site_visit'] = "numeric|callback:checkIntRange:0:1";
-        $rules['supports_remote'] = "numeric|callback:checkIntRange:0:1";
-        $rules['estimated_duration_hours'] = "numeric|callback:checkIntRange:0:9999.99";
+        $rules['requires_site_visit'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['supports_remote'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['estimated_duration_hours'] = "?numeric|?callback:checkIntRange:0:9999.99";
 
         return $rules;
     }

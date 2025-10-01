@@ -47,7 +47,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Price Multiplier')
                         ->setAttribute('min', '0')
                         ->setAttribute('step', '0.01')
-                        ->setAttribute('placeholder', '1.00')
+                        ->setAttribute('placeholder', 'e.g., 1.25')
                         ->setHelp('Decimal factor to adjust base service pricing (1.00 = no change, 1.5 = 50% increase)')
                 )
                 ->withColumn(),

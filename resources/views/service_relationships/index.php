@@ -18,7 +18,10 @@ $table->setColumns([
     ],
     'relation_type' => [
         'label' => 'Relation Type',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'relatedservice.name' => [
         'label' => 'Related Service',

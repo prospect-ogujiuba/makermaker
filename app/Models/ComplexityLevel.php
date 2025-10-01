@@ -24,6 +24,11 @@ class ComplexityLevel extends Model
         'updated_by'
     ];
 
+    protected $format = [
+        'level' => 'convertEmptyToNull',
+        'price_mulitipler' => 'convertEmptyToNull'
+    ];
+
     protected $with = [
         'services'
     ];

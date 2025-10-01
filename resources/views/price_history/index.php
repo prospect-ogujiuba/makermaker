@@ -22,7 +22,10 @@ $table->setColumns([
     ],
     'change_type' => [
         'label' => 'Change',
-        'sort' => true
+        'sort' => true,
+                'callback' => function($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'change_description' => [
         'label' => 'Summary',

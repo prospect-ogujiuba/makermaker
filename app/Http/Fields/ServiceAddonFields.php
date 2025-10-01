@@ -34,15 +34,22 @@ class ServiceAddonFields extends Fields
      */
     protected function rules()
     {
-        return [
-            'service_id' => 'required|numeric',
-            'addon_service_id' => 'required|numeric',
-            'required' => 'numeric',
-            'min_qty' => '?numeric',
-            'max_qty' => '?numeric',
-            'default_qty' => '?numeric',
-            'sort_order' => 'numeric'
-        ];
+        $request = Request::new();
+        $route_args = $request->getDataGet('route_args');
+        $id = $route_args[0] ?? null;
+        $wpdb_prefix = GLOBAL_WPDB_PREFIX;
+
+        $rules = [];
+
+        $rules['service_id'] = 'required|numeric';
+        $rules['addon_service_id'] = "required|numeric";
+        $rules['required'] = 'numeric';
+        $rules['min_qty'] = '?numeric';
+        $rules['max_qty'] = '?numeric';
+        $rules['default_qty'] = '?numeric';
+        $rules['sort_order'] = 'numeric';
+
+        return $rules;
     }
 
     /**

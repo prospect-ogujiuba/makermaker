@@ -5,7 +5,7 @@ CREATE TABLE `{!!prefix!!}srvc_categories` (
   `parent_id` bigint(20) DEFAULT NULL,
   `name` varchar(64) NOT NULL,
   `slug` varchar(64) NOT NULL,
-  `icon` varchar(64) DEFAULT NULL,
+  `icon` varchar(32) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `sort_order` int unsigned NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,

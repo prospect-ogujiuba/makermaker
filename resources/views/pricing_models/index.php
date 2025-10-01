@@ -20,6 +20,9 @@ $table->setColumns([
     'code' => [
         'label' => 'Code',
         'sort' => true,
+                'callback' => function($value) {
+            return "<code>{$value}</code>";
+        }
     ],
 
     'description' => [
@@ -30,6 +33,12 @@ $table->setColumns([
     'is_time_based' => [
         'label' => 'Time Based',
         'sort' => true,
+                 'callback' => function ($value) {
+            return $value ?
+                "<i class='bi bi-check' style='color: green;'></i>" :
+                "<i class='bi bi-x' style='color: red;'></i>";
+        }
+        
     ],
     'created_at' => [
         'label' => 'Created',

@@ -24,7 +24,10 @@ $table->setColumns([
 
     'required' => [
         'label' => 'Required',
-        'sort' => true
+        'sort' => true,
+          'callback' => function ($value) {
+            return $value ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
     ],
 
     'min_qty' => [

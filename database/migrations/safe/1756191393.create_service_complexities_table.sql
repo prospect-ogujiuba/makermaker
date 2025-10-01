@@ -4,7 +4,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexities` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `level` tinyint unsigned NOT NULL DEFAULT 0,
-  `price_multiplier` decimal(8,2) NOT NULL DEFAULT 1.00,
+  `price_multiplier` decimal(8,2) DEFAULT 1.00,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL,

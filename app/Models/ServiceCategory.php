@@ -7,11 +7,18 @@ use TypeRocket\Models\Model;
 class ServiceCategory extends Model
 {
     protected $resource = 'srvc_categories';
+    
     protected $fillable = [
         'parent_id',
         'name',
-        'slug'
+        'slug',
+        'icon',
+        'description',
+        'sort_order',
+        'is_active',
     ];
+
+
     protected $guard = [
         'id',
         'created_at',

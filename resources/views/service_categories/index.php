@@ -14,11 +14,7 @@ $table->setColumns([
     'name' => [
         'label' => 'Name',
         'sort' => 'true',
-        'actions' => ['edit', 'view', 'delete'],
-        'callback' => function($value, $item) {
-            $icon = $item->icon ? "<i class=\"icon-{$item->icon}\"></i> " : '';
-            return $icon . $value;
-        }
+        'actions' => ['edit', 'view', 'delete']
     ],
     'parentCategory.name' => [
         'label' => 'Parent',
@@ -30,31 +26,29 @@ $table->setColumns([
     'slug' => [
         'label' => 'Slug',
         'sort' => 'true',
-        'callback' => function($value) {
+        'callback' => function ($value) {
             return "<code>{$value}</code>";
         }
     ],
     'sort_order' => [
         'label' => 'Order',
         'sort' => 'true',
-        'callback' => function($value) {
+        'callback' => function ($value) {
             return '<span class="badge badge-secondary">' . $value . '</span>';
         }
     ],
     'is_active' => [
         'label' => 'Status',
         'sort' => 'true',
-        'callback' => function($value) {
-            return $value ? 
-                '<span class="badge badge-success">Active</span>' : 
-                '<span class="badge badge-danger">Inactive</span>';
+        'callback' => function ($value) {
+            return $value ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
         }
     ],
     'description' => [
         'label' => 'Description',
-        'callback' => function($value) {
-            return $value ? 
-                (strlen($value) > 50 ? substr($value, 0, 47) . '...' : $value) : 
+        'callback' => function ($value) {
+            return $value ?
+                (strlen($value) > 50 ? substr($value, 0, 47) . '...' : $value) :
                 '<span class="text-muted">No description</span>';
         }
     ],

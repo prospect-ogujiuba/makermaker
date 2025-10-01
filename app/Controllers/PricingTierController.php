@@ -53,7 +53,7 @@ class PricingTierController extends Controller
 
         $pricing_tier->save($fields);
 
-        return tr_redirect()->toPage('PricingTier', 'index')
+        return tr_redirect()->toPage('pricingtier', 'index')
             ->withFlash('Pricing Tier created');
     }
 
@@ -97,7 +97,7 @@ class PricingTierController extends Controller
 
         $pricing_tier->save($fields);
 
-        return tr_redirect()->toPage('PricingTier', 'edit', $pricing_tier->getID())
+        return tr_redirect()->toPage('pricingtier', 'edit', $pricing_tier->getID())
             ->withFlash('Pricing Tier updated');
     }
 

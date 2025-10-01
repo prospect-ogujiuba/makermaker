@@ -71,24 +71,10 @@ $table->setColumns([
     ],
     'status_flags' => [
         'label' => 'Status',
-        'callback' => function ($value, $item) {
-            $badges = [];
-
-            // Current status
-            if ($item->is_current) {
-                $badges[] = '<span class="badge badge-success">Current</span>';
-            }
-
-            // Approval status
-            $statusBadges = [
-                'draft' => '<span class="badge badge-light">Draft</span>',
-                'pending' => '<span class="badge badge-warning">Pending</span>',
-                'approved' => '<span class="badge badge-success">Approved</span>',
-                'rejected' => '<span class="badge badge-danger">Rejected</span>'
-            ];
-            $badges[] = $statusBadges[$item->approval_status] ?? $item->approval_status;
-
-            return implode(' ', $badges);
+         'callback' => function ($item, $value) {
+            return $value->approval_status == 'approved' ?
+                "<i class='bi bi-check' style='color: green;'></i>" :
+                "<i class='bi bi-x' style='color: red;'></i>";
         }
     ],
     'currency' => [

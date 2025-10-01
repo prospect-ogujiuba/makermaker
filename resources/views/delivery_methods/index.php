@@ -18,20 +18,23 @@ $table->setColumns([
     ],
     'code' => [
         'label' => 'Code',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'requires_site_access' => [
         'label' => 'Site Access',
         'sort' => true,
-        'callback' => function($item, $value) {
-            return $value ? "<i class='bi bi-check-circle-fill' style='color: green;'></i>" : "<i class='bi bi-x-circle-fill' style='color: gray;'></i>";
+        'callback' => function ($value) {
+            return $value ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
         }
     ],
     'supports_remote' => [
         'label' => 'Remote',
         'sort' => true,
-        'callback' => function($item, $value) {
-            return $value ? "<i class='bi bi-check-circle-fill' style='color: green;'></i>" : "<i class='bi bi-x-circle-fill' style='color: gray;'></i>";
+        'callback' => function ($item, $value) {
+            return $value ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
         }
     ],
     'default_lead_time_days' => [

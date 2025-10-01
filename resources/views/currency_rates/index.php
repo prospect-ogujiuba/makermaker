@@ -33,7 +33,10 @@ $table->setColumns([
     ],
     'source' => [
         'label' => 'Source',
-        'sort' => 'true'
+        'sort' => 'true',
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'created_at' => [
         'label' => 'Created At',

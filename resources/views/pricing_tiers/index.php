@@ -19,6 +19,13 @@ $table->setColumns([
 
     'code' => [
         'label' => 'Code',
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
+    ],
+    'sort_order' => [
+        'label' => 'Sort',
         'sort' => true
     ],
     'created_at' => [

@@ -18,7 +18,10 @@ $table->setColumns([
     ],
     'code' => [
         'label' => 'Code',
-        'sort' => true
+        'sort' => true,
+                'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'country_code' => [
         'label' => 'Country',

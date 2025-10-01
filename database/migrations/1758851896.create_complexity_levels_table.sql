@@ -17,7 +17,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexity_levels` (
   KEY `idx_complexity__deleted_at` (`deleted_at`),
   KEY `idx_complexity__created_by` (`created_by`),
   KEY `idx_complexity__updated_by` (`updated_by`),
-  CONSTRAINT `chk_complexity__positive_multiplier` CHECK (`price_multiplier` > 0 AND `price_multiplier` <= 99),
+  CONSTRAINT `chk_complexity__positive_multiplier` CHECK (`price_multiplier` >= 0 AND `price_multiplier` <= 99),
   CONSTRAINT `chk_complexity__valid_level` CHECK (`level` >= 0 AND `level` <= 255),
   CONSTRAINT `fk_complexity__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
   CONSTRAINT `fk_complexity__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE

@@ -26,11 +26,14 @@ $table->setColumns([
     ],
     'category' => [
         'label' => 'Category',
-        'sort' => true
+        'sort' => true,
     ],
     'sku' => [
         'label' => 'SKU',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'unit_cost' => [
         'label' => 'Unit Cost',
@@ -38,7 +41,10 @@ $table->setColumns([
     ],
     'is_consumable' => [
         'label' => 'Consumable',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($item, $value) {
+            return $item ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
     ],
     'created_at' => [
         'label' => 'Created',

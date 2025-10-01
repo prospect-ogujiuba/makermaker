@@ -36,10 +36,10 @@ $table->setColumns([
         'callback' => function ($value, $item) {
             $badges = [];
             if ($item->requires_site_visit) {
-                $badges[] = '<span class="badge tr-warning">On-Site</span>';
+                $badges[] = '<i class="bi bi-building-fill-check"></i>';
             }
             if ($item->supports_remote) {
-                $badges[] = '<span class="badge tr-table-tag">Remote</span>';
+                $badges[] = '<i class="bi bi-display"></i>';
             }
             return implode(' ', $badges) ?: '<span class="text-muted">Not specified</span>';
         }
@@ -58,8 +58,8 @@ $table->setColumns([
         'callback' => function ($value, $item) {
             $count = count((array)$item->services);
             return $count > 0 ?
-                "<span class=\"badge badge-secondary\">{$count}</span>" :
-                '<span class="text-muted">0</span>';
+                "<code class='code'>{$count}</code>" :
+                "<i class='bi bi-x'></i>";
         }
     ],
     'created_at' => [

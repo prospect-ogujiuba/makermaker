@@ -18,7 +18,10 @@ $table->setColumns([
     ],
     'deliverable_type' => [
         'label' => 'Type',
-        'sort' => true
+        'sort' => true,
+        'callback' => function ($value) {
+            return "<code>{$value}</code>";
+        }
     ],
     'estimated_effort_hours' => [
         'label' => 'Est. Hours',
