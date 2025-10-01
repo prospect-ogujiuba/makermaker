@@ -38,19 +38,21 @@ class ServiceBundleFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
-        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_bundles@id:{$id}|required|max:64";
-        $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_bundles@id:{$id}|?required|max:64";
-        $rules['short_desc'] = "required";
-        $rules['is_active'] = "?numeric";
-
-
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_service_bundles@id:{$id}|required|max:64";
+        $rules['slug'] = "unique:slug:{$wpdb_prefix}srvc_service_bundles@id:{$id}|?required|max:64";
+        $rules['short_desc'] = "max:512|?required";
+        $rules['long_desc'] = "?required";
+        $rules['bundle_type'] = "";
+        $rules['total_discount_pct'] = "?numeric|callback:checkIntRange:0:100";
+        $rules['is_active'] = "?required|callback:checkIntRange:0:1";
+        $rules['valid_from'] = "?required";
+        $rules['valid_to'] = "?required";
 
         return $rules;
     }
-
     /**
      * Custom Error Messages
      *

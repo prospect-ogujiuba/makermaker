@@ -17,42 +17,87 @@ $tabs = tr_tabs()
     ->layoutLeft();
 
 // Main Tab
+// Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Service Bundle',
-        'Define the service bundle characteristics and pricing impact',
+        'Define the service bundle characteristics, pricing, and validity',
         [
             $form->row()
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Bundle Name')
                         ->setHelp('Display name for this service bundle')
-                        ->setAttribute('maxlength', '128')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'e.g., Complete Office Setup')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->text('slug')
                         ->setLabel('Slug')
-                        ->setAttribute('maxlength', '128')
-                        ->setHelp('URL-friendly identifier (lowercase, hyphens only)')
+                        ->setAttribute('maxlength', '64')
+                        ->setHelp('URL-friendly identifier (auto-generated from name if left empty)')
+                        ->setAttribute('placeholder', 'complete-office-setup')
                         ->markLabelRequired()
                 ),
-
+            $form->row()
+                ->withColumn(
+                    $form->select('bundle_type')
+                        ->setLabel('Bundle Type')
+                        ->setHelp('Category of bundle offering')
+                        ->setOptions([
+                            'Select Bundle Type' => NULL,
+                            'Package' => 'package',
+                            'Collection' => 'collection',
+                            'Suite' => 'suite',
+                            'Solution' => 'solution'
+                        ])
+                        ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->number('total_discount_pct')
+                        ->setLabel('Total Discount %')
+                        ->setHelp('Overall bundle discount percentage (0-100)')
+                        ->setAttribute('step', '0.01')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('max', '100')
+                        ->setAttribute('placeholder', '0.00')
+                        ->markLabelRequired()
+                ),
             $form->row()
                 ->withColumn(
                     $form->textarea('short_desc')
                         ->setLabel('Short Description')
-                        ->setHelp('Brief summary of what this bundle includes')
+                        ->setHelp('Brief summary of what this bundle includes (max 512 characters)')
                         ->setAttribute('maxlength', '512')
-                        ->setAttribute('placeholder', 'e.g., VoIP system with network setup')
+                        ->setAttribute('rows', '2')
+                        ->setAttribute('placeholder', 'e.g., Complete IT solution for small offices (5-15 employees)')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->editor('long_desc')
+                        ->setLabel('Long Description')
+                        ->setHelp('Detailed description of the bundle, benefits, and what\'s included')
+                        ->setAttribute('placeholder', 'Provide a comprehensive description...')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->date('valid_from')
+                        ->setLabel('Valid From')
+                        ->setHelp('Start date when this bundle becomes available (optional)')
+                        ->setHelp('Date when this pricing becomes effective')
+                        ->setFormat('yy-mm-dd')
+                        ->setAttribute('placeholder', 'Format: ' . date('Y-m-d H:i:s'))
                         ->markLabelRequired()
                 )
                 ->withColumn(
-                    $form->toggle('is_active')
-                        ->setLabel('Bundle Active')
-                        ->setHelp('Whether this bundle is currently available for purchase')
-                )
+                    $form->date('valid_to')
+                        ->setLabel('Valid To')
+                        ->setHelp('End date when this bundle expires (optional)')
+                        ->setHelp('Date when this pricing expires (leave empty for no expiration)')
+                        ->setFormat('yy-mm-dd')
+                        ->setAttribute('placeholder', 'Format: ' . date('Y-m-d H:i:s'))
+                ),
         ]
     )
 

@@ -7,13 +7,18 @@ use TypeRocket\Models\WPUser;
 
 class ServiceBundle extends Model
 {
-    protected $resource = 'srvc_bundles';
+    protected $resource = 'srvc_service_bundles';
 
     protected $fillable = [
         'name',
         'slug',
         'short_desc',
-        'is_active'
+        'long_desc',
+        'bundle_type',
+        'total_discount_pct',
+        'is_active',
+        'valid_from',
+        'valid_to'
     ];
 
     protected $guard = [
