@@ -18,10 +18,11 @@ $tabs = tr_tabs()
     ->layoutLeft();
 
 // Main Tab
+// Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Service Coverage',
-        'Define coverage relationships between services',
+        'Define coverage relationships between services and geographic areas',
         [
             $form->row()
                 ->withColumn(
@@ -36,6 +37,23 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Coverage Area')
                         ->setHelp('Select the geographic area where this service is available')
                         ->setModelOptions(CoverageArea::class, 'name', 'id', 'Select Coverage Area')
+                        ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->number('delivery_surcharge')
+                        ->setLabel('Delivery Surcharge')
+                        ->setHelp('Additional cost for delivery to this area (0.00 for no surcharge)')
+                        ->setAttribute('step', '0.01')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('placeholder', 'e.g., 0.00')
+                        ->markLabelRequired()
+                )
+                ->withColumn(
+                    $form->number('lead_time_adjustment_days')
+                        ->setLabel('Lead Time Adjustment (Days)')
+                        ->setHelp('Additional days needed for delivery to this area (use negative for faster, 0 for standard)')
+                        ->setAttribute('placeholder', 'e.g., 0')
                         ->markLabelRequired()
                 )
         ]

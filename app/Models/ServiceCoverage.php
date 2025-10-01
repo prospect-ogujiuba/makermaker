@@ -12,6 +12,8 @@ class ServiceCoverage extends Model
     protected $fillable = [
         'service_id',
         'coverage_area_id',
+        'delivery_surcharge',
+        'lead_time_adjustment_days'
     ];
 
     protected $guard = [

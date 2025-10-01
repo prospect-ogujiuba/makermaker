@@ -43,6 +43,8 @@ class ServiceCoverageFields extends Fields
 
         $rules['service_id'] = "numeric|required";
         $rules['coverage_area_id'] = "numeric|required";
+        $rules['delivery_surcharge'] = "?numeric|min:0|required";
+        $rules['lead_time_adjustment_days'] = "?numeric|required";
 
         return $rules;
     }
