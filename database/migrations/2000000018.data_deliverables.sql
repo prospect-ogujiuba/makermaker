@@ -1,0 +1,34 @@
+-- Description:
+-- >>> Up >>>
+INSERT INTO `{!!prefix!!}srvc_deliverables`
+(`name`, `description`, `deliverable_type`, `template_path`, `estimated_effort_hours`, `requires_approval`, `created_at`, `updated_at`, `deleted_at`, `created_by`, `updated_by`) VALUES
+('System Design Document', 'Detailed technical design and architecture documentation including network topology, hardware specifications, and integration points', 'document', '/templates/deliverables/system-design.docx', 16.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Installation Plan', 'Step-by-step installation and deployment plan with timeline, resource requirements, and risk mitigation strategies', 'document', '/templates/deliverables/installation-plan.docx', 8.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Network Diagram', 'Complete network topology and connection diagrams using industry-standard notation', 'document', '/templates/deliverables/network-diagram.vsdx', 6.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Equipment List', 'Detailed bill of materials and equipment specifications with part numbers and quantities', 'document', '/templates/deliverables/equipment-list.xlsx', 4.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Configuration Documentation', 'System configuration settings and parameters for all devices and software components', 'document', '/templates/deliverables/configuration-doc.docx', 12.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('User Manual', 'End-user operation and maintenance documentation with screenshots and step-by-step instructions', 'document', '/templates/deliverables/user-manual.docx', 20.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Operations Handbook', 'Day-to-day operational procedures and escalation processes for support teams', 'document', '/templates/deliverables/ops-handbook.docx', 24.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('API Documentation', 'Reference documentation for developers integrating with the system including endpoints, authentication, and examples', 'document', '/templates/deliverables/api-docs.md', 30.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Knowledge Base Articles', 'Support-focused documentation for frequently asked questions and troubleshooting common issues', 'document', NULL, 16.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('As-Built Documentation', 'Final installation documentation with actual configurations, deviations from plan, and lessons learned', 'document', '/templates/deliverables/as-built.docx', 10.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Testing Report', 'Comprehensive system testing and validation results including test cases, pass/fail status, and defect logs', 'report', '/templates/deliverables/testing-report.docx', 14.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Performance Baseline', 'Initial system performance metrics and benchmarks for future comparison', 'report', '/templates/deliverables/performance-baseline.xlsx', 8.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Security Assessment', 'Security configuration review and recommendations based on industry standards', 'report', '/templates/deliverables/security-assessment.docx', 18.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Compliance Certificate', 'Industry compliance and certification documentation demonstrating adherence to standards', 'report', '/templates/deliverables/compliance-cert.pdf', 6.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Project Closure Report', 'Summary of deliverables, outcomes, budget variance, and lessons learned', 'report', '/templates/deliverables/closure-report.docx', 12.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Acceptance Test Plan', 'Formal customer acceptance testing documentation with success criteria', 'report', '/templates/deliverables/acceptance-test.docx', 10.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 1),
+('Change Log', 'Record of all changes, updates, and version history throughout the project lifecycle', 'report', NULL, 2.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Warranty Documentation', 'Equipment warranties and service agreements with contact information and claim procedures', 'service', '/templates/deliverables/warranty-package.docx', 3.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Maintenance Schedule', 'Recommended maintenance tasks and schedules for optimal system performance', 'service', '/templates/deliverables/maintenance-schedule.xlsx', 5.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Emergency Procedures', 'Troubleshooting and emergency contact procedures for critical incidents', 'service', '/templates/deliverables/emergency-procedures.docx', 8.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Service Level Agreement (SLA)', 'Defined service expectations, uptime guarantees, response times, and remediation procedures', 'service', '/templates/deliverables/sla-template.docx', 6.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Disaster Recovery Plan', 'Procedures and documentation for restoring services after failure including RPO/RTO targets', 'service', '/templates/deliverables/disaster-recovery.docx', 20.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Backup Procedures', 'Documentation of data backup policies, schedules, retention, and restoration procedures', 'service', '/templates/deliverables/backup-procedures.docx', 6.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Training Materials', 'Training guides, videos, presentations, and reference materials for end users', 'training', '/templates/deliverables/training-package/', 40.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2),
+('Monitoring & Alerts Setup', 'Configuration of system monitoring tools and alert thresholds with dashboard access', 'software', NULL, 12.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 2, 2),
+('Deployment Checklist', 'Checklist of pre-deployment, during deployment, and post-deployment verification tasks', 'document', '/templates/deliverables/deployment-checklist.xlsx', 4.00, 0, '2025-08-28 23:57:07', NOW(), NULL, 2, 1),
+('Project Charter', 'High-level scope, objectives, stakeholders, and responsibilities document approved by sponsors', 'document', '/templates/deliverables/project-charter.docx', 8.00, 1, '2025-08-28 23:57:07', NOW(), NULL, 1, 2);
+
+-- >>> Down >>>
+DELETE FROM `{!!prefix!!}srvc_deliverables`;

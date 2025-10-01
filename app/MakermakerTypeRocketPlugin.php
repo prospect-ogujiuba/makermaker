@@ -97,7 +97,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             '\MakerMaker\Models\Equipment' => '\MakerMaker\Auth\EquipmentPolicy',
             '\MakerMaker\Models\ServiceEquipment' => '\MakerMaker\Auth\ServiceEquipmentPolicy',
             '\MakerMaker\Models\Deliverable' => '\MakerMaker\Auth\DeliverablePolicy',
-            '\MakerMaker\Models\ServiceDeliverable' => '\MakerMaker\Auth\ServiceDeliverablePolicy',
+            '\MakerMaker\Models\Deliverable' => '\MakerMaker\Auth\DeliverablePolicy',
 
             // Package & Bundle Management
             '\MakerMaker\Models\ServiceBundle' => '\MakerMaker\Auth\ServiceBundlePolicy',

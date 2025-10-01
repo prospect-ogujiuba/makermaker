@@ -5,13 +5,17 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceDeliverable extends Model
+class Deliverable extends Model
 {
     protected $resource = 'srvc_deliverables';
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'deliverable_type',
+        'template_path',
+        'estimated_effort_hours',
+        'requires_approval'
     ];
 
     protected $guard = [

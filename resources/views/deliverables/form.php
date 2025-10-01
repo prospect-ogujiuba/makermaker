@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ServiceDeliverable Form
+ * Deliverable Form
  */
 
 // Form instance
@@ -15,27 +15,67 @@ $tabs = tr_tabs()
     ->layoutLeft();
 
 // Main Tab
+// Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Deliverable',
-        'Define the service deliverable characteristics',
+        'Define the service deliverable characteristics and requirements',
         [
             $form->row()
                 ->withColumn(
                     $form->text('name')
                         ->setLabel('Name')
-                        ->setHelp('Display name for this service deliverable (max 128 characters)')
+                        ->setHelp('Display name for this service deliverable')
                         ->setAttribute('maxlength', '128')
-                        ->setAttribute('placeholder', 'e.g., Advanced Implementation')
+                        ->setAttribute('placeholder', 'e.g., System Design Document')
                         ->markLabelRequired()
                 )
+                ->withColumn(
+                    $form->select('deliverable_type')
+                        ->setLabel('Deliverable Type')
+                        ->setHelp('Category of deliverable')
+                        ->setOptions([
+                            '' => '-- Select Type --',
+                            'Document' => 'document',
+                            'Software' => 'software',
+                            'Hardware' => 'hardware',
+                            'Service' => 'service',
+                            'Training' => 'training',
+                            'Report' => 'report'
+                        ])
+                        ->markLabelRequired()
+                ),
+            $form->row()
                 ->withColumn(
                     $form->textarea('description')
                         ->setLabel('Description')
                         ->setHelp('Detailed description of what this deliverable includes and provides')
-                        ->setAttribute('maxlength', '2000')
+                        ->setAttribute('placeholder', 'Describe the deliverable contents, scope, and purpose...')
                         ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->text('template_path')
+                        ->setLabel('Template Path')
+                        ->setHelp('File path or URL to template (optional)')
+                        ->setAttribute('maxlength', '255')
+                        ->setAttribute('placeholder', '/templates/deliverables/system-design.docx')
                 )
+                ->withColumn(
+                    $form->number('estimated_effort_hours')
+                        ->setLabel('Estimated Effort (Hours)')
+                        ->setHelp('Expected hours to complete this deliverable')
+                        ->setAttribute('step', '0.25')
+                        ->setAttribute('min', '0')
+                        ->setAttribute('placeholder', 'e.g., 0.00')
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->toggle('requires_approval')
+                        ->setLabel('Requires Approval')
+                        ->setHelp('Does this deliverable require customer approval before completion?')
+                )
+                ->withColumn()
         ]
     )
 

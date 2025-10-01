@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceDeliverableFields extends Fields
+class DeliverableFields extends Fields
 {
     /**
      * Run On Import
@@ -38,11 +38,15 @@ class ServiceDeliverableFields extends Fields
         $route_args = $request->getDataGet('route_args');
         $id = $route_args[0] ?? null;
         $wpdb_prefix = GLOBAL_WPDB_PREFIX;
-        
+
         $rules = [];
 
-        $rules['name'] = "unique:name:{GLOBAL_WPDB_PREFIX}srvc_pricing_models@id:{$id}|required";
-        $rules['description'] = "required|max:2000";
+        $rules['name'] = "unique:name:{$wpdb_prefix}srvc_deliverables@id:{$id}|required|max:128";
+        $rules['description'] = "required";
+        $rules['deliverable_type'] = "";
+        $rules['template_path'] = "max:255|?required";
+        $rules['estimated_effort_hours'] = "?numeric|min:0.01|?required";
+        $rules['requires_approval'] = "?numeric|callback:checkIntRange:0:1";
 
         return $rules;
     }

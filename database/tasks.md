@@ -111,15 +111,15 @@
 
 ## Service Deliverable
 
-[ServiceDeliverable-Migration]: /database/migrations/1756308065.create_service_deliverables_table.sql
-[ServiceDeliverable-Model]: /app/Models/ServiceDeliverable.php
-[ServiceDeliverable-Policy]: /app/Auth/ServiceDeliverablePolicy.php
-[ServiceDeliverable-Fields]: /app/Http/Fields/ServiceDeliverableFields.php
-[ServiceDeliverable-Controller]: /app/Controllers/ServiceDeliverableController.php
-[ServiceDeliverable-Form]: /resources/views/service_deliverables/form.php
-[ServiceDeliverable-Index]: /resources/views/service_deliverables/index.php
+[Deliverable-Migration]: /database/migrations/1756308065.create_service_deliverables_table.sql
+[Deliverable-Model]: /app/Models/Deliverable.php
+[Deliverable-Policy]: /app/Auth/DeliverablePolicy.php
+[Deliverable-Fields]: /app/Http/Fields/DeliverableFields.php
+[Deliverable-Controller]: /app/Controllers/DeliverableController.php
+[Deliverable-Form]: /resources/views/service_deliverables/form.php
+[Deliverable-Index]: /resources/views/service_deliverables/index.php
 
-- [Migration][ServiceDeliverable-Migration] - [Model][ServiceDeliverable-Model] - [Policy][ServiceDeliverable-Policy] - [Fields][ServiceDeliverable-Fields] - [Controller][ServiceDeliverable-Controller] - [Form][ServiceDeliverable-Form] - [Index][ServiceDeliverable-Index]
+- [Migration][Deliverable-Migration] - [Model][Deliverable-Model] - [Policy][Deliverable-Policy] - [Fields][Deliverable-Fields] - [Controller][Deliverable-Controller] - [Form][Deliverable-Form] - [Index][Deliverable-Index]
 
 ### Todo
 
@@ -273,15 +273,15 @@
 
 ## Service Deliverable Assignment
 
-[ServiceDeliverableAssignment-Migration]: /database/migrations/1756660896.create_service_deliverable_assignments_table.sql
-[ServiceDeliverableAssignment-Model]: /app/Models/ServiceDeliverableAssignment.php
-[ServiceDeliverableAssignment-Policy]: /app/Auth/ServiceDeliverableAssignmentPolicy.php
-[ServiceDeliverableAssignment-Fields]: /app/Http/Fields/ServiceDeliverableAssignmentFields.php
-[ServiceDeliverableAssignment-Controller]: /app/Controllers/ServiceDeliverableAssignmentController.php
-[ServiceDeliverableAssignment-Form]: /resources/views/service_deliverable_assignments/form.php
-[ServiceDeliverableAssignment-Index]: /resources/views/service_deliverable_assignments/index.php
+[DeliverableAssignedToService-Migration]: /database/migrations/1756660896.create_service_deliverable_assignments_table.sql
+[DeliverableAssignedToService-Model]: /app/Models/DeliverableAssignedToService.php
+[DeliverableAssignedToService-Policy]: /app/Auth/DeliverableAssignedToServicePolicy.php
+[DeliverableAssignedToService-Fields]: /app/Http/Fields/DeliverableAssignedToServiceFields.php
+[DeliverableAssignedToService-Controller]: /app/Controllers/DeliverableAssignedToServiceController.php
+[DeliverableAssignedToService-Form]: /resources/views/service_deliverable_assignments/form.php
+[DeliverableAssignedToService-Index]: /resources/views/service_deliverable_assignments/index.php
 
-- [Migration][ServiceDeliverableAssignment-Migration] - [Model][ServiceDeliverableAssignment-Model] - [Policy][ServiceDeliverableAssignment-Policy] - [Fields][ServiceDeliverableAssignment-Fields] - [Controller][ServiceDeliverableAssignment-Controller] - [Form][ServiceDeliverableAssignment-Form] - [Index][ServiceDeliverableAssignment-Index]
+- [Migration][DeliverableAssignedToService-Migration] - [Model][DeliverableAssignedToService-Model] - [Policy][DeliverableAssignedToService-Policy] - [Fields][DeliverableAssignedToService-Fields] - [Controller][DeliverableAssignedToService-Controller] - [Form][DeliverableAssignedToService-Form] - [Index][DeliverableAssignedToService-Index]
 
 ### Todo
 

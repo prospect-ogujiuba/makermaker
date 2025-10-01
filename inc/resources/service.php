@@ -135,7 +135,7 @@ $delivery->addPage(
 //     mm_create_custom_resource('Equipment', 'EquipmentController', 'Equipment Catalog'),
 //     mm_create_custom_resource('ServiceEquipment', 'ServiceEquipmentController', 'Service Equipment'),
 //     mm_create_custom_resource('Deliverable', 'DeliverableController', 'Deliverables'),
-//     mm_create_custom_resource('ServiceDeliverable', 'ServiceDeliverableController', 'Service Deliverables'),
+//     mm_create_custom_resource('Deliverable', 'DeliverableController', 'Service Deliverables'),
 
 //     // Package & Bundle Management
 //     mm_create_custom_resource('ServiceBundle', 'ServiceBundleController', 'Service Bundles'),

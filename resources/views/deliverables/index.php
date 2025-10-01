@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceDeliverable Index View
+ * Deliverable Index View
  */
 
-use MakerMaker\Models\ServiceDeliverable;
+use MakerMaker\Models\Deliverable;
 
-$table = tr_table(ServiceDeliverable::class);
+$table = tr_table(Deliverable::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -15,6 +15,21 @@ $table->setColumns([
         'label' => 'Name',
         'sort' => true,
         'actions' => ['edit', 'view', 'delete']
+    ],
+    'deliverable_type' => [
+        'label' => 'Type',
+        'sort' => true
+    ],
+    'estimated_effort_hours' => [
+        'label' => 'Est. Hours',
+        'sort' => true
+    ],
+    'requires_approval' => [
+        'label' => 'Approval Required',
+        'sort' => true,
+        'callback' => function ($item, $value) {
+            return $item ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
     ],
     'description' => [
         'label' => 'Description',
@@ -36,6 +51,6 @@ $table->setColumns([
     ],
     'id' => [
         'label' => 'ID',
-        'sort' => 'true'
+        'sort' => true
     ]
 ], 'name')->setOrder('id', 'DESC')->render();
