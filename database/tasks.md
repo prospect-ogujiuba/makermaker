@@ -343,17 +343,17 @@
 
 ---
 
-## Service Bundle Item
+## Bundle Item
 
-[ServiceBundleItem-Migration]: /database/migrations/1756668483.create_service_bundle_items_table.sql
-[ServiceBundleItem-Model]: /app/Models/ServiceBundleItem.php
-[ServiceBundleItem-Policy]: /app/Auth/ServiceBundleItemPolicy.php
-[ServiceBundleItem-Fields]: /app/Http/Fields/ServiceBundleItemFields.php
-[ServiceBundleItem-Controller]: /app/Controllers/ServiceBundleItemController.php
-[ServiceBundleItem-Form]: /resources/views/service_bundle_items/form.php
-[ServiceBundleItem-Index]: /resources/views/service_bundle_items/index.php
+[BundleItem-Migration]: /database/migrations/1756668483.create_bundle_items_table.sql
+[BundleItem-Model]: /app/Models/BundleItem.php
+[BundleItem-Policy]: /app/Auth/BundleItemPolicy.php
+[BundleItem-Fields]: /app/Http/Fields/BundleItemFields.php
+[BundleItem-Controller]: /app/Controllers/BundleItemController.php
+[BundleItem-Form]: /resources/views/bundle_items/form.php
+[BundleItem-Index]: /resources/views/bundle_items/index.php
 
-- [Migration][ServiceBundleItem-Migration] - [Model][ServiceBundleItem-Model] - [Policy][ServiceBundleItem-Policy] - [Fields][ServiceBundleItem-Fields] - [Controller][ServiceBundleItem-Controller] - [Form][ServiceBundleItem-Form] - [Index][ServiceBundleItem-Index]
+- [Migration][BundleItem-Migration] - [Model][BundleItem-Model] - [Policy][BundleItem-Policy] - [Fields][BundleItem-Fields] - [Controller][BundleItem-Controller] - [Form][BundleItem-Form] - [Index][BundleItem-Index]
 
 ### Todo
 

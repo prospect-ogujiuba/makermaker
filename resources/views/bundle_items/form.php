@@ -1,9 +1,9 @@
 <?php
 
 /**
- * ServiceBundleItem Form View
+ * BundleItem Form View
  * 
- * This view displays a form for creating/editing ServiceBundleItem.
+ * This view displays a form for creating/editing BundleItem.
  * Add your form fields and functionality here.
  */
 
@@ -13,7 +13,7 @@ use MakerMaker\Models\Service;
 // Form instance
 echo $form->open();
 
-echo to_resource('ServiceBundleItem', 'index', 'Back To Service Bundle Items');
+echo to_resource('BundleItem', 'index', 'Back To Bundle Items');
 
 // Tab Layout
 $tabs = tr_tabs()
@@ -23,8 +23,8 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Bundle Item',
-        'Define services included in this bundle',
+        'Bundle Item Configuration',
+        'Define services included in this bundle with pricing and presentation options',
         [
             $form->row()
                 ->withColumn(
@@ -45,20 +45,37 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->number('quantity')
                         ->setLabel('Quantity')
-                        ->setHelp('Number of units of this service included in the bundle')
+                        ->setAttribute('min', 0.001)
+                        ->setAttribute('step', 0.001)
+                        ->setHelp('Number of units of this service included in the bundle (minimum 0.001)')
                         ->markLabelRequired()
                 )
                 ->withColumn(
                     $form->number('discount_pct')
                         ->setLabel('Discount %')
+                        ->setAttribute('min', 0)
                         ->setAttribute('max', 100)
                         ->setAttribute('step', 0.01)
                         ->setHelp('Percentage discount applied to this service in the bundle (0-100)')
                         ->markLabelRequired()
+                ),
+            $form->row()
+                ->withColumn(
+                    $form->number('sort_order')
+                        ->setLabel('Display Order')
+                        ->setAttribute('min', 0)
+                        ->setAttribute('step', 1)
+                        ->setHelp('Order in which this item appears in the bundle (0 = first, lower numbers appear first)')
+                )
+                ->withColumn(
+                    $form->toggle('is_optional')
+                        ->setLabel('Optional Item')
+                        ->setText('Is this service optional in the bundle?')
+                        ->setHelp('Optional items can be added or removed by customers when purchasing the bundle')
                 )
         ]
     )
-])->setDescription('Service Bundle Item');
+])->setDescription('Bundle Item Configuration');
 
 // Conditional System Info Tab
 if (isset($current_id)) {

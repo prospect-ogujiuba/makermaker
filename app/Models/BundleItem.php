@@ -5,15 +5,17 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class ServiceBundleItem extends Model
+class BundleItem extends Model
 {
     protected $resource = 'srvc_bundle_items';
 
-    protected $fillable = [
+protected $fillable = [
         'bundle_id',
         'service_id',
         'quantity',
-        'discount_pct'
+        'discount_pct',
+        'is_optional',
+        'sort_order'
     ];
 
     protected $guard = [
@@ -30,13 +32,13 @@ class ServiceBundleItem extends Model
         'service'
     ];
 
-    /** ServiceBundleItem belongs to a ServiceBundle */
+    /** BundleItem belongs to a ServiceBundle */
     public function bundle()
     {
         return $this->belongsTo(ServiceBundle::class, 'bundle_id');
     }
 
-    /** ServiceBundleItem belongs to a Service */
+    /** BundleItem belongs to a Service */
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');

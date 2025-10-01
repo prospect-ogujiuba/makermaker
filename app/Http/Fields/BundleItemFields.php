@@ -5,7 +5,7 @@ namespace MakerMaker\Http\Fields;
 use TypeRocket\Http\Fields;
 use TypeRocket\Http\Request;
 
-class ServiceBundleItemFields extends Fields
+class BundleItemFields extends Fields
 {
     /**
      * Run On Import
@@ -43,8 +43,10 @@ class ServiceBundleItemFields extends Fields
 
         $rules['bundle_id'] = "numeric|required";
         $rules['service_id'] = "numeric|required";
-        $rules['quantity'] = "?numeric|?required";
-        $rules['discount_pct'] = "?numeric|?required|callback:checkIntRange:0:100";
+        $rules['quantity'] = "?numeric|required|min:0.001";
+        $rules['discount_pct'] = "numeric|required|callback:checkIntRange:0:100";
+        $rules['is_optional'] = "?numeric|callback:checkIntRange:0:1";
+        $rules['sort_order'] = "?numeric|min:0";
 
         return $rules;
     }

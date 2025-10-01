@@ -3,6 +3,7 @@
 ## Core Lookup Tables
 
 ### 1. Service Complexities
+
 ```sql
 -- 1756191393.create_service_complexities_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_complexities` (
@@ -30,6 +31,7 @@ CREATE TABLE `{!!prefix!!}srvc_complexities` (
 ```
 
 ### 2. Pricing Models
+
 ```sql
 -- 1756230789.create_service_pricing_models_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
@@ -56,6 +58,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_models` (
 ```
 
 ### 3. Pricing Tiers
+
 ```sql
 -- 1756251629.create_service_pricing_tiers_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
@@ -86,6 +89,7 @@ CREATE TABLE `{!!prefix!!}srvc_pricing_tiers` (
 ```
 
 ### 4. Currency Exchange Rates (NEW)
+
 ```sql
 -- NEW TABLE: Currency support for multi-currency pricing
 CREATE TABLE `{!!prefix!!}srvc_currency_rates` (
@@ -116,6 +120,7 @@ CREATE TABLE `{!!prefix!!}srvc_currency_rates` (
 ## Service Structure Tables
 
 ### 5. Service Categories
+
 ```sql
 -- 1756312227.create_service_categories_table.sql (IMPROVED - NO TRIGGERS)
 CREATE TABLE `{!!prefix!!}srvc_categories` (
@@ -149,6 +154,7 @@ CREATE TABLE `{!!prefix!!}srvc_categories` (
 ```
 
 ### 6. Service Types
+
 ```sql
 -- 1756309963.create_service_types_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_service_types` (
@@ -179,6 +185,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_types` (
 ```
 
 ### 7. Services (Core Table)
+
 ```sql
 -- 1756346166.create_services_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_services` (
@@ -232,6 +239,7 @@ CREATE TABLE `{!!prefix!!}srvc_services` (
 ## Pricing Tables (With Effective Dating)
 
 ### 8. Service Prices (With History Support)
+
 ```sql
 -- 1756411355.create_service_prices_table.sql (MAJOR IMPROVEMENTS)
 CREATE TABLE `{!!prefix!!}srvc_service_prices` (
@@ -282,6 +290,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_prices` (
 ```
 
 ### 9. Service Price History (NEW)
+
 ```sql
 -- NEW TABLE: Track all pricing changes for audit and compliance
 CREATE TABLE `{!!prefix!!}srvc_service_price_history` (
@@ -314,6 +323,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_price_history` (
 ## Service Relationship Tables
 
 ### 10. Service Addons (Improved)
+
 ```sql
 -- 1756480611.create_service_addons_table.sql (IMPROVED - NO TRIGGERS)
 CREATE TABLE `{!!prefix!!}srvc_service_addons` (
@@ -348,6 +358,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_addons` (
 ```
 
 ### 11. Service Relationships (Improved)
+
 ```sql
 -- 1756667496.create_service_relationships_table.sql (IMPROVED - NO TRIGGERS)
 CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
@@ -381,6 +392,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_relationships` (
 ## Support Tables (Equipment, Coverage, etc.)
 
 ### 12. Equipment
+
 ```sql
 -- 1756309210.create_service_equipment_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_equipment` (
@@ -414,6 +426,7 @@ CREATE TABLE `{!!prefix!!}srvc_equipment` (
 ```
 
 ### 13. Service Equipment Assignments (Improved)
+
 ```sql
 -- 1756666767.create_service_equipment_assignments_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
@@ -445,6 +458,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_equipment_assignments` (
 ```
 
 ### 14. Delivery Methods
+
 ```sql
 -- 1756252687.create_service_delivery_methods_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_delivery_methods` (
@@ -475,6 +489,7 @@ CREATE TABLE `{!!prefix!!}srvc_delivery_methods` (
 ```
 
 ### 15. Service Delivery Method Assignments
+
 ```sql
 -- 1756666041.create_service_delivery_method_assignments_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_service_delivery_method_assignments` (
@@ -506,6 +521,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_delivery_method_assignments` (
 ```
 
 ### 16. Coverage Areas
+
 ```sql
 -- 1756253851.create_service_coverage_areas_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
@@ -536,6 +552,7 @@ CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
 ```
 
 ### 17. Service Coverage
+
 ```sql
 -- 1756518066.create_service_coverage_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_service_coverage` (
@@ -565,6 +582,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_coverage` (
 ```
 
 ### 18. Deliverables
+
 ```sql
 -- 1756308065.create_service_deliverables_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_deliverables` (
@@ -594,10 +612,11 @@ CREATE TABLE `{!!prefix!!}srvc_deliverables` (
 ```
 
 ### 19. Service Deliverable Assignments
+
 ```sql
 -- 1756660896.create_service_deliverable_assignments_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_service_deliverable_assignments` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,  
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `deliverable_id` bigint(20) NOT NULL,
   `is_optional` tinyint(1) NOT NULL DEFAULT 0,
@@ -625,6 +644,7 @@ CREATE TABLE `{!!prefix!!}srvc_service_deliverable_assignments` (
 ## Bundle Tables
 
 ### 20. Service Bundles
+
 ```sql
 -- 1756345584.create_service_bundles_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_bundles` (
@@ -663,8 +683,9 @@ CREATE TABLE `{!!prefix!!}srvc_bundles` (
 ```
 
 ### 21. Bundle Items
+
 ```sql
--- 1756668483.create_service_bundle_items_table.sql (IMPROVED)
+-- 1756668483.create_bundle_items_table.sql (IMPROVED)
 CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `bundle_id` bigint(20) NOT NULL,
@@ -698,10 +719,11 @@ CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
 ## Summary Views for Performance (Optional)
 
 ### 22. Service Pricing Summary View
+
 ```sql
 -- OPTIONAL: Materialized view for common pricing queries
 CREATE VIEW `{!!prefix!!}srvc_v_current_service_pricing` AS
-SELECT 
+SELECT
     s.id as service_id,
     s.name as service_name,
     s.slug as service_slug,
@@ -720,12 +742,12 @@ SELECT
     sp.approval_status
 FROM `{!!prefix!!}srvc_services` s
 LEFT JOIN `{!!prefix!!}srvc_categories` c ON s.category_id = c.id
-LEFT JOIN `{!!prefix!!}srvc_service_types` st ON s.service_type_id = st.id  
+LEFT JOIN `{!!prefix!!}srvc_service_types` st ON s.service_type_id = st.id
 LEFT JOIN `{!!prefix!!}srvc_complexities` sc ON s.complexity_id = sc.id
 LEFT JOIN `{!!prefix!!}srvc_service_prices` sp ON s.id = sp.service_id AND sp.is_current = 1 AND sp.deleted_at IS NULL
 LEFT JOIN `{!!prefix!!}srvc_pricing_tiers` pt ON sp.pricing_tier_id = pt.id
 LEFT JOIN `{!!prefix!!}srvc_pricing_models` pm ON sp.pricing_model_id = pm.id
-WHERE s.deleted_at IS NULL 
+WHERE s.deleted_at IS NULL
   AND s.is_active = 1
   AND (sp.valid_to IS NULL OR sp.valid_to > NOW())
   AND (c.deleted_at IS NULL OR c.deleted_at IS NULL)
@@ -736,40 +758,47 @@ WHERE s.deleted_at IS NULL
 ## Key Improvements Made
 
 ### 1. **Eliminated All Triggers**
+
 - Replaced trigger-based validations with CHECK constraints
 - Better performance and SQL standard compliance
 - Self-reference prevention via `CHECK (service_id != addon_service_id)`
 
 ### 2. **Added Comprehensive Data Validation**
+
 - Currency validation: `CHECK (currency REGEXP '^[A-Z]{3})`
 - Positive amount constraints: `CHECK (amount >= 0)`
 - Quantity range validation: `CHECK (quantity > 0 AND quantity <= 10000)`
 - Discount percentage limits: `CHECK (discount_pct >= 0 AND discount_pct <= 100.00)`
 
 ### 3. **Implemented Effective Dating & History**
+
 - `valid_from`/`valid_to` columns on pricing
 - `is_current` flag to identify active pricing
 - Complete price history table for audit compliance
 - Approval workflow with status tracking
 
 ### 4. **Enhanced Business Logic**
+
 - Added `skill_level` and `estimated_hours` to services (promoted from JSON)
 - Bundle validity periods with `valid_from`/`valid_to`
-- Equipment cost tracking and consumable flags  
+- Equipment cost tracking and consumable flags
 - Delivery method timing defaults
 - Coverage area geographic enhancements
 
 ### 5. **Improved Indexing Strategy**
+
 - Covering indexes for common query patterns
 - Composite indexes on frequently joined columns
 - Performance-optimized indexes for soft-delete aware queries
 
 ### 6. **Better Data Types**
+
 - Changed metadata from `longtext` to `json` for better validation
 - Added appropriate length constraints
 - Consistent use of `unsigned` for counts and IDs
 
 ### 7. **Enhanced Foreign Key Relationships**
+
 - Consistent naming convention for all constraints
 - Proper CASCADE/SET NULL behaviors
 - Added approval user tracking with foreign keys
