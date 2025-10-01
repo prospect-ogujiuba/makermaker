@@ -89,7 +89,7 @@ if (isset($current_id)) {
                 $form->row()
                     ->withColumn(
                         $form->text('id')
-                            ->setLabel('Service Deliverable Assignment ID')
+                            ->setLabel('Service Deliverable ID')
                             ->setHelp('System generated unique identifier')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)

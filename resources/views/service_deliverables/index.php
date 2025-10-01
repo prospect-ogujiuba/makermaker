@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ServiceDeliverableAssignment Index View
+ * ServiceDeliverable Index View
  */
 
-use MakerMaker\Models\ServiceDeliverableAssignment;
+use MakerMaker\Models\ServiceDeliverable;
 
-$table = tr_table(ServiceDeliverableAssignment::class);
+$table = tr_table(ServiceDeliverable::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []);
 
@@ -16,18 +16,28 @@ $table->setColumns([
         'sort' => true,
         'actions' => ['edit', 'view', 'delete']
     ],
-
     'deliverable.name' => [
         'label' => 'Deliverable Name',
         'sort' => true
     ],
+    'is_optional' => [
+        'label' => 'Optional',
+        'sort' => true,
+        'callback' => function ($item, $value) {
+            return $item ? "<i class='bi bi-check' style='color: green;'></i>" : "<i class='bi bi-x' style='color: red;'></i>";
+        }
+    ],
+    'sequence_order' => [
+        'label' => 'Sequence',
+        'sort' => true
+    ],
     'created_at' => [
         'label' => 'Created At',
-        'sort' => 'true'
+        'sort' => true
     ],
     'updated_at' => [
         'label' => 'Updated At',
-        'sort' => 'true'
+        'sort' => true
     ],
     'createdBy.user_nicename' => [
         'label' => 'Created By'
@@ -35,7 +45,6 @@ $table->setColumns([
     'updatedBy.user_nicename' => [
         'label' => 'Updated By'
     ],
-
     'id' => [
         'label' => 'ID',
         'sort' => true

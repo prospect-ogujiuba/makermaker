@@ -271,17 +271,17 @@
 
 ---
 
-## Service Deliverable Assignment
+## Service Deliverable
 
-[DeliverableAssignedToService-Migration]: /database/migrations/1756660896.create_service_deliverable_assignments_table.sql
-[DeliverableAssignedToService-Model]: /app/Models/DeliverableAssignedToService.php
-[DeliverableAssignedToService-Policy]: /app/Auth/DeliverableAssignedToServicePolicy.php
-[DeliverableAssignedToService-Fields]: /app/Http/Fields/DeliverableAssignedToServiceFields.php
-[DeliverableAssignedToService-Controller]: /app/Controllers/DeliverableAssignedToServiceController.php
-[DeliverableAssignedToService-Form]: /resources/views/service_deliverable_assignments/form.php
-[DeliverableAssignedToService-Index]: /resources/views/service_deliverable_assignments/index.php
+[ServiceDeliverable-Migration]: /database/migrations/1756660896.create_service_deliverables_table.sql
+[ServiceDeliverable-Model]: /app/Models/ServiceDeliverable.php
+[ServiceDeliverable-Policy]: /app/Auth/ServiceDeliverablePolicy.php
+[ServiceDeliverable-Fields]: /app/Http/Fields/ServiceDeliverableFields.php
+[ServiceDeliverable-Controller]: /app/Controllers/ServiceDeliverableController.php
+[ServiceDeliverable-Form]: /resources/views/service_deliverables/form.php
+[ServiceDeliverable-Index]: /resources/views/service_deliverables/index.php
 
-- [Migration][DeliverableAssignedToService-Migration] - [Model][DeliverableAssignedToService-Model] - [Policy][DeliverableAssignedToService-Policy] - [Fields][DeliverableAssignedToService-Fields] - [Controller][DeliverableAssignedToService-Controller] - [Form][DeliverableAssignedToService-Form] - [Index][DeliverableAssignedToService-Index]
+- [Migration][ServiceDeliverable-Migration] - [Model][ServiceDeliverable-Model] - [Policy][ServiceDeliverable-Policy] - [Fields][ServiceDeliverable-Fields] - [Controller][ServiceDeliverable-Controller] - [Form][ServiceDeliverable-Form] - [Index][ServiceDeliverable-Index]
 
 ### Todo
 
@@ -291,13 +291,13 @@
 
 ## Service Delivery
 
-[ServiceDelivery-Migration]: /database/migrations/1756666041.create_service_delivery_method_assignments_table.sql
+[ServiceDelivery-Migration]: /database/migrations/1756666041.create_service_delivery_methods_table.sql
 [ServiceDelivery-Model]: /app/Models/ServiceDelivery.php
 [ServiceDelivery-Policy]: /app/Auth/ServiceDeliveryPolicy.php
 [ServiceDelivery-Fields]: /app/Http/Fields/ServiceDeliveryFields.php
 [ServiceDelivery-Controller]: /app/Controllers/ServiceDeliveryController.php
-[ServiceDelivery-Form]: /resources/views/service_delivery_method_assignments/form.php
-[ServiceDelivery-Index]: /resources/views/service_delivery_method_assignments/index.php
+[ServiceDelivery-Form]: /resources/views/service_delivery_methods/form.php
+[ServiceDelivery-Index]: /resources/views/service_delivery_methods/index.php
 
 - [Migration][ServiceDelivery-Migration] - [Model][ServiceDelivery-Model] - [Policy][ServiceDelivery-Policy] - [Fields][ServiceDelivery-Fields] - [Controller][ServiceDelivery-Controller] - [Form][ServiceDelivery-Form] - [Index][ServiceDelivery-Index]
 
@@ -309,13 +309,13 @@
 
 ## Service Equipment Assignment
 
-[ServiceEquipment-Migration]: /database/migrations/1756666767.create_service_equipment_assignments_table.sql
+[ServiceEquipment-Migration]: /database/migrations/1756666767.create_service_equipments_table.sql
 [ServiceEquipment-Model]: /app/Models/ServiceEquipment.php
 [ServiceEquipment-Policy]: /app/Auth/ServiceEquipmentPolicy.php
 [ServiceEquipment-Fields]: /app/Http/Fields/ServiceEquipmentFields.php
 [ServiceEquipment-Controller]: /app/Controllers/ServiceEquipmentController.php
-[ServiceEquipment-Form]: /resources/views/service_equipment_assignments/form.php
-[ServiceEquipment-Index]: /resources/views/service_equipment_assignments/index.php
+[ServiceEquipment-Form]: /resources/views/service_equipments/form.php
+[ServiceEquipment-Index]: /resources/views/service_equipments/index.php
 
 - [Migration][ServiceEquipment-Migration] - [Model][ServiceEquipment-Model] - [Policy][ServiceEquipment-Policy] - [Fields][ServiceEquipment-Fields] - [Controller][ServiceEquipment-Controller] - [Form][ServiceEquipment-Form] - [Index][ServiceEquipment-Index]
 

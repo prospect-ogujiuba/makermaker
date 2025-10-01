@@ -65,10 +65,10 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setHelp('Check if equipment cost is included in service price')
                         ->setText('Yes', 'No')
                 )
-                ->withColumn( $form->toggle('required')
-                        ->setLabel('Required')
-                        ->setHelp('Check if this equipment is mandatory for the service')
-                        ->setText('Yes', 'No'))
+                ->withColumn($form->toggle('required')
+                    ->setLabel('Required')
+                    ->setHelp('Check if this equipment is mandatory for the service')
+                    ->setText('Yes', 'No'))
 
         ]
     )
@@ -85,7 +85,7 @@ if (isset($current_id)) {
                 $form->row()
                     ->withColumn(
                         $form->text('id')
-                            ->setLabel('Service Deliverable Assignment ID')
+                            ->setLabel('Service Deliverable ID')
                             ->setHelp('System generated unique identifier')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)

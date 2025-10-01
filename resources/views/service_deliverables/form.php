@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ServiceDeliverableAssignment Form View
+ * ServiceDeliverable Form View
  * 
- * This view displays a form for creating/editing ServiceDeliverableAssignment.
+ * This view displays a form for creating/editing ServiceDeliverable.
  * Add your form fields and functionality here.
  */
 
 use MakerMaker\Models\Service;
-use MakerMaker\Models\ServiceDeliverable;
+use MakerMaker\Models\Deliverable;
 
 // Form instance
 echo $form->open();
@@ -21,10 +21,11 @@ $tabs = tr_tabs()
     ->layoutLeft();
 
 // Main Tab
+// Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        'Service Deliverable Assignment',
-        'Define which deliverables are included with this service',
+        'Service Deliverable',
+        'Define which deliverables are included with this service and their order',
         [
             $form->row()
                 ->withColumn(
@@ -38,12 +39,25 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->select('deliverable_id')
                         ->setLabel('Deliverable')
                         ->setHelp('Select the deliverable that will be included with this service')
-                        ->setModelOptions(ServiceDeliverable::class, 'name', 'id', 'Select Deliverable')
+                        ->setModelOptions(Deliverable::class, 'name', 'id', 'Select Deliverable')
                         ->markLabelRequired()
+                ),
+            $form->row()
+                 ->withColumn(
+                    $form->number('sequence_order')
+                        ->setLabel('Sequence Order')
+                        ->setHelp('Order in which this deliverable should be completed (leave empty for no specific order)')
+                        ->setAttribute('min', '1')
+                        ->setAttribute('placeholder', 'e.g., 1, 2, 3...')
+                )->withColumn(
+                    $form->toggle('is_optional')
+                        ->setLabel('Is Optional')
+                        ->setHelp('Can the customer choose to exclude this deliverable?')
                 )
+               
         ]
     )
-])->setDescription('Service Deliverable Assignment');
+])->setDescription('Service Deliverable');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
@@ -56,7 +70,7 @@ if (isset($current_id)) {
                 $form->row()
                     ->withColumn(
                         $form->text('id')
-                            ->setLabel('Service Deliverable Assignment ID')
+                            ->setLabel('Service Deliverable ID')
                             ->setHelp('System generated unique identifier')
                             ->setAttribute('readonly', true)
                             ->setAttribute('name', false)

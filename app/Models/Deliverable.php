@@ -29,7 +29,7 @@ class Deliverable extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_deliverable_assignments', 'deliverable_id', 'service_id');
+        return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_deliverables', 'deliverable_id', 'service_id');
     }
 
     /** Created by WP user */

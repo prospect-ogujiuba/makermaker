@@ -6,7 +6,7 @@ use \App\Models\User;
 use TypeRocket\Models\AuthUser;
 use TypeRocket\Auth\Policy;
 
-class ServiceDeliverableAssignmentPolicy extends Policy
+class ServiceDeliverablePolicy extends Policy
 {
     public function update(AuthUser $auth, $object)
     {
