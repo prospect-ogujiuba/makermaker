@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * {{class}} Form
+ */
+
+// Form instance
+echo $form->open();
+
+echo to_resource('{{class}}', 'index', 'Back To {{plural_class}}');
+
+// Tab Layout
+$tabs = tr_tabs()
+    ->setFooter($form->save())
+    ->layoutLeft();
+
+// Main Tab
+$tabs->tab('Overview', 'admin-settings', [
+    $form->fieldset(
+        '{{class}} Information',
+        'Core {{variable}} details',
+        [
+            // Add your form fields here
+            $form->row()
+                ->withColumn(
+                    $form->text('name')
+                        ->setLabel('Name')
+                        ->setHelp('Enter the {{variable}} name')
+                        ->setAttribute('maxlength', '255')
+                        ->setAttribute('placeholder', 'Enter name...')
+                        ->markLabelRequired()
+                )
+                ->withColumn()
+        ]
+    )
+])->setDescription('{{class}} Configuration');
+
+// Conditional System Info Tab
+if (isset($current_id)) {
+    // System Info Tab
+    $tabs->tab('System', 'info', [
+        $form->fieldset(
+            'System Info',
+            'Core system metadata fields',
+            [
+                $form->row()
+                    ->withColumn(
+                        $form->text('id')
+                            ->setLabel('ID')
+                            ->setHelp('System generated unique identifier')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(),
+                $form->row()
+                    ->withColumn(
+                        $form->text('created_at')
+                            ->setLabel('Created At')
+                            ->setHelp('Record creation timestamp')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(
+                        $form->text('updated_at')
+                            ->setLabel('Updated At')
+                            ->setHelp('Last update timestamp')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    ),
+                $form->row()
+                    ->withColumn(
+                        $form->text('created_by_user')
+                            ->setLabel('Created By')
+                            ->setHelp('User who originally created this record')
+                            ->setAttribute('value', $createdBy->user_nicename ?? 'System')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(
+                        $form->text('updated_by_user')
+                            ->setLabel('Last Updated By')
+                            ->setHelp('User who last updated this record')
+                            ->setAttribute('value', $updatedBy->user_nicename ?? 'System')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    ),
+                $form->row()
+                    ->withColumn(
+                        $form->text('deleted_at')
+                            ->setLabel('Deleted At')
+                            ->setHelp('Timestamp when this record was soft-deleted, if applicable')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                            ->setAttribute('disabled', true)
+                    )
+                    ->withColumn()
+            ]
+        )
+    ])->setDescription('System information');
+}
+
+// Render the complete tabbed interface
+$tabs->render();
+
+echo $form->close();
