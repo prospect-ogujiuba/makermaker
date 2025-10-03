@@ -24,8 +24,8 @@
 [ComplexityLevel-Policy]: /app/Auth/ComplexityLevelPolicy.php
 [ComplexityLevel-Fields]: /app/Http/Fields/ComplexityLevelFields.php
 [ComplexityLevel-Controller]: /app/Controllers/ComplexityLevelController.php
-[ComplexityLevel-Form]: /resources/views/service_complexities/form.php
-[ComplexityLevel-Index]: /resources/views/service_complexities/index.php
+[ComplexityLevel-Form]: /resources/views/complexity_levels/form.php
+[ComplexityLevel-Index]: /resources/views/complexity_levels/index.php
 
 - [Migration][ComplexityLevel-Migration] - [Data][ComplexityLevel-Data] - [Model][ComplexityLevel-Model] - [Policy][ComplexityLevel-Policy] - [Fields][ComplexityLevel-Fields] - [Controller][ComplexityLevel-Controller] - [Form][ComplexityLevel-Form] - [Index][ComplexityLevel-Index]
 

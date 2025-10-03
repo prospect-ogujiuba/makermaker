@@ -34,9 +34,10 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->number('level')
                         ->setLabel('Complexity Level')
                         ->setAttribute('placeholder', 'e.g., 9')
-                        ->setAttribute('min', '')
+                        ->setAttribute('min', '0')
                         ->setAttribute('max', '255')
                         ->setAttribute('step', '1')
+                        ->setDefault(0)
                         ->setHelp('Numeric value from 0-255 representing difficulty/complexity ranking')
                         ->markLabelRequired()
                 ),
@@ -48,6 +49,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setAttribute('min', '0')
                         ->setAttribute('step', '0.01')
                         ->setAttribute('placeholder', 'e.g., 1.25')
+                        ->setDefault(1)
                         ->setHelp('Decimal factor to adjust base service pricing (1.00 = no change, 1.5 = 50% increase)')
                 )
                 ->withColumn(),

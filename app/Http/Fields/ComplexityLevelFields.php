@@ -42,7 +42,7 @@ class ComplexityLevelFields extends Fields
         $rules = [];
 
         $rules['name'] = "unique:name:{$wpdb_prefix}srvc_complexity_levels@id:{$id}|required|max:64";
-        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexity_levels@id:{$id}|numeric|required|min:1|max:3|callback:checkIntRange:0:255";
+        $rules['level'] = "unique:level:{$wpdb_prefix}srvc_complexity_levels@id:{$id}|min:1|max:3|callback:checkIntRange:0:255";
         $rules['price_multiplier'] = "?numeric";
 
         return $rules;

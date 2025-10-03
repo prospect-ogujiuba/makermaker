@@ -26,7 +26,7 @@ class ComplexityLevel extends Model
 
     protected $format = [
         'level' => 'convertEmptyToNull',
-        'price_mulitipler' => 'convertEmptyToNull'
+        'price_multiplier' => 'convertEmptyToNull'
     ];
 
     protected $with = [
