@@ -1,6 +1,6 @@
 -- Description: {{description}}
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}{{table_name}}` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}{{table_name}}` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),

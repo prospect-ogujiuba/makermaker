@@ -1,6 +1,6 @@
 -- Description:
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_service_delivery` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_service_delivery` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `delivery_method_id` bigint(20) NOT NULL,

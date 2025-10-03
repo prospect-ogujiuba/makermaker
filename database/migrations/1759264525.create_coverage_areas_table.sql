@@ -1,6 +1,6 @@
 -- Description:
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_coverage_areas` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_coverage_areas` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `code` varchar(64) NOT NULL,

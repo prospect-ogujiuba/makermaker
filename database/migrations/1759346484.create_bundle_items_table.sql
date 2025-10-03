@@ -1,6 +1,6 @@
 -- Description:
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_bundle_items` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_bundle_items` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `bundle_id` bigint(20) NOT NULL,
   `service_id` bigint(20) NOT NULL,

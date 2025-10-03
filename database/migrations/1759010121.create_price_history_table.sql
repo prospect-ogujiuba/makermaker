@@ -1,6 +1,6 @@
 -- Description: Complete audit trail for all ServicePrice changes
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_price_history` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_price_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_price_id` bigint(20) NOT NULL,
   `change_type` enum('created','updated','deleted','amount_changed','dates_changed','status_changed','currency_changed','unit_changed','tier_changed','model_changed','approval_changed', 'multi_update') NOT NULL,

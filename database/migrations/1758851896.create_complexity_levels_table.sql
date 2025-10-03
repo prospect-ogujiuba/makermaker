@@ -1,6 +1,6 @@
 -- Description:
 -- >>> Up >>>
-CREATE TABLE `{!!prefix!!}srvc_complexity_levels` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_complexity_levels` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `level` tinyint unsigned NOT NULL DEFAULT 0,
