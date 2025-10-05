@@ -158,19 +158,19 @@ class ServiceEquipmentController extends Controller
             if (empty($service_equipment)) {
                 return $response
                     ->setData('service_equipment', [])
-                    ->setMessage('No Service Equipment Assignments found', 'info')
+                    ->setMessage('No Service Equipment found', 'info')
                     ->setStatus(200);
             }
 
             return $response
                 ->setData('service_equipment', $service_equipment)
-                ->setMessage('Service Equipment Assignments retrieved successfully', 'success')
+                ->setMessage('Service Equipment retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service Equipment indexRest error: ' . $e->getMessage());
 
             return $response
-                ->error('Failed to retrieve Service Equipment Assignments: ' . $e->getMessage())
+                ->error('Failed to retrieve Service Equipment: ' . $e->getMessage())
                 ->setStatus(500);
         }
     }
