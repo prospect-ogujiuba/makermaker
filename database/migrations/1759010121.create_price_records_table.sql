@@ -1,6 +1,6 @@
 -- Description: Complete audit trail for all ServicePrice changes
 -- >>> Up >>>
-CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_price_history` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_price_records` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_price_id` bigint(20) NOT NULL,
   `change_type` enum('created','updated','deleted','amount_changed','dates_changed','status_changed','currency_changed','unit_changed','tier_changed','model_changed','approval_changed', 'multi_update') NOT NULL,
@@ -34,17 +34,17 @@ CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_price_history` (
   `changed_at` datetime NOT NULL DEFAULT current_timestamp(),
   `changed_by` bigint(20) unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
-  KEY `idx_price_history__service_price_id` (`service_price_id`),
-  KEY `idx_price_history__change_type` (`change_type`),
-  KEY `idx_price_history__changed_at` (`changed_at`),
-  KEY `idx_price_history__changed_by` (`changed_by`),
-  KEY `idx_price_history__old_service_id` (`old_service_id`),
-  KEY `idx_price_history__new_service_id` (`new_service_id`),
-  CONSTRAINT `fk_price_history__service_price` FOREIGN KEY (`service_price_id`) REFERENCES `{!!prefix!!}srvc_service_prices` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_price_history__changed_by` FOREIGN KEY (`changed_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_price_history__old_approved_by` FOREIGN KEY (`old_approved_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_price_history__new_approved_by` FOREIGN KEY (`new_approved_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
+  KEY `idx_price_record__service_price_id` (`service_price_id`),
+  KEY `idx_price_record__change_type` (`change_type`),
+  KEY `idx_price_record__changed_at` (`changed_at`),
+  KEY `idx_price_record__changed_by` (`changed_by`),
+  KEY `idx_price_record__old_service_id` (`old_service_id`),
+  KEY `idx_price_record__new_service_id` (`new_service_id`),
+  CONSTRAINT `fk_price_record__service_price` FOREIGN KEY (`service_price_id`) REFERENCES `{!!prefix!!}srvc_service_prices` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_price_record__changed_by` FOREIGN KEY (`changed_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_price_record__old_approved_by` FOREIGN KEY (`old_approved_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_price_record__new_approved_by` FOREIGN KEY (`new_approved_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Complete compliance audit trail for all pricing changes';
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_price_history`;
+DROP TABLE IF EXISTS `{!!prefix!!}srvc_price_records`;

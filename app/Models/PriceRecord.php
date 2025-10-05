@@ -5,9 +5,9 @@ namespace MakerMaker\Models;
 use TypeRocket\Models\Model;
 use TypeRocket\Models\WPUser;
 
-class PriceHistory extends Model
+class PriceRecord extends Model
 {
-    protected $resource = 'srvc_price_history';
+    protected $resource = 'srvc_price_records';
 
     protected $fillable = [
         'service_price_id',
@@ -60,7 +60,7 @@ class PriceHistory extends Model
         'new_approved_at' => 'convertEmptyToNull',
     ];
 
-    /** PriceHistory belongs to a ServicePrice */
+    /** PriceRecord belongs to a ServicePrice */
     public function servicePrice()
     {
         return $this->belongsTo(ServicePrice::class, 'service_price_id');
@@ -85,7 +85,7 @@ class PriceHistory extends Model
     }
 
     /**
-     * Smart price history recorder - Complete compliance version
+     * Smart Price Record recorder - Complete compliance version
      * Tracks ALL fields from ServicePrice for full audit trail
      */
     public static function recordChange($servicePriceId, $changeType, $oldData = [], $newData = [], $reason = 'update', $userID = 1)
@@ -104,7 +104,7 @@ class PriceHistory extends Model
         // Generate smart description
         $description = self::generateDescription($determinedChangeType, $changes, $oldData, $newData, $reason);
 
-        $historyData = [
+        $recordData = [
             'service_price_id' => $servicePriceId,
             'change_type' => $determinedChangeType,
             'change_description' => $description,
@@ -130,15 +130,15 @@ class PriceHistory extends Model
 
         foreach ($trackableFields as $field => $columns) {
             if (isset($oldData[$field])) {
-                $historyData[$columns[0]] = $oldData[$field] ?: null;
+                $recordData[$columns[0]] = $oldData[$field] ?: null;
             }
             if (isset($newData[$field])) {
-                $historyData[$columns[1]] = $newData[$field] ?: null;
+                $recordData[$columns[1]] = $newData[$field] ?: null;
             }
         }
 
-        $history = new static();
-        return $history->create($historyData);
+        $record = new static();
+        return $record->create($recordData);
     }
 
     /**

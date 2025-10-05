@@ -494,7 +494,7 @@ function checkMinValue($value, $field_name, $min_value)
 /**
  * Generate a link to a TypeRocket resource page
  *
- * @param string $resource The resource name (e.g., 'PriceHistory', 'Service')
+ * @param string $resource The resource name (e.g., 'PriceRecord', 'Service')
  * @param string $action The action (index, add, edit, show, delete)
  * @param string $text The link text to display
  * @param int|null $id The resource ID (required for edit, show, delete actions)
@@ -603,27 +603,27 @@ function getUserName($userId)
 function pluralize($word)
 {
     static $inflector = null;
-    
+
     if ($inflector === null) {
         $inflector = InflectorFactory::create()->build();
     }
-    
+
     // Detect delimiter
     $delimiter = null;
     $delimiters = ['-', '_', '.', ' '];
-    
+
     foreach ($delimiters as $d) {
         if (strpos($word, $d) !== false) {
             $delimiter = $d;
             break;
         }
     }
-    
+
     // Check for PascalCase/camelCase
     if ($delimiter === null && preg_match('/[a-z][A-Z]/', $word)) {
         // Split on capital letters
         $parts = preg_split('/(?=[A-Z])/', $word, -1, PREG_SPLIT_NO_EMPTY);
-        
+
         if (count($parts) > 1) {
             // Pluralize the last part
             $lastIndex = count($parts) - 1;
@@ -631,17 +631,17 @@ function pluralize($word)
             return implode('', $parts);
         }
     }
-    
+
     // No delimiter found, pluralize the whole word
     if ($delimiter === null) {
         return $inflector->pluralize($word);
     }
-    
+
     // Split by delimiter, pluralize last part only
     $parts = explode($delimiter, $word);
     $lastIndex = count($parts) - 1;
     $parts[$lastIndex] = $inflector->pluralize($parts[$lastIndex]);
-    
+
     return implode($delimiter, $parts);
 }
 
@@ -655,27 +655,27 @@ function pluralize($word)
 function singularize($word)
 {
     static $inflector = null;
-    
+
     if ($inflector === null) {
         $inflector = InflectorFactory::create()->build();
     }
-    
+
     // Detect delimiter
     $delimiter = null;
     $delimiters = ['-', '_', '.', ' '];
-    
+
     foreach ($delimiters as $d) {
         if (strpos($word, $d) !== false) {
             $delimiter = $d;
             break;
         }
     }
-    
+
     // Check for PascalCase/camelCase
     if ($delimiter === null && preg_match('/[a-z][A-Z]/', $word)) {
         // Split on capital letters
         $parts = preg_split('/(?=[A-Z])/', $word, -1, PREG_SPLIT_NO_EMPTY);
-        
+
         if (count($parts) > 1) {
             // Singularize the last part
             $lastIndex = count($parts) - 1;
@@ -683,16 +683,16 @@ function singularize($word)
             return implode('', $parts);
         }
     }
-    
+
     // No delimiter found, singularize the whole word
     if ($delimiter === null) {
         return $inflector->singularize($word);
     }
-    
+
     // Split by delimiter, singularize last part only
     $parts = explode($delimiter, $word);
     $lastIndex = count($parts) - 1;
     $parts[$lastIndex] = $inflector->singularize($parts[$lastIndex]);
-    
+
     return implode($delimiter, $parts);
 }

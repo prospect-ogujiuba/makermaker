@@ -136,18 +136,18 @@
 
 ---
 
-## Price History
+## Price Record
 
-[PriceHistory-Migration]: /database/migrations/1759010121.create_price_history_table.sql
-[PriceHistory-Data]: /database/migrations/2000000009.data_price_history.sql
-[PriceHistory-Model]: /app/Models/PriceHistory.php
-[PriceHistory-Policy]: /app/Auth/PriceHistoryPolicy.php
-[PriceHistory-Fields]: /app/Http/Fields/PriceHistoryFields.php
-[PriceHistory-Controller]: /app/Controllers/PriceHistoryController.php
-[PriceHistory-Form]: /resources/views/price_history/form.php
-[PriceHistory-Index]: /resources/views/price_history/index.php
+[PriceRecord-Migration]: /database/migrations/1759010121.create_price_record_table.sql
+[PriceRecord-Data]: /database/migrations/2000000009.data_price_record.sql
+[PriceRecord-Model]: /app/Models/PriceRecord.php
+[PriceRecord-Policy]: /app/Auth/PriceRecordPolicy.php
+[PriceRecord-Fields]: /app/Http/Fields/PriceRecordFields.php
+[PriceRecord-Controller]: /app/Controllers/PriceRecordController.php
+[PriceRecord-Form]: /resources/views/price_record/form.php
+[PriceRecord-Index]: /resources/views/price_record/index.php
 
-- [Migration][PriceHistory-Migration] - [Data][PriceHistory-Data] - [Model][PriceHistory-Model] - [Policy][PriceHistory-Policy] - [Fields][PriceHistory-Fields] - [Controller][PriceHistory-Controller] - [Form][PriceHistory-Form] - [Index][PriceHistory-Index]
+- [Migration][PriceRecord-Migration] - [Data][PriceRecord-Data] - [Model][PriceRecord-Model] - [Policy][PriceRecord-Policy] - [Fields][PriceRecord-Fields] - [Controller][PriceRecord-Controller] - [Form][PriceRecord-Form] - [Index][PriceRecord-Index]
 
 ---
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Price History Form (Read-Only View) - Complete Compliance Version
+ * Price Record Form (Read-Only View) - Complete Compliance Version
  */
 
 use MakerMaker\Models\ServicePrice;
@@ -12,7 +12,7 @@ use MakerMaker\Models\PricingModel;
 // Form instance
 echo $form->open();
 
-echo to_resource('PriceHistory', 'index', 'Back To Price History');
+echo to_resource('PriceRecord', 'index', 'Back To Price Record');
 
 // Tab Layout
 $tabs = tr_tabs()
@@ -23,7 +23,7 @@ $tabs = tr_tabs()
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
         'Change Information',
-        'Details about this price history record',
+        'Details about this Price Record record',
         [
             $form->row()
                 ->withColumn(
@@ -338,7 +338,7 @@ $tabs->tab('System', 'info', [
             $form->row()
                 ->withColumn(
                     $form->text('id')
-                        ->setLabel('Price History ID')
+                        ->setLabel('Price Record ID')
                         ->setHelp('System generated unique identifier')
                         ->setAttribute('readonly', true)
                         ->setAttribute('name', false)

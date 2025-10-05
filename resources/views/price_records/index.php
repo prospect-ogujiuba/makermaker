@@ -1,12 +1,12 @@
 <?php
 
 /**
- * PriceHistory Index View - Complete Compliance Version
+ * PriceRecord Index View - Complete Compliance Version
  */
 
-use MakerMaker\Models\PriceHistory;
+use MakerMaker\Models\PriceRecord;
 
-$table = tr_table(PriceHistory::class);
+$table = tr_table(PriceRecord::class);
 
 $table->setBulkActions(tr_form()->useConfirm(), []); // No bulk actions for read-only records
 
@@ -23,7 +23,7 @@ $table->setColumns([
     'change_type' => [
         'label' => 'Change',
         'sort' => true,
-                'callback' => function($value) {
+        'callback' => function ($value) {
             return "<code>{$value}</code>";
         }
     ],

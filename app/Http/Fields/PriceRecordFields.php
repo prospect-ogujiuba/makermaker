@@ -4,12 +4,12 @@ namespace MakerMaker\Http\Fields;
 
 use TypeRocket\Http\Fields;
 
-class PriceHistoryFields extends Fields
+class PriceRecordFields extends Fields
 {
     /**
      * Run On Import
      *
-     * Price history records are read-only, so validation is not needed
+     * Price Record records are read-only, so validation is not needed
      * for user input, but we still validate data structure for system-generated records
      *
      * @var bool
@@ -19,7 +19,7 @@ class PriceHistoryFields extends Fields
     /**
      * Model Fillable Property Override
      * 
-     * PriceHistory records are audit logs and should not be fillable
+     * PriceRecord records are audit logs and should not be fillable
      * to maintain data integrity
      *
      * @return array
@@ -79,9 +79,9 @@ class PriceHistoryFields extends Fields
     protected function messages()
     {
         return [
-            'service_price_id.required' => 'Service Price ID is required for price history records.',
+            'service_price_id.required' => 'Service Price ID is required for Price Record records.',
             'service_price_id.numeric' => 'Service Price ID must be a valid number.',
-            'change_type.required' => 'Change type is required for price history records.',
+            'change_type.required' => 'Change type is required for Price Record records.',
             'old_amount.numeric' => 'Old amount must be a valid number.',
             'old_amount.min' => 'Old amount cannot be negative.',
             'new_amount.numeric' => 'New amount must be a valid number.',

@@ -43,7 +43,7 @@ $pricing->addPage(
 );
 
 $pricing->addPage(
-    mm_create_custom_resource('PriceHistory', 'PriceHistoryController', 'Price History', false)
+    mm_create_custom_resource('PriceRecord', 'PriceRecordController', 'Price Record', false)
 );
 
 $pricing->addPage(
@@ -97,7 +97,7 @@ $delivery->addPage(
 //     mm_create_custom_resource('PricingTier', 'PricingTierController', 'Pricing Tiers'),
 //     mm_create_custom_resource('ServicePrice', 'ServicePriceController', 'Service Pricing'),
 //     mm_create_custom_resource('CurrencyRate', 'CurrencyRateController', 'Currency Rates'),
-//     mm_create_custom_resource('PriceHistory', 'PriceHistoryController', 'Pricing History', false),
+//     mm_create_custom_resource('PriceRecord', 'PriceRecordController', 'Pricing record', false),
 
 //     // Service Relationships & Configuration
 //     mm_create_custom_resource('ServiceAddon', 'ServiceAddonController', 'Service Add-ons'),

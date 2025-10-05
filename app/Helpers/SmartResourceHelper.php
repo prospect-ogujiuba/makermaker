@@ -1,4 +1,5 @@
 <?php
+
 namespace MakerMaker\Helpers;
 
 use TypeRocket\Models\Model;
@@ -37,20 +38,20 @@ class SmartResourceHelper
             $resource = self::getResourceNameFromModel($resource);
         }
 
-        // Convert resource name to slug (PriceHistory -> pricehistory)
+        // Convert resource name to slug (PriceRecord -> PriceRecord)
         $resource_slug = self::resourceToSlug($resource);
-        
+
         // Build page parameter - ALWAYS include action with underscore
         $page = $resource_slug . '_' . $action;
-        
+
         // Build URL parameters
         $params = ['page' => $page];
-        
+
         // Add ID for actions that need it
         if (in_array($action, self::ID_REQUIRED_ACTIONS) && $id) {
             $params['route_args'] = [$id];
         }
-        
+
         return admin_url('admin.php?' . http_build_query($params));
     }
 
@@ -68,23 +69,23 @@ class SmartResourceHelper
     public static function link($resource, $action = 'index', $text = null, $id = null, $icon = null, $class = 'button')
     {
         $url = self::url($resource, $action, $id);
-        
+
         // Auto-generate text if not provided
         if (!$text) {
             $text = self::generateLinkText($resource, $action);
         }
-        
+
         // Auto-select icon if not provided
         if (!$icon) {
             $icon = self::getDefaultIcon($action);
         }
-        
+
         // Build icon HTML
         $icon_html = $icon ? "<i class='bi bi-{$icon}'></i> " : '';
-        
+
         // Build CSS classes
         $css_classes = self::getActionClasses($action, $class);
-        
+
         return "<a href='{$url}' class='{$css_classes}'>{$icon_html}{$text}</a>";
     }
 
@@ -99,7 +100,7 @@ class SmartResourceHelper
     {
         $resource_name = $resource instanceof Model ? self::getResourceNameFromModel($resource) : $resource;
         $text = $text ?: "Back to " . pluralize($resource_name);
-        
+
         return self::link($resource, 'index', $text, null, 'arrow-left', 'button button-secondary');
     }
 
@@ -144,7 +145,7 @@ class SmartResourceHelper
 
     /**
      * Convert resource name to TypeRocket format
-     * PriceHistory -> pricehistory, ServicePrice -> serviceprice
+     * PriceRecord -> PriceRecord, ServicePrice -> serviceprice
      *
      * @param string $resource Resource name
      * @return string
@@ -177,7 +178,7 @@ class SmartResourceHelper
     protected static function generateLinkText($resource, $action)
     {
         $resource_name = $resource instanceof Model ? self::getResourceNameFromModel($resource) : $resource;
-        
+
         switch ($action) {
             case 'index':
                 return pluralize($resource_name);
@@ -215,7 +216,7 @@ class SmartResourceHelper
             'delete' => 'trash',
             'destroy' => 'trash',
         ];
-        
+
         return $icons[$action] ?? 'arrow-right';
     }
 
@@ -238,9 +239,9 @@ class SmartResourceHelper
             'destroy' => 'button-danger',
             'index' => 'button-secondary',
         ];
-        
+
         $action_class = $action_classes[$action] ?? 'button-secondary';
-        
+
         return trim($base_class . ' ' . $action_class);
     }
 }

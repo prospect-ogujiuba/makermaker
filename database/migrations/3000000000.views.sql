@@ -599,10 +599,10 @@ LEFT JOIN `{!!prefix!!}srvc_service_prices` sp ON pm.id = sp.pricing_model_id
 WHERE pm.deleted_at IS NULL
 GROUP BY pm.id, pm.name, pm.code, pm.description, pm.is_time_based;
 
--- Price History with Change Details
-CREATE OR REPLACE VIEW `{!!prefix!!}vw_srvc_pricing_history` AS
+-- Price Record with Change Details
+CREATE OR REPLACE VIEW `{!!prefix!!}vw_srvc_pricing_record` AS
 SELECT 
-    ph.id AS history_id,
+    ph.id AS record_id,
     ph.service_price_id,
     s.name AS service_name,
     s.sku AS service_sku,
@@ -637,7 +637,7 @@ SELECT
     changer.display_name AS changed_by_name,
     changer.user_email AS changed_by_email,
     ph.changed_at
-FROM `{!!prefix!!}srvc_price_history` ph
+FROM `{!!prefix!!}srvc_price_record` ph
 INNER JOIN `{!!prefix!!}srvc_service_prices` sp ON ph.service_price_id = sp.id
 INNER JOIN `{!!prefix!!}srvc_services` s ON sp.service_id = s.id
 LEFT JOIN `{!!prefix!!}srvc_pricing_tiers` old_tier ON ph.old_pricing_tier_id = old_tier.id
@@ -1870,7 +1870,7 @@ DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_equipment_active`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_relationships_summary`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_relationships_all`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_relationships_active`;
-DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_pricing_history`;
+DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_pricing_record`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_pricing_by_model`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_pricing_by_tier`;
 DROP VIEW IF EXISTS `{!!prefix!!}vw_srvc_pricing_all`;

@@ -81,7 +81,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
             '\MakerMaker\Models\PricingTier' => '\MakerMaker\Auth\PricingTierPolicy',
             '\MakerMaker\Models\ServicePrice' => '\MakerMaker\Auth\ServicePricePolicy',
             '\MakerMaker\Models\CurrencyRate' => '\MakerMaker\Auth\CurrencyRatePolicy',
-            '\MakerMaker\Models\PriceHistory' => '\MakerMaker\Auth\PriceHistoryPolicy',
+            '\MakerMaker\Models\PriceRecord' => '\MakerMaker\Auth\PriceRecordPolicy',
 
             // Service Relationships & Configuration
             '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',

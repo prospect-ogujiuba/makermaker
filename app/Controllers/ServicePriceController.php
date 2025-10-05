@@ -3,7 +3,7 @@
 namespace MakerMaker\Controllers;
 
 use MakerMaker\Http\Fields\ServicePriceFields;
-use MakerMaker\Models\PriceHistory;
+use MakerMaker\Models\PriceRecord;
 use MakerMaker\Models\ServicePrice;
 use MakerMaker\View;
 use TypeRocket\Controllers\Controller;
@@ -66,7 +66,7 @@ class ServicePriceController extends Controller
             'approval_status' => $fields['approval_status'],
         ];
 
-        PriceHistory::recordChange(
+        PriceRecord::recordChange(
             $service_price->getID(),
             'created',
             [],  // No old data on creation
@@ -155,7 +155,7 @@ class ServicePriceController extends Controller
             'approved_at' => $updated_service_price->approved_at,
         ];
 
-        PriceHistory::recordChange(
+        PriceRecord::recordChange(
             $service_price->getID(),
             'updated',
             $oldData,
@@ -248,7 +248,7 @@ class ServicePriceController extends Controller
         }
 
         // Record deletion with all previous values
-        PriceHistory::recordChange(
+        PriceRecord::recordChange(
             $servicePriceId,
             'deleted',
             $oldData,
