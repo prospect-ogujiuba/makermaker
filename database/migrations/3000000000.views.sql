@@ -637,7 +637,7 @@ SELECT
     changer.display_name AS changed_by_name,
     changer.user_email AS changed_by_email,
     ph.changed_at
-FROM `{!!prefix!!}srvc_price_record` ph
+FROM `{!!prefix!!}srvc_price_records` ph
 INNER JOIN `{!!prefix!!}srvc_service_prices` sp ON ph.service_price_id = sp.id
 INNER JOIN `{!!prefix!!}srvc_services` s ON sp.service_id = s.id
 LEFT JOIN `{!!prefix!!}srvc_pricing_tiers` old_tier ON ph.old_pricing_tier_id = old_tier.id

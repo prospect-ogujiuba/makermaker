@@ -1,6 +1,6 @@
 -- Description:
 -- >>> Up >>>
-INSERT INTO `{!!prefix!!}srvc_price_record` 
+INSERT INTO `{!!prefix!!}srvc_price_records` 
 (`id`, `service_price_id`, `change_type`, `old_amount`, `new_amount`, `old_setup_fee`, `new_setup_fee`, `old_currency`, `new_currency`, `old_unit`, `new_unit`, `old_valid_from`, `new_valid_from`, `old_valid_to`, `new_valid_to`, `old_is_current`, `new_is_current`, `old_service_id`, `new_service_id`, `old_pricing_tier_id`, `new_pricing_tier_id`, `old_pricing_model_id`, `new_pricing_model_id`, `old_approval_status`, `new_approval_status`, `old_approved_by`, `new_approved_by`, `old_approved_at`, `new_approved_at`, `change_description`, `changed_at`, `changed_by`) VALUES
 (1, 1, 'created', NULL, 45.00, NULL, 500.00, NULL, 'CAD', NULL, 'hour', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 1, NULL, 1, NULL, 1, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at $45.00 | Initial price creation', '2025-08-28 23:57:07', 1),
 (2, 2, 'created', NULL, 42.00, NULL, 400.00, NULL, 'CAD', NULL, 'hour', NULL, '2025-01-01 00:00:00', NULL, NULL, NULL, 1, NULL, 1, NULL, 2, NULL, 1, NULL, 'approved', NULL, 1, NULL, '2025-01-01 00:00:00', 'Price created at CAD $42.00 | Initial price creation', '2025-08-28 23:57:07', 1),
