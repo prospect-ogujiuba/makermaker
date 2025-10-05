@@ -179,7 +179,7 @@ class ServiceCategoryController extends Controller
 
             return $response
                 ->setData('service_categories', $service_categories)
-                ->setMessage('Service Categpries retrieved successfully', 'success')
+                ->setMessage('Service Categories retrieved successfully', 'success')
                 ->setStatus(200);
         } catch (\Exception $e) {
             error_log('Service Category indexRest error: ' . $e->getMessage());
