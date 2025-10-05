@@ -1,7 +1,7 @@
 <?php
 
 use TypeRocket\Http\Request;
-use Doctrine\Inflector\InflectorFactory;
+use TypeRocket\Utility\Inflect;
 
 /**
  * Helpers for MakerMaker WordPress/TypeRocket application.
@@ -84,7 +84,7 @@ function mm_create_custom_resource(
 
     // Register REST endpoint
     if ($registerRest) {
-        $slug = $restSlug ?: mm_kebab(pluralize($resourceKey), '-');
+        $slug = $restSlug ?: pluralize(mm_kebab($resourceKey, '-'));
         \TypeRocket\Register\Registry::addCustomResource($slug, ['controller' => $fqcn]);
     }
 
@@ -602,11 +602,8 @@ function getUserName($userId)
  */
 function pluralize($word)
 {
-    static $inflector = null;
-
-    if ($inflector === null) {
-        $inflector = InflectorFactory::create()->build();
-    }
+    // Use TypeRocket's Inflector
+    $inflector = Inflect::class;
 
     // Detect delimiter
     $delimiter = null;
@@ -627,20 +624,20 @@ function pluralize($word)
         if (count($parts) > 1) {
             // Pluralize the last part
             $lastIndex = count($parts) - 1;
-            $parts[$lastIndex] = $inflector->pluralize($parts[$lastIndex]);
+            $parts[$lastIndex] = $inflector::pluralize($parts[$lastIndex]);
             return implode('', $parts);
         }
     }
 
     // No delimiter found, pluralize the whole word
     if ($delimiter === null) {
-        return $inflector->pluralize($word);
+        return $inflector::pluralize($word);
     }
 
     // Split by delimiter, pluralize last part only
     $parts = explode($delimiter, $word);
     $lastIndex = count($parts) - 1;
-    $parts[$lastIndex] = $inflector->pluralize($parts[$lastIndex]);
+    $parts[$lastIndex] = $inflector::pluralize($parts[$lastIndex]);
 
     return implode($delimiter, $parts);
 }
@@ -654,11 +651,8 @@ function pluralize($word)
  */
 function singularize($word)
 {
-    static $inflector = null;
-
-    if ($inflector === null) {
-        $inflector = InflectorFactory::create()->build();
-    }
+    // Use TypeRocket's Inflector
+    $inflector = Inflect::class;
 
     // Detect delimiter
     $delimiter = null;
@@ -679,20 +673,20 @@ function singularize($word)
         if (count($parts) > 1) {
             // Singularize the last part
             $lastIndex = count($parts) - 1;
-            $parts[$lastIndex] = $inflector->singularize($parts[$lastIndex]);
+            $parts[$lastIndex] = $inflector::singularize($parts[$lastIndex]);
             return implode('', $parts);
         }
     }
 
     // No delimiter found, singularize the whole word
     if ($delimiter === null) {
-        return $inflector->singularize($word);
+        return $inflector::singularize($word);
     }
 
     // Split by delimiter, singularize last part only
     $parts = explode($delimiter, $word);
     $lastIndex = count($parts) - 1;
-    $parts[$lastIndex] = $inflector->singularize($parts[$lastIndex]);
+    $parts[$lastIndex] = $inflector::singularize($parts[$lastIndex]);
 
     return implode($delimiter, $parts);
 }
