@@ -98,7 +98,7 @@ class SmartResourceHelper
     public static function backToIndex($resource, $text = null)
     {
         $resource_name = $resource instanceof Model ? self::getResourceNameFromModel($resource) : $resource;
-        $text = $text ?: "Back to " . self::pluralize($resource_name);
+        $text = $text ?: "Back to " . pluralize($resource_name);
         
         return self::link($resource, 'index', $text, null, 'arrow-left', 'button button-secondary');
     }
@@ -180,7 +180,7 @@ class SmartResourceHelper
         
         switch ($action) {
             case 'index':
-                return self::pluralize($resource_name);
+                return pluralize($resource_name);
             case 'add':
             case 'create':
                 return "Add " . $resource_name;
@@ -242,25 +242,5 @@ class SmartResourceHelper
         $action_class = $action_classes[$action] ?? 'button-secondary';
         
         return trim($base_class . ' ' . $action_class);
-    }
-
-    /**
-     * Simple pluralization
-     *
-     * @param string $word Word to pluralize
-     * @return string
-     */
-    protected static function pluralize($word)
-    {
-        // Simple rules - extend as needed
-        if (substr($word, -1) === 'y') {
-            return substr($word, 0, -1) . 'ies';
-        }
-        
-        if (in_array(substr($word, -1), ['s', 'x', 'z']) || in_array(substr($word, -2), ['ch', 'sh'])) {
-            return $word . 'es';
-        }
-        
-        return $word . 's';
     }
 }

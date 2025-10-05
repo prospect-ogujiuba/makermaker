@@ -27,9 +27,9 @@ class Crud extends Command
         // Convert name to different cases
         $pascalCase = $this->toPascalCase($name);
         $snakeCase = $this->toSnakeCase($name);
-        $pluralSnakeCase = $this->pluralize($snakeCase);
+        $pluralSnakeCase = pluralize($snakeCase);
         $variable = lcfirst($pascalCase);
-        $pluralVariable = $this->pluralize($variable);
+        $pluralVariable = pluralize($variable);
         $pluralClass = $this->toPascalCase($pluralSnakeCase);
 
         $this->info("Generating CRUD files for: {$pascalCase}");
@@ -155,7 +155,7 @@ class Crud extends Command
             mkdir($policiesDir, 0755, true);
         }
 
-        $capability = $this->pluralize($snakeCase);
+        $capability = pluralize($snakeCase);
 
         $tags = ['{{namespace}}', '{{class}}', '{{capability}}'];
         $replacements = [
@@ -331,42 +331,5 @@ class Crud extends Command
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
     }
 
-    protected function pluralize($word)
-    {
-        // Simple pluralization rules
-        $irregular = array(
-            'person' => 'people',
-            'man' => 'men',
-            'woman' => 'women',
-            'child' => 'children',
-            'foot' => 'feet',
-            'tooth' => 'teeth',
-            'mouse' => 'mice',
-        );
 
-        if (isset($irregular[$word])) {
-            return $irregular[$word];
-        }
-
-        // Handle words ending in 'y'
-        if (substr($word, -1) === 'y' && !in_array(substr($word, -2, 1), array('a', 'e', 'i', 'o', 'u'))) {
-            return substr($word, 0, -1) . 'ies';
-        }
-
-        // Handle words ending in 's', 'sh', 'ch', 'x', 'z'
-        if (preg_match('/(s|sh|ch|x|z)$/', $word)) {
-            return $word . 'es';
-        }
-
-        // Handle words ending in 'f' or 'fe'
-        if (substr($word, -1) === 'f') {
-            return substr($word, 0, -1) . 'ves';
-        }
-        if (substr($word, -2) === 'fe') {
-            return substr($word, 0, -2) . 'ves';
-        }
-
-        // Default: add 's'
-        return $word . 's';
-    }
 }

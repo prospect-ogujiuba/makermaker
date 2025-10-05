@@ -1,5 +1,8 @@
 <?php
 
+use TypeRocket\Http\Request;
+use Doctrine\Inflector\InflectorFactory;
+
 /**
  * Helpers for MakerMaker WordPress/TypeRocket application.
  *
@@ -81,7 +84,7 @@ function mm_create_custom_resource(
 
     // Register REST endpoint
     if ($registerRest) {
-        $slug = $restSlug ?: mm_kebab($resourceKey, '-');
+        $slug = $restSlug ?: mm_kebab(pluralize($resourceKey), '-');
         \TypeRocket\Register\Registry::addCustomResource($slug, ['controller' => $fqcn]);
     }
 
@@ -255,7 +258,7 @@ function checkSelfReference($args)
     }
 
     // Get current record ID from route args
-    $request = \TypeRocket\Http\Request::new();
+    $request = Request::new();
     $route_args = $request->getDataGet('route_args');
     $currentId = $route_args[0] ?? null;
 
@@ -581,4 +584,115 @@ function getUserName($userId)
     }
 
     return "User #$userId";
+}
+
+/**
+ * Pluralize a word, handling delimiters (kebab-case, snake_case, etc.)
+ * Only pluralizes the last segment when delimiters are present.
+ * 
+ * Examples:
+ * - "equipment" -> "equipment"
+ * - "service-equipment" -> "service-equipment" (equipment is uncountable)
+ * - "user-profile" -> "user-profiles"
+ * - "api_endpoint" -> "api_endpoints"
+ * - "ServiceEquipment" -> "ServiceEquipments"
+ * 
+ * @param string $word The word to pluralize
+ * @return string The pluralized word
+ */
+function pluralize($word)
+{
+    static $inflector = null;
+    
+    if ($inflector === null) {
+        $inflector = InflectorFactory::create()->build();
+    }
+    
+    // Detect delimiter
+    $delimiter = null;
+    $delimiters = ['-', '_', '.', ' '];
+    
+    foreach ($delimiters as $d) {
+        if (strpos($word, $d) !== false) {
+            $delimiter = $d;
+            break;
+        }
+    }
+    
+    // Check for PascalCase/camelCase
+    if ($delimiter === null && preg_match('/[a-z][A-Z]/', $word)) {
+        // Split on capital letters
+        $parts = preg_split('/(?=[A-Z])/', $word, -1, PREG_SPLIT_NO_EMPTY);
+        
+        if (count($parts) > 1) {
+            // Pluralize the last part
+            $lastIndex = count($parts) - 1;
+            $parts[$lastIndex] = $inflector->pluralize($parts[$lastIndex]);
+            return implode('', $parts);
+        }
+    }
+    
+    // No delimiter found, pluralize the whole word
+    if ($delimiter === null) {
+        return $inflector->pluralize($word);
+    }
+    
+    // Split by delimiter, pluralize last part only
+    $parts = explode($delimiter, $word);
+    $lastIndex = count($parts) - 1;
+    $parts[$lastIndex] = $inflector->pluralize($parts[$lastIndex]);
+    
+    return implode($delimiter, $parts);
+}
+
+/**
+ * Singularize a word, handling delimiters
+ * Only singularizes the last segment when delimiters are present.
+ * 
+ * @param string $word The word to singularize
+ * @return string The singularized word
+ */
+function singularize($word)
+{
+    static $inflector = null;
+    
+    if ($inflector === null) {
+        $inflector = InflectorFactory::create()->build();
+    }
+    
+    // Detect delimiter
+    $delimiter = null;
+    $delimiters = ['-', '_', '.', ' '];
+    
+    foreach ($delimiters as $d) {
+        if (strpos($word, $d) !== false) {
+            $delimiter = $d;
+            break;
+        }
+    }
+    
+    // Check for PascalCase/camelCase
+    if ($delimiter === null && preg_match('/[a-z][A-Z]/', $word)) {
+        // Split on capital letters
+        $parts = preg_split('/(?=[A-Z])/', $word, -1, PREG_SPLIT_NO_EMPTY);
+        
+        if (count($parts) > 1) {
+            // Singularize the last part
+            $lastIndex = count($parts) - 1;
+            $parts[$lastIndex] = $inflector->singularize($parts[$lastIndex]);
+            return implode('', $parts);
+        }
+    }
+    
+    // No delimiter found, singularize the whole word
+    if ($delimiter === null) {
+        return $inflector->singularize($word);
+    }
+    
+    // Split by delimiter, singularize last part only
+    $parts = explode($delimiter, $word);
+    $lastIndex = count($parts) - 1;
+    $parts[$lastIndex] = $inflector->singularize($parts[$lastIndex]);
+    
+    return implode($delimiter, $parts);
 }
