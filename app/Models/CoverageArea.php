@@ -27,6 +27,11 @@ class CoverageArea extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'serviceCoverages.service'
+    ];
+
+
     public function serviceCoverages()
     {
         return $this->hasMany(ServiceCoverage::class, 'coverage_area_id');

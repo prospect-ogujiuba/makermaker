@@ -47,6 +47,10 @@ class PriceRecord extends Model
         'changed_at',
     ];
 
+    protected $with = [
+        'servicePrice'
+    ];
+
     protected $format = [
         'old_amount' => 'convertEmptyToNull',
         'new_amount' => 'convertEmptyToNull',

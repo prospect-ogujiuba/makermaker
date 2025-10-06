@@ -111,7 +111,7 @@ class DeliveryMethodController extends Controller
      */
     public function show(DeliveryMethod $delivery_method)
     {
-        return $delivery_method->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $delivery_method;
     }
 
     /**

@@ -30,6 +30,10 @@ class ServiceBundle extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'services'
+    ];
+
     /** ServiceBundle belongs to many Services */
     public function services()
     {

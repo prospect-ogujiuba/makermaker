@@ -27,7 +27,7 @@ class PricingTier extends Model
         'updated_by'
     ];
 
-        protected $with = [
+    protected $with = [
         'servicePrices'
     ];
 

@@ -116,7 +116,7 @@ class DeliverableController extends Controller
      */
     public function show(Deliverable $deliverable)
     {
-        return $deliverable->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $deliverable;
     }
 
     /**

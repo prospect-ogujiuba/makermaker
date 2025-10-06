@@ -35,6 +35,10 @@ class DeliveryMethod extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'services'
+    ];
+
     // Service prices using this pricing tier
     public function services()
     {

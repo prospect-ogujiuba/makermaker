@@ -7,7 +7,7 @@ use TypeRocket\Models\Model;
 class ServiceCategory extends Model
 {
     protected $resource = 'srvc_categories';
-    
+
     protected $fillable = [
         'parent_id',
         'name',
@@ -30,6 +30,12 @@ class ServiceCategory extends Model
 
     protected $format = [
         'parent_id' => 'convertEmptyToNull'
+    ];
+
+    protected $with = [
+        'services',
+        'parentCategory',
+        'childCategories',
     ];
 
     /** ServiceCategory has many Services */

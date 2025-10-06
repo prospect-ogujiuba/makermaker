@@ -108,7 +108,7 @@ class ServiceBundleController extends Controller
      */
     public function show(ServiceBundle $service_bundle)
     {
-        return $service_bundle->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_bundle;
     }
 
     /**

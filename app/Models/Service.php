@@ -50,21 +50,21 @@ class Service extends Model
         'updated_by'
     ];
 
-    // protected $with = [
-    //     'serviceType',
-    //     'category',
-    //     'complexity',
-    //     'prices',
-    //     'coverages',
-    //     'addonServices',
-    //     'parentServices',
-    //     'relatedServices',
-    //     'reverseRelatedServices',
-    //     'equipment',
-    //     'deliverables',
-    //     'deliveryMethods',
-    //     'bundles',
-    // ];
+    protected $with = [
+        'serviceType',
+        'category.parentCategory',
+        'complexity',
+        'prices.pricingTier',
+        'prices.pricingModel',
+        'coverages.coverageArea',
+        'addonServices',
+        'parentServices',
+        'relationships.relatedService',
+        'equipment',
+        'deliverables',
+        'deliveryMethods',
+        'bundles.services',
+    ];
 
     /** Service belongs to a ServiceType */
     public function serviceType()
@@ -102,10 +102,17 @@ class Service extends Model
         return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_addons', 'service_id', 'addon_service_id');
     }
 
+    
     /** Services that include THIS service as an addon */
     public function parentServices()
     {
         return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_addons', 'addon_service_id', 'service_id');
+    }
+
+    /** Service has many Service Relationships */
+    public function relationships()
+    {
+        return $this->hasMany(ServiceRelationship::class, 'service_id');
     }
 
     /** Services related to this Service (prerequisites, dependencies, etc.) */
@@ -156,118 +163,4 @@ class Service extends Model
         return $this->belongsTo(WPUser::class, 'updated_by');
     }
 
-    // Simplified attribute handling for timestamp-based metadata structure
-    public function getAttribute($key, $default = null)
-    {
-        $metadata = $this->getMetadataArray();
-
-        foreach ($metadata as $item) {
-            if (isset($item['key']) && $item['key'] === $key) {
-                return $item['value'] ?? $default;
-            }
-        }
-
-        return $default;
-    }
-
-    public function setAttribute($key, $value)
-    {
-        $metadata = $this->getMetadataArray();
-        $found = false;
-
-        // Update existing attribute
-        foreach ($metadata as $timestamp => &$item) {
-            if (isset($item['key']) && $item['key'] === $key) {
-                $item['value'] = $value;
-                $found = true;
-                break;
-            }
-        }
-
-        // Add new attribute with timestamp key
-        if (!$found) {
-            $timestamp = (string)(microtime(true) * 1000000); // microsecond timestamp
-            $metadata[$timestamp] = [
-                'key' => $key,
-                'value' => $value
-            ];
-        }
-
-        $this->metadata = json_encode($metadata);
-        return $this;
-    }
-
-    public function setAttributes(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $this->setAttribute($key, $value);
-        }
-        return $this;
-    }
-
-    public function getAttributes()
-    {
-        $metadata = $this->getMetadataArray();
-        $result = [];
-
-        foreach ($metadata as $item) {
-            if (isset($item['key'], $item['value'])) {
-                $result[$item['key']] = $item['value'];
-            }
-        }
-
-        return $result;
-    }
-
-    public function hasAttribute($key)
-    {
-        $metadata = $this->getMetadataArray();
-
-        foreach ($metadata as $item) {
-            if (isset($item['key']) && $item['key'] === $key) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function removeAttribute($key)
-    {
-        $metadata = $this->getMetadataArray();
-
-        foreach ($metadata as $timestamp => $item) {
-            if (isset($item['key']) && $item['key'] === $key) {
-                unset($metadata[$timestamp]);
-                break;
-            }
-        }
-
-        $this->metadata = json_encode($metadata);
-        return $this;
-    }
-
-    public function getAttributeTimestamps()
-    {
-        $metadata = $this->getMetadataArray();
-        $result = [];
-
-        foreach ($metadata as $timestamp => $item) {
-            if (isset($item['key'])) {
-                $result[$item['key']] = $timestamp;
-            }
-        }
-
-        return $result;
-    }
-
-    private function getMetadataArray()
-    {
-        if (empty($this->metadata)) {
-            return [];
-        }
-
-        $decoded = json_decode($this->metadata, true);
-        return is_array($decoded) ? $decoded : [];
-    }
 }

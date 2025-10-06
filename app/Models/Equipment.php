@@ -39,6 +39,10 @@ class Equipment extends Model
         'updated_by',
     ];
 
+        protected $with = [
+        'services',
+    ];
+
     public function services()
     {
         return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_equipment', 'equipment_id', 'service_id');

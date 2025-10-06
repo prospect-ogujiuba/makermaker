@@ -26,6 +26,10 @@ class CurrencyRate extends Model
         'updated_by'
     ];
 
+    protected $with = [
+        'servicePrices'
+    ];
+
     // Service prices using this pricing model
     public function servicePrices()
     {

@@ -110,7 +110,7 @@ class CoverageAreaController extends Controller
      */
     public function show(CoverageArea $coverage_area)
     {
-        return $coverage_area->with(['serviceCoverages', 'createdBy', 'updatedBy'])->get();
+        return $coverage_area;
     }
 
     /**

@@ -27,6 +27,10 @@ class Deliverable extends Model
         'updated_by',
     ];
 
+    protected $with = [
+        'services'
+    ];
+
     public function services()
     {
         return $this->belongsToMany(Service::class, GLOBAL_WPDB_PREFIX . 'srvc_service_deliverables', 'deliverable_id', 'service_id');

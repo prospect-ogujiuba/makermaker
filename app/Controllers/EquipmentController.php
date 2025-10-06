@@ -108,7 +108,7 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-        return $equipment->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $equipment;
     }
 
     /**

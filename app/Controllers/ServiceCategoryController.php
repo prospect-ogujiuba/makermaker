@@ -108,7 +108,7 @@ class ServiceCategoryController extends Controller
      */
     public function show(ServiceCategory $service_category)
     {
-        return $service_category->with(['services', 'createdBy', 'updatedBy'])->get();
+        return $service_category;
     }
 
     /**

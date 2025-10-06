@@ -103,7 +103,7 @@ class ServiceRelationshipController extends Controller
      */
     public function show(ServiceRelationship $service_relationship)
     {
-        return $service_relationship->with(['service', 'relatedService', 'createdBy', 'updatedBy'])->get();
+        return $service_relationship;
     }
 
     /**
