@@ -55,7 +55,6 @@ class ServiceBundle extends Model
     /**
      * Get all active bundles
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getActive()
     {
@@ -81,7 +80,6 @@ class ServiceBundle extends Model
      * Get bundles available on a specific date
      * 
      * @param string $date Y-m-d format
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getAvailableOnDate($date)
     {
@@ -103,7 +101,6 @@ class ServiceBundle extends Model
     /**
      * Get currently available bundles
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getCurrentlyAvailable()
     {

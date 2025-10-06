@@ -60,7 +60,6 @@ class DeliveryMethod extends Model
     /**
      * Get all active delivery methods
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getActive()
     {
@@ -86,7 +85,6 @@ class DeliveryMethod extends Model
      * Find delivery methods by type
      * 
      * @param string $type
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function findByType($type)
     {
@@ -100,7 +98,6 @@ class DeliveryMethod extends Model
     /**
      * Get digital delivery methods
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getDigital()
     {
@@ -110,7 +107,6 @@ class DeliveryMethod extends Model
     /**
      * Get physical delivery methods
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getPhysical()
     {

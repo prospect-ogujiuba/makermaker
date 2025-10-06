@@ -179,7 +179,6 @@ class ServiceRelationship extends Model
      * Get all relationships for a service (as parent)
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByParentService($serviceId)
     {
@@ -194,7 +193,6 @@ class ServiceRelationship extends Model
      * Get all relationships for a service (as related/child)
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByRelatedService($serviceId)
     {
@@ -209,7 +207,6 @@ class ServiceRelationship extends Model
      * Get all relationships for a service (both directions)
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByService($serviceId)
     {
@@ -228,7 +225,6 @@ class ServiceRelationship extends Model
      * 
      * @param int $serviceId
      * @param string $relationType
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByType($serviceId, $relationType)
     {

@@ -67,7 +67,6 @@ class ServiceAddon extends Model
     /**
      * Get all active addons
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getActive()
     {
@@ -78,7 +77,6 @@ class ServiceAddon extends Model
      * Get all addons for a service
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByService($serviceId)
     {
@@ -93,7 +91,6 @@ class ServiceAddon extends Model
      * Get active addons for a service
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getActiveByService($serviceId)
     {

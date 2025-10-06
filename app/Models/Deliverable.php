@@ -51,7 +51,6 @@ class Deliverable extends Model
     /**
      * Get all active deliverables
      * 
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getActive()
     {
@@ -77,7 +76,6 @@ class Deliverable extends Model
      * Find deliverables by type
      * 
      * @param string $type
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function findByType($type)
     {

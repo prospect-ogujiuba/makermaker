@@ -57,7 +57,6 @@ class ServiceDeliverable extends Model
      * Get all deliverables for a service
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByService($serviceId)
     {
@@ -72,7 +71,6 @@ class ServiceDeliverable extends Model
      * Get all services using a deliverable
      * 
      * @param int $deliverableId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByDeliverable($deliverableId)
     {

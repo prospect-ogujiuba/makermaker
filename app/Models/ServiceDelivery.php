@@ -67,7 +67,6 @@ class ServiceDelivery extends Model
      * Get all delivery methods for a service
      * 
      * @param int $serviceId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByService($serviceId)
     {
@@ -82,7 +81,6 @@ class ServiceDelivery extends Model
      * Get all services using a delivery method
      * 
      * @param int $deliveryMethodId
-     * @return \TypeRocket\Models\Results|static[]
      */
     public static function getByDeliveryMethod($deliveryMethodId)
     {
