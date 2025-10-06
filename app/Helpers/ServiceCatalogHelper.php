@@ -19,6 +19,10 @@ use MakerMaker\Models\Deliverable;
 use MakerMaker\Models\ServiceDeliverable;
 use MakerMaker\Models\DeliveryMethod;
 use MakerMaker\Models\ServiceDelivery;
+use MakerMaker\Models\ServiceRelationship;
+use MakerMaker\Models\ServiceAddon;
+use MakerMaker\Models\ServiceBundle;
+use MakerMaker\Models\BundleItem;
 
 /**
  * Service Catalog Helper Functions
@@ -1757,5 +1761,423 @@ class ServiceCatalogHelper
         }
 
         return $maxDays;
+    }
+
+    // ========================================================================
+    // SUBSET - Deliverable, ServiceDelivery, DeliveryMethod, ServiceDelivery
+    // ========================================================================
+
+    /**
+     * Get all related services for a given service (with relationship details)
+     * 
+     * @param int $serviceId
+     * @param string|null $relationType Filter by specific relationship type
+     * @return array
+     */
+    public static function getRelatedServices($serviceId, $relationType = null)
+    {
+        if (empty($serviceId)) {
+            return [];
+        }
+
+        $query = ServiceRelationship::new()->where('parent_service_id', $serviceId);
+
+        if (!empty($relationType)) {
+            $query->where('relationship_type', $relationType);
+        }
+
+        $relationships = $query->orderBy('priority', 'ASC')->get();
+
+        if ($relationships->isEmpty()) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($relationships as $rel) {
+            $relatedService = $rel->getRelatedService();
+
+            if ($relatedService) {
+                $result[] = [
+                    'id' => $relatedService->getID(),
+                    'name' => $relatedService->name ?? '',
+                    'relationship_type' => $rel->getType(),
+                    'formatted_type' => $rel->getFormattedType(),
+                    'is_required' => $rel->isRequired(),
+                    'is_bidirectional' => $rel->isBidirectional(),
+                    'priority' => $rel->getPriority(),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get prerequisite services for a service
+     * 
+     * @param int $serviceId
+     * @return array
+     */
+    public static function getPrerequisiteServices($serviceId)
+    {
+        return self::getRelatedServices($serviceId, 'prerequisite');
+    }
+
+    /**
+     * Get upsell services for a service
+     * 
+     * @param int $serviceId
+     * @return array
+     */
+    public static function getUpsellServices($serviceId)
+    {
+        return self::getRelatedServices($serviceId, 'upsell');
+    }
+
+    /**
+     * Get cross-sell services for a service
+     * 
+     * @param int $serviceId
+     * @return array
+     */
+    public static function getCrossSellServices($serviceId)
+    {
+        return self::getRelatedServices($serviceId, 'cross-sell');
+    }
+
+    /**
+     * Get all addons for a service with details
+     * 
+     * @param int $serviceId
+     * @param bool $activeOnly
+     * @return array
+     */
+    public static function getServiceAddons($serviceId, $activeOnly = true)
+    {
+        if (empty($serviceId)) {
+            return [];
+        }
+
+        $addons = $activeOnly
+            ? ServiceAddon::getActiveByService($serviceId)
+            : ServiceAddon::getByService($serviceId);
+
+        if ($addons->isEmpty()) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($addons as $addon) {
+            $result[] = [
+                'id' => $addon->getID(),
+                'name' => $addon->name ?? '',
+                'slug' => $addon->slug ?? '',
+                'description' => $addon->description ?? '',
+                'price' => $addon->getPrice(),
+                'formatted_price' => $addon->getFormattedPrice(),
+                'formatted_price_with_interval' => $addon->getFormattedPriceWithInterval(),
+                'is_free' => $addon->isFree(),
+                'is_recurring' => $addon->isRecurring(),
+                'recurring_interval' => $addon->getRecurringInterval(),
+                'is_required' => $addon->isRequired(),
+                'max_quantity' => $addon->getMaxQuantity(),
+                'is_unlimited' => $addon->isUnlimitedQuantity(),
+                'priority' => $addon->getPriority(),
+            ];
+        }
+
+        // Sort by priority
+        usort($result, function ($a, $b) {
+            return $a['priority'] <=> $b['priority'];
+        });
+
+        return $result;
+    }
+
+    /**
+     * Calculate total addon cost for a service configuration
+     * 
+     * @param int $serviceId
+     * @param array $addonQuantities ['addon_id' => quantity]
+     * @return float
+     */
+    public static function calculateAddonsCost($serviceId, $addonQuantities = [])
+    {
+        if (empty($serviceId) || empty($addonQuantities)) {
+            return 0;
+        }
+
+        $total = 0;
+
+        foreach ($addonQuantities as $addonId => $quantity) {
+            $addon = ServiceAddon::new()->findById($addonId);
+
+            if ($addon && $addon->service_id == $serviceId) {
+                $addonPrice = $addon->calculatePrice($quantity);
+                if ($addonPrice !== null) {
+                    $total += $addonPrice;
+                }
+            }
+        }
+
+        return $total;
+    }
+
+    /**
+     * Get all bundles containing a service
+     * 
+     * @param int $serviceId
+     * @return array
+     */
+    public static function getBundlesContainingService($serviceId)
+    {
+        if (empty($serviceId)) {
+            return [];
+        }
+
+        $bundleItems = BundleItem::getByService($serviceId);
+
+        if ($bundleItems->isEmpty()) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($bundleItems as $item) {
+            $bundle = $item->getBundle();
+
+            if ($bundle && $bundle->isCurrentlyAvailable()) {
+                $result[] = [
+                    'id' => $bundle->getID(),
+                    'name' => $bundle->name ?? '',
+                    'slug' => $bundle->slug ?? '',
+                    'description' => $bundle->description ?? '',
+                    'final_price' => $bundle->calculateFinalPrice(),
+                    'formatted_price' => $bundle->getFormattedFinalPrice(),
+                    'discount_percentage' => $bundle->getDiscountPercentage(),
+                    'formatted_discount' => $bundle->getFormattedDiscount(),
+                    'savings' => $bundle->calculateSavings(),
+                    'formatted_savings' => $bundle->getFormattedSavings(),
+                    'service_count' => $bundle->getServiceCount(),
+                    'item_quantity' => $item->getQuantity(),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get bundle details with all included services
+     * 
+     * @param int $bundleId
+     * @return array|null
+     */
+    public static function getBundleDetails($bundleId)
+    {
+        if (empty($bundleId)) {
+            return null;
+        }
+
+        $bundle = ServiceBundle::new()->findById($bundleId);
+
+        if (!$bundle) {
+            return null;
+        }
+
+        $services = $bundle->getServices();
+        $itemsTotal = $bundle->calculateItemsTotal();
+        $finalPrice = $bundle->calculateFinalPrice();
+
+        return [
+            'id' => $bundle->getID(),
+            'name' => $bundle->name ?? '',
+            'slug' => $bundle->slug ?? '',
+            'description' => $bundle->description ?? '',
+            'status' => $bundle->status ?? '',
+            'is_available' => $bundle->isCurrentlyAvailable(),
+            'services' => $services,
+            'service_count' => count($services),
+            'items_total' => $itemsTotal,
+            'formatted_items_total' => '$' . number_format($itemsTotal, 2),
+            'discount_percentage' => $bundle->getDiscountPercentage(),
+            'formatted_discount' => $bundle->getFormattedDiscount(),
+            'final_price' => $finalPrice,
+            'formatted_price' => $bundle->getFormattedFinalPrice(),
+            'savings' => $bundle->calculateSavings(),
+            'formatted_savings' => $bundle->getFormattedSavings(),
+            'start_date' => $bundle->start_date ?? null,
+            'end_date' => $bundle->end_date ?? null,
+        ];
+    }
+
+    /**
+     * Check if a service has any prerequisites
+     * 
+     * @param int $serviceId
+     * @return bool
+     */
+    public static function hasPrerequisites($serviceId)
+    {
+        if (empty($serviceId)) {
+            return false;
+        }
+
+        $prerequisite = ServiceRelationship::new()
+            ->where('parent_service_id', $serviceId)
+            ->where('relationship_type', 'prerequisite')
+            ->where('is_required', 1)
+            ->first();
+
+        return $prerequisite !== null;
+    }
+
+    /**
+     * Get all available bundles (currently active)
+     * 
+     * @return array
+     */
+    public static function getAvailableBundles()
+    {
+        $bundles = ServiceBundle::getCurrentlyAvailable();
+
+        if ($bundles->isEmpty()) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($bundles as $bundle) {
+            $result[] = [
+                'id' => $bundle->getID(),
+                'name' => $bundle->name ?? '',
+                'slug' => $bundle->slug ?? '',
+                'description' => $bundle->description ?? '',
+                'final_price' => $bundle->calculateFinalPrice(),
+                'formatted_price' => $bundle->getFormattedFinalPrice(),
+                'discount_percentage' => $bundle->getDiscountPercentage(),
+                'formatted_discount' => $bundle->getFormattedDiscount(),
+                'savings' => $bundle->calculateSavings(),
+                'formatted_savings' => $bundle->getFormattedSavings(),
+                'service_count' => $bundle->getServiceCount(),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calculate total service cost with addons and delivery
+     * 
+     * @param int $serviceId
+     * @param int|null $pricingTierId
+     * @param int|null $pricingModelId
+     * @param array $addonQuantities ['addon_id' => quantity]
+     * @param int|null $deliveryMethodId
+     * @return float|null
+     */
+    public static function calculateTotalServiceCost($serviceId, $pricingTierId = null, $pricingModelId = null, $addonQuantities = [], $deliveryMethodId = null)
+    {
+        if (empty($serviceId)) {
+            return null;
+        }
+
+        $total = 0;
+
+        // Base service price (requires both tier and model)
+        if (!empty($pricingTierId) && !empty($pricingModelId)) {
+            $servicePrice = ServicePrice::new()->getCurrentPriceFor($serviceId, $pricingTierId, $pricingModelId);
+            if ($servicePrice) {
+                $total += $servicePrice->amount ?? 0;
+                $total += $servicePrice->setup_fee ?? 0;
+            }
+        }
+
+        // Addons
+        $addonsCost = self::calculateAddonsCost($serviceId, $addonQuantities);
+        $total += $addonsCost;
+
+        // Delivery method additional cost
+        if (!empty($deliveryMethodId)) {
+            $serviceDelivery = ServiceDelivery::findRelationship($serviceId, $deliveryMethodId);
+            if ($serviceDelivery) {
+                $deliveryCost = $serviceDelivery->getTotalCost();
+                if ($deliveryCost !== null) {
+                    $total += $deliveryCost;
+                }
+            }
+        }
+
+        return $total;
+    }
+
+    /**
+     * Get formatted total service cost breakdown
+     * 
+     * @param int $serviceId
+     * @param int|null $pricingTierId
+     * @param int|null $pricingModelId
+     * @param array $addonQuantities ['addon_id' => quantity]
+     * @param int|null $deliveryMethodId
+     * @param string $currencySymbol
+     * @return array
+     */
+    public static function getServiceCostBreakdown($serviceId, $pricingTierId = null, $pricingModelId = null, $addonQuantities = [], $deliveryMethodId = null, $currencySymbol = '$')
+    {
+        if (empty($serviceId)) {
+            return [];
+        }
+
+        $breakdown = [
+            'base_price' => 0,
+            'setup_fee' => 0,
+            'addons_cost' => 0,
+            'delivery_cost' => 0,
+            'subtotal' => 0,
+            'total' => 0,
+            'currency' => null,
+            'unit' => null,
+            'formatted' => [],
+        ];
+
+        // Base service price (requires both tier and model)
+        if (!empty($pricingTierId) && !empty($pricingModelId)) {
+            $servicePrice = ServicePrice::new()->getCurrentPriceFor($serviceId, $pricingTierId, $pricingModelId);
+            if ($servicePrice) {
+                $breakdown['base_price'] = $servicePrice->amount ?? 0;
+                $breakdown['setup_fee'] = $servicePrice->setup_fee ?? 0;
+                $breakdown['currency'] = $servicePrice->currency ?? null;
+                $breakdown['unit'] = $servicePrice->unit ?? null;
+            }
+        }
+
+        // Addons
+        $breakdown['addons_cost'] = self::calculateAddonsCost($serviceId, $addonQuantities);
+
+        // Delivery
+        if (!empty($deliveryMethodId)) {
+            $serviceDelivery = ServiceDelivery::findRelationship($serviceId, $deliveryMethodId);
+            if ($serviceDelivery) {
+                $breakdown['delivery_cost'] = $serviceDelivery->getTotalCost() ?? 0;
+            }
+        }
+
+        // Calculate totals
+        $breakdown['subtotal'] = $breakdown['base_price'] + $breakdown['addons_cost'] + $breakdown['delivery_cost'];
+        $breakdown['total'] = $breakdown['subtotal'] + $breakdown['setup_fee'];
+
+        // Formatted versions
+        $breakdown['formatted'] = [
+            'base_price' => $currencySymbol . number_format($breakdown['base_price'], 2),
+            'setup_fee' => $currencySymbol . number_format($breakdown['setup_fee'], 2),
+            'addons_cost' => $currencySymbol . number_format($breakdown['addons_cost'], 2),
+            'delivery_cost' => $currencySymbol . number_format($breakdown['delivery_cost'], 2),
+            'subtotal' => $currencySymbol . number_format($breakdown['subtotal'], 2),
+            'total' => $currencySymbol . number_format($breakdown['total'], 2),
+        ];
+
+        return $breakdown;
     }
 }

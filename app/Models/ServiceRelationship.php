@@ -61,7 +61,7 @@ class ServiceRelationship extends Model
     {
         return [
             'prerequisite' => 'enables',
-            'dependency' => 'enables', 
+            'dependency' => 'enables',
             'incompatible_with' => 'incompatible_with',
             'substitute_for' => 'substitute_for',
             'complements' => 'complements',
@@ -83,20 +83,20 @@ class ServiceRelationship extends Model
     public static function findBidirectional($serviceId, $relationType = null)
     {
         $query = static::new();
-        
+
         // Find relationships where service is either the primary or related service
-        $query->where(function($q) use ($serviceId) {
+        $query->where(function ($q) use ($serviceId) {
             $q->where('service_id', $serviceId)
-              ->orWhere('related_service_id', $serviceId);
+                ->orWhere('related_service_id', $serviceId);
         });
 
         if ($relationType) {
             $inverseType = static::getInverseRelationTypes()[$relationType] ?? null;
-            
-            $query->where(function($q) use ($serviceId, $relationType, $inverseType) {
+
+            $query->where(function ($q) use ($serviceId, $relationType, $inverseType) {
                 // Direct relationship
                 $q->where('service_id', $serviceId)->where('relation_type', $relationType);
-                
+
                 // Or inverse relationship
                 if ($inverseType && $inverseType !== $relationType) {
                     $q->orWhere('related_service_id', $serviceId)->where('relation_type', $inverseType);
@@ -158,20 +158,304 @@ class ServiceRelationship extends Model
     {
         $inverseType = static::getInverseRelationTypes()[$relationType] ?? null;
 
-        $query = static::new()->where(function($q) use ($serviceId1, $serviceId2, $relationType, $inverseType) {
+        $query = static::new()->where(function ($q) use ($serviceId1, $serviceId2, $relationType, $inverseType) {
             // Direct relationship
             $q->where('service_id', $serviceId1)
-              ->where('related_service_id', $serviceId2)
-              ->where('relation_type', $relationType);
+                ->where('related_service_id', $serviceId2)
+                ->where('relation_type', $relationType);
 
             // Inverse relationship
             if ($inverseType) {
                 $q->orWhere('service_id', $serviceId2)
-                  ->where('related_service_id', $serviceId1)
-                  ->where('relation_type', $inverseType);
+                    ->where('related_service_id', $serviceId1)
+                    ->where('relation_type', $inverseType);
             }
         });
 
         return $query->first() !== null;
+    }
+
+    /**
+     * Get all relationships for a service (as parent)
+     * 
+     * @param int $serviceId
+     * @return \TypeRocket\Models\Results|static[]
+     */
+    public static function getByParentService($serviceId)
+    {
+        if (empty($serviceId)) {
+            return static::new()->where('1', '0')->get();
+        }
+
+        return static::new()->where('parent_service_id', $serviceId)->get();
+    }
+
+    /**
+     * Get all relationships for a service (as related/child)
+     * 
+     * @param int $serviceId
+     * @return \TypeRocket\Models\Results|static[]
+     */
+    public static function getByRelatedService($serviceId)
+    {
+        if (empty($serviceId)) {
+            return static::new()->where('1', '0')->get();
+        }
+
+        return static::new()->where('related_service_id', $serviceId)->get();
+    }
+
+    /**
+     * Get all relationships for a service (both directions)
+     * 
+     * @param int $serviceId
+     * @return \TypeRocket\Models\Results|static[]
+     */
+    public static function getByService($serviceId)
+    {
+        if (empty($serviceId)) {
+            return static::new()->where('1', '0')->get();
+        }
+
+        return static::new()
+            ->where('parent_service_id', $serviceId)
+            ->orWhere('related_service_id', $serviceId)
+            ->get();
+    }
+
+    /**
+     * Find relationships by type
+     * 
+     * @param int $serviceId
+     * @param string $relationType
+     * @return \TypeRocket\Models\Results|static[]
+     */
+    public static function getByType($serviceId, $relationType)
+    {
+        if (empty($serviceId) || empty($relationType)) {
+            return static::new()->where('1', '0')->get();
+        }
+
+        return static::new()
+            ->where('parent_service_id', $serviceId)
+            ->where('relationship_type', $relationType)
+            ->get();
+    }
+
+    /**
+     * Find specific relationship between two services
+     * 
+     * @param int $parentServiceId
+     * @param int $relatedServiceId
+     * @return static|null
+     */
+    public static function findRelationship($parentServiceId, $relatedServiceId)
+    {
+        if (empty($parentServiceId) || empty($relatedServiceId)) {
+            return null;
+        }
+
+        return static::new()
+            ->where('parent_service_id', $parentServiceId)
+            ->where('related_service_id', $relatedServiceId)
+            ->first();
+    }
+
+    /**
+     * Get the parent Service model
+     * 
+     * @return Service|null
+     */
+    public function getParentService()
+    {
+        if (empty($this->parent_service_id)) {
+            return null;
+        }
+
+        return Service::new()->findById($this->parent_service_id);
+    }
+
+    /**
+     * Get the related Service model
+     * 
+     * @return Service|null
+     */
+    public function getRelatedService()
+    {
+        if (empty($this->related_service_id)) {
+            return null;
+        }
+
+        return Service::new()->findById($this->related_service_id);
+    }
+
+    /**
+     * Get the relationship type
+     * 
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->relationship_type ?? '';
+    }
+
+    /**
+     * Check if relationship is prerequisite type
+     * 
+     * @return bool
+     */
+    public function isPrerequisite()
+    {
+        return strtolower($this->getType()) === 'prerequisite';
+    }
+
+    /**
+     * Check if relationship is upsell type
+     * 
+     * @return bool
+     */
+    public function isUpsell()
+    {
+        return strtolower($this->getType()) === 'upsell';
+    }
+
+    /**
+     * Check if relationship is cross-sell type
+     * 
+     * @return bool
+     */
+    public function isCrossSell()
+    {
+        return strtolower($this->getType()) === 'cross-sell';
+    }
+
+    /**
+     * Check if relationship is alternative type
+     * 
+     * @return bool
+     */
+    public function isAlternative()
+    {
+        return strtolower($this->getType()) === 'alternative';
+    }
+
+    /**
+     * Check if relationship is complement type
+     * 
+     * @return bool
+     */
+    public function isComplement()
+    {
+        return strtolower($this->getType()) === 'complement';
+    }
+
+    /**
+     * Check if relationship is required
+     * 
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return !empty($this->is_required) && (bool)$this->is_required;
+    }
+
+    /**
+     * Check if relationship is optional
+     * 
+     * @return bool
+     */
+    public function isOptional()
+    {
+        return !$this->isRequired();
+    }
+
+    /**
+     * Get relationship priority/sort order
+     * 
+     * @return int
+     */
+    public function getPriority()
+    {
+        return isset($this->priority) ? (int)$this->priority : 999;
+    }
+
+    /**
+     * Check if relationship is bidirectional
+     * 
+     * @return bool
+     */
+    public function isBidirectional()
+    {
+        return !empty($this->is_bidirectional) && (bool)$this->is_bidirectional;
+    }
+
+    /**
+     * Get the reverse relationship (if bidirectional)
+     * 
+     * @return static|null
+     */
+    public function getReverseRelationship()
+    {
+        if (!$this->isBidirectional()) {
+            return null;
+        }
+
+        return static::findRelationship($this->related_service_id, $this->parent_service_id);
+    }
+
+    /**
+     * Get formatted relationship description
+     * 
+     * @return string
+     */
+    public function getFormattedType()
+    {
+        $type = $this->getType();
+
+        $labels = [
+            'prerequisite' => 'Prerequisite',
+            'upsell' => 'Upsell',
+            'cross-sell' => 'Cross-sell',
+            'alternative' => 'Alternative',
+            'complement' => 'Complement',
+            'related' => 'Related',
+        ];
+
+        return $labels[strtolower($type)] ?? ucfirst($type);
+    }
+
+    /**
+     * Validate service relationship
+     * 
+     * @return array Array of error messages (empty if valid)
+     */
+    public function validate()
+    {
+        $errors = [];
+
+        if (empty($this->parent_service_id)) {
+            $errors[] = 'Parent service ID is required';
+        }
+
+        if (empty($this->related_service_id)) {
+            $errors[] = 'Related service ID is required';
+        }
+
+        if (!empty($this->parent_service_id) && !empty($this->related_service_id)) {
+            if ($this->parent_service_id === $this->related_service_id) {
+                $errors[] = 'A service cannot be related to itself';
+            }
+
+            $existing = static::findRelationship($this->parent_service_id, $this->related_service_id);
+            if ($existing && $existing->getID() !== $this->getID()) {
+                $errors[] = 'This service relationship already exists';
+            }
+        }
+
+        if (empty($this->relationship_type)) {
+            $errors[] = 'Relationship type is required';
+        }
+
+        return $errors;
     }
 }
