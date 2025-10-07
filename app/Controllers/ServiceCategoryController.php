@@ -166,9 +166,7 @@ class ServiceCategoryController extends Controller
     public function indexRest(Response $response)
     {
         try {
-            $service_categories = ServiceCategory::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
-                ->get();
+            $service_categories = ServiceCategory::new()->get();
 
             if (empty($service_categories)) {
                 return $response
@@ -201,9 +199,7 @@ class ServiceCategoryController extends Controller
     public function showRest(ServiceCategory $service_category, Response $response)
     {
         try {
-            $service_category = ServiceCategory::new()
-                ->with(['services', 'createdBy', 'updatedBy'])
-                ->find($service_category->getID());
+            $service_category = ServiceCategory::new()->find($service_category->getID());
 
             if (empty($service_category)) {
                 return $response
