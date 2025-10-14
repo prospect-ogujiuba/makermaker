@@ -47,11 +47,7 @@ function typerocket_plugin_makermaker()
 
     // Require additional files
     $includes = [
-        'helpers',
-        'model_inspector',
-        'smart_index',
-        'smart_form',
-        'model_debug',
+        'helpers'
     ];
 
     foreach ($includes as $include) {
