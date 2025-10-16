@@ -23,14 +23,19 @@ $tabs->tab('Overview', 'admin-settings', [
             // Add your form fields here
             $form->row()
                 ->withColumn(
-                    $form->text('name')
-                        ->setLabel('Name')
-                        ->setHelp('Enter the {{variable}} name')
+                    $form->text('title')
+                        ->setLabel('Title')
+                        ->setHelp('Enter the {{variable}} title')
                         ->setAttribute('maxlength', '255')
-                        ->setAttribute('placeholder', 'Enter name...')
+                        ->setAttribute('placeholder', 'Enter title...')
                         ->markLabelRequired()
                 )
-                ->withColumn()
+                ->withColumn(
+                    $form->textarea('description')
+                        ->setLabel('Description')
+                        ->setHelp('Detailed description of {{variable}}')
+                        ->setAttribute('placeholder', 'e.g., This is a description')
+                )
         ]
     )
 ])->setDescription('{{class}} Configuration');

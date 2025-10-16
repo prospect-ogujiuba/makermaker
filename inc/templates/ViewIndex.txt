@@ -16,12 +16,28 @@ $table->setColumns([
         'sort' => true,
         'actions' => ['edit', 'view', 'delete']
     ],
+    'title' => [
+        'label' => 'Title',
+        'sort' => true,
+    ],
+    'description' => [
+        'label' => 'Description',
+        'sort' => true,
+    ],
     'created_at' => [
         'label' => 'Created At',
         'sort' => true
     ],
     'updated_at' => [
         'label' => 'Updated At',
+        'sort' => true
+    ],
+    'created_by' => [
+        'label' => 'Created By',
+        'sort' => true
+    ],
+    'updated_by' => [
+        'label' => 'Updated By',
         'sort' => true
     ]
 ], 'id')->setOrder('id', 'DESC')->render();

@@ -143,23 +143,23 @@ class Crud extends Command
     {
         $policyName = $className . 'Policy';
         $app_path = \TypeRocket\Core\Config::get('paths.app');
-        $policyFile = $app_path . '/Policies/' . $policyName . '.php';
+        $policyFile = $app_path . '/Auth/' . $policyName . '.php';
 
         if (file_exists($policyFile) && !$force) {
             throw new \Exception("Policy file already exists: {$policyName}.php");
         }
 
-        // Create Policies directory if it doesn't exist
-        $policiesDir = $app_path . '/Policies';
-        if (!is_dir($policiesDir)) {
-            mkdir($policiesDir, 0755, true);
+        // Create Auth directory if it doesn't exist
+        $authDir = $app_path . '/Auth';
+        if (!is_dir($authDir)) {
+            mkdir($authDir, 0755, true);
         }
 
         $capability = pluralize($snakeCase);
 
         $tags = ['{{namespace}}', '{{class}}', '{{capability}}'];
         $replacements = [
-            $appNamespace . '\\Policies',
+            $appNamespace . '\\Auth',
             $policyName,
             $capability
         ];
@@ -172,7 +172,7 @@ class Crud extends Command
             throw new \Exception("Failed to generate Policy");
         }
 
-        return "app/Policies/{$policyName}.php";
+        return "app/Auth/{$policyName}.php";
     }
 
     protected function generateFields($className, $tableName, $appNamespace, $force = false)
