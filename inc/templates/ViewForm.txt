@@ -26,7 +26,7 @@ $tabs->tab('Overview', 'admin-settings', [
                     $form->text('title')
                         ->setLabel('Title')
                         ->setHelp('Enter the {{variable}} title')
-                        ->setAttribute('maxlength', '255')
+                        ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Enter title...')
                         ->markLabelRequired()
                 )
@@ -35,6 +35,7 @@ $tabs->tab('Overview', 'admin-settings', [
                         ->setLabel('Description')
                         ->setHelp('Detailed description of {{variable}}')
                         ->setAttribute('placeholder', 'e.g., This is a description')
+                        ->setAttribute('maxlength', '255')
                 )
         ]
     )

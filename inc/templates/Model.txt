@@ -11,6 +11,8 @@ class {{class}} extends Model
 
     protected $fillable = [
         // Add your fillable fields here
+        'title',
+        'description'
     ];
 
     protected $guard = [
