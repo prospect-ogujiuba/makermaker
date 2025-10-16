@@ -13,9 +13,3 @@ use MakerMaker\View;
 | after the typerocket_routes action is fired.
 |
 */
-// tr_route()->get()->match('services')->do([WebServiceController::class, 'index']);
-// tr_route()->get()->match('services/add')->do([WebServiceController::class, 'add']);
-// tr_route()->post()->match('services')->do([WebServiceController::class, 'create']);
-// tr_route()->get()->match('services/([0-9]+)')->do([WebServiceController::class, 'edit']);
-// tr_route()->put()->match('services/([0-9]+)')->do([WebServiceController::class, 'update']);
-// tr_route()->delete()->match('services/([0-9]+)')->do([WebServiceController::class, 'destroy']);

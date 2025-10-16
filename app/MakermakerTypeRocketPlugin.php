@@ -18,8 +18,9 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     public function init()
     {
 
+        // Include Resource files here (Typically Creation of custom resource and adding pages)
         $resources = [
-            'service',
+            'resource',
         ];
 
         foreach ($resources as $resource) {
@@ -70,38 +71,8 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // TODO: Add your TypeRocket policies here
         return [
-            // Core Service Management
-            '\MakerMaker\Models\Service' => '\MakerMaker\Auth\ServicePolicy',
-            '\MakerMaker\Models\ServiceCategory' => '\MakerMaker\Auth\ServiceCategoryPolicy',
-            '\MakerMaker\Models\ServiceType' => '\MakerMaker\Auth\ServiceTypePolicy',
-            '\MakerMaker\Models\ComplexityLevel' => '\MakerMaker\Auth\ComplexityLevelPolicy',
-
-            // Pricing Management
-            '\MakerMaker\Models\PricingModel' => '\MakerMaker\Auth\PricingModelPolicy',
-            '\MakerMaker\Models\PricingTier' => '\MakerMaker\Auth\PricingTierPolicy',
-            '\MakerMaker\Models\ServicePrice' => '\MakerMaker\Auth\ServicePricePolicy',
-            '\MakerMaker\Models\CurrencyRate' => '\MakerMaker\Auth\CurrencyRatePolicy',
-            '\MakerMaker\Models\PriceRecord' => '\MakerMaker\Auth\PriceRecordPolicy',
-
-            // Service Relationships & Configuration
-            '\MakerMaker\Models\ServiceAddon' => '\MakerMaker\Auth\ServiceAddonPolicy',
-            '\MakerMaker\Models\ServiceRelationship' => '\MakerMaker\Auth\ServiceRelationshipPolicy',
-
-            // Service Delivery & Operations
-            '\MakerMaker\Models\DeliveryMethod' => '\MakerMaker\Auth\DeliveryMethodPolicy',
-            '\MakerMaker\Models\ServiceDelivery' => '\MakerMaker\Auth\ServiceDeliveryPolicy',
-            '\MakerMaker\Models\CoverageArea' => '\MakerMaker\Auth\CoverageAreaPolicy',
-            '\MakerMaker\Models\ServiceCoverage' => '\MakerMaker\Auth\ServiceCoveragePolicy',
-
-            // Resources & Assets
-            '\MakerMaker\Models\Equipment' => '\MakerMaker\Auth\EquipmentPolicy',
-            '\MakerMaker\Models\ServiceEquipment' => '\MakerMaker\Auth\ServiceEquipmentPolicy',
-            '\MakerMaker\Models\Deliverable' => '\MakerMaker\Auth\DeliverablePolicy',
-            '\MakerMaker\Models\ServiceDeliverable' => '\MakerMaker\Auth\ServiceDeliverablePolicy',
-
-            // Package & Bundle Management
-            '\MakerMaker\Models\ServiceBundle' => '\MakerMaker\Auth\ServiceBundlePolicy',
-            '\MakerMaker\Models\BundleItem' => '\MakerMaker\Auth\BundleItemPolicy',
+            // Example
+            // '\MakerMaker\Models\Resource' => '\MakerMaker\Auth\ResourcePolicy',
         ];
     }
 
