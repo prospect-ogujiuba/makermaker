@@ -21,6 +21,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         // Include Resource files here (Typically Creation of custom resource and adding pages)
         $resources = [
             'resource',
+            'customer',
         ];
 
         foreach ($resources as $resource) {
@@ -73,6 +74,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         return [
             // Example
             // '\MakerMaker\Models\Resource' => '\MakerMaker\Auth\ResourcePolicy',
+            '\MakerMaker\Models\Customer' => '\MakerMaker\Auth\CustomerPolicy',
         ];
     }
 
@@ -80,9 +82,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         $this->migrateUp();
         System::updateSiteState('flush_rewrite_rules');
-
-        include MAKERMAKER_PLUGIN_DIR . 'inc/capabilities/capabilities.php';
-
 
         // TODO: Add your plugin activation code here
     }
