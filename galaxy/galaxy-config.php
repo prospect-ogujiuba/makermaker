@@ -1,7 +1,7 @@
 <?php
 // galaxy-config.php
 
-$typerocket = __DIR__ . '/wp-content/plugins/typerocket-pro-v6/typerocket';
+$typerocket = __DIR__ . '/wp-content/mu-plugins/typerocket-pro-v6/typerocket';
 define('TYPEROCKET_GALAXY_PATH', $typerocket);
 define('TYPEROCKET_CORE_CONFIG_PATH', $typerocket . '/config');
 define('TYPEROCKET_ROOT_WP', __DIR__);

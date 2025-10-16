@@ -1,6 +1,6 @@
 <?php
 $sitename = 'playground';
-$typerocket = '/var/www/html/' . $sitename . '/public/wp-content/plugins/typerocket-pro-v6/typerocket';
+$typerocket = '/var/www/html/' . $sitename . '/public/wp-content/mu-plugins/typerocket-pro-v6/typerocket';
 $overrides = '/var/www/html/' . $sitename . '/public/wp-content/plugins/makermaker';
 define('TYPEROCKET_GALAXY_MAKE_NAMESPACE', 'MakerMaker');
 define('TYPEROCKET_GALAXY_PATH', $typerocket);
