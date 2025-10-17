@@ -1,0 +1,21 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| {{class}} Resource
+|--------------------------------------------------------------------------
+|
+| This file is used to register and configure the {{singular}} resource
+| within the WordPress admin interface.
+|
+*/
+
+// Create the main resource
+${{variable}} = mm_create_custom_resource('{{class}}', '{{class}}Controller', '{{plural_title}}')
+    ->setIcon('dashicons-admin-generic')
+    ->setPosition(2);
+
+// Uncomment to add sub-pages/resources
+// ${{variable}}->addPage(
+//     mm_create_custom_resource('{{class}}Category', '{{class}}CategoryController', 'Categories')
+// );

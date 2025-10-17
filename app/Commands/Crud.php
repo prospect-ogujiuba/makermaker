@@ -10,8 +10,8 @@ class Crud extends Command
 {
     protected $command = [
         'make:crud {name} {?--force}',
-        'Generate a complete CRUD setup with Model, Controller, Policy, Fields, and Views',
-        'This command creates all necessary files for a CRUD operation including Model, Controller, Policy, Fields and basic view templates.',
+        'Generate a complete CRUD setup with Model, Controller, Policy, Fields, Views, and Resource',
+        'This command creates all necessary files for a CRUD operation including Model, Controller, Policy, Fields, basic view templates, and resource registration.',
     ];
 
     public function exec()
@@ -31,6 +31,7 @@ class Crud extends Command
         $variable = lcfirst($pascalCase);
         $pluralVariable = pluralize($variable);
         $pluralClass = $this->toPascalCase($pluralSnakeCase);
+        $pluralTitle = ucwords(str_replace('_', ' ', $pluralSnakeCase));
 
         $this->info("Generating CRUD files for: {$pascalCase}");
         $this->info("Table name: {$pluralSnakeCase}");
@@ -48,6 +49,12 @@ class Crud extends Command
             $results['fields'] = $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $force);
             $results['controller'] = $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $force);
             $results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $appNamespace, $force);
+            
+            // Generate resource file
+            $results['resource'] = $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $force);
+            
+            // Update MakermakerTypeRocketPlugin.php
+            $this->updatePluginFile($snakeCase, $pascalCase);
 
             // Summary
             $this->line('');
@@ -72,10 +79,113 @@ class Crud extends Command
             $this->line('3. Customize the generated files as needed');
             $this->line('4. Add fields to your migration, model fillable, and form view');
         } catch (\Exception $e) {
-            $this->error('Error generating CRUD: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage());
         }
     }
 
+    /**
+     * Generate Resource File
+     */
+    protected function generateResourceFile($className, $variable, $snakeCase, $pluralTitle, $force = false)
+    {
+        $resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
+
+        if (file_exists($resourceFile) && !$force) {
+            throw new \Exception("Resource file already exists: {$snakeCase}.php");
+        }
+
+        // Create resources directory if it doesn't exist
+        $resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+        if (!is_dir($resourcesDir)) {
+            mkdir($resourcesDir, 0755, true);
+        }
+
+        $tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}'];
+        $replacements = [$className, $snakeCase, $variable, $pluralTitle];
+
+        // Use the resource template
+        $template = $this->getTemplatePath('Resource.txt');
+        $file = new File($template);
+        $result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
+
+        if (!$result) {
+            throw new \Exception("Failed to generate Resource file");
+        }
+
+        return "inc/resources/{$snakeCase}.php";
+    }
+
+    /**
+     * Update MakermakerTypeRocketPlugin.php file
+     */
+    protected function updatePluginFile($snakeCase, $pascalCase)
+    {
+        $pluginFile = MAKERMAKER_PLUGIN_DIR . 'MakermakerTypeRocketPlugin.php';
+        
+        if (!file_exists($pluginFile)) {
+            throw new \Exception("Plugin file not found: MakermakerTypeRocketPlugin.php");
+        }
+
+        $content = file_get_contents($pluginFile);
+        
+        // 1. Add resource to $resources array
+        $resourcesPattern = '/\$resources\s*=\s*\[\s*([^]]*)\];/';
+        if (preg_match($resourcesPattern, $content, $matches)) {
+            $currentResources = $matches[1];
+            
+            // Check if resource already exists
+            if (strpos($currentResources, "'{$snakeCase}'") === false) {
+                // Add new resource to array
+                $newResources = rtrim($currentResources);
+                if (!empty(trim($newResources))) {
+                    $newResources .= ",\n            ";
+                }
+                $newResources .= "'{$snakeCase}',";
+                
+                $newResourcesArray = '$resources = [' . "\n            " . trim($newResources) . "\n        ];";
+                $content = preg_replace($resourcesPattern, $newResourcesArray, $content);
+                
+                $this->success("Added '{$snakeCase}' to resources array");
+            } else {
+                $this->warning("Resource '{$snakeCase}' already exists in resources array");
+            }
+        }
+
+        // 2. Add policy association
+        $policiesPattern = '/public\s+function\s+policies\(\)\s*\{[^}]*return\s+\[\s*([^]]*)\];/s';
+        if (preg_match($policiesPattern, $content, $matches)) {
+            $currentPolicies = $matches[1];
+            
+            $modelClass = '\\MakerMaker\\Models\\' . $pascalCase;
+            $policyClass = '\\MakerMaker\\Auth\\' . $pascalCase . 'Policy';
+            
+            // Check if policy already exists
+            if (strpos($currentPolicies, $modelClass) === false) {
+                // Add new policy to array
+                $newPolicies = rtrim($currentPolicies);
+                if (!empty(trim($newPolicies))) {
+                    $newPolicies .= ",\n            ";
+                }
+                $newPolicies .= "'{$modelClass}' => '{$policyClass}',";
+                
+                $newPoliciesReturn = "return [\n            " . trim($newPolicies) . "\n        ];";
+                $content = preg_replace(
+                    '/return\s+\[\s*([^]]*)\];/s',
+                    $newPoliciesReturn,
+                    $content
+                );
+                
+                $this->success("Added policy association for {$pascalCase}");
+            } else {
+                $this->warning("Policy association for {$pascalCase} already exists");
+            }
+        }
+
+        // Save the modified content
+        file_put_contents($pluginFile, $content);
+        $this->success("Updated MakermakerTypeRocketPlugin.php");
+    }
+    
     protected function generateMigration($className, $tableName, $force = false)
     {
         $migrationName = "create_{$tableName}_table";
@@ -139,7 +249,7 @@ class Crud extends Command
         return "app/Models/{$className}.php";
     }
 
-    protected function generatePolicy($className, $snakeCase, $appNamespace, $force = false)
+        protected function generatePolicy($className, $snakeCase, $appNamespace, $force = false)
     {
         $policyName = $className . 'Policy';
         $app_path = \TypeRocket\Core\Config::get('paths.app');
@@ -330,6 +440,4 @@ class Crud extends Command
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
     }
-
-
 }

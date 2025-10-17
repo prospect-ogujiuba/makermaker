@@ -20,7 +20,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
 
         // Include Resource files here (Typically Creation of custom resource and adding pages)
         $resources = [
-            'resource',
             'customer',
         ];
 
