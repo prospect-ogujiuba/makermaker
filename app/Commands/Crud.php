@@ -87,36 +87,36 @@ class Crud extends Command
 	 * Generate Resource File
 	 */
 	protected function generateResourceFile($className, $variable, $snakeCase, $pluralTitle, $force = false)
-    {
-        $resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
+	{
+		$resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
 
-        if (file_exists($resourceFile) && !$force) {
-            throw new \Exception("Resource file already exists: {$snakeCase}.php");
-        }
+		if (file_exists($resourceFile) && !$force) {
+			throw new \Exception("Resource file already exists: {$snakeCase}.php");
+		}
 
-        // Create resources directory if it doesn't exist
-        $resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
-        if (!is_dir($resourcesDir)) {
-            mkdir($resourcesDir, 0755, true);
-        }
+		// Create resources directory if it doesn't exist
+		$resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+		if (!is_dir($resourcesDir)) {
+			mkdir($resourcesDir, 0755, true);
+		}
 
-        // Generate plural snake case for capabilities
-        $pluralSnakeCase = pluralize($snakeCase);
+		// Generate plural snake case for capabilities
+		$pluralSnakeCase = pluralize($snakeCase);
 
-        $tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}', '{{plural_snake}}'];
-        $replacements = [$className, $snakeCase, $variable, $pluralTitle, $pluralSnakeCase];
+		$tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}', '{{plural_snake}}'];
+		$replacements = [$className, $snakeCase, $variable, $pluralTitle, $pluralSnakeCase];
 
-        // Use the resource template
-        $template = $this->getTemplatePath('Resource.txt');
-        $file = new File($template);
-        $result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
+		// Use the resource template
+		$template = $this->getTemplatePath('Resource.txt');
+		$file = new File($template);
+		$result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
 
-        if (!$result) {
-            throw new \Exception("Failed to generate Resource file");
-        }
+		if (!$result) {
+			throw new \Exception("Failed to generate Resource file");
+		}
 
-        return "inc/resources/{$snakeCase}.php";
-    }
+		return "inc/resources/{$snakeCase}.php";
+	}
 
 	/**
 	 * Update MakermakerTypeRocketPlugin.php file
@@ -236,6 +236,12 @@ class Crud extends Command
 	protected function generateModel($className, $tableName, $appNamespace, $force = false)
 	{
 		$app_path = \TypeRocket\Core\Config::get('paths.app');
+
+		$modelsDir = $app_path . '/Models';
+		if (!is_dir($modelsDir)) {
+			mkdir($modelsDir, 0755, true);
+		}
+
 		$modelFile = $app_path . '/Models/' . $className . '.php';
 
 		if (file_exists($modelFile) && !$force) {
@@ -300,6 +306,12 @@ class Crud extends Command
 	{
 		$fieldsName = $className . 'Fields';
 		$app_path = \TypeRocket\Core\Config::get('paths.app');
+
+		$fieldsDir = $app_path . '/Http/Fields';
+		if (!is_dir($fieldsDir)) {
+			mkdir($fieldsDir, 0755, true);
+		}
+
 		$fieldsFile = $app_path . '/Http/Fields/' . $fieldsName . '.php';
 
 		if (file_exists($fieldsFile) && !$force) {
@@ -328,6 +340,12 @@ class Crud extends Command
 	{
 		$controllerName = $className . 'Controller';
 		$app_path = \TypeRocket\Core\Config::get('paths.app');
+
+		$controllersDir = $app_path . '/Controllers';
+		if (!is_dir($controllersDir)) {
+			mkdir($controllersDir, 0755, true);
+		}
+
 		$controllerFile = $app_path . '/Controllers/' . $controllerName . '.php';
 
 		if (file_exists($controllerFile) && !$force) {
