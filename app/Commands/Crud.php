@@ -219,7 +219,7 @@ class Crud extends Command
 		$replacements = [
 			$tableName,
 			"Create {$tableName} table",
-			ucfirst($className) . ' table with audit fields'
+			ucfirst($className) . ' table'
 		];
 
 		$template = $this->getTemplatePath('Migration.txt');
