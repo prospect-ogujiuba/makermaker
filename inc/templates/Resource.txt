@@ -28,7 +28,7 @@ tr_roles()->updateRolesCapabilities('administrator', $wp_caps);
 // Create the main resource
 ${{variable}} = mm_create_custom_resource('{{class}}', '{{class}}Controller', '{{plural_title}}')
     ->setIcon('dashicons-admin-generic')
-    ->setPosition(30);
+    ->setPosition(2);
 
 // Uncomment to add sub-pages/resources
 // ${{variable}}->addPage(
