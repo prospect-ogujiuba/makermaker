@@ -87,33 +87,36 @@ class Crud extends Command
 	 * Generate Resource File
 	 */
 	protected function generateResourceFile($className, $variable, $snakeCase, $pluralTitle, $force = false)
-	{
-		$resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
+    {
+        $resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
 
-		if (file_exists($resourceFile) && !$force) {
-			throw new \Exception("Resource file already exists: {$snakeCase}.php");
-		}
+        if (file_exists($resourceFile) && !$force) {
+            throw new \Exception("Resource file already exists: {$snakeCase}.php");
+        }
 
-		// Create resources directory if it doesn't exist
-		$resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
-		if (!is_dir($resourcesDir)) {
-			mkdir($resourcesDir, 0755, true);
-		}
+        // Create resources directory if it doesn't exist
+        $resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+        if (!is_dir($resourcesDir)) {
+            mkdir($resourcesDir, 0755, true);
+        }
 
-		$tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}'];
-		$replacements = [$className, $snakeCase, $variable, $pluralTitle];
+        // Generate plural snake case for capabilities
+        $pluralSnakeCase = pluralize($snakeCase);
 
-		// Use the resource template
-		$template = $this->getTemplatePath('Resource.txt');
-		$file = new File($template);
-		$result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
+        $tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}', '{{plural_snake}}'];
+        $replacements = [$className, $snakeCase, $variable, $pluralTitle, $pluralSnakeCase];
 
-		if (!$result) {
-			throw new \Exception("Failed to generate Resource file");
-		}
+        // Use the resource template
+        $template = $this->getTemplatePath('Resource.txt');
+        $file = new File($template);
+        $result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
 
-		return "inc/resources/{$snakeCase}.php";
-	}
+        if (!$result) {
+            throw new \Exception("Failed to generate Resource file");
+        }
+
+        return "inc/resources/{$snakeCase}.php";
+    }
 
 	/**
 	 * Update MakermakerTypeRocketPlugin.php file

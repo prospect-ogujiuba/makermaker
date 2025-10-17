@@ -10,6 +10,18 @@
 |
 */
 
+// Define WordPress capabilities for this resource
+$wp_caps = [
+    'manage_{{plural_snake}}',
+    'edit_{{plural_snake}}',
+    'delete_{{plural_snake}}',
+    'view_{{plural_snake}}',
+    'publish_{{plural_snake}}',
+];
+
+// Grant capabilities to administrator role
+tr_roles()->updateRolesCapabilities('administrator', $wp_caps);
+
 // Create the main resource
 ${{variable}} = mm_create_custom_resource('{{class}}', '{{class}}Controller', '{{plural_title}}')
     ->setIcon('dashicons-admin-generic')
