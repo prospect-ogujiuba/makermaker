@@ -20,7 +20,6 @@ class MakermakerTypeRocketPlugin extends BasePlugin
 
         // Include Resource files here (Typically Creation of custom resource and adding pages)
         $resources = [
-            'customer',
         ];
 
         foreach ($resources as $resource) {
@@ -71,9 +70,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
     {
         // TODO: Add your TypeRocket policies here
         return [
-            // Example
-            // '\MakerMaker\Models\Resource' => '\MakerMaker\Auth\ResourcePolicy',
-            '\MakerMaker\Models\Customer' => '\MakerMaker\Auth\CustomerPolicy',
+
         ];
     }
 
