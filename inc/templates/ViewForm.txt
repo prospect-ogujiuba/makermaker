@@ -39,7 +39,7 @@ $tabs->tab('Overview', 'admin-settings', [
                 )
         ]
     )
-])->setDescription('{{class}} Configuration');
+])->setDescription('{{class}}');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
