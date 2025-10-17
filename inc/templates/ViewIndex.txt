@@ -32,11 +32,11 @@ $table->setColumns([
         'label' => 'Updated At',
         'sort' => true
     ],
-    'created_by' => [
+    'createdBy.display_name' => [
         'label' => 'Created By',
         'sort' => true
     ],
-    'updated_by' => [
+    'updatedBy.display_name' => [
         'label' => 'Updated By',
         'sort' => true
     ]
