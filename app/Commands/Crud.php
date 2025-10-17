@@ -120,7 +120,7 @@ class Crud extends Command
 	 */
 	protected function updatePluginFile($snakeCase, $pascalCase)
 	{
-		$pluginFile = MAKERMAKER_PLUGIN_DIR . 'MakermakerTypeRocketPlugin.php';
+		$pluginFile = MAKERMAKER_PLUGIN_DIR . 'app/MakermakerTypeRocketPlugin.php';
 
 		if (!file_exists($pluginFile)) {
 			throw new \Exception("Plugin file not found: MakermakerTypeRocketPlugin.php");
