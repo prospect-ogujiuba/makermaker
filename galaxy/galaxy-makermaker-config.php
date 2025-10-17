@@ -4,7 +4,7 @@ $typerocket = '/var/www/html/' . $sitename . '/public/wp-content/mu-plugins/type
 $overrides = '/var/www/html/' . $sitename . '/public/wp-content/plugins/makermaker';
 define('TYPEROCKET_GALAXY_MAKE_NAMESPACE', 'MakerMaker');
 define('TYPEROCKET_GALAXY_PATH', $typerocket);
-define('TYPEROCKET_CORE_CONFIG_PATH', $typerocket . '/config');
+define('TYPEROCKET_CORE_CONFIG_PATH', $overrides . '/config');
 define('TYPEROCKET_ROOT_WP', '/var/www/html/' . $sitename . '/public/');
 
 define('TYPEROCKET_APP_ROOT_PATH', $overrides);
