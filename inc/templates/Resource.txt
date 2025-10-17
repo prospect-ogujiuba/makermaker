@@ -22,10 +22,13 @@ $wp_caps = [
 // Grant capabilities to administrator role
 tr_roles()->updateRolesCapabilities('administrator', $wp_caps);
 
+// Uncomment to remove capabilities from a role
+// tr_roles()->removeRolesCapabilities('administrator', $wp_caps);
+
 // Create the main resource
 ${{variable}} = mm_create_custom_resource('{{class}}', '{{class}}Controller', '{{plural_title}}')
     ->setIcon('dashicons-admin-generic')
-    ->setPosition(2);
+    ->setPosition(30);
 
 // Uncomment to add sub-pages/resources
 // ${{variable}}->addPage(
