@@ -61,7 +61,19 @@ function mm_kebab(string $s, string $separator = '_'): string
     return trim($k, $sep);
 }
 
-
+function toTitleCase($string)
+{
+	// Convert PascalCase to Title Case with spaces
+	// TicketStatus becomes "Ticket Status"
+	// Only process if string is in PascalCase format (no underscores, no spaces)
+	if (strpos($string, '_') !== false || strpos($string, ' ') !== false) {
+		// Already has separators, just return ucwords
+		return ucwords(str_replace('_', ' ', $string));
+	}
+	
+	$result = preg_replace('/(?<!^)([A-Z])/', ' $1', $string);
+	return trim($result);
+}
 
 // Create TypeRocket resource page + REST endpoint
 function mm_create_custom_resource(

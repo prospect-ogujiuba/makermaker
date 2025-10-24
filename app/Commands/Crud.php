@@ -33,6 +33,9 @@ class Crud extends Command
 		$pluralClass = $this->toPascalCase($pluralSnakeCase);
 		$pluralTitle = ucwords(str_replace('_', ' ', $pluralSnakeCase));
 
+		$titleCase = toTitleCase($pascalCase);
+		$pluralTitleCase = toTitleCase($pluralClass);
+
 		$this->info("Generating CRUD files for: {$pascalCase}");
 		$this->info("Table name: {$pluralSnakeCase}");
 
@@ -48,7 +51,7 @@ class Crud extends Command
 			$results['policy'] = $this->generatePolicy($pascalCase, $snakeCase, $appNamespace, $force);
 			$results['fields'] = $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $force);
 			$results['controller'] = $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $force);
-			$results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $appNamespace, $force);
+			$results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $force);
 
 			// Generate resource file
 			$results['resource'] = $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $force);
@@ -138,14 +141,24 @@ class Crud extends Command
 
 			// Check if resource already exists
 			if (strpos($currentResources, "'{$snakeCase}'") === false) {
-				// Add new resource to array
-				$newResources = rtrim($currentResources);
-				if (!empty(trim($newResources))) {
-					$newResources .= ",\n            ";
-				}
-				$newResources .= "'{$snakeCase}'";
+				// Trim and prepare the resources array content
+				$resourcesArray = trim($currentResources);
 
-				$newResourcesArray = '$resources = [' . "\n            " . trim($newResources) . "\n        ];";
+				// Add comma if content exists and doesn't already end with a comma
+				if (!empty($resourcesArray) && !str_ends_with(trim($resourcesArray), ',')) {
+					$resourcesArray .= ",";
+				}
+
+				// Add newline and indentation if there's existing content
+				if (!empty($resourcesArray)) {
+					$resourcesArray .= "\n            ";
+				}
+
+				// Add the new resource
+				$resourcesArray .= "'{$snakeCase}'";
+
+				// Rebuild the complete resources assignment
+				$newResourcesArray = '$resources = [' . "\n            " . $resourcesArray . "\n        ];";
 				$content = preg_replace($resourcesPattern, $newResourcesArray, $content);
 
 				$this->success("Added '{$snakeCase}' to resources array");
@@ -384,67 +397,71 @@ class Crud extends Command
 		return "app/Controllers/{$controllerName}.php";
 	}
 
-	protected function generateViews($viewPath, $className, $pluralClass, $variable, $appNamespace, $force = false)
-	{
-		// Use the plugin's defined view path
-		$pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')
-			? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH
-			: __DIR__ . '/../../resources/views';
+	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $force = false)
+{
+	// Use the plugin's defined view path
+	$pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')
+		? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH
+		: __DIR__ . '/../../resources/views';
 
-		$viewsDir = "{$pluginViewsPath}/{$viewPath}";
+	$viewsDir = "{$pluginViewsPath}/{$viewPath}";
 
-		// Create directory if it doesn't exist
-		if (!is_dir($viewsDir)) {
-			mkdir($viewsDir, 0755, true);
-		}
-
-		$indexFile = "{$viewsDir}/index.php";
-		$formFile = "{$viewsDir}/form.php";
-
-		$generatedFiles = [];
-
-		// Generate index view
-		if (!file_exists($indexFile) || $force) {
-			$tags = ['{{class}}', '{{app_namespace}}'];
-			$replacements = [$className, $appNamespace];
-
-			$template = $this->getTemplatePath('ViewIndex.txt');
-			$file = new File($template);
-			$result = $file->copyTemplateFile($indexFile, $tags, $replacements);
-
-			if (!$result) {
-				throw new \Exception("Failed to generate Index view");
-			}
-			$generatedFiles[] = "resources/views/{$viewPath}/index.php";
-		}
-
-		// Generate form view
-		if (!file_exists($formFile) || $force) {
-			$tags = [
-				'{{class}}',
-				'{{plural_class}}',
-				'{{variable}}',
-				'{{app_namespace}}'
-			];
-			$replacements = [
-				$className,
-				$pluralClass,
-				$variable,
-				$appNamespace
-			];
-
-			$template = $this->getTemplatePath('ViewForm.txt');
-			$file = new File($template);
-			$result = $file->copyTemplateFile($formFile, $tags, $replacements);
-
-			if (!$result) {
-				throw new \Exception("Failed to generate Form view");
-			}
-			$generatedFiles[] = "resources/views/{$viewPath}/form.php";
-		}
-
-		return $generatedFiles;
+	// Create directory if it doesn't exist
+	if (!is_dir($viewsDir)) {
+		mkdir($viewsDir, 0755, true);
 	}
+
+	$indexFile = "{$viewsDir}/index.php";
+	$formFile = "{$viewsDir}/form.php";
+
+	$generatedFiles = [];
+
+	// Generate index view
+	if (!file_exists($indexFile) || $force) {
+		$tags = ['{{class}}', '{{app_namespace}}', '{{title_class}}'];
+		$replacements = [$className, $appNamespace, $titleCase];
+
+		$template = $this->getTemplatePath('ViewIndex.txt');
+		$file = new File($template);
+		$result = $file->copyTemplateFile($indexFile, $tags, $replacements);
+
+		if (!$result) {
+			throw new \Exception("Failed to generate Index view");
+		}
+		$generatedFiles[] = "resources/views/{$viewPath}/index.php";
+	}
+
+	// Generate form view
+	if (!file_exists($formFile) || $force) {
+		$tags = [
+			'{{class}}',
+			'{{plural_class}}',
+			'{{variable}}',
+			'{{app_namespace}}',
+			'{{title_class}}',
+			'{{title_plural}}'
+		];
+		$replacements = [
+			$className,
+			$pluralClass,
+			$variable,
+			$appNamespace,
+			$titleCase,
+			$pluralTitleCase
+		];
+
+		$template = $this->getTemplatePath('ViewForm.txt');
+		$file = new File($template);
+		$result = $file->copyTemplateFile($formFile, $tags, $replacements);
+
+		if (!$result) {
+			throw new \Exception("Failed to generate Form view");
+		}
+		$generatedFiles[] = "resources/views/{$viewPath}/form.php";
+	}
+
+	return $generatedFiles;
+}
 
 	protected function getTemplatePath($templateName)
 	{
