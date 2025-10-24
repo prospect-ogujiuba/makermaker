@@ -7,7 +7,7 @@
 // Form instance
 echo $form->open();
 
-echo to_resource('{{class}}', 'index', 'Back To {{plural_class}}');
+echo to_resource('{{class}}', 'index', 'Back To {{title_plural}}');
 
 // Tab Layout
 $tabs = tr_tabs()
@@ -17,15 +17,15 @@ $tabs = tr_tabs()
 // Main Tab
 $tabs->tab('Overview', 'admin-settings', [
     $form->fieldset(
-        '{{class}} Information',
-        'Core {{variable}} details',
+        '{{title_class}} Information',
+        'Core {{title_class}} details',
         [
             // Add your form fields here
             $form->row()
                 ->withColumn(
                     $form->text('title')
                         ->setLabel('Title')
-                        ->setHelp('Enter the {{variable}} title')
+                        ->setHelp('Enter the {{title_class}} title')
                         ->setAttribute('maxlength', '64')
                         ->setAttribute('placeholder', 'Enter title...')
                         ->markLabelRequired()
@@ -33,13 +33,13 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->withColumn(
                     $form->textarea('description')
                         ->setLabel('Description')
-                        ->setHelp('Detailed description of {{variable}}')
+                        ->setHelp('Detailed description of {{title_class}}')
                         ->setAttribute('placeholder', 'e.g., This is a description')
                         ->setAttribute('maxlength', '255')
                 )
         ]
     )
-])->setDescription('{{class}}');
+])->setDescription('{{title_class}}');
 
 // Conditional System Info Tab
 if (isset($current_id)) {
