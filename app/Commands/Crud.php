@@ -4,23 +4,31 @@ namespace MakerMaker\Commands;
 
 use TypeRocket\Console\Command;
 use TypeRocket\Utility\File;
-use TypeRocket\Utility\Str;
 
 class Crud extends Command
 {
 	protected $command = [
-		'make:crud {name} {?--force}',
+		'make:crud {name} {?--module=} {?--template=standard} {?--force}',
 		'Generate a complete CRUD setup with Model, Controller, Policy, Fields, Views, and Resource',
-		'This command creates all necessary files for a CRUD operation including Model, Controller, Policy, Fields, basic view templates, and resource registration.',
+		'Options: --module=shop, --template=simple|standard|api-ready',
 	];
 
 	public function exec()
 	{
 		$name = $this->getArgument('name');
+		$module = $this->getOption('module');
+		$template = $this->getOption('template') ?: 'standard';
 		$force = $this->getOption('force');
 
 		if (!$name) {
 			$this->error('Name argument is required');
+			return;
+		}
+
+		// Validate template option
+		$validTemplates = ['simple', 'standard', 'api-ready'];
+		if (!in_array($template, $validTemplates)) {
+			$this->error("Invalid template: {$template}. Valid options: " . implode(', ', $validTemplates));
 			return;
 		}
 
@@ -37,27 +45,40 @@ class Crud extends Command
 		$pluralTitleCase = toTitleCase($pluralClass);
 
 		$this->info("Generating CRUD files for: {$pascalCase}");
+		$this->info("Template variant: {$template}");
 		$this->info("Table name: {$pluralSnakeCase}");
 
-		// Get namespace from config
-		$appNamespace = $this->getGalaxyMakeNamespace();
+		// Determine base paths based on module flag
+		if ($module) {
+			$base_path = MAKERMAKER_PLUGIN_DIR . "modules/{$module}";
+			$this->info("Module: {$module}");
+			$this->ensureModuleStructure($base_path, $module);
+			$appNamespace = 'MakerMaker\\Modules\\' . $this->toPascalCase($module);
+		} else {
+			$base_path = MAKERMAKER_PLUGIN_DIR . 'app';
+			$appNamespace = $this->getGalaxyMakeNamespace();
+		}
 
 		// Generate each component
 		$results = [];
 
 		try {
-			$results['migration'] = $this->generateMigration($pascalCase, $pluralSnakeCase, $force);
-			$results['model'] = $this->generateModel($pascalCase, $pluralSnakeCase, $appNamespace, $force);
-			$results['policy'] = $this->generatePolicy($pascalCase, $snakeCase, $appNamespace, $force);
-			$results['fields'] = $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $force);
-			$results['controller'] = $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $force);
-			$results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $force);
+			$results['migration'] = $this->generateMigration($pascalCase, $pluralSnakeCase, $force, $template);
+			$results['model'] = $this->generateModel($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
+			$results['policy'] = $this->generatePolicy($pascalCase, $snakeCase, $appNamespace, $base_path, $force, $template);
+			$results['fields'] = $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
+			$results['controller'] = $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
+			$results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module, $force, $template);
 
 			// Generate resource file
-			$results['resource'] = $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $force);
+			$results['resource'] = $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $module, $force, $template);
 
-			// Update MakermakerTypeRocketPlugin.php
-			$this->updatePluginFile($snakeCase, $pascalCase);
+			// Update plugin file or module metadata
+			if ($module) {
+				$this->updateModuleMetadata($module, $pascalCase, $snakeCase);
+			} else {
+				$this->updatePluginFile($snakeCase, $pascalCase);
+			}
 
 			// Summary
 			$this->line('');
@@ -76,29 +97,82 @@ class Crud extends Command
 			}
 
 			$this->line('');
+			$this->info('Template variant: ' . $template);
+			if ($module) {
+				$this->info('Module: ' . $module);
+			}
+			$this->line('');
 			$this->info('Next steps:');
-			$this->line('1. Add routes for your controller in your routes file');
-			$this->line('2. Run migrations: php galaxy migrate:up');
-			$this->line('3. Customize the generated files as needed');
-			$this->line('4. Add fields to your migration, model fillable, and form view');
+			$this->line('1. Run migrations: php galaxy migrate:up');
+			$this->line('2. Customize the generated files as needed');
+			$this->line('3. Add fields to your migration, model fillable, and form view');
+			
+			if ($template === 'api-ready') {
+				$this->line('4. Configure REST routes in your routes file');
+			}
 		} catch (\Exception $e) {
 			$this->error('Error: ' . $e->getMessage());
 		}
 	}
 
 	/**
+	 * Ensure module directory structure exists
+	 */
+	protected function ensureModuleStructure($path, $module)
+	{
+		$dirs = ['Controllers', 'Models', 'Auth', 'Http/Fields', 'resources'];
+		foreach ($dirs as $dir) {
+			$full_path = "{$path}/{$dir}";
+			if (!is_dir($full_path)) {
+				mkdir($full_path, 0755, true);
+				$this->info("Created directory: modules/{$module}/{$dir}");
+			}
+		}
+	}
+
+	/**
+	 * Update module metadata file
+	 */
+	protected function updateModuleMetadata($module, $pascalCase, $snakeCase)
+	{
+		$metadataFile = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/module.json";
+		
+		$metadata = file_exists($metadataFile) 
+			? json_decode(file_get_contents($metadataFile), true)
+			: ['name' => $module, 'resources' => [], 'policies' => []];
+
+		// Add resource if not exists
+		if (!in_array($snakeCase, $metadata['resources'])) {
+			$metadata['resources'][] = $snakeCase;
+		}
+
+		// Add policy if not exists
+		$modelClass = "\\MakerMaker\\Modules\\" . $this->toPascalCase($module) . "\\Models\\{$pascalCase}";
+		$policyClass = "\\MakerMaker\\Modules\\" . $this->toPascalCase($module) . "\\Auth\\{$pascalCase}Policy";
+		$metadata['policies'][$modelClass] = $policyClass;
+
+		file_put_contents($metadataFile, json_encode($metadata, JSON_PRETTY_PRINT));
+		$this->success("Updated module metadata: modules/{$module}/module.json");
+	}
+
+	/**
 	 * Generate Resource File
 	 */
-	protected function generateResourceFile($className, $variable, $snakeCase, $pluralTitle, $force = false)
+	protected function generateResourceFile($className, $variable, $snakeCase, $pluralTitle, $module = null, $force = false, $template = 'standard')
 	{
-		$resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
+		if ($module) {
+			$resourceFile = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/resources/{$snakeCase}.php";
+			$resourcesDir = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/resources";
+		} else {
+			$resourceFile = MAKERMAKER_PLUGIN_DIR . 'inc/resources/' . $snakeCase . '.php';
+			$resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+		}
 
 		if (file_exists($resourceFile) && !$force) {
 			throw new \Exception("Resource file already exists: {$snakeCase}.php");
 		}
 
 		// Create resources directory if it doesn't exist
-		$resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
 		if (!is_dir($resourcesDir)) {
 			mkdir($resourcesDir, 0755, true);
 		}
@@ -110,15 +184,17 @@ class Crud extends Command
 		$replacements = [$className, $snakeCase, $variable, $pluralTitle, $pluralSnakeCase];
 
 		// Use the resource template
-		$template = $this->getTemplatePath('Resource.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Resource.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
 
 		if (!$result) {
 			throw new \Exception("Failed to generate Resource file");
 		}
 
-		return "inc/resources/{$snakeCase}.php";
+		return $module 
+			? "modules/{$module}/resources/{$snakeCase}.php"
+			: "inc/resources/{$snakeCase}.php";
 	}
 
 	/**
@@ -210,7 +286,7 @@ class Crud extends Command
 		$this->success("Updated MakermakerTypeRocketPlugin.php");
 	}
 
-	protected function generateMigration($className, $tableName, $force = false)
+	protected function generateMigration($className, $tableName, $force = false, $template = 'standard')
 	{
 		$migrationName = "create_{$tableName}_table";
 		$timestamp = time();
@@ -235,8 +311,8 @@ class Crud extends Command
 			ucfirst($className) . ' table'
 		];
 
-		$template = $this->getTemplatePath('Migration.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Migration.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($migrationFile, $tags, $replacements);
 
 		if (!$result) {
@@ -246,16 +322,14 @@ class Crud extends Command
 		return "database/migrations/{$fileName}";
 	}
 
-	protected function generateModel($className, $tableName, $appNamespace, $force = false)
+	protected function generateModel($className, $tableName, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
-		$app_path = \TypeRocket\Core\Config::get('paths.app');
-
-		$modelsDir = $app_path . '/Models';
+		$modelsDir = $basePath . '/Models';
 		if (!is_dir($modelsDir)) {
 			mkdir($modelsDir, 0755, true);
 		}
 
-		$modelFile = $app_path . '/Models/' . $className . '.php';
+		$modelFile = $modelsDir . '/' . $className . '.php';
 
 		if (file_exists($modelFile) && !$force) {
 			throw new \Exception("Model file already exists: {$className}.php");
@@ -268,31 +342,31 @@ class Crud extends Command
 			$tableName
 		];
 
-		$template = $this->getTemplatePath('Model.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Model.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($modelFile, $tags, $replacements);
 
 		if (!$result) {
 			throw new \Exception("Failed to generate Model");
 		}
 
-		return "app/Models/{$className}.php";
+		$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $modelFile);
+		return ltrim($relativePath, '/');
 	}
 
-	protected function generatePolicy($className, $snakeCase, $appNamespace, $force = false)
+	protected function generatePolicy($className, $snakeCase, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$policyName = $className . 'Policy';
-		$app_path = \TypeRocket\Core\Config::get('paths.app');
-		$policyFile = $app_path . '/Auth/' . $policyName . '.php';
+		$authDir = $basePath . '/Auth';
+		
+		if (!is_dir($authDir)) {
+			mkdir($authDir, 0755, true);
+		}
+
+		$policyFile = $authDir . '/' . $policyName . '.php';
 
 		if (file_exists($policyFile) && !$force) {
 			throw new \Exception("Policy file already exists: {$policyName}.php");
-		}
-
-		// Create Auth directory if it doesn't exist
-		$authDir = $app_path . '/Auth';
-		if (!is_dir($authDir)) {
-			mkdir($authDir, 0755, true);
 		}
 
 		$capability = pluralize($snakeCase);
@@ -304,28 +378,28 @@ class Crud extends Command
 			$capability
 		];
 
-		$template = $this->getTemplatePath('Policy.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Policy.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($policyFile, $tags, $replacements);
 
 		if (!$result) {
 			throw new \Exception("Failed to generate Policy");
 		}
 
-		return "app/Auth/{$policyName}.php";
+		$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $policyFile);
+		return ltrim($relativePath, '/');
 	}
 
-	protected function generateFields($className, $tableName, $appNamespace, $force = false)
+	protected function generateFields($className, $tableName, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$fieldsName = $className . 'Fields';
-		$app_path = \TypeRocket\Core\Config::get('paths.app');
-
-		$fieldsDir = $app_path . '/Http/Fields';
+		$fieldsDir = $basePath . '/Http/Fields';
+		
 		if (!is_dir($fieldsDir)) {
 			mkdir($fieldsDir, 0755, true);
 		}
 
-		$fieldsFile = $app_path . '/Http/Fields/' . $fieldsName . '.php';
+		$fieldsFile = $fieldsDir . '/' . $fieldsName . '.php';
 
 		if (file_exists($fieldsFile) && !$force) {
 			throw new \Exception("Fields file already exists: {$fieldsName}.php");
@@ -338,28 +412,28 @@ class Crud extends Command
 			$tableName
 		];
 
-		$template = $this->getTemplatePath('Fields.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Fields.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($fieldsFile, $tags, $replacements);
 
 		if (!$result) {
 			throw new \Exception("Failed to generate Fields");
 		}
 
-		return "app/Http/Fields/{$fieldsName}.php";
+		$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $fieldsFile);
+		return ltrim($relativePath, '/');
 	}
 
-	protected function generateController($className, $variable, $pluralVariable, $viewPath, $appNamespace, $force = false)
+	protected function generateController($className, $variable, $pluralVariable, $viewPath, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$controllerName = $className . 'Controller';
-		$app_path = \TypeRocket\Core\Config::get('paths.app');
-
-		$controllersDir = $app_path . '/Controllers';
+		$controllersDir = $basePath . '/Controllers';
+		
 		if (!is_dir($controllersDir)) {
 			mkdir($controllersDir, 0755, true);
 		}
 
-		$controllerFile = $app_path . '/Controllers/' . $controllerName . '.php';
+		$controllerFile = $controllersDir . '/' . $controllerName . '.php';
 
 		if (file_exists($controllerFile) && !$force) {
 			throw new \Exception("Controller file already exists: {$controllerName}.php");
@@ -386,95 +460,105 @@ class Crud extends Command
 			$appNamespace
 		];
 
-		$template = $this->getTemplatePath('Controller.txt');
-		$file = new File($template);
+		$templatePath = $this->getTemplatePath('Controller.txt', $template);
+		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($controllerFile, $tags, $replacements);
 
 		if (!$result) {
 			throw new \Exception("Failed to generate Controller");
 		}
 
-		return "app/Controllers/{$controllerName}.php";
+		$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $controllerFile);
+		return ltrim($relativePath, '/');
 	}
 
-	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $force = false)
-{
-	// Use the plugin's defined view path
-	$pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')
-		? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH
-		: __DIR__ . '/../../resources/views';
-
-	$viewsDir = "{$pluginViewsPath}/{$viewPath}";
-
-	// Create directory if it doesn't exist
-	if (!is_dir($viewsDir)) {
-		mkdir($viewsDir, 0755, true);
-	}
-
-	$indexFile = "{$viewsDir}/index.php";
-	$formFile = "{$viewsDir}/form.php";
-
-	$generatedFiles = [];
-
-	// Generate index view
-	if (!file_exists($indexFile) || $force) {
-		$tags = ['{{class}}', '{{app_namespace}}', '{{title_class}}'];
-		$replacements = [$className, $appNamespace, $titleCase];
-
-		$template = $this->getTemplatePath('ViewIndex.txt');
-		$file = new File($template);
-		$result = $file->copyTemplateFile($indexFile, $tags, $replacements);
-
-		if (!$result) {
-			throw new \Exception("Failed to generate Index view");
-		}
-		$generatedFiles[] = "resources/views/{$viewPath}/index.php";
-	}
-
-	// Generate form view
-	if (!file_exists($formFile) || $force) {
-		$tags = [
-			'{{class}}',
-			'{{plural_class}}',
-			'{{variable}}',
-			'{{app_namespace}}',
-			'{{title_class}}',
-			'{{title_plural}}'
-		];
-		$replacements = [
-			$className,
-			$pluralClass,
-			$variable,
-			$appNamespace,
-			$titleCase,
-			$pluralTitleCase
-		];
-
-		$template = $this->getTemplatePath('ViewForm.txt');
-		$file = new File($template);
-		$result = $file->copyTemplateFile($formFile, $tags, $replacements);
-
-		if (!$result) {
-			throw new \Exception("Failed to generate Form view");
-		}
-		$generatedFiles[] = "resources/views/{$viewPath}/form.php";
-	}
-
-	return $generatedFiles;
-}
-
-	protected function getTemplatePath($templateName)
+	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module = null, $force = false, $template = 'standard')
 	{
-		// Check if running from plugin context
-		$pluginTemplatePath = defined('MAKERMAKER_PLUGIN_DIR')
-			? MAKERMAKER_PLUGIN_DIR . '/inc/templates/' . $templateName
-			: __DIR__ . '/../../inc/templates/' . $templateName;
-
-		if (file_exists($pluginTemplatePath)) {
-			return $pluginTemplatePath;
+		// Determine views directory based on module
+		if ($module) {
+			$viewsDir = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/resources/views/{$viewPath}";
+		} else {
+			$pluginViewsPath = defined('TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH')
+				? TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH
+				: MAKERMAKER_PLUGIN_DIR . '/resources/views';
+			$viewsDir = "{$pluginViewsPath}/{$viewPath}";
 		}
 
-		throw new \Exception("Template file not found: {$templateName}");
+		// Create directory if it doesn't exist
+		if (!is_dir($viewsDir)) {
+			mkdir($viewsDir, 0755, true);
+		}
+
+		$indexFile = "{$viewsDir}/index.php";
+		$formFile = "{$viewsDir}/form.php";
+
+		$generatedFiles = [];
+
+		// Generate index view
+		if (!file_exists($indexFile) || $force) {
+			$tags = ['{{class}}', '{{app_namespace}}', '{{title_class}}'];
+			$replacements = [$className, $appNamespace, $titleCase];
+
+			$templatePath = $this->getTemplatePath('ViewIndex.txt', $template);
+			$file = new File($templatePath);
+			$result = $file->copyTemplateFile($indexFile, $tags, $replacements);
+
+			if (!$result) {
+				throw new \Exception("Failed to generate Index view");
+			}
+			
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $indexFile);
+			$generatedFiles[] = ltrim($relativePath, '/');
+		}
+
+		// Generate form view
+		if (!file_exists($formFile) || $force) {
+			$tags = [
+				'{{class}}',
+				'{{plural_class}}',
+				'{{variable}}',
+				'{{app_namespace}}',
+				'{{title_class}}',
+				'{{title_plural}}'
+			];
+			$replacements = [
+				$className,
+				$pluralClass,
+				$variable,
+				$appNamespace,
+				$titleCase,
+				$pluralTitleCase
+			];
+
+			$templatePath = $this->getTemplatePath('ViewForm.txt', $template);
+			$file = new File($templatePath);
+			$result = $file->copyTemplateFile($formFile, $tags, $replacements);
+
+			if (!$result) {
+				throw new \Exception("Failed to generate Form view");
+			}
+			
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $formFile);
+			$generatedFiles[] = ltrim($relativePath, '/');
+		}
+
+		return $generatedFiles;
+	}
+
+	protected function getTemplatePath($templateName, $variant = 'standard')
+	{
+		$template_path = MAKERMAKER_PLUGIN_DIR . "inc/templates/{$variant}/{$templateName}";
+
+		if (!file_exists($template_path)) {
+			// Fallback to standard
+			$template_path = MAKERMAKER_PLUGIN_DIR . "inc/templates/standard/{$templateName}";
+		}
+
+		if (!file_exists($template_path)) {
+			throw new \Exception("Template not found: {$templateName}");
+		}
+
+		return $template_path;
 	}
 
 	protected function toPascalCase($string)
