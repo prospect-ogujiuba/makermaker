@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Makermaker
-Version: 1.0
-Description: Boilerplate TypeRocket Plugin.
+Plugin Name: Maker Maker
+Version: 0.1.0
+Description: Scaffold CRUD Applications and Advanced Custom Resources
 Author: TypeRocket Galaxy CLI
 License: GPLv2 or later
 */
