@@ -106,7 +106,7 @@ class Crud extends Command
 			$this->line('1. Run migrations: php galaxy migrate:up');
 			$this->line('2. Customize the generated files as needed');
 			$this->line('3. Add fields to your migration, model fillable, and form view');
-			
+
 			if ($template === 'api-ready') {
 				$this->line('4. Configure REST routes in your routes file');
 			}
@@ -133,25 +133,106 @@ class Crud extends Command
 	/**
 	 * Update module metadata file
 	 */
-	protected function updateModuleMetadata($module, $pascalCase, $snakeCase)
+	protected function updateModuleMetadata($module, $pascalCase, $snakeCase, array $results = [])
 	{
 		$metadataFile = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/module.json";
-		
-		$metadata = file_exists($metadataFile) 
-			? json_decode(file_get_contents($metadataFile), true)
-			: ['name' => $module, 'resources' => [], 'policies' => []];
 
-		// Add resource if not exists
-		if (!in_array($snakeCase, $metadata['resources'])) {
-			$metadata['resources'][] = $snakeCase;
+		// Load existing metadata or create new
+		if (file_exists($metadataFile)) {
+			$metadata = json_decode(file_get_contents($metadataFile), true);
+		} else {
+			// Create default metadata structure
+			$metadata = [
+				'name' => ucwords(str_replace(['-', '_'], ' ', $module)),
+				'slug' => $module,
+				'namespace' => 'MakerMaker\\Modules\\' . $this->toPascalCase($module),
+				'description' => 'Module description',
+				'version' => '1.0.0',
+				'author' => get_bloginfo('name') ?: 'Your Name',
+				'active' => false,
+				'dependencies' => [],
+				'conflicts' => [],
+				'files' => [
+					'controllers' => [],
+					'models' => [],
+					'policies' => [],
+					'fields' => [],
+					'resources' => [],
+					'migrations' => [],
+					'views' => []
+				],
+				'autoload' => [
+					'psr-4' => [
+						'MakerMaker\\Modules\\' . $this->toPascalCase($module) . '\\' => '.'
+					]
+				],
+				'capabilities' => []
+			];
 		}
 
-		// Add policy if not exists
-		$modelClass = "\\MakerMaker\\Modules\\" . $this->toPascalCase($module) . "\\Models\\{$pascalCase}";
-		$policyClass = "\\MakerMaker\\Modules\\" . $this->toPascalCase($module) . "\\Auth\\{$pascalCase}Policy";
-		$metadata['policies'][$modelClass] = $policyClass;
+		// Add files from generation results
+		foreach ($results as $type => $files) {
+			if (!isset($metadata['files'][$type])) {
+				continue;
+			}
 
-		file_put_contents($metadataFile, json_encode($metadata, JSON_PRETTY_PRINT));
+			if (is_array($files)) {
+				foreach ($files as $file) {
+					$filename = basename($file);
+					if (!in_array($filename, $metadata['files'][$type])) {
+						$metadata['files'][$type][] = $filename;
+					}
+				}
+			} else {
+				$filename = basename($files);
+				if (!in_array($filename, $metadata['files'][$type])) {
+					$metadata['files'][$type][] = $filename;
+				}
+			}
+		}
+
+		// Add controller
+		$controllerFile = "{$pascalCase}Controller.php";
+		if (!in_array($controllerFile, $metadata['files']['controllers'])) {
+			$metadata['files']['controllers'][] = $controllerFile;
+		}
+
+		// Add model
+		$modelFile = "{$pascalCase}.php";
+		if (!in_array($modelFile, $metadata['files']['models'])) {
+			$metadata['files']['models'][] = $modelFile;
+		}
+
+		// Add policy
+		$policyFile = "{$pascalCase}Policy.php";
+		if (!in_array($policyFile, $metadata['files']['policies'])) {
+			$metadata['files']['policies'][] = $policyFile;
+		}
+
+		// Add fields
+		$fieldsFile = "{$pascalCase}Fields.php";
+		if (!in_array($fieldsFile, $metadata['files']['fields'])) {
+			$metadata['files']['fields'][] = $fieldsFile;
+		}
+
+		// Add resource
+		$resourceFile = "{$snakeCase}.php";
+		if (!in_array($resourceFile, $metadata['files']['resources'])) {
+			$metadata['files']['resources'][] = $resourceFile;
+		}
+
+		// Add capability
+		$capability = 'manage_' . pluralize($snakeCase);
+		if (!in_array($capability, $metadata['capabilities'])) {
+			$metadata['capabilities'][] = $capability;
+		}
+
+		// Save updated metadata
+		file_put_contents(
+			$metadataFile,
+			json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+		);
+
 		$this->success("Updated module metadata: modules/{$module}/module.json");
 	}
 
@@ -192,7 +273,7 @@ class Crud extends Command
 			throw new \Exception("Failed to generate Resource file");
 		}
 
-		return $module 
+		return $module
 			? "modules/{$module}/resources/{$snakeCase}.php"
 			: "inc/resources/{$snakeCase}.php";
 	}
@@ -358,7 +439,7 @@ class Crud extends Command
 	{
 		$policyName = $className . 'Policy';
 		$authDir = $basePath . '/Auth';
-		
+
 		if (!is_dir($authDir)) {
 			mkdir($authDir, 0755, true);
 		}
@@ -394,7 +475,7 @@ class Crud extends Command
 	{
 		$fieldsName = $className . 'Fields';
 		$fieldsDir = $basePath . '/Http/Fields';
-		
+
 		if (!is_dir($fieldsDir)) {
 			mkdir($fieldsDir, 0755, true);
 		}
@@ -428,7 +509,7 @@ class Crud extends Command
 	{
 		$controllerName = $className . 'Controller';
 		$controllersDir = $basePath . '/Controllers';
-		
+
 		if (!is_dir($controllersDir)) {
 			mkdir($controllersDir, 0755, true);
 		}
@@ -506,7 +587,7 @@ class Crud extends Command
 			if (!$result) {
 				throw new \Exception("Failed to generate Index view");
 			}
-			
+
 			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $indexFile);
 			$generatedFiles[] = ltrim($relativePath, '/');
 		}
@@ -537,7 +618,7 @@ class Crud extends Command
 			if (!$result) {
 				throw new \Exception("Failed to generate Form view");
 			}
-			
+
 			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $formFile);
 			$generatedFiles[] = ltrim($relativePath, '/');
 		}

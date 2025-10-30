@@ -37,6 +37,11 @@ return [
     |
     */
     'commands' => [
+        \MakerMaker\Commands\ModuleList::class,
+        \MakerMaker\Commands\ModuleCreate::class,
+        \MakerMaker\Commands\ModuleEnable::class,
+        \MakerMaker\Commands\ModuleDisable::class,
+        \MakerMaker\Commands\ModuleInfo::class,
         \MakerMaker\Commands\Crud::class,
     ]
 ];
