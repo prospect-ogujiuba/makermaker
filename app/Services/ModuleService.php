@@ -3,9 +3,13 @@
 namespace MakerMaker\Services;
 
 use Exception;
+use TypeRocket\Services\Service;
 
-class ModuleService
+class ModuleService extends Service
 {
+    public const ALIAS = 'modules';
+    protected $singleton = true;
+    
     private string $modulesPath;
     private string $registryPath;
     private string $appPath;
@@ -17,6 +21,12 @@ class ModuleService
         $this->appPath = MAKERMAKER_PLUGIN_DIR . 'app';
         
         $this->ensureRegistryExists();
+    }
+    
+    public function register() : Service
+    {
+        // Service is ready to use after construction
+        return $this;
     }
     
     /**
@@ -144,31 +154,61 @@ class ModuleService
         
         $results = [
             'module' => $slug,
-            'actions' => []
+            'actions' => [],
+            'summary' => []
         ];
         
+        // Log what we're about to do
+        error_log("ModuleService: Disabling module '{$slug}'");
+        error_log("ModuleService: Keep data = " . ($keepData ? 'true' : 'false'));
+        error_log("ModuleService: Metadata files: " . json_encode($metadata['files'] ?? []));
+        
         // Remove files from app directories
-        $results['actions']['files'] = $this->removeModuleFiles($slug, $metadata);
+        try {
+            $results['actions']['files'] = $this->removeModuleFiles($slug, $metadata);
+            $results['summary']['files_removed'] = count($results['actions']['files']);
+            error_log("ModuleService: Removed " . count($results['actions']['files']) . " files");
+        } catch (Exception $e) {
+            error_log("ModuleService: Error removing files: " . $e->getMessage());
+            throw $e;
+        }
         
         // Rollback migrations unless keeping data
         if (!$keepData) {
-            $results['actions']['migrations'] = $this->runModuleMigrations($slug, $metadata, 'down');
-            $results['actions']['data_removed'] = true;
+            try {
+                $results['actions']['migrations'] = $this->runModuleMigrations($slug, $metadata, 'down');
+                $results['actions']['data_removed'] = true;
+                $results['summary']['migrations_rolled_back'] = count($results['actions']['migrations']);
+                error_log("ModuleService: Rolled back " . count($results['actions']['migrations']) . " migrations");
+            } catch (Exception $e) {
+                error_log("ModuleService: Error rolling back migrations: " . $e->getMessage());
+                throw $e;
+            }
         } else {
             $results['actions']['data_kept'] = true;
+            error_log("ModuleService: Database tables preserved");
         }
         
         // Remove capabilities
         if (!empty($metadata['capabilities'])) {
-            $this->removeCapabilities($metadata['capabilities']);
-            $results['actions']['capabilities_removed'] = $metadata['capabilities'];
+            try {
+                $this->removeCapabilities($metadata['capabilities']);
+                $results['actions']['capabilities_removed'] = $metadata['capabilities'];
+                $results['summary']['capabilities_removed'] = count($metadata['capabilities']);
+                error_log("ModuleService: Removed " . count($metadata['capabilities']) . " capabilities");
+            } catch (Exception $e) {
+                error_log("ModuleService: Error removing capabilities: " . $e->getMessage());
+                // Don't throw - capabilities removal is not critical
+            }
         }
         
         // Update registry
         $this->removeFromRegistry($slug);
+        error_log("ModuleService: Removed from registry");
         
         // Clear cache
         $this->clearCache();
+        error_log("ModuleService: Cache cleared");
         
         return $results;
     }
@@ -279,67 +319,102 @@ class ModuleService
     private function removeModuleFiles(string $slug, array $metadata): array
     {
         $removed = [];
+        $errors = [];
+        $modulePath = $this->modulesPath . "/{$slug}";
         
-        // Remove from app directories
-        $fileTypes = ['controllers', 'models', 'policies', 'fields'];
+        // Map of source directories to destination directories (same as copyModuleFiles)
         $dirMap = [
-            'controllers' => 'Controllers',
-            'models' => 'Models',
-            'policies' => 'Auth',
-            'fields' => 'Http/Fields',
+            'Controllers' => 'Controllers',
+            'Models' => 'Models',
+            'Auth' => 'Auth',
+            'Http/Fields' => 'Http/Fields',
         ];
         
-        foreach ($fileTypes as $type) {
-            if (empty($metadata['files'][$type])) {
+        // Remove files from app directories by scanning the module's source directories
+        foreach ($dirMap as $sourceDir => $destDir) {
+            $source = $modulePath . '/' . $sourceDir;
+            $dest = $this->appPath . '/' . $destDir;
+            
+            if (!is_dir($source)) {
                 continue;
             }
             
-            $dir = $this->appPath . '/' . $dirMap[$type];
+            // Get list of files that should have been copied
+            $files = glob($source . '/*.php');
             
-            foreach ($metadata['files'][$type] as $filename) {
-                $file = $dir . '/' . $filename;
+            foreach ($files as $file) {
+                $filename = basename($file);
+                $destFile = $dest . '/' . $filename;
                 
-                if (file_exists($file)) {
-                    unlink($file);
-                    $removed[] = $dirMap[$type] . '/' . $filename;
+                if (file_exists($destFile)) {
+                    if (unlink($destFile)) {
+                        $removed[] = $destDir . '/' . $filename;
+                    } else {
+                        $errors[] = "Failed to delete: {$destDir}/{$filename}";
+                    }
+                } else {
+                    // File doesn't exist - might have been manually deleted
+                    $removed[] = $destDir . '/' . $filename . ' (already removed)';
                 }
             }
         }
         
         // Remove resources
-        if (!empty($metadata['files']['resources'])) {
-            $resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+        $resourcesSource = $modulePath . '/resources';
+        $resourcesDest = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
+        
+        if (is_dir($resourcesSource)) {
+            $resources = glob($resourcesSource . '/*.php');
             
-            foreach ($metadata['files']['resources'] as $filename) {
-                $file = $resourcesDir . '/' . $filename;
+            foreach ($resources as $file) {
+                $filename = basename($file);
+                $destFile = $resourcesDest . '/' . $filename;
                 
-                if (file_exists($file)) {
-                    unlink($file);
-                    $removed[] = 'resources/' . $filename;
+                if (file_exists($destFile)) {
+                    if (unlink($destFile)) {
+                        $removed[] = 'resources/' . $filename;
+                    } else {
+                        $errors[] = "Failed to delete: resources/{$filename}";
+                    }
+                } else {
+                    $removed[] = 'resources/' . $filename . ' (already removed)';
                 }
             }
         }
         
         // Remove views
         if (!empty($metadata['files']['views'])) {
-            $viewsDir = TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH;
+            $viewsSource = $modulePath . '/views';
+            $viewsDest = TYPEROCKET_PLUGIN_MAKERMAKER_VIEWS_PATH;
             
             foreach ($metadata['files']['views'] as $viewDir => $viewFiles) {
                 foreach ($viewFiles as $viewFile) {
-                    $file = $viewsDir . '/' . $viewDir . '/' . $viewFile;
+                    $file = $viewsDest . '/' . $viewDir . '/' . $viewFile;
                     
                     if (file_exists($file)) {
-                        unlink($file);
-                        $removed[] = "views/{$viewDir}/{$viewFile}";
+                        if (unlink($file)) {
+                            $removed[] = "views/{$viewDir}/{$viewFile}";
+                        } else {
+                            $errors[] = "Failed to delete: views/{$viewDir}/{$viewFile}";
+                        }
+                    } else {
+                        $removed[] = "views/{$viewDir}/{$viewFile} (already removed)";
                     }
                 }
                 
                 // Remove empty view directory
-                $dir = $viewsDir . '/' . $viewDir;
+                $dir = $viewsDest . '/' . $viewDir;
                 if (is_dir($dir) && count(scandir($dir)) == 2) {
-                    rmdir($dir);
+                    if (rmdir($dir)) {
+                        $removed[] = "views/{$viewDir}/ (directory)";
+                    }
                 }
             }
+        }
+        
+        // Throw exception if there were errors
+        if (!empty($errors)) {
+            throw new Exception("File removal errors:\n" . implode("\n", $errors));
         }
         
         return $removed;

@@ -41,6 +41,7 @@ return [
          * Application Service Providers...
          */
         '\App\Services\AuthService',
+        '\MakerMaker\Services\ModuleService',
     ],
 
     /*
