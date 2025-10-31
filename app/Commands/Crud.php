@@ -8,112 +8,132 @@ use TypeRocket\Utility\File;
 class Crud extends Command
 {
 	protected $command = [
-		'make:crud {name} {?--module=} {?--template=standard} {?--force}',
+		'make:crud {name} {?--module=} {?--template=standard} {?--force} {?-o|--only=} {?-s|--skip=}',
 		'Generate a complete CRUD setup with Model, Controller, Policy, Fields, Views, and Resource',
-		'Options: --module=shop, --template=simple|standard|api-ready',
+		'Options: --module=shop, --template=simple|standard|api-ready, --only=list, --skip=list',
 	];
+
 
 	public function exec()
 	{
-		$name = $this->getArgument('name');
-		$module = $this->getOption('module');
-		$template = $this->getOption('template') ?: 'standard';
-		$force = (bool) $this->getOption('force');
+		$name      = $this->getArgument('name');
+		$module    = $this->getOption('module');
+		$template  = $this->getOption('template') ?: 'standard';
+		$force     = (bool) $this->getOption('force');
+		$onlyOpt  = $this->getOption('only');
+		$skipOpt = $this->getOption('skip');
 
 		if (!$name) {
 			$this->error('Name argument is required');
 			return;
 		}
 
-		// Validate template option
 		$validTemplates = ['simple', 'standard', 'api-ready'];
 		if (!in_array($template, $validTemplates)) {
 			$this->error("Invalid template: {$template}. Valid options: " . implode(', ', $validTemplates));
 			return;
 		}
 
-		// Convert name to different cases
-		$pascalCase = $this->toPascalCase($name);
-		$snakeCase = $this->toSnakeCase($name);
-		$pluralSnakeCase = pluralize($snakeCase);
-		$variable = lcfirst($pascalCase);
-		$pluralVariable = pluralize($variable);
-		$pluralClass = $this->toPascalCase($pluralSnakeCase);
-		$pluralTitle = ucwords(str_replace('_', ' ', $pluralSnakeCase));
-
-		$titleCase = toTitleCase($pascalCase);
-		$pluralTitleCase = toTitleCase($pluralClass);
+		// Case transforms
+		$pascalCase       = $this->toPascalCase($name);
+		$snakeCase        = $this->toSnakeCase($name);
+		$pluralSnakeCase  = pluralize($snakeCase);
+		$variable         = lcfirst($pascalCase);
+		$pluralVariable   = pluralize($variable);
+		$pluralClass      = $this->toPascalCase($pluralSnakeCase);
+		$pluralTitle      = ucwords(str_replace('_', ' ', $pluralSnakeCase));
+		$titleCase        = toTitleCase($pascalCase);
+		$pluralTitleCase  = toTitleCase($pluralClass);
 
 		$this->info("Generating CRUD files for: {$pascalCase}");
 		$this->info("Template variant: {$template}");
 		$this->info("Table name: {$pluralSnakeCase}");
 
-		// Determine base paths based on module flag
 		if ($module) {
 			$base_path = MAKERMAKER_PLUGIN_DIR . "modules/{$module}";
 			$this->info("Module: {$module}");
 			$this->ensureModuleStructure($base_path, $module);
 			$appNamespace = 'MakerMaker\\Modules\\' . $this->toPascalCase($module);
 		} else {
-			$base_path = MAKERMAKER_PLUGIN_DIR . 'app';
+			$base_path   = MAKERMAKER_PLUGIN_DIR . 'app';
 			$appNamespace = $this->getGalaxyMakeNamespace();
 		}
 
-		// Generate each component
+		// Parse selection flags
+		$only    = $this->parseListOption($onlyOpt);
+		$exclude = $this->parseListOption($skipOpt);
+
+		// Define all steps (keys must match our normalized names)
+		$allSteps = [
+			'migration'   => fn() => $this->generateMigration($pascalCase, $pluralSnakeCase, $force, $template),
+			'model'       => fn() => $this->generateModel($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template),
+			'policy'      => fn() => $this->generatePolicy($pascalCase, $snakeCase, $appNamespace, $base_path, $force, $template),
+			'fields'      => fn() => $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template),
+			'controller'  => fn() => $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $base_path, $force, $template),
+			'views:index' => fn() => $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module, $force, $template, 'index'),
+			'views:form'  => fn() => $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module, $force, $template, 'form'),
+			'resource'    => fn() => $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $module, $force, $template),
+			'register'    => function () use ($module, $pascalCase, $snakeCase) {
+				if ($module) {
+					$this->updateModuleMetadata($module, $pascalCase, $snakeCase);
+					return "modules/{$module}/module.json";
+				}
+			},
+		];
+
+		// Work out which to run
+		$runKeys = $this->resolveStepsToRun($allSteps, $only, $exclude);
+
 		$results = [];
-
-		try {
-			$results['migration'] = $this->generateMigration($pascalCase, $pluralSnakeCase, $force, $template);
-			$results['model'] = $this->generateModel($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
-			$results['policy'] = $this->generatePolicy($pascalCase, $snakeCase, $appNamespace, $base_path, $force, $template);
-			$results['fields'] = $this->generateFields($pascalCase, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
-			$results['controller'] = $this->generateController($pascalCase, $variable, $pluralVariable, $pluralSnakeCase, $appNamespace, $base_path, $force, $template);
-			$results['views'] = $this->generateViews($pluralSnakeCase, $pascalCase, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module, $force, $template);
-
-			// Generate resource file
-			$results['resource'] = $this->generateResourceFile($pascalCase, $variable, $snakeCase, $pluralTitle, $module, $force, $template);
-
-			// Update plugin file or module metadata
-			if ($module) {
-				$this->updateModuleMetadata($module, $pascalCase, $snakeCase);
-			} else {
-				$this->updatePluginFile($snakeCase, $pascalCase);
+		foreach ($runKeys as $key) {
+			try {
+				$out = $allSteps[$key]();
+				if (is_array($out)) {
+					foreach ($out as $f) {
+						if ($f) $results[$key][] = $f;
+					}
+				} elseif ($out) {
+					$results[$key] = $out;
+				}
+			} catch (\Throwable $e) {
+				$this->warning("Skipped {$key}: " . $e->getMessage());
 			}
+		}
 
-			// Summary
-			$this->line('');
-			$this->success('✓ CRUD generation completed successfully!');
-			$this->line('');
-			$this->info('Generated files:');
-
+		// Summary
+		$this->line('');
+		$this->success('✓ CRUD generation completed!');
+		$this->line('');
+		if (!empty($results)) {
+			$this->info('Generated/updated:');
 			foreach ($results as $type => $files) {
 				if (is_array($files)) {
 					foreach ($files as $file) {
-						$this->line("  - {$file}");
+						$this->line("  - {$type}: {$file}");
 					}
 				} else {
-					$this->line("  - {$files}");
+					$this->line("  - {$type}: {$files}");
 				}
 			}
+		} else {
+			$this->warning('No files changed (possibly all skipped or excluded).');
+		}
 
-			$this->line('');
-			$this->info('Template variant: ' . $template);
-			if ($module) {
-				$this->info('Module: ' . $module);
-			}
-			$this->line('');
-			$this->info('Next steps:');
-			$this->line('1. Run migrations: php galaxy migrate:up');
-			$this->line('2. Customize the generated files as needed');
-			$this->line('3. Add fields to your migration, model fillable, and form view');
-
-			if ($template === 'api-ready') {
-				$this->line('4. Configure REST routes in your routes file');
-			}
-		} catch (\Exception $e) {
-			$this->error('Error: ' . $e->getMessage());
+		$this->line('');
+		$this->info('Template variant: ' . $template);
+		if ($module) {
+			$this->info('Module: ' . $module);
+		}
+		$this->line('');
+		$this->info('Next steps:');
+		$this->line('1. Run migrations: php galaxy migrate:up');
+		$this->line('2. Customize the generated files as needed');
+		$this->line('3. Add fields to migration, model fillable, and form view');
+		if ($template === 'api-ready') {
+			$this->line('4. Configure REST routes in your routes file');
 		}
 	}
+
 
 	/**
 	 * Ensure module directory structure exists
@@ -275,96 +295,6 @@ class Crud extends Command
 		return $module
 			? "modules/{$module}/resources/{$snakeCase}.php"
 			: "inc/resources/{$snakeCase}.php";
-	}
-
-
-	/**
-	 * Update MakermakerTypeRocketPlugin.php file
-	 */
-	protected function updatePluginFile($snakeCase, $pascalCase)
-	{
-		$pluginFile = MAKERMAKER_PLUGIN_DIR . 'app/MakermakerTypeRocketPlugin.php';
-
-		if (!file_exists($pluginFile)) {
-			throw new \Exception("Plugin file not found: MakermakerTypeRocketPlugin.php");
-		}
-
-		$content = file_get_contents($pluginFile);
-
-		// 1. Add resource to $resources array
-		$resourcesPattern = '/\$resources\s*=\s*\[\s*([^]]*)\];/';
-		if (preg_match($resourcesPattern, $content, $matches)) {
-			$currentResources = $matches[1];
-
-			// Check if resource already exists
-			if (strpos($currentResources, "'{$snakeCase}'") === false) {
-				// Trim and prepare the resources array content
-				$resourcesArray = trim($currentResources);
-
-				// Add comma if content exists and doesn't already end with a comma
-				if (!empty($resourcesArray) && !str_ends_with(trim($resourcesArray), ',')) {
-					$resourcesArray .= ",";
-				}
-
-				// Add newline and indentation if there's existing content
-				if (!empty($resourcesArray)) {
-					$resourcesArray .= "\n            ";
-				}
-
-				// Add the new resource
-				$resourcesArray .= "'{$snakeCase}'";
-
-				// Rebuild the complete resources assignment
-				$newResourcesArray = '$resources = [' . "\n            " . $resourcesArray . "\n        ];";
-				$content = preg_replace($resourcesPattern, $newResourcesArray, $content);
-
-				$this->success("Added '{$snakeCase}' to resources array");
-			} else {
-				$this->warning("Resource '{$snakeCase}' already exists in resources array");
-			}
-		}
-
-		// 2. Add policy association - specifically in the policies() method
-		// Look for the policies() function and its return statement
-		$policiesPattern = '/(public\s+function\s+policies\(\)\s*\{[^}]*?return\s+\[)([^]]*?)(\];)/s';
-
-		if (preg_match($policiesPattern, $content, $matches)) {
-			$beforeReturn = $matches[1];
-			$currentPolicies = $matches[2];
-			$afterReturn = $matches[3];
-
-			$modelClass = '\\MakerMaker\\Models\\' . $pascalCase;
-			$policyClass = '\\MakerMaker\\Auth\\' . $pascalCase . 'Policy';
-
-			// Check if policy already exists
-			if (strpos($currentPolicies, $modelClass) === false) {
-				// Add new policy to array
-				$policiesArray = trim($currentPolicies);
-				if (!empty($policiesArray) && !str_ends_with(trim($policiesArray), ',')) {
-					$policiesArray .= ",";
-				}
-				if (!empty($policiesArray)) {
-					$policiesArray .= "\n            ";
-				}
-				$policiesArray .= "'{$modelClass}' => '{$policyClass}',";
-
-				// Rebuild the policies method part
-				$newPoliciesSection = $beforeReturn . "\n            " . $policiesArray . "\n        " . $afterReturn;
-
-				// Replace only the policies() method
-				$content = preg_replace($policiesPattern, $newPoliciesSection, $content, 1);
-
-				$this->success("Added policy association for {$pascalCase}");
-			} else {
-				$this->warning("Policy association for {$pascalCase} already exists");
-			}
-		} else {
-			$this->error("Could not find policies() method in plugin file");
-		}
-
-		// Save the modified content
-		file_put_contents($pluginFile, $content);
-		$this->success("Updated MakermakerTypeRocketPlugin.php");
 	}
 
 	protected function generateMigration($className, $tableName, $force = false, $template = 'standard')
@@ -561,7 +491,7 @@ class Crud extends Command
 	}
 
 
-	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module = null, $force = false, $template = 'standard')
+	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module = null, $force = false, $template = 'standard', $which = null)
 	{
 		if ($module) {
 			$viewsDir = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/resources/views/{$viewPath}";
@@ -578,18 +508,19 @@ class Crud extends Command
 
 		$indexFile = "{$viewsDir}/index.php";
 		$formFile  = "{$viewsDir}/form.php";
+		$doIndex = ($which === null || $which === 'index');
+		$doForm  = ($which === null || $which === 'form');
 
 		$generatedFiles = [];
 
 		// index
-		if (!$this->skipIfExists($indexFile, $force, 'View (index)')) {
+		if ($doIndex && !$this->skipIfExists($indexFile, $force, 'View (index)')) {
 			$tags = ['{{class}}', '{{app_namespace}}', '{{title_class}}'];
 			$replacements = [$className, $appNamespace, $titleCase];
 
 			$templatePath = $this->getTemplatePath('ViewIndex.txt', $template);
 			$file = new File($templatePath);
 			$result = $file->copyTemplateFile($indexFile, $tags, $replacements);
-
 			if (!$result) {
 				throw new \Exception("Failed to generate Index view");
 			}
@@ -599,7 +530,7 @@ class Crud extends Command
 		}
 
 		// form
-		if (!$this->skipIfExists($formFile, $force, 'View (form)')) {
+		if ($doForm && !$this->skipIfExists($formFile, $force, 'View (form)')) {
 			$tags = [
 				'{{class}}',
 				'{{plural_class}}',
@@ -620,7 +551,6 @@ class Crud extends Command
 			$templatePath = $this->getTemplatePath('ViewForm.txt', $template);
 			$file = new File($templatePath);
 			$result = $file->copyTemplateFile($formFile, $tags, $replacements);
-
 			if (!$result) {
 				throw new \Exception("Failed to generate Form view");
 			}
@@ -667,5 +597,57 @@ class Crud extends Command
 			return true;
 		}
 		return false;
+	}
+
+	protected function parseListOption($value): array
+	{
+		if ($value === null || $value === '') {
+			return [];
+		}
+		// allow spaces, semicolons, etc.
+		$parts = preg_split('/[\s,;]+/', strtolower(trim($value)));
+		return array_values(array_filter(array_map('trim', $parts)));
+	}
+
+	/** Expand groups and normalize keys */
+	protected function normalizeTargets(array $keys): array
+	{
+		$expanded = [];
+		foreach ($keys as $k) {
+			switch ($k) {
+				case 'views':
+					$expanded[] = 'views:index';
+					$expanded[] = 'views:form';
+					break;
+				case 'except': // just in case
+					// ignore here; handled earlier
+					break;
+				default:
+					$expanded[] = $k;
+			}
+		}
+		// de-dupe
+		return array_values(array_unique($expanded));
+	}
+
+	/** Return final allowlist of steps to run */
+	protected function resolveStepsToRun(array $allSteps, array $only, array $exclude): array
+	{
+		$only = $this->normalizeTargets($only);
+		$exclude = $this->normalizeTargets($exclude);
+
+		if (!empty($only)) {
+			$allow = $only;
+		} else {
+			$allow = array_keys($allSteps); // everything by default
+		}
+
+		// apply excludes
+		$allow = array_values(array_diff($allow, $exclude));
+
+		// sanity filter against known steps
+		$allow = array_values(array_intersect($allow, array_keys($allSteps)));
+
+		return $allow;
 	}
 }
