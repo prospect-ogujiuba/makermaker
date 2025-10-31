@@ -18,7 +18,7 @@ class Crud extends Command
 		$name = $this->getArgument('name');
 		$module = $this->getOption('module');
 		$template = $this->getOption('template') ?: 'standard';
-		$force = $this->getOption('force');
+		$force = (bool) $this->getOption('force');
 
 		if (!$name) {
 			$this->error('Name argument is required');
@@ -249,22 +249,21 @@ class Crud extends Command
 			$resourcesDir = MAKERMAKER_PLUGIN_DIR . 'inc/resources';
 		}
 
-		if (file_exists($resourceFile) && !$force) {
-			throw new \Exception("Resource file already exists: {$snakeCase}.php");
-		}
-
-		// Create resources directory if it doesn't exist
 		if (!is_dir($resourcesDir)) {
 			mkdir($resourcesDir, 0755, true);
 		}
 
-		// Generate plural snake case for capabilities
+		if ($this->skipIfExists($resourceFile, $force, 'Resource')) {
+			return $module
+				? "modules/{$module}/resources/{$snakeCase}.php"
+				: "inc/resources/{$snakeCase}.php";
+		}
+
 		$pluralSnakeCase = pluralize($snakeCase);
 
 		$tags = ['{{class}}', '{{singular}}', '{{variable}}', '{{plural_title}}', '{{plural_snake}}'];
 		$replacements = [$className, $snakeCase, $variable, $pluralTitle, $pluralSnakeCase];
 
-		// Use the resource template
 		$templatePath = $this->getTemplatePath('Resource.txt', $template);
 		$file = new File($templatePath);
 		$result = $file->copyTemplateFile($resourceFile, $tags, $replacements);
@@ -277,6 +276,7 @@ class Crud extends Command
 			? "modules/{$module}/resources/{$snakeCase}.php"
 			: "inc/resources/{$snakeCase}.php";
 	}
+
 
 	/**
 	 * Update MakermakerTypeRocketPlugin.php file
@@ -374,15 +374,14 @@ class Crud extends Command
 		$fileName = "{$timestamp}.{$migrationName}.sql";
 
 		$root = \TypeRocket\Core\Config::get('paths.migrations');
-
 		if (!file_exists($root)) {
 			mkdir($root, 0755, true);
 		}
 
 		$migrationFile = $root . '/' . $fileName;
 
-		if (file_exists($migrationFile) && !$force) {
-			throw new \Exception("Migration file already exists: {$fileName}");
+		if ($this->skipIfExists($migrationFile, $force, 'Migration')) {
+			return "database/migrations/" . basename($migrationFile);
 		}
 
 		$tags = ['{{table_name}}', '{{description}}', '{{comment}}'];
@@ -403,6 +402,7 @@ class Crud extends Command
 		return "database/migrations/{$fileName}";
 	}
 
+
 	protected function generateModel($className, $tableName, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$modelsDir = $basePath . '/Models';
@@ -412,8 +412,9 @@ class Crud extends Command
 
 		$modelFile = $modelsDir . '/' . $className . '.php';
 
-		if (file_exists($modelFile) && !$force) {
-			throw new \Exception("Model file already exists: {$className}.php");
+		if ($this->skipIfExists($modelFile, $force, 'Model')) {
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $modelFile);
+			return ltrim($relativePath, '/');
 		}
 
 		$tags = ['{{namespace}}', '{{class}}', '{{table_name}}'];
@@ -435,6 +436,7 @@ class Crud extends Command
 		return ltrim($relativePath, '/');
 	}
 
+
 	protected function generatePolicy($className, $snakeCase, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$policyName = $className . 'Policy';
@@ -446,8 +448,9 @@ class Crud extends Command
 
 		$policyFile = $authDir . '/' . $policyName . '.php';
 
-		if (file_exists($policyFile) && !$force) {
-			throw new \Exception("Policy file already exists: {$policyName}.php");
+		if ($this->skipIfExists($policyFile, $force, 'Policy')) {
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $policyFile);
+			return ltrim($relativePath, '/');
 		}
 
 		$capability = pluralize($snakeCase);
@@ -471,6 +474,7 @@ class Crud extends Command
 		return ltrim($relativePath, '/');
 	}
 
+
 	protected function generateFields($className, $tableName, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$fieldsName = $className . 'Fields';
@@ -482,8 +486,9 @@ class Crud extends Command
 
 		$fieldsFile = $fieldsDir . '/' . $fieldsName . '.php';
 
-		if (file_exists($fieldsFile) && !$force) {
-			throw new \Exception("Fields file already exists: {$fieldsName}.php");
+		if ($this->skipIfExists($fieldsFile, $force, 'Fields')) {
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $fieldsFile);
+			return ltrim($relativePath, '/');
 		}
 
 		$tags = ['{{namespace}}', '{{class}}', '{{table_name}}'];
@@ -505,6 +510,7 @@ class Crud extends Command
 		return ltrim($relativePath, '/');
 	}
 
+
 	protected function generateController($className, $variable, $pluralVariable, $viewPath, $appNamespace, $basePath, $force = false, $template = 'standard')
 	{
 		$controllerName = $className . 'Controller';
@@ -516,8 +522,9 @@ class Crud extends Command
 
 		$controllerFile = $controllersDir . '/' . $controllerName . '.php';
 
-		if (file_exists($controllerFile) && !$force) {
-			throw new \Exception("Controller file already exists: {$controllerName}.php");
+		if ($this->skipIfExists($controllerFile, $force, 'Controller')) {
+			$relativePath = str_replace(MAKERMAKER_PLUGIN_DIR, '', $controllerFile);
+			return ltrim($relativePath, '/');
 		}
 
 		$routeName = $this->toSnakeCase($className);
@@ -553,9 +560,9 @@ class Crud extends Command
 		return ltrim($relativePath, '/');
 	}
 
+
 	protected function generateViews($viewPath, $className, $pluralClass, $variable, $titleCase, $pluralTitleCase, $appNamespace, $module = null, $force = false, $template = 'standard')
 	{
-		// Determine views directory based on module
 		if ($module) {
 			$viewsDir = MAKERMAKER_PLUGIN_DIR . "modules/{$module}/resources/views/{$viewPath}";
 		} else {
@@ -565,18 +572,17 @@ class Crud extends Command
 			$viewsDir = "{$pluginViewsPath}/{$viewPath}";
 		}
 
-		// Create directory if it doesn't exist
 		if (!is_dir($viewsDir)) {
 			mkdir($viewsDir, 0755, true);
 		}
 
 		$indexFile = "{$viewsDir}/index.php";
-		$formFile = "{$viewsDir}/form.php";
+		$formFile  = "{$viewsDir}/form.php";
 
 		$generatedFiles = [];
 
-		// Generate index view
-		if (!file_exists($indexFile) || $force) {
+		// index
+		if (!$this->skipIfExists($indexFile, $force, 'View (index)')) {
 			$tags = ['{{class}}', '{{app_namespace}}', '{{title_class}}'];
 			$replacements = [$className, $appNamespace, $titleCase];
 
@@ -592,8 +598,8 @@ class Crud extends Command
 			$generatedFiles[] = ltrim($relativePath, '/');
 		}
 
-		// Generate form view
-		if (!file_exists($formFile) || $force) {
+		// form
+		if (!$this->skipIfExists($formFile, $force, 'View (form)')) {
 			$tags = [
 				'{{class}}',
 				'{{plural_class}}',
@@ -626,6 +632,7 @@ class Crud extends Command
 		return $generatedFiles;
 	}
 
+
 	protected function getTemplatePath($templateName, $variant = 'standard')
 	{
 		$template_path = MAKERMAKER_PLUGIN_DIR . "inc/templates/{$variant}/{$templateName}";
@@ -650,5 +657,15 @@ class Crud extends Command
 	protected function toSnakeCase($string)
 	{
 		return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
+	}
+
+	protected function skipIfExists(string $path, $force, string $label): bool
+	{
+		$force = (bool) $force;
+		if (file_exists($path) && !$force) {
+			$this->warning("{$label} already exists, skipping: " . basename($path));
+			return true;
+		}
+		return false;
 	}
 }
