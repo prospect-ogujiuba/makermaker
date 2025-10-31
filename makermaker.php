@@ -44,15 +44,7 @@ function typerocket_plugin_makermaker()
 
         typerocket_autoload_psr4($map);
     }
-
-    // Require additional files
-    $includes = [
-        'helpers'
-    ];
-
-    foreach ($includes as $include) {
-        require_once MAKERMAKER_PLUGIN_DIR . 'inc/helpers/' . $include . '.php';
-    }
+    
     $__typerocket_plugin_makermaker = call_user_func('MakerMaker\MakermakerTypeRocketPlugin::new', __FILE__, __DIR__);
 }
 
