@@ -30,7 +30,7 @@ if (!$typerocket) {
 define('TYPEROCKET_GALAXY_MAKE_NAMESPACE', 'MakerMaker');
 define('TYPEROCKET_GALAXY_PATH', $typerocket);
 
-define('TYPEROCKET_CORE_CONFIG_PATH', $typerocket . '/config');
+define('TYPEROCKET_CORE_CONFIG_PATH', $mm_plugin . '/config');
 define('TYPEROCKET_ROOT_WP', $wp_root);
 define('TYPEROCKET_APP_ROOT_PATH', $mm_plugin);
 define('TYPEROCKET_ALT_PATH', $mm_plugin);
