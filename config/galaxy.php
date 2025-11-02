@@ -38,6 +38,5 @@ return [
     */
     'commands' => [
         \MakerMaker\Commands\Crud::class,
-        \MakerMaker\Commands\MakeClient::class,
     ]
 ];
