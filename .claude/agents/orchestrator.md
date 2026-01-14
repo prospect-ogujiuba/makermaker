@@ -1,7 +1,7 @@
 ---
 name: orchestrator-coordinator
 description: Cross-layer orchestrator for Maker Framework. Routes full-feature requests to layer coordinators. Use when building features spanning MakerMaker, MakerBlocks, and MakerStarter.
-tools: Task, Read, Grep, Glob
+tools: Task, Read, Grep, Glob, AskUserQuestion
 model: opus
 ---
 

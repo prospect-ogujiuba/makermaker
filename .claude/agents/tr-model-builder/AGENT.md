@@ -6,6 +6,7 @@ tools:
   - Write
   - Grep
   - Glob
+  - AskUserQuestion
 model: opus
 ---
 

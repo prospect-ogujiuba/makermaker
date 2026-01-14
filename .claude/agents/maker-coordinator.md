@@ -1,7 +1,7 @@
 ---
 name: maker-coordinator
 description: Coordinator for MakerMaker (TypeRocket MVC Plugin). Routes business logic and data layer tasks to specialist agents. Use when creating resources, models, controllers, or REST APIs.
-tools: Task, Read, Grep, Glob, Write, Edit
+tools: Task, Read, Grep, Glob, Write, Edit, AskUserQuestion
 model: opus
 ---
 
