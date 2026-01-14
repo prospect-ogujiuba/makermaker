@@ -1,0 +1,240 @@
+/**
+ * Makermaker Admin Styles
+ */
+
+/* Contact Submissions - Muted Badge Styles */
+.mm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    i {
+        font-size: 13px;
+        line-height: 1;
+    }
+}
+
+/* Contact Type Badges - Neutral with icons */
+.mm-badge-type {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+/* Priority Badges */
+.mm-badge-priority-urgent {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+
+    i {
+        color: #c53030;
+    }
+}
+
+.mm-badge-priority-high {
+    background: #fffaf0;
+    color: #c05621;
+    border: 1px solid #fbd38d;
+
+    i {
+        color: #c05621;
+    }
+}
+
+.mm-badge-priority-normal {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+
+    i {
+        color: #6c757d;
+    }
+}
+
+.mm-badge-priority-low {
+    background: #f8f9fa;
+    color: #adb5bd;
+    border: 1px solid #e9ecef;
+
+    i {
+        color: #adb5bd;
+    }
+}
+
+/* Status Badges */
+.mm-badge-status-new {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+
+    i {
+        color: #c53030;
+    }
+}
+
+.mm-badge-status-in-progress {
+    background: #ebf8ff;
+    color: #2c5282;
+    border: 1px solid #90cdf4;
+
+    i {
+        color: #2c5282;
+    }
+}
+
+.mm-badge-status-awaiting-info {
+    background: #fffaf0;
+    color: #c05621;
+    border: 1px solid #fbd38d;
+
+    i {
+        color: #c05621;
+    }
+}
+
+.mm-badge-status-resolved {
+    background: #f0fff4;
+    color: #276749;
+    border: 1px solid #9ae6b4;
+
+    i {
+        color: #276749;
+    }
+}
+
+.mm-badge-status-closed {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+
+    i {
+        color: #495057;
+    }
+}
+
+.mm-badge-status-cancelled {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+
+    i {
+        color: #c53030;
+    }
+}
+
+/* Search Container */
+.tr-search-filters {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 8px 0;
+  padding: 16px;
+  background-color: white;
+  border-radius: 16px;
+}
+
+/* Filter Groups */
+.tr-filter-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  gap: 8px;
+}
+
+.tr-filter-group label {
+  font-weight: bold;
+}
+
+.tr-filter-group select {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.tr-field-group {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tr-field-group input[type="radio"] {
+  margin: 0;
+}
+
+/* Action Buttons */
+.tr-search-actions {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+/* Form Elements */
+.tr-filter {
+  display: flex;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+}
+
+.tr-date-inputs,
+.tr-range-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tr-range-inputs select {
+  width: auto;
+}
+
+/* Table Navigation */
+.tr-table-container .tablenav .actions {
+  display: contents;
+}
+
+.tr-table-container .tablenav {
+  gap: 8px;
+}
+
+/* Search Toggle */
+.tr-search-filters {
+  display: none;
+}
+
+.search-toggle-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#search-toggle:checked ~ .tr-search-filters {
+  display: none !important;
+}
+
+/* Table Tags and Labels */
+.tr-table-tag {
+  color: rgb(125, 154, 162);
+  font-weight: bold;
+}
+
+.tr-check {
+  color: green;
+  font-weight: bold;
+}
+
+.tr-no-data {
+  color: rgb(165, 70, 70);
+  font-weight: bold;
+}
+
+.tr-warning {
+  color: rgb(212, 198, 119);
+  font-weight: bold;
+}
