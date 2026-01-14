@@ -1,0 +1,36 @@
+# Input Schema: model_handoff
+
+# Consumed from tr-model-builder
+# Contains model definition and schema information
+
+handoff:
+  metadata:
+    from_stage: "model-phase"
+    to_stage: "fields-phase"
+    timestamp: "{ISO-8601}"
+    version: "1.0"
+
+  schema:
+    model:
+      name: "{Entity}"
+      table: "{table_name}"
+      fillable:
+        - "sku"
+        - "name"
+        - "description"
+      relationships:
+        - type: "belongsTo"
+          model: "EquipmentType"
+          foreign_key: "equipment_type_id"
+      enum_fields:
+        - field: "status"
+          values: ["available", "in_use", "maintenance"]
+      schema:
+        sku:
+          type: "varchar(64)"
+          nullable: true
+          unique: true
+        name:
+          type: "varchar(128)"
+          nullable: false
+          unique: true

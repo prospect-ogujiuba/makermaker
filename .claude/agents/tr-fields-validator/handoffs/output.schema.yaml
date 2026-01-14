@@ -1,0 +1,53 @@
+# Output Schema: fields_handoff
+
+# Produced for tr-controller-engineer and tr-form-designer
+# Contains validation rules and UI hints
+
+handoff:
+  metadata:
+    from_stage: "fields-phase"
+    to_stage: "controller-phase|form-phase"
+    timestamp: "{ISO-8601}"
+    version: "1.0"
+
+  schema:
+    model_class: "{Entity}"
+    fields_class: "{Entity}Fields"
+    namespace: "MakerMaker\\Http\\Fields"
+
+    validation_rules:
+      name: "required|max:128"
+      slug: "unique:slug:{prefix}table@id:{id}|required|max:64"
+      sku: "?unique:sku:{prefix}table@id:{id}|max:64"
+      description: ""
+      type_id: "required|numeric"
+      is_active: "numeric|min:0|max:1"
+      status: "callback:checkInList:{Entity}"
+
+    sanitization:
+      name: "sanitize_text_field"
+      slug: "sanitize_title"
+      description: "wp_kses_post"
+      type_id: "absint"
+
+    ui_hints:
+      name:
+        type: "text"
+        required: true
+      slug:
+        type: "text"
+        auto_generate: true
+      description:
+        type: "wysiwyg"
+      type_id:
+        type: "select"
+        relationship: "type"
+      is_active:
+        type: "toggle"
+        default: true
+
+  discovery_hints:
+    - hint: "Form needs WYSIWYG component"
+      condition: "if any ui_hints[].type == 'wysiwyg'"
+    - hint: "Form needs relationship select"
+      condition: "if any ui_hints[].type == 'select' with relationship"
