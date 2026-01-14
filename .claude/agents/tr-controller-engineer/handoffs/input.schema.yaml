@@ -1,0 +1,56 @@
+# Input Schema: tr-controller-engineer
+# Consumes 3 handoffs from predecessor agents
+
+model_handoff:
+  source: tr-model-builder
+  location: .planning/handoffs/model_handoff.yaml
+  required_fields:
+    schema:
+      class: string           # "Equipment"
+      namespace: string       # "MakerMaker\\Models"
+      table: string           # "srvc_equipment"
+      fillable: array         # ["name", "sku", "slug", ...]
+      relationships:
+        belongsTo: object     # {type: {model: "ServiceType"}}
+        hasMany: object       # {prices: {model: "Price"}}
+        belongsToMany: object # {services: {model: "Service", pivot: "..."}}
+      with: array             # Default eager loads
+      has_soft_deletes: boolean
+      has_audit_trail: boolean
+
+policy_handoff:
+  source: tr-policy-author
+  location: .planning/handoffs/policy_handoff.yaml
+  required_fields:
+    schema:
+      policy_class: string    # "EquipmentPolicy"
+      capabilities:
+        create: string        # "manage_equipment"
+        read: string
+        update: string
+        delete: string
+      ownership_field: string # "created_by" or null
+      admin_override: boolean
+
+fields_handoff:
+  source: tr-fields-validator
+  location: .planning/handoffs/fields_handoff.yaml
+  required_fields:
+    schema:
+      fields_class: string    # "EquipmentFields"
+      validation_rules: object
+      sanitization: object
+
+# Example merged input
+example:
+  entity:
+    name: "Equipment"
+    plural: "equipment"
+  model:
+    fillable: ["name", "sku", "manufacturer", "model"]
+    has_sku: true
+    has_slug: false
+  policy:
+    actions: ["create", "read", "update", "delete"]
+  fields:
+    class: "EquipmentFields"

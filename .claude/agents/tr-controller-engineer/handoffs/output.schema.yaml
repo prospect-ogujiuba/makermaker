@@ -1,0 +1,56 @@
+# Output Schema: controller_handoff.yaml
+# Produced for tr-form-designer and tr-index-builder
+
+metadata:
+  from_stage: "controller-phase"
+  to_stage: "form-phase|index-phase"
+  timestamp: string           # ISO timestamp
+  version: "1.0"
+
+schema:
+  controller_class: string    # "EquipmentController"
+  model_class: string         # "Equipment"
+  namespace: string           # "MakerMaker\\Controllers"
+
+  methods:
+    - index
+    - add
+    - create
+    - edit
+    - update
+    - show
+    - destroy
+    - indexRest
+    - showRest
+
+  helpers_used:
+    - helper: string          # "AuthorizationHelper"
+      method: string          # "authorize"
+      purpose: string         # "Policy enforcement"
+
+  routes:
+    admin_prefix: string      # "equipment"
+    rest_prefix: string       # "equipment"
+    resource_name: string     # "equipment"
+
+  rest_endpoints:
+    - method: string          # "GET"
+      path: string            # "/tr-api/rest/equipment/"
+      controller_method: string
+      auth_required: boolean
+
+discovery_hints:
+  - hint: string              # "Form needs SKU readonly after creation"
+    condition: string         # "AutoCodeHelper in helpers_used"
+    reference: string         # "form-patterns.md#readonly-fields"
+
+decisions:
+  - decision: string
+    rationale: string
+    alternatives: array
+    impact: array
+
+constraints:
+  - constraint: string
+    reason: string
+    enforcement: string       # "hard" | "soft"
