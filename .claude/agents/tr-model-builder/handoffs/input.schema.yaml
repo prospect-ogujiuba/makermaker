@@ -1,0 +1,43 @@
+# Input: migration_handoff.yaml
+# From: tr-migration-architect
+# To: tr-model-builder
+
+handoff:
+  metadata:
+    from_stage: "migration-phase"
+    to_stage: "model-phase"
+    created_at: ""  # ISO timestamp
+
+  schema:
+    entity: ""              # PascalCase entity name (e.g., "ServiceType")
+    table: ""               # Full table name (e.g., "srvc_service_types")
+
+    columns:
+      - name: ""            # Column name (e.g., "service_type_id")
+        type: ""            # SQL type (VARCHAR(128), BIGINT UNSIGNED, etc.)
+        primary: false      # Is primary key
+        auto_increment: false
+        nullable: false     # Allows NULL
+        unique: false       # Has unique constraint
+        default: null       # Default value
+        foreign_key: null   # FK reference (e.g., "srvc_service_types.id")
+
+    indexes:
+      - name: ""            # Index name
+        columns: []         # Columns in index
+        rationale: ""       # Why this index
+
+    foreign_keys:
+      - column: ""          # FK column name
+        references: ""      # Target table.column
+        on_delete: ""       # CASCADE | RESTRICT | SET NULL
+        rationale: ""       # Cascade behavior reason
+
+  decisions:
+    - decision: ""          # What was decided
+      rationale: ""         # Why
+      alternatives: []      # What was considered
+      impact: []            # Downstream effects
+
+  constraints: []           # Hard constraints to honor
+  discovery_hints: []       # Patterns for model to consider

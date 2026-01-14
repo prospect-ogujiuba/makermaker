@@ -1,0 +1,59 @@
+# Output: model_handoff.yaml
+# From: tr-model-builder
+# To: tr-policy-author, tr-fields-validator, tr-controller-engineer
+
+handoff:
+  metadata:
+    from_stage: "model-phase"
+    to_stage: "policy-phase|fields-phase|controller-phase"
+    created_at: ""  # ISO timestamp
+
+  model:
+    class_name: ""          # PascalCase (e.g., "ServiceType")
+    namespace: "MakerMaker\\Models"
+    table_name: ""          # e.g., "srvc_service_types"
+    file_path: ""           # e.g., "app/Models/ServiceType.php"
+
+  properties:
+    fillable: []            # Mass-assignable fields
+    guard: []               # Protected fields
+    private: []             # Hidden from REST
+    cast: {}                # field: type mapping
+    format: {}              # field: transformation mapping
+    with: []                # Default eager loading
+
+  relationships:
+    - name: ""              # Method name (e.g., "serviceType")
+      type: ""              # belongsTo | hasMany | belongsToMany
+      model: ""             # Related model class
+      method: ""            # Method name
+      foreign_key: ""       # FK column
+
+  query_scopes:
+    - name: ""              # Scope method name
+      description: ""       # What it does
+
+  computed_properties:
+    - name: ""              # Getter method name
+      description: ""       # What it returns
+
+  rest_api:
+    endpoint: ""            # e.g., "/tr-api/rest/service-types"
+    auto_generated: true
+    excluded_fields: []     # From $private
+
+  decisions:
+    - decision: ""
+      rationale: ""
+      impact: []
+
+  validation_hints:
+    required_fields: []     # For tr-fields-validator
+    unique_fields: []       # Fields with unique constraints
+
+  authorization_hints:
+    capabilities: []        # e.g., ["manage_service_types", "edit_service_types"]
+
+  discovery_hints:
+    - hint: ""              # Pattern suggestion
+      for_agent: ""         # Which downstream agent
