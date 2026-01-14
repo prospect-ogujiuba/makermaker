@@ -1,0 +1,37 @@
+# Input: requirements_handoff.yaml
+# From: requirements-gathering
+# To: tr-migration-architect
+
+handoff:
+  metadata:
+    from_stage: "requirements-gathering"
+    to_stage: "migration-phase"
+    created_at: ""  # ISO timestamp
+
+  schema:
+    entity_name: ""        # PascalCase (e.g., "Service")
+    entity_plural: ""      # Plural for table name (e.g., "services")
+    table_prefix: "srvc_"  # Standard prefix
+
+    fields:
+      - name: ""           # snake_case column name
+        type: ""           # string | int | bigint | text | json | datetime | decimal | boolean
+        nullable: false    # Can be NULL
+        default: null      # Default value
+        unique: false      # Has unique constraint
+        indexed: false     # Should be indexed
+
+    relationships:
+      - type: ""           # belongsTo | hasMany | belongsToMany
+        target: ""         # Target entity PascalCase
+        foreign_key: ""    # FK column name (for belongsTo)
+        cascade: ""        # restrict | cascade | set_null
+
+    features:
+      has_sku: false       # Add sku column with unique index
+      soft_delete: true    # Add deleted_at column
+      audit_trail: true    # Add timestamp and user columns
+
+  decisions: []            # Requirements-level decisions to honor
+  constraints: []          # Hard constraints to enforce
+  discovery_hints: []      # Hints about patterns to consider
