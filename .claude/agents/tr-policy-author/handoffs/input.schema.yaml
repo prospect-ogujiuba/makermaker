@@ -1,0 +1,51 @@
+# Input Schema: model_handoff
+
+# Consumed from tr-model-builder
+# Contains model definition and capability hints
+
+handoff:
+  metadata:
+    from_stage: "model-phase"
+    to_stage: "policy-phase"
+    timestamp: "{ISO-8601}"
+    version: "1.0"
+
+  schema:
+    model:
+      name: "{Entity}"           # e.g., Equipment
+      table: "{table_name}"      # e.g., srvc_equipment
+      namespace: "MakerMaker\\Models"
+      fillable:                  # Mass-assignable fields
+        - "sku"
+        - "name"
+        - "description"
+      guarded:                   # Protected fields
+        - "id"
+        - "created_at"
+        - "updated_at"
+      relationships:
+        - type: "belongsTo"
+          model: "EquipmentType"
+          foreign_key: "equipment_type_id"
+
+    # Optional capability hints
+    capabilities:
+      manage: "manage_services"   # Admin capability
+      edit: "edit_services"       # Editor capability (optional)
+      custom:                     # Custom capabilities (optional)
+        - "assign_equipment"
+        - "export_equipment"
+
+    # Optional access pattern hint
+    access_pattern: "admin_only"  # or "ownership_based", "public_read"
+
+  # Key fields for policy design
+  extraction_hints:
+    ownership_fields:
+      - "created_by"
+      - "user_id"
+      - "assigned_to"
+      - "owner_id"
+    sensitivity_indicators:
+      - "is_private"
+      - "visibility"

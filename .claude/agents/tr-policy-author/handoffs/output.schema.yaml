@@ -1,0 +1,57 @@
+# Output Schema: policy_handoff
+
+# Produced for tr-controller-engineer
+# Contains policy class details and capability configuration
+
+handoff:
+  metadata:
+    from_stage: "policy-phase"
+    to_stage: "controller-phase"
+    timestamp: "{ISO-8601}"
+    version: "1.0"
+
+  schema:
+    policy_class: "{Entity}Policy"
+    model_class: "{Entity}"
+    namespace: "MakerMaker\\Auth"
+
+    capabilities:
+      - action: "index"
+        capability: "manage_{entity}"
+        description: "View list of {entities}"
+      - action: "create"
+        capability: "manage_{entity}"
+        description: "Create new {entity}"
+      - action: "update"
+        capability: "manage_{entity}"
+        description: "Edit existing {entity}"
+      - action: "delete"
+        capability: "manage_{entity}"
+        description: "Delete {entity}"
+
+    ownership_field: null        # or "created_by", "user_id"
+    admin_override: true
+
+    custom_checks:
+      - method: "canPublish"
+        description: "Check if user can activate item"
+        applies_to: ["update"]
+
+  decisions:
+    - decision: "Ownership-based access for non-admins"
+      rationale: "Users should only access their own items unless admin"
+      alternatives: ["Role-based only", "Team-based ownership"]
+      impact: ["Controller filters queries by ownership field"]
+
+  constraints:
+    - constraint: "All CRUD operations must check policy"
+      reason: "Centralized authorization enforcement"
+      enforcement: "hard"
+
+  discovery_hints:
+    - hint: "Controller needs ownership filtering in index/show"
+      reference: "controller-patterns.md#ownership-scoping"
+      condition: "if ownership_field is set"
+    - hint: "Controller needs AuthorizationHelper import"
+      reference: "controller-patterns.md#authorization-helper"
+      condition: "always"
