@@ -20,6 +20,7 @@ class MakermakerTypeRocketPlugin extends BasePlugin
         $this->loadResources();
         $this->setupSettingsPage();
         $this->registerAssets();
+        $this->initReflectiveRestApi();
     }
 
 
@@ -131,8 +132,40 @@ class MakermakerTypeRocketPlugin extends BasePlugin
 
         // Admin Assets
         add_action('admin_enqueue_scripts', function () use ($manifest, $uri) {
-            wp_enqueue_style('admin-style-' . $this->slug, $uri . $manifest['/admin/admin.css']);
+            // Bootstrap Icons CDN
+            wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css', [], '1.11.3');
+            wp_enqueue_style('admin-style-' . $this->slug, $uri . $manifest['/admin/admin.css'], ['bootstrap-icons']);
             wp_enqueue_script('admin-script-' . $this->slug, $uri . $manifest['/admin/admin.js'], [], false, true);
         });
+    }
+
+    /**
+     * Initialize Reflective REST API Wrapper
+     *
+     * This single call automatically enhances ALL custom resources with:
+     * - Full-text search
+     * - Field filtering
+     * - Sorting and pagination
+     * - Custom actions (for models implementing HasRestActions)
+     *
+     * Zero per-model configuration required.
+     */
+    private function initReflectiveRestApi()
+    {
+        // Configure model namespace for this plugin
+        \MakermakerCore\Rest\ReflectiveRestWrapper::setModelNamespace('\\MakerMaker\\Models\\');
+
+        // Configure list query modifier for user-based filtering
+        \MakermakerCore\Rest\ReflectiveRestWrapper::setListQueryModifier(function ($model, $resource, $user) {
+            // Apply user-based filtering for contact-submissions
+            // Non-admin users can only see submissions they created
+            if ($resource === 'contact-submissions' && !$user->isCapable('manage_contact_submissions')) {
+                $model = $model->where('created_by', $user->ID);
+            }
+            return $model;
+        });
+
+        // Initialize the REST API wrapper
+        \MakermakerCore\Rest\ReflectiveRestWrapper::init();
     }
 }
