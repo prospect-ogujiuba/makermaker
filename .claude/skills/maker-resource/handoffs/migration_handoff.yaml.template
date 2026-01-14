@@ -1,0 +1,160 @@
+# Migration Handoff Template
+# Produced by: migration-phase (tr-migration-architect)
+# Consumed by: model-phase (tr-model-builder)
+
+handoff:
+  metadata:
+    from_stage: "migration-phase"
+    to_stage: "model-phase"
+    timestamp: ""            # e.g., "2026-01-13T10:30:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # ENTITY IDENTIFICATION
+    # ─────────────────────────────────────────────────────────────────────────
+    entity: ""               # PascalCase (e.g., "Service")
+    table: ""                # Full table name with prefix (e.g., "srvc_services")
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # COLUMNS
+    # Complete column definitions as created in migration
+    # ─────────────────────────────────────────────────────────────────────────
+    columns:
+      - name: ""             # Column name (e.g., "id")
+        type: ""             # SQL type (e.g., "BIGINT UNSIGNED", "VARCHAR(255)", "TEXT", "JSON")
+        primary: false       # true if primary key
+        auto_increment: false
+        nullable: false
+        unique: false
+        default: null        # Default value if any
+        foreign_key: null    # Reference if FK (e.g., "srvc_service_types.id")
+      # Example columns for Service entity:
+      # - name: "id"
+      #   type: "BIGINT UNSIGNED"
+      #   primary: true
+      #   auto_increment: true
+      # - name: "name"
+      #   type: "VARCHAR(255)"
+      #   nullable: false
+      # - name: "slug"
+      #   type: "VARCHAR(255)"
+      #   nullable: false
+      #   unique: true
+      # - name: "sku"
+      #   type: "VARCHAR(100)"
+      #   nullable: true
+      #   unique: true
+      # - name: "description"
+      #   type: "TEXT"
+      #   nullable: true
+      # - name: "type_id"
+      #   type: "BIGINT UNSIGNED"
+      #   nullable: false
+      #   foreign_key: "srvc_service_types.id"
+      # - name: "metadata"
+      #   type: "JSON"
+      #   nullable: true
+      # - name: "is_active"
+      #   type: "TINYINT(1)"
+      #   default: 1
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # INDEXES
+    # Non-primary indexes with rationale for model/query optimization
+    # ─────────────────────────────────────────────────────────────────────────
+    indexes:
+      - name: ""             # Index name (e.g., "idx_type_status")
+        columns: []          # Columns in index (e.g., ["type_id", "is_active"])
+        rationale: ""        # Why this index exists (e.g., "Common query: list active by type")
+      # Example:
+      # - name: "idx_type_status"
+      #   columns: ["type_id", "is_active"]
+      #   rationale: "Common query pattern: list active services by type"
+      # - name: "idx_sku"
+      #   columns: ["sku"]
+      #   rationale: "Fast SKU lookups for duplicate checking"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # FOREIGN KEYS
+    # FK constraints with cascade behavior and rationale
+    # ─────────────────────────────────────────────────────────────────────────
+    foreign_keys:
+      - column: ""           # FK column (e.g., "type_id")
+        references: ""       # Target table.column (e.g., "srvc_service_types.id")
+        on_delete: ""        # RESTRICT | CASCADE | SET NULL
+        rationale: ""        # Why this cascade behavior
+      # Example:
+      # - column: "type_id"
+      #   references: "srvc_service_types.id"
+      #   on_delete: "RESTRICT"
+      #   rationale: "Prevent orphaned services, require reassignment before type deletion"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Database design choices made during migration
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: ""
+      rationale: ""
+      alternatives: []
+      impact: []
+    # Example decisions:
+    # - decision: "Soft delete via deleted_at column"
+    #   rationale: "Business requirement to maintain history for auditing"
+    #   alternatives: ["Hard delete with archive table", "Hard delete with no archive"]
+    #   impact: ["Model needs SoftDeletes trait", "Queries must filter deleted records"]
+    #
+    # - decision: "SKU field nullable (not all services require SKU)"
+    #   rationale: "Some service types are internal-only and don't need external identifiers"
+    #   alternatives: ["Required SKU with auto-generation for all"]
+    #   impact: ["Controller conditionally generates SKU", "Form shows SKU as optional"]
+    #
+    # - decision: "JSON metadata column for extensible attributes"
+    #   rationale: "Different service types need different custom fields without schema changes"
+    #   alternatives: ["EAV pattern", "Separate metadata table per type"]
+    #   impact: ["Model needs array cast", "Form needs dynamic fields section"]
+    #
+    # - decision: "Composite index on (type_id, is_active)"
+    #   rationale: "Most common query pattern is filtering active services by type"
+    #   alternatives: ["Separate indexes on each column"]
+    #   impact: ["Query planner will use composite for type+status filters"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Database-level rules downstream must honor
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: ""
+      reason: ""
+      enforcement: "hard"    # hard | soft
+    # Example constraints:
+    # - constraint: "type_id always references valid ServiceType"
+    #   reason: "FK constraint enforced at database level"
+    #   enforcement: "hard"
+    #
+    # - constraint: "slug uniqueness must be validated before save"
+    #   reason: "Database unique constraint will reject duplicates"
+    #   enforcement: "hard"
+    #
+    # - constraint: "sku uniqueness when not null"
+    #   reason: "Unique constraint allows nulls but rejects duplicate values"
+    #   enforcement: "hard"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Context the model phase might need
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: ""
+      reference: ""
+      condition: ""
+    # Example hints:
+    # - hint: "Model may need trait for soft deletes"
+    #   reference: "typerocket-patterns.md#soft-delete-trait"
+    #   condition: "if using soft delete pattern (deleted_at column exists)"
+    #
+    # - hint: "Array cast for JSON columns"
+    #   reference: "typerocket-patterns.md#json-casting"
+    #   condition: "if entity has JSON type columns"
+    #
+    # - hint: "Relationship patterns for foreign keys"
+    #   reference: "typerocket-patterns.md#relationship-patterns"
+    #   condition: "if foreign_keys array is not empty"

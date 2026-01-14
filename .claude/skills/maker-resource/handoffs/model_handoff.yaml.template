@@ -1,0 +1,142 @@
+# Model Handoff Template
+# Produced by: model-phase (tr-model-builder)
+# Consumed by: policy-phase (tr-policy-author), fields-phase (tr-fields-validator)
+
+handoff:
+  metadata:
+    from_stage: "model-phase"
+    to_stage: "policy-phase|fields-phase"
+    timestamp: ""            # e.g., "2026-01-13T11:00:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # MODEL CLASS
+    # ─────────────────────────────────────────────────────────────────────────
+    class: ""                # Model class name (e.g., "Service")
+    namespace: ""            # Full namespace (e.g., "App\\Models")
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # MASS ASSIGNMENT
+    # ─────────────────────────────────────────────────────────────────────────
+    fillable: []             # Mass-assignable fields
+    guarded: []              # Protected fields (typically ["id", "created_at", "updated_at"])
+    # Example:
+    # fillable: ["name", "slug", "sku", "description", "type_id", "metadata", "is_active"]
+    # guarded: ["id", "created_at", "updated_at", "created_by", "updated_by", "deleted_at"]
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # CASTS
+    # Type casting for model attributes
+    # ─────────────────────────────────────────────────────────────────────────
+    casts: {}                # field→cast type mapping
+    # Example:
+    # casts:
+    #   metadata: "array"
+    #   is_active: "boolean"
+    #   created_at: "datetime"
+    #   updated_at: "datetime"
+    #   deleted_at: "datetime"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # RELATIONSHIPS
+    # Eloquent-style relationship definitions
+    # ─────────────────────────────────────────────────────────────────────────
+    relationships:
+      - type: ""             # belongsTo | hasMany | belongsToMany | hasOne
+        method: ""           # Method name (e.g., "type", "prices")
+        related_class: ""    # Related model class (e.g., "ServiceType")
+        foreign_key: ""      # FK column if belongsTo (e.g., "type_id")
+        pivot_table: ""      # Pivot table if belongsToMany
+        pivot_fields: []     # Extra pivot fields if belongsToMany
+      # Example relationships:
+      # - type: "belongsTo"
+      #   method: "type"
+      #   related_class: "ServiceType"
+      #   foreign_key: "type_id"
+      # - type: "hasMany"
+      #   method: "prices"
+      #   related_class: "Price"
+      # - type: "belongsToMany"
+      #   method: "categories"
+      #   related_class: "Category"
+      #   pivot_table: "srvc_service_categories"
+      #   pivot_fields: ["sort_order"]
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # ACCESSORS & MUTATORS
+    # Custom attribute getters/setters
+    # ─────────────────────────────────────────────────────────────────────────
+    accessors: []            # Custom accessor methods
+    mutators: []             # Custom mutator methods
+    # Example:
+    # accessors: ["formatted_price", "display_name"]
+    # mutators: ["name"]  # e.g., auto-trim whitespace
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # EAGER LOADING
+    # Default relationships to eager load
+    # ─────────────────────────────────────────────────────────────────────────
+    with: []                 # Default eager loads
+    # Example:
+    # with: ["type"]  # Always load type relationship
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: ORM configuration choices made during model phase
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: ""
+      rationale: ""
+      alternatives: []
+      impact: []
+    # Example decisions:
+    # - decision: "Eager load type by default"
+    #   rationale: "Type is always needed in list views and detail views"
+    #   alternatives: ["Lazy load on demand", "Include type_name directly on model"]
+    #   impact: ["Controller doesn't need explicit with() calls", "N+1 prevented by default"]
+    #
+    # - decision: "JSON cast for metadata field"
+    #   rationale: "Enables flexible schema extension without migrations"
+    #   alternatives: ["Separate metadata fields table", "Strict typed columns"]
+    #   impact: ["Form needs dynamic key-value editor", "Validation rules apply to nested structure"]
+    #
+    # - decision: "Boolean cast for is_active"
+    #   rationale: "PHP boolean semantics cleaner than 0/1 integers"
+    #   alternatives: ["Integer with explicit checks"]
+    #   impact: ["Form uses checkbox, not select", "Queries can use true/false"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Model-level rules downstream must honor
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: ""
+      reason: ""
+      enforcement: "hard"
+    # Example constraints:
+    # - constraint: "type relationship is required (not nullable)"
+    #   reason: "Model assumes type always exists for display"
+    #   enforcement: "hard"
+    #
+    # - constraint: "metadata must be array when set"
+    #   reason: "Cast expects array, non-array will cause errors"
+    #   enforcement: "hard"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Context policy/fields phases might need
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: ""
+      reference: ""
+      condition: ""
+    # Example hints:
+    # - hint: "Policy may need ownership checks"
+    #   reference: "policy-patterns.md#ownership-authorization"
+    #   condition: "if model has user_id or created_by relationship"
+    #
+    # - hint: "Form needs relationship dropdowns"
+    #   reference: "form-patterns.md#relationship-select"
+    #   condition: "if model has belongsTo relationships"
+    #
+    # - hint: "Validation needs nested rules for JSON"
+    #   reference: "validation-patterns.md#nested-array-rules"
+    #   condition: "if casts include array type"

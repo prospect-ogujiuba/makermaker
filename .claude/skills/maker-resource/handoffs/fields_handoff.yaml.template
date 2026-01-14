@@ -1,0 +1,164 @@
+# Fields Handoff Template
+# Produced by: fields-phase (tr-fields-validator)
+# Consumed by: controller-phase (tr-controller-engineer), form-phase (tr-form-designer)
+
+handoff:
+  metadata:
+    from_stage: "fields-phase"
+    to_stage: "controller-phase|form-phase"
+    timestamp: ""            # e.g., "2026-01-13T11:30:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # MODEL REFERENCE
+    # ─────────────────────────────────────────────────────────────────────────
+    model_class: ""          # Associated model class (e.g., "Service")
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # VALIDATION RULES
+    # TypeRocket validation rules for each field
+    # ─────────────────────────────────────────────────────────────────────────
+    validation_rules: {}     # field → rules mapping
+    # Example:
+    # validation_rules:
+    #   name: "required|string|max:255"
+    #   slug: "required|string|max:255|unique:srvc_services,slug,{id}"
+    #   sku: "nullable|string|max:100|unique:srvc_services,sku,{id}"
+    #   description: "nullable|string"
+    #   type_id: "required|integer|exists:srvc_service_types,id"
+    #   metadata: "nullable|array"
+    #   is_active: "boolean"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SANITIZATION
+    # WordPress sanitization functions for each field
+    # ─────────────────────────────────────────────────────────────────────────
+    sanitization: {}         # field → sanitizer function mapping
+    # Example:
+    # sanitization:
+    #   name: "sanitize_text_field"
+    #   slug: "sanitize_title"
+    #   sku: "sanitize_text_field"
+    #   description: "wp_kses_post"
+    #   type_id: "absint"
+    #   is_active: "rest_sanitize_boolean"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # UI HINTS
+    # Guidance for form designer on field presentation
+    # ─────────────────────────────────────────────────────────────────────────
+    ui_hints: {}             # field → hint object mapping
+    # Example:
+    # ui_hints:
+    #   name:
+    #     type: "text"
+    #     placeholder: "Enter service name"
+    #   slug:
+    #     type: "text"
+    #     auto_generate: true
+    #     source_field: "name"
+    #   sku:
+    #     type: "text"
+    #     placeholder: "Auto-generated if blank"
+    #     help: "Leave blank for auto-generation"
+    #   description:
+    #     type: "wysiwyg"
+    #     rows: 10
+    #     media_buttons: true
+    #   type_id:
+    #     type: "select"
+    #     relationship: "type"
+    #     display_field: "name"
+    #   metadata:
+    #     type: "repeater"
+    #     fields:
+    #       - { name: "key", type: "text" }
+    #       - { name: "value", type: "text" }
+    #   is_active:
+    #     type: "toggle"
+    #     default: true
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # CONDITIONAL RULES
+    # Validation rules that apply only under certain conditions
+    # ─────────────────────────────────────────────────────────────────────────
+    conditional_rules:
+      - field: ""            # Field name
+        condition: ""        # Condition expression (e.g., "features.has_sku == true")
+        rules: ""            # Rules to apply when condition is true
+      # Example:
+      # - field: "sku"
+      #   condition: "features.has_sku == true"
+      #   rules: "required|string|max:100|unique:srvc_services,sku,{id}"
+      # - field: "parent_id"
+      #   condition: "features.hierarchical == true"
+      #   rules: "nullable|integer|exists:srvc_services,id"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Validation and UI design choices
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: ""
+      rationale: ""
+      alternatives: []
+      impact: []
+    # Example decisions:
+    # - decision: "WYSIWYG for description field"
+    #   rationale: "Services need rich content with formatting, links, and media"
+    #   alternatives: ["Plain textarea", "Markdown editor"]
+    #   impact: ["Form uses wp_editor", "Output needs wp_kses_post sanitization"]
+    #
+    # - decision: "Repeater for metadata field"
+    #   rationale: "Flexible key-value pairs for service-specific attributes"
+    #   alternatives: ["Fixed fields", "JSON textarea"]
+    #   impact: ["Form uses TypeRocket repeater", "Controller handles array transformation"]
+    #
+    # - decision: "Conditional SKU validation"
+    #   rationale: "SKU only required when has_sku feature enabled for entity"
+    #   alternatives: ["Always optional", "Always required"]
+    #   impact: ["Controller checks feature flag before validation", "Form shows/hides based on flag"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Validation rules downstream must honor
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: ""
+      reason: ""
+      enforcement: "hard"
+    # Example constraints:
+    # - constraint: "Validation rules must use TypeRocket syntax"
+    #   reason: "Controller uses TypeRocket Validator class"
+    #   enforcement: "hard"
+    #
+    # - constraint: "Sanitizers must be valid WordPress functions"
+    #   reason: "Called via call_user_func in sanitization layer"
+    #   enforcement: "hard"
+    #
+    # - constraint: "UI hint types must match available form components"
+    #   reason: "Form designer maps types to TypeRocket form methods"
+    #   enforcement: "soft"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Context controller/form phases might need
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: ""
+      reference: ""
+      condition: ""
+    # Example hints:
+    # - hint: "Form needs WYSIWYG component"
+    #   reference: "form-patterns.md#wysiwyg-field"
+    #   condition: "if any ui_hints[].type == 'wysiwyg'"
+    #
+    # - hint: "Form needs repeater component"
+    #   reference: "form-patterns.md#repeater-field"
+    #   condition: "if any ui_hints[].type == 'repeater'"
+    #
+    # - hint: "Controller needs conditional validation logic"
+    #   reference: "controller-patterns.md#conditional-validation"
+    #   condition: "if conditional_rules is not empty"
+    #
+    # - hint: "Form needs relationship select component"
+    #   reference: "form-patterns.md#relationship-select"
+    #   condition: "if any ui_hints[].type == 'select' and has relationship"

@@ -1,0 +1,189 @@
+# Controller Handoff Template
+# Produced by: controller-phase (tr-controller-engineer)
+# Consumed by: form-phase (tr-form-designer), index-phase (tr-index-builder)
+
+handoff:
+  metadata:
+    from_stage: "controller-phase"
+    to_stage: "form-phase|index-phase"
+    timestamp: ""            # e.g., "2026-01-13T12:00:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # CONTROLLER CLASS
+    # ─────────────────────────────────────────────────────────────────────────
+    controller_class: ""     # Controller class name (e.g., "ServiceController")
+    model_class: ""          # Associated model class (e.g., "Service")
+    namespace: ""            # Full namespace (e.g., "App\\Controllers")
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # METHODS
+    # Standard CRUD + REST methods implemented
+    # ─────────────────────────────────────────────────────────────────────────
+    methods:
+      - index                # List view
+      - add                  # Create form
+      - create               # Store new record
+      - edit                 # Edit form
+      - update               # Update record
+      - show                 # Detail view
+      - destroy              # Delete record
+      - indexRest            # REST API list
+      - showRest             # REST API single
+    # Example with custom methods:
+    # methods:
+    #   - index
+    #   - add
+    #   - create
+    #   - edit
+    #   - update
+    #   - show
+    #   - destroy
+    #   - indexRest
+    #   - showRest
+    #   - duplicate          # Custom: clone record
+    #   - export             # Custom: export to CSV
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # HELPERS USED
+    # TypeRocket helpers integrated into controller
+    # ─────────────────────────────────────────────────────────────────────────
+    helpers_used:
+      - helper: ""           # Helper class name
+        method: ""           # Primary method used
+        purpose: ""          # Why this helper is used
+      # Example helpers:
+      # - helper: "AuthorizationHelper"
+      #   method: "authorize"
+      #   purpose: "Policy enforcement on all CRUD actions"
+      # - helper: "AutoCodeHelper"
+      #   method: "generateSkuAndSlug"
+      #   purpose: "Auto-generate SKU and slug from name field"
+      # - helper: "DeleteHelper"
+      #   method: "executeDelete"
+      #   purpose: "Soft delete with audit trail"
+      # - helper: "AuditTrailHelper"
+      #   method: "logAction"
+      #   purpose: "Track create/update/delete actions with user context"
+      # - helper: "RestHelper"
+      #   method: "formatResponse"
+      #   purpose: "Consistent JSON response format for REST endpoints"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # ROUTES
+    # Admin and REST route configuration
+    # ─────────────────────────────────────────────────────────────────────────
+    routes:
+      admin_prefix: ""       # Admin menu prefix (e.g., "services")
+      rest_prefix: ""        # REST API prefix (e.g., "services")
+      resource_name: ""      # URL resource name (e.g., "services")
+    # Example:
+    # routes:
+    #   admin_prefix: "services"
+    #   rest_prefix: "services"
+    #   resource_name: "services"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # REST ENDPOINTS
+    # Detailed REST API endpoint configuration
+    # ─────────────────────────────────────────────────────────────────────────
+    rest_endpoints:
+      - method: ""           # HTTP method (GET, POST, PUT, DELETE)
+        path: ""             # Endpoint path (e.g., "/tr-api/rest/services/")
+        controller_method: "" # Controller method handling this endpoint
+        auth_required: true  # Whether authentication is required
+      # Example endpoints:
+      # - method: "GET"
+      #   path: "/tr-api/rest/services/"
+      #   controller_method: "indexRest"
+      #   auth_required: false
+      # - method: "GET"
+      #   path: "/tr-api/rest/services/{id}"
+      #   controller_method: "showRest"
+      #   auth_required: false
+      # - method: "POST"
+      #   path: "/tr-api/rest/services/"
+      #   controller_method: "create"
+      #   auth_required: true
+      # - method: "PUT"
+      #   path: "/tr-api/rest/services/{id}"
+      #   controller_method: "update"
+      #   auth_required: true
+      # - method: "DELETE"
+      #   path: "/tr-api/rest/services/{id}"
+      #   controller_method: "destroy"
+      #   auth_required: true
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Controller implementation choices
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: ""
+      rationale: ""
+      alternatives: []
+      impact: []
+    # Example decisions:
+    # - decision: "SKU generation uses AutoCodeHelper::generateSkuAndSlug"
+    #   rationale: "Consistent SKU format across all entities, handles uniqueness"
+    #   alternatives: ["Manual SKU entry only", "UUID-based SKU"]
+    #   impact: ["Form shows SKU as readonly after creation", "Index displays generated SKU"]
+    #
+    # - decision: "Soft delete with DeleteHelper::executeDelete"
+    #   rationale: "Business requires audit trail and ability to restore deleted items"
+    #   alternatives: ["Hard delete", "Archive to separate table"]
+    #   impact: ["Index needs 'show deleted' filter", "Form needs restore action for deleted items"]
+    #
+    # - decision: "REST endpoints require nonce validation"
+    #   rationale: "Security: prevent CSRF attacks on state-changing operations"
+    #   alternatives: ["JWT tokens", "API keys only"]
+    #   impact: ["Frontend must include nonce in requests", "Block components auto-include via wp_localize_script"]
+    #
+    # - decision: "Public REST read endpoints (no auth required)"
+    #   rationale: "Frontend blocks need to fetch data without user login"
+    #   alternatives: ["All endpoints require auth"]
+    #   impact: ["indexRest and showRest accessible without login", "Write operations still protected"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Controller rules downstream must honor
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: ""
+      reason: ""
+      enforcement: "hard"
+    # Example constraints:
+    # - constraint: "All REST write endpoints must validate nonce"
+    #   reason: "Security requirement for CSRF protection"
+    #   enforcement: "hard"
+    #
+    # - constraint: "CRUD methods must call policy before action"
+    #   reason: "Authorization must be checked on every state change"
+    #   enforcement: "hard"
+    #
+    # - constraint: "REST responses must use RestHelper format"
+    #   reason: "Frontend components expect consistent response structure"
+    #   enforcement: "hard"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Context form/index phases might need
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: ""
+      reference: ""
+      condition: ""
+    # Example hints:
+    # - hint: "Form needs SKU field as readonly after creation"
+    #   reference: "form-patterns.md#readonly-fields"
+    #   condition: "if AutoCodeHelper is in helpers_used"
+    #
+    # - hint: "Index needs soft delete filter toggle"
+    #   reference: "index-patterns.md#soft-delete-filter"
+    #   condition: "if DeleteHelper is in helpers_used"
+    #
+    # - hint: "Index needs bulk action for restore"
+    #   reference: "index-patterns.md#bulk-actions"
+    #   condition: "if DeleteHelper is in helpers_used"
+    #
+    # - hint: "Form needs audit trail display section"
+    #   reference: "form-patterns.md#audit-trail-display"
+    #   condition: "if AuditTrailHelper is in helpers_used"

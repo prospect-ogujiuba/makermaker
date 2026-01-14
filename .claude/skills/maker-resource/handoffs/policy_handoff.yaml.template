@@ -1,0 +1,133 @@
+# Policy Handoff Template
+# Produced by: policy-phase (tr-policy-author)
+# Consumed by: controller-phase (tr-controller-engineer)
+
+handoff:
+  metadata:
+    from_stage: "policy-phase"
+    to_stage: "controller-phase"
+    timestamp: ""            # e.g., "2026-01-13T11:30:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # POLICY CLASS
+    # ─────────────────────────────────────────────────────────────────────────
+    policy_class: ""         # Policy class name (e.g., "ServicePolicy")
+    model_class: ""          # Associated model class (e.g., "Service")
+    namespace: ""            # Full namespace (e.g., "App\\Policies")
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # CAPABILITIES
+    # Maps CRUD actions to WordPress capabilities
+    # ─────────────────────────────────────────────────────────────────────────
+    capabilities:
+      - action: ""           # index | show | create | update | delete
+        capability: ""       # WordPress capability (e.g., "edit_services", "delete_services")
+        description: ""      # What this capability allows
+      # Example capabilities:
+      # - action: "index"
+      #   capability: "edit_services"
+      #   description: "View list of services"
+      # - action: "show"
+      #   capability: "edit_services"
+      #   description: "View single service"
+      # - action: "create"
+      #   capability: "edit_services"
+      #   description: "Create new service"
+      # - action: "update"
+      #   capability: "edit_services"
+      #   description: "Edit existing service"
+      # - action: "delete"
+      #   capability: "delete_services"
+      #   description: "Delete service (soft delete)"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # OWNERSHIP
+    # Controls ownership-based access restrictions
+    # ─────────────────────────────────────────────────────────────────────────
+    ownership_field: null    # Field for ownership checks (e.g., "created_by"), null if no ownership
+    admin_override: true     # Whether admins bypass ownership checks
+    # Example:
+    # ownership_field: "created_by"
+    # admin_override: true
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # CUSTOM CHECKS
+    # Additional authorization logic beyond capability checks
+    # ─────────────────────────────────────────────────────────────────────────
+    custom_checks:
+      - method: ""           # Method name in policy (e.g., "canPublish")
+        description: ""      # What this check verifies
+        applies_to: []       # Which actions trigger this check (e.g., ["update"])
+      # Example custom checks:
+      # - method: "canPublish"
+      #   description: "Check if user can change is_active to true"
+      #   applies_to: ["update"]
+      # - method: "canReassignType"
+      #   description: "Check if user can change service type"
+      #   applies_to: ["update"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Authorization design choices
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: ""
+      rationale: ""
+      alternatives: []
+      impact: []
+    # Example decisions:
+    # - decision: "Ownership-based access for non-admins"
+    #   rationale: "Users should only edit their own services unless admin"
+    #   alternatives: ["Role-based only", "Team-based ownership"]
+    #   impact: ["Controller filters queries by created_by", "Form shows owner info"]
+    #
+    # - decision: "Soft delete requires edit capability, not delete"
+    #   rationale: "Soft delete is reversible, treat like edit not permanent delete"
+    #   alternatives: ["Require delete capability for soft delete"]
+    #   impact: ["Delete action uses edit_services cap", "Hard delete (if any) uses delete_services"]
+    #
+    # - decision: "Same capability for index/show/create/update"
+    #   rationale: "Simplify permission model - if you can edit, you can do all CRUD"
+    #   alternatives: ["Granular capabilities per action"]
+    #   impact: ["Single capability check in most controller methods"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Authorization rules downstream must honor
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: ""
+      reason: ""
+      enforcement: "hard"
+    # Example constraints:
+    # - constraint: "Capability must exist in WordPress or be registered"
+    #   reason: "Capability checks fail silently if cap doesn't exist"
+    #   enforcement: "soft"
+    #
+    # - constraint: "Ownership field must exist in model"
+    #   reason: "Ownership checks query this field"
+    #   enforcement: "hard"
+    #
+    # - constraint: "Admin override applies to all ownership checks"
+    #   reason: "Consistent behavior - admins always have full access"
+    #   enforcement: "hard"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Context controller phase might need
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: ""
+      reference: ""
+      condition: ""
+    # Example hints:
+    # - hint: "Controller needs AuthorizationHelper"
+    #   reference: "controller-patterns.md#authorization-helper"
+    #   condition: "always"
+    #
+    # - hint: "Form may need ownership display"
+    #   reference: "form-patterns.md#ownership-display"
+    #   condition: "if ownership_field is set"
+    #
+    # - hint: "Index query needs ownership filter"
+    #   reference: "controller-patterns.md#ownership-scoping"
+    #   condition: "if ownership_field is set and admin_override is true"

@@ -1,0 +1,52 @@
+# Handoff Schema v1.0
+# Universal schema for all stage-to-stage handoffs in maker skills.
+# All handoff files must conform to this structure.
+
+handoff:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # METADATA: Identifies the handoff source, destination, and versioning
+  # ─────────────────────────────────────────────────────────────────────────────
+  metadata:
+    from_stage: string       # Stage that produced this handoff (e.g., "requirements-gathering", "migration-phase")
+    to_stage: string         # Expected consumer stage(s) (e.g., "model-phase", "policy-phase|fields-phase")
+    timestamp: datetime      # ISO 8601 timestamp when handoff was created
+    version: "1.0"           # Schema version for forward compatibility
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SCHEMA: Domain-specific data structure
+  # Each handoff type defines its own schema fields validated against stage expectations.
+  # Example fields vary by handoff type (requirements, migration, model, etc.)
+  # ─────────────────────────────────────────────────────────────────────────────
+  schema:
+    # Domain-specific data structure populated by producing stage
+    # Structure varies by handoff type - see individual templates
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Architectural choices made during this stage
+  # Enables downstream agents to understand "why" not just "what"
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions:
+    - decision: string       # What was decided (clear statement)
+      rationale: string      # Why this choice was made (context for downstream)
+      alternatives:          # What was considered and rejected
+        - string
+      impact:                # What downstream stages should know/do differently
+        - string
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Rules that downstream stages must honor
+  # Hard constraints cause failures if violated; soft constraints are advisory
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints:
+    - constraint: string     # What must be true/honored
+      reason: string         # Why this constraint exists
+      enforcement: enum      # "hard" = must be enforced | "soft" = should be followed
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Suggestions for context the next stage might need
+  # Enables just-in-time loading of reference sections
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints:
+    - hint: string           # What might be needed
+      reference: string      # Which reference section to load (e.g., "typerocket-patterns.md#soft-delete-trait")
+      condition: string      # When to load it (e.g., "if using soft delete pattern")

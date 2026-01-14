@@ -1,0 +1,89 @@
+# Requirements Handoff Template
+# Produced by: requirements-gathering stage
+# Consumed by: migration-phase (and informs all subsequent phases)
+
+handoff:
+  metadata:
+    from_stage: "requirements-gathering"
+    to_stage: "migration-phase"
+    timestamp: ""            # e.g., "2026-01-13T10:30:00Z"
+    version: "1.0"
+
+  schema:
+    # ─────────────────────────────────────────────────────────────────────────
+    # ENTITY IDENTIFICATION
+    # ─────────────────────────────────────────────────────────────────────────
+    entity_name: ""          # PascalCase (e.g., "Service", "ServiceType")
+    entity_plural: ""        # Plural form for routes (e.g., "services", "service-types")
+    table_prefix: "srvc_"    # Standard prefix for this domain
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # FIELDS
+    # Each field maps to a database column and model property
+    # ─────────────────────────────────────────────────────────────────────────
+    fields:
+      - name: ""             # snake_case column name (e.g., "name", "type_id")
+        type: ""             # string | int | bigint | text | json | datetime | decimal | boolean
+        nullable: false      # true if column allows NULL
+        default: null        # Default value if any (null, 0, "", true, false, "CURRENT_TIMESTAMP")
+        unique: false        # true if column requires unique constraint
+        indexed: false       # true if column needs index (non-unique)
+      # Example:
+      # - name: "name"
+      #   type: "string"
+      #   nullable: false
+      #   default: null
+      #   unique: false
+      #   indexed: false
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # RELATIONSHIPS
+    # Defines how this entity connects to others
+    # ─────────────────────────────────────────────────────────────────────────
+    relationships:
+      - type: ""             # belongsTo | hasMany | belongsToMany
+        target: ""           # Target entity PascalCase (e.g., "ServiceType")
+        foreign_key: ""      # FK column name (for belongsTo: "type_id")
+        cascade: ""          # restrict | cascade | set_null (on delete behavior)
+      # Example:
+      # - type: "belongsTo"
+      #   target: "ServiceType"
+      #   foreign_key: "type_id"
+      #   cascade: "restrict"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # FEATURES
+    # Boolean flags for common patterns
+    # ─────────────────────────────────────────────────────────────────────────
+    features:
+      has_sku: false         # true if entity needs SKU/slug auto-generation
+      soft_delete: true      # true if using deleted_at pattern (default: true)
+      audit_trail: true      # true if using created_at/updated_at/created_by/updated_by (default: true)
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DECISIONS: Populated during requirements gathering
+  # ─────────────────────────────────────────────────────────────────────────────
+  decisions: []
+  # Example:
+  # - decision: "SKU is optional for this entity"
+  #   rationale: "Internal services don't need external identifiers"
+  #   alternatives: ["Required SKU with auto-generation"]
+  #   impact: ["Controller won't auto-generate SKU", "Form shows SKU as optional field"]
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONSTRAINTS: Populated during requirements gathering
+  # ─────────────────────────────────────────────────────────────────────────────
+  constraints: []
+  # Example:
+  # - constraint: "Entity must have at least one parent type"
+  #   reason: "Business rule: all services must be categorized"
+  #   enforcement: "hard"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DISCOVERY_HINTS: Populated during requirements gathering
+  # ─────────────────────────────────────────────────────────────────────────────
+  discovery_hints: []
+  # Example:
+  # - hint: "Entity has JSON metadata field"
+  #   reference: "typerocket-patterns.md#json-casting"
+  #   condition: "when fields include type=json"
