@@ -1,0 +1,36 @@
+# Input: Combined handoffs for index design
+# From: tr-model-builder, tr-controller-engineer
+# To: tr-index-builder
+
+# Model handoff (subset)
+model_handoff:
+  model:
+    class_name: ""           # Model class for tr_table()
+    namespace: ""            # Full namespace for use statement
+
+  properties:
+    fillable: []             # Available display columns
+
+  relationships:
+    - name: ""               # Method name
+      type: ""               # belongsTo, hasMany
+      model: ""              # Related model class
+      foreign_key: ""        # FK column
+
+  with: []                   # Default eager loads
+
+# Controller handoff
+controller_handoff:
+  methods: []                # Available methods
+                             # - edit → 'edit' action
+                             # - show → 'view' action
+                             # - destroy → 'delete' action
+
+  helpers_used:
+    - helper: ""             # DeleteHelper, BulkActionHelper
+      method: ""
+      purpose: ""
+
+  decisions:
+    - decision: ""
+      impact: []             # Effects on index (soft delete, etc.)

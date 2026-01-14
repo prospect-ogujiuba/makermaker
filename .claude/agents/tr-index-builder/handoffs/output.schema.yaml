@@ -1,0 +1,27 @@
+# Output: Index view file
+# From: tr-index-builder
+# To: File system (terminal agent)
+
+# This agent produces a PHP file, not a YAML handoff
+
+output:
+  file_path: "resources/views/{entity}/index.php"
+  type: "php_view"
+
+structure:
+  - php_open_tag
+  - docblock_comment
+  - use_statement: "MakerMaker\\Models\\{Model}"
+  - table_init: "$table = tr_table({Model}::class)"
+  - bulk_actions: "$table->setBulkActions(...)"
+  - columns: "$table->setColumns([...])"
+  - primary_column: "Second param to setColumns"
+  - ordering: "->setOrder('column', 'DIR')"
+  - render: "->render()"
+  - output: "$table;"
+
+conventions:
+  directory_naming: "lowercase_underscored"
+  indentation: "4 spaces"
+  quotes: "single for strings, double for HTML"
+  column_limit: "8-10 max"
