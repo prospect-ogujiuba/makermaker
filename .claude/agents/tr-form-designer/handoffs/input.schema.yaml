@@ -1,0 +1,42 @@
+# Input: Combined handoffs for form design
+# From: tr-model-builder, tr-fields-validator, tr-controller-engineer
+# To: tr-form-designer
+
+# Model handoff (subset)
+model_handoff:
+  schema:
+    class: ""               # Model class name
+    fillable: []            # Fields needing form inputs
+    relationships:          # For select dropdowns
+      - type: ""            # belongsTo, hasMany
+        method: ""          # Relationship method name
+        related_class: ""   # Related model class
+        foreign_key: ""     # FK column name
+    casts: {}               # field: type (array, bool)
+    with: []                # Eager loading
+
+# Fields handoff
+fields_handoff:
+  ui_hints:                 # Per-field UI configuration
+    field_name:
+      type: ""              # wysiwyg, repeater, select, etc.
+      rows: 0               # For textarea/editor
+      media_buttons: false  # For editor
+      options: []           # For static selects
+      relationship: ""      # For FK selects
+      display_field: ""     # Model display field
+
+  validation_rules: {}      # field: "required|string|max:255"
+
+# Controller handoff
+controller_handoff:
+  helpers_used:
+    - helper: ""            # AutoCodeHelper, AuditTrailHelper
+      method: ""            # generateSkuAndSlug, logAction
+      purpose: ""           # Why used, affects form behavior
+
+  variables:                # Form view variables
+    form: "$form"
+    current_id: "$current_id"
+    createdBy: "$createdBy"
+    updatedBy: "$updatedBy"
