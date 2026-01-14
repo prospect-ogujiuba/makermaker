@@ -1,0 +1,39 @@
+# Input Schema: test_target
+
+# Consumed from any artifact agent
+# Specifies what component to test
+
+handoff:
+  metadata:
+    from_stage: "any-artifact-phase"
+    to_stage: "test-phase"
+    timestamp: "{ISO-8601}"
+    version: "1.0"
+
+  schema:
+    test_target:
+      type: "model|controller|policy|fields"
+      entity: "{Entity}"
+      file: "app/{Component}/{Entity}.php"
+      methods_to_test:
+        - "findAll"
+        - "findById"
+        - "create"
+      relationships:
+        - belongsTo: "EntityType"
+        - hasMany: "ChildEntity"
+
+    focus:
+      unit_tests: true
+      integration_tests: false
+      edge_cases:
+        - "null_values"
+        - "invalid_ids"
+        - "permission_denied"
+
+  # From predecessor handoffs
+  context:
+    model_handoff: "fillable, guarded, relationships"
+    policy_handoff: "capabilities, ownership_field"
+    fields_handoff: "validation_rules, sanitization"
+    controller_handoff: "actions, helpers"
