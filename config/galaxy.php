@@ -37,6 +37,6 @@ return [
     |
     */
     'commands' => [
-        \MakerMaker\Commands\Crud::class,
+        \MakermakerCore\Commands\Crud::class,
     ]
 ];
