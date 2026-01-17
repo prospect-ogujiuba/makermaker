@@ -6,15 +6,15 @@ model_handoff:
   location: .planning/handoffs/model_handoff.yaml
   required_fields:
     schema:
-      class: string           # "Equipment"
-      namespace: string       # "MakerMaker\\Models"
-      table: string           # "srvc_equipment"
-      fillable: array         # ["name", "sku", "slug", ...]
+      class: string # "Equipment"
+      namespace: string # "MakerMaker\\Models"
+      table: string # "prfx_equipment"
+      fillable: array # ["name", "sku", "slug", ...]
       relationships:
-        belongsTo: object     # {type: {model: "ServiceType"}}
-        hasMany: object       # {prices: {model: "Price"}}
+        belongsTo: object # {type: {model: "ServiceType"}}
+        hasMany: object # {prices: {model: "Price"}}
         belongsToMany: object # {services: {model: "Service", pivot: "..."}}
-      with: array             # Default eager loads
+      with: array # Default eager loads
       has_soft_deletes: boolean
       has_audit_trail: boolean
 
@@ -23,9 +23,9 @@ policy_handoff:
   location: .planning/handoffs/policy_handoff.yaml
   required_fields:
     schema:
-      policy_class: string    # "EquipmentPolicy"
+      policy_class: string # "EquipmentPolicy"
       capabilities:
-        create: string        # "manage_equipment"
+        create: string # "manage_equipment"
         read: string
         update: string
         delete: string
@@ -37,7 +37,7 @@ fields_handoff:
   location: .planning/handoffs/fields_handoff.yaml
   required_fields:
     schema:
-      fields_class: string    # "EquipmentFields"
+      fields_class: string # "EquipmentFields"
       validation_rules: object
       sanitization: object
 

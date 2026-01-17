@@ -63,30 +63,33 @@ CREATE TABLE IF NOT EXISTS {!!prefix!!}{plural_entity} (
 );
 ```
 
-**Prefix placeholder:** `{!!prefix!!}` is replaced with `srvc_` at runtime.
+**Prefix placeholder:** `{!!prefix!!}` is replaced with `prfx_` at runtime.
+
 </section>
 
 <section id="field-type-mappings">
 ## PHP to SQL Type Mappings
 
-| PHP Type | SQL Type | Notes |
-|----------|----------|-------|
-| string (short) | VARCHAR(64) | SKU, slug, code |
-| string (medium) | VARCHAR(255) | Names, titles |
-| string (long) | TEXT | Descriptions |
-| int | INT | Regular integers |
-| int (id) | BIGINT UNSIGNED | Foreign keys, IDs |
-| float | DECIMAL(10,2) | Currency, prices |
-| bool | TINYINT(1) | Flags, is_active |
-| datetime | DATETIME | Timestamps |
-| json | JSON | Metadata, config |
-| enum | VARCHAR(32) | Status values |
+| PHP Type        | SQL Type        | Notes             |
+| --------------- | --------------- | ----------------- |
+| string (short)  | VARCHAR(64)     | SKU, slug, code   |
+| string (medium) | VARCHAR(255)    | Names, titles     |
+| string (long)   | TEXT            | Descriptions      |
+| int             | INT             | Regular integers  |
+| int (id)        | BIGINT UNSIGNED | Foreign keys, IDs |
+| float           | DECIMAL(10,2)   | Currency, prices  |
+| bool            | TINYINT(1)      | Flags, is_active  |
+| datetime        | DATETIME        | Timestamps        |
+| json            | JSON            | Metadata, config  |
+| enum            | VARCHAR(32)     | Status values     |
+
 </section>
 
 <section id="index-strategies">
 ## Index Strategies
 
 **Always index:**
+
 - Primary key (automatic)
 - Foreign keys
 - Fields used in WHERE clauses
@@ -95,6 +98,7 @@ CREATE TABLE IF NOT EXISTS {!!prefix!!}{plural_entity} (
 - `is_active` (status filtering)
 
 **Index types:**
+
 ```sql
 -- Unique constraint
 UNIQUE KEY unique_sku (sku)
@@ -110,12 +114,14 @@ INDEX idx_parent_id (parent_id)
 ```
 
 **Composite index rule:** Put equality conditions first, then range conditions.
+
 </section>
 
 <section id="foreign-key-patterns">
 ## Foreign Key Patterns
 
 **belongsTo (many-to-one):**
+
 ```sql
 -- Add column and FK to child table
 {target}_id BIGINT UNSIGNED NULL,
@@ -125,6 +131,7 @@ FOREIGN KEY fk_{entity}_{target} ({target}_id)
 ```
 
 **ON DELETE options:**
+
 - `SET NULL` - Keep record, clear relationship (default for optional)
 - `CASCADE` - Delete dependent records (use for required relationships)
 - `RESTRICT` - Prevent delete if dependents exist
@@ -159,24 +166,28 @@ CREATE TABLE IF NOT EXISTS {!!prefix!!}{source}_{target} (
         REFERENCES {!!prefix!!}{targets}(id) ON DELETE CASCADE
 );
 ```
+
 </section>
 
 <section id="alter-table-patterns">
 ## ALTER TABLE Patterns
 
 **Add column:**
+
 ```sql
 ALTER TABLE {!!prefix!!}{table}
 ADD COLUMN new_field VARCHAR(255) NULL AFTER existing_field;
 ```
 
 **Add index:**
+
 ```sql
 ALTER TABLE {!!prefix!!}{table}
 ADD INDEX idx_new_field (new_field);
 ```
 
 **Add foreign key:**
+
 ```sql
 ALTER TABLE {!!prefix!!}{table}
 ADD COLUMN {target}_id BIGINT UNSIGNED NULL,
@@ -186,10 +197,12 @@ ADD FOREIGN KEY fk_{table}_{target} ({target}_id)
 ```
 
 **Drop column (careful!):**
+
 ```sql
 ALTER TABLE {!!prefix!!}{table}
 DROP COLUMN old_field;
 ```
+
 </section>
 
 <section id="migration-naming">
@@ -198,6 +211,7 @@ DROP COLUMN old_field;
 Pattern: `{timestamp}.{action}_{table}_{description}.sql`
 
 Examples:
+
 - `1736000001.create_services_table.sql`
 - `1736000002.create_service_categories_table.sql`
 - `1736000003.add_parent_id_to_service_categories.sql`
@@ -205,6 +219,7 @@ Examples:
 - `3736000001.create_service_summary_view.sql`
 
 Prefix meanings:
+
 - `1xxx...` - Schema creation/modification
 - `2xxx...` - Data seeding
 - `3xxx...` - Views and procedures

@@ -6,6 +6,7 @@ Map analyzed fields to appropriate validation rules.
 
 <trigger_loads>
 Based on field types from Phase 1:
+
 - String fields → @rules/string-rules.md
 - Numeric fields → @rules/numeric-rules.md
 - Unique fields → @rules/unique-rules.md
@@ -13,11 +14,12 @@ Based on field types from Phase 1:
 - Custom validation → @rules/custom-rules.md
 
 Based on column types:
+
 - varchar/text → @types/string-defaults.md
 - int/decimal → @types/numeric-defaults.md
 - date/datetime → @types/date-defaults.md
 - FK columns → @types/relationship-defaults.md
-</trigger_loads>
+  </trigger_loads>
 
 <rule_mapping>
 
@@ -52,8 +54,8 @@ Example: `?unique:sku:table@id:$id|max:64`
 Pass to Phase 3:
 ```yaml
 rules:
-  sku: "?unique:sku:{$wpdb_prefix}srvc_equipment@id:{$id}|max:64"
-  name: "unique:name:{$wpdb_prefix}srvc_equipment@id:{$id}|required|max:128"
+  sku: "?unique:sku:{$wpdb_prefix}prfx_equipment@id:{$id}|max:64"
+  name: "unique:name:{$wpdb_prefix}prfx_equipment@id:{$id}|required|max:128"
   equipment_type_id: "required|numeric"
   status: "callback:checkInList:Equipment"
   description: ""

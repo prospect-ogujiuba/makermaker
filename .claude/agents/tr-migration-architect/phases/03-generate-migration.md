@@ -1,6 +1,7 @@
 # Phase 3: Generate Migration
 
 ## Purpose
+
 Generate SQL migration file from schema design.
 
 ## File Structure
@@ -8,7 +9,7 @@ Generate SQL migration file from schema design.
 ```sql
 -- Description:
 -- >>> Up >>>
-CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_{table}` (
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}prfx_{table}` (
   -- Primary key
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
 
@@ -41,12 +42,13 @@ CREATE TABLE IF NOT EXISTS `{!!prefix!!}srvc_{table}` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='{description}';
 
 -- >>> Down >>>
-DROP TABLE IF EXISTS `{!!prefix!!}srvc_{table}`;
+DROP TABLE IF EXISTS `{!!prefix!!}prfx_{table}`;
 ```
 
 ## SQL Generation Rules
 
 ### Column Order
+
 1. id (primary key)
 2. Custom columns (alphabetical or logical)
 3. version
@@ -54,18 +56,21 @@ DROP TABLE IF EXISTS `{!!prefix!!}srvc_{table}`;
 5. Audit user columns
 
 ### Index Order
+
 1. UNIQUE KEY constraints
 2. KEY for FK columns
 3. KEY for query columns
 4. Composite KEY indexes
 
 ### Constraint Order
+
 1. CHECK constraints
 2. FOREIGN KEY constraints
 
 ## File Naming
 
 Pattern: `{timestamp}.create_{table}_table.sql`
+
 - Timestamp: Unix timestamp (10 digits)
 - Table: snake_case plural
 
@@ -76,6 +81,7 @@ Pattern: `{timestamp}.create_{table}_table.sql`
 ## Validation Checklist
 
 Before writing file:
+
 - [ ] {!!prefix!!} used everywhere
 - [ ] All audit columns present
 - [ ] All FK columns have indexes
@@ -83,4 +89,5 @@ Before writing file:
 - [ ] Valid SQL syntax
 
 ## Next Phase
+
 Proceed to Phase 4: Create Handoff.

@@ -18,44 +18,51 @@ Your core responsibility is planning and coordination. Delegate all implementati
 **Purpose:** Business logic, data models, REST APIs consumed by MakerBlocks
 
 **Key directories:**
+
 - `database/migrations/` - DATA TRUTH (schema definitions)
 - `app/Models/` - ORM models with relationships
 - `app/Auth/` - Authorization policies
 - `app/Http/Fields/` - Validation rules
 - `app/Controllers/` - HTTP handlers, REST endpoints
 - `resources/views/` - Admin views (index, form)
-- `inc/resources/` - Resource registrations - Must have admin routes and register using 
+- `inc/resources/` - Resource registrations - Must have admin routes and register using
 - `config/` - Plugin configuration
-</project_context>
+  </project_context>
 
 <available_agents>
 
 **Database Layer:**
+
 - `tr-migration-architect/AGENT.md`: Database schema design, migrations
   - Creates: `database/migrations/XXXX_create_{table}_table.sql`
   - Phases: parse-requirements → design-schema → generate-migration → create-handoff
 
 **Model Layer:**
+
 - `tr-model-builder/AGENT.md`: ORM models, relationships, scopes
   - Creates: `app/Models/{Entity}.php`
   - Phases: parse-migration → configure-properties → define-relationships → create-handoff
 
 **Authorization:**
+
 - `tr-policy-author/AGENT.md`: Authorization policies, capability checks
   - Creates: `app/Auth/{Entity}Policy.php`
   - Phases: analyze-model → define-capabilities → generate-policy
 
 **Validation:**
+
 - `tr-fields-validator/AGENT.md`: Field validation rules, sanitization
   - Creates: `app/Http/Fields/{Entity}Fields.php`
   - Phases: analyze-model → determine-rules → generate-fields
 
 **Controller Layer:**
+
 - `tr-controller-engineer/AGENT.md`: HTTP handlers, REST endpoints
   - Creates: `app/Controllers/{Entity}Controller.php`
   - Phases: analyze-handoffs → determine-helpers → generate-controller → create-output-handoff
 
 **Admin Views:**
+
 - `tr-form-designer/AGENT.md`: Admin form layouts, field configurations
   - Creates: `resources/views/{entity}/form.php`
   - Phases: analyze-handoff → determine-layout → generate-fields → output-form
@@ -65,6 +72,7 @@ Your core responsibility is planning and coordination. Delegate all implementati
   - Phases: analyze-handoff → select-columns → configure-features → output-index
 
 **Testing:**
+
 - `tr-test-writer/AGENT.md`: PHPUnit tests (Pest framework)
   - Creates: `tests/{Entity}Test.php`
   - Phases: analyze-artifacts → plan-tests → generate-tests
@@ -78,6 +86,7 @@ Your core responsibility is planning and coordination. Delegate all implementati
 Trigger: "create resource", "new resource", "add resource", "build resource for [entity]"
 
 Sequential workflow with parallel phase:
+
 ```
 1. tr-migration-architect → Migration + schema handoff
          ↓
@@ -100,6 +109,7 @@ Sequential workflow with parallel phase:
 Trigger: "add migration", "create table", "new table for [entity]"
 
 Direct routing:
+
 ```
 1. tr-migration-architect → Migration file
 ```
@@ -111,6 +121,7 @@ Trigger: "add model", "create model for [entity]"
 Prerequisite: Migration must exist
 
 Direct routing:
+
 ```
 1. tr-model-builder → Model file
 ```
@@ -122,6 +133,7 @@ Trigger: "add controller", "create controller for [entity]"
 Prerequisite: Model must exist
 
 Direct routing:
+
 ```
 1. tr-controller-engineer → Controller file
 ```
@@ -131,6 +143,7 @@ Direct routing:
 Trigger: "add REST endpoint", "REST API for [entity]"
 
 May require controller update or new controller:
+
 ```
 1. tr-controller-engineer → Controller with REST methods
 ```
@@ -142,6 +155,7 @@ Trigger: "add admin views", "create index and form for [entity]"
 Prerequisite: Model must exist
 
 Parallel routing:
+
 ```
 PARALLEL:
 ├── tr-index-builder → Index view
@@ -159,6 +173,7 @@ When invoking an agent, load progressively:
 3. Load triggered patterns/helpers based on handoff content
 
 Example for tr-controller-engineer:
+
 ```
 Always: tr-controller-engineer/AGENT.md
 Phase 1: + phases/01-analyze-handoffs.md
@@ -170,6 +185,7 @@ Phase 3: + phases/03-generate-controller.md
 ```
 
 Example for tr-model-builder:
+
 ```
 Always: tr-model-builder/AGENT.md
 Phase 1: + phases/01-parse-migration.md
@@ -183,18 +199,19 @@ Phase 3: + phases/03-define-relationships.md
 <handoff_protocol>
 
 **Migration → Model:**
+
 ```yaml
 from: tr-migration-architect
 to: tr-model-builder
 task: Create ORM model from migration schema
 context:
   what_was_done: Created migration for {table_name}
-  key_findings: {notable schema decisions}
+  key_findings: { notable schema decisions }
 data:
-  table_name: string          # srvc_{entity_plural}
+  table_name: string # prfx_{entity_plural}
   columns:
     - name: string
-      type: string            # PHP type
+      type: string # PHP type
       nullable: boolean
   indexes:
     - name: string
@@ -202,12 +219,13 @@ data:
       unique: boolean
   foreign_keys:
     - column: string
-      references: string      # table.column
+      references: string # table.column
       on_delete: string
 expected_output: Model class with relationships and REST configuration
 ```
 
 **Model → Parallel Agents:**
+
 ```yaml
 from: tr-model-builder
 to: [tr-policy-author, tr-fields-validator, tr-index-builder]
@@ -215,7 +233,7 @@ task: Create supporting files for {Entity} model
 context:
   what_was_done: Created {Entity} model
 data:
-  model_class: string         # MakerMaker\Models\{Entity}
+  model_class: string # MakerMaker\Models\{Entity}
   fillable: array
   table_name: string
   entity_name: string
@@ -226,6 +244,7 @@ expected_output:
 ```
 
 **All → Controller:**
+
 ```yaml
 from: tr-model-builder + tr-policy-author + tr-fields-validator
 to: tr-controller-engineer
@@ -249,6 +268,7 @@ expected_output: Controller with authorization, validation, REST
 ```
 
 **Controller → Form:**
+
 ```yaml
 from: tr-controller-engineer
 to: tr-form-designer
@@ -267,6 +287,7 @@ expected_output: Form view with fields and relationship handling
 ```
 
 **Output Handoff (for blocks-coordinator):**
+
 ```yaml
 from: maker-coordinator
 to: blocks-coordinator
@@ -310,6 +331,7 @@ data:
 4. **Execute agent chain**
 
    **Sequential:**
+
    ```
    Launch agent with Task tool
    Wait for completion
@@ -319,6 +341,7 @@ data:
    ```
 
    **Parallel:**
+
    ```
    Launch all independent agents simultaneously
    Track completion status
@@ -367,15 +390,15 @@ makermaker/
 
 <naming_conventions>
 
-| Artifact | Convention | Example |
-|----------|------------|---------|
-| Table | `srvc_{entity_plural}` | `srvc_equipment` |
-| Model | PascalCase | `Equipment` |
-| Controller | PascalCase + Controller | `EquipmentController` |
-| Policy | PascalCase + Policy | `EquipmentPolicy` |
-| Fields | PascalCase + Fields | `EquipmentFields` |
-| Views folder | snake_case | `equipment/` |
-| Migration | `XXXX_create_{table}_table.sql` | `0001_create_srvc_equipment_table.sql` |
+| Artifact     | Convention                      | Example                                |
+| ------------ | ------------------------------- | -------------------------------------- |
+| Table        | `prfx_{entity_plural}`          | `prfx_equipment`                       |
+| Model        | PascalCase                      | `Equipment`                            |
+| Controller   | PascalCase + Controller         | `EquipmentController`                  |
+| Policy       | PascalCase + Policy             | `EquipmentPolicy`                      |
+| Fields       | PascalCase + Fields             | `EquipmentFields`                      |
+| Views folder | snake_case                      | `equipment/`                           |
+| Migration    | `XXXX_create_{table}_table.sql` | `0001_create_prfx_equipment_table.sql` |
 
 </naming_conventions>
 
@@ -394,24 +417,28 @@ makermaker/
 <quality_gates>
 
 **Migrations MUST have:**
+
 - `{!!prefix!!}` placeholder for table prefix
 - Audit fields: created_at, updated_at, created_by, updated_by, deleted_at, version
 - Indexes on foreign keys
 - Valid SQL syntax
 
 **Models MUST have:**
+
 - Extend `TypeRocket\Models\Model`
 - Set `$resource` to table name
 - Guard: id, version, audit fields
 - Configure `$fillable`, `$cast`, `$format`
 
 **Controllers MUST have:**
+
 - Authorization via AuthorizationHelper
 - Validation via Fields class
 - Audit trail via AuditTrailHelper
 - REST responses via RestHelper
 
 **Policies MUST have:**
+
 - Methods for each CRUD operation
 - Proper capability checks
 
@@ -420,18 +447,22 @@ makermaker/
 <error_handling>
 
 **Agent failure:**
+
 - Retry with refined context (max 2 attempts)
 - Break into smaller pieces if needed
 - Escalate to user on third failure
 
 **Parallel failure:**
+
 - 1 of 3 fails: proceed with 2, document gap
 - 2 of 3 fail: report to user
 
 **Missing prerequisite:**
+
 - Create prerequisite first, then continue
 
 **Quality gate failure:**
+
 - Request agent regenerate with specific requirements
 
 </error_handling>
@@ -439,6 +470,7 @@ makermaker/
 <success_criteria>
 
 Task complete when:
+
 - All agents executed successfully
 - All expected files exist at correct locations
 - Handoffs validated at each transition

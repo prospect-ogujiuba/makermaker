@@ -29,13 +29,14 @@ TypeRocket MVC patterns for the Maker Framework. MakerMaker handles ALL business
 <section id="layer-separation">
 ## Strict Layer Separation
 
-| Layer | Plugin | Responsibility |
-|-------|--------|----------------|
-| Business Logic | makermaker | Models, Controllers, Policies, Migrations |
-| UI Rendering | makerblocks | Gutenberg blocks, React components |
-| Templates | makerstarter | FSE templates, theme.json |
+| Layer          | Plugin       | Responsibility                            |
+| -------------- | ------------ | ----------------------------------------- |
+| Business Logic | makermaker   | Models, Controllers, Policies, Migrations |
+| UI Rendering   | makerblocks  | Gutenberg blocks, React components        |
+| Templates      | makerstarter | FSE templates, theme.json                 |
 
 **NEVER put business logic in makerblocks. NEVER put UI in makermaker.**
+
 </section>
 
 <section id="file-locations">
@@ -58,6 +59,7 @@ makermaker/
     └── views/
         └── {entity}/       # form.php, index.php
 ```
+
 </section>
 
 <section id="handoff-chain">
@@ -94,6 +96,7 @@ Agents execute in strict order. Each produces a handoff consumed by the next.
    INPUT: entity name, model/controller handoffs
    OUTPUT: table_columns[], filters[]
 ```
+
 </section>
 
 <section id="helper-usage">
@@ -110,7 +113,8 @@ use MakerMaker\Helpers\AuthorizationHelper;
 AuthorizationHelper::authorize($model, 'create', $response);
 AuthorizationHelper::authorize($model, 'update', $response);
 AuthorizationHelper::authorize($model, 'delete', $response);
-```
+
+````
 </subsection>
 
 <subsection id="audit-trail-helper">
@@ -123,7 +127,8 @@ AuditTrailHelper::setCreateAuditFields($model, $user);
 
 // On update - sets updated_by only
 AuditTrailHelper::setUpdateAuditFields($model, $user);
-```
+````
+
 </subsection>
 
 <subsection id="rest-helper">
@@ -133,11 +138,12 @@ use MakerMaker\Helpers\RestHelper;
 
 // Check if request expects JSON
 if (RestHelper::isRestRequest()) {
-    return RestHelper::successResponse($response, $data, 'Message', 200);
+return RestHelper::successResponse($response, $data, 'Message', 200);
     return RestHelper::errorResponse($response, $errors, 'Failed', 400);
     return RestHelper::deleteResponse($response, 'Deleted');
 }
-```
+
+````
 </subsection>
 
 <subsection id="auto-code-helper">
@@ -153,7 +159,8 @@ AutoCodeHelper::generateSlug($fields, 'name', '-');
 
 // For config entities (types, tiers)
 AutoCodeHelper::generateCode($fields, 'name', '-');
-```
+````
+
 </subsection>
 
 <subsection id="delete-helper">
@@ -167,7 +174,8 @@ if ($check) return $check;
 
 // Execute delete with proper response
 return DeleteHelper::executeDelete($model, $response);
-```
+
+````
 </subsection>
 
 <subsection id="redirect-helper">
@@ -180,7 +188,8 @@ return RedirectHelper::afterCreate('service');
 
 // After successful update
 return RedirectHelper::afterUpdate('service', $model->id);
-```
+````
+
 </subsection>
 
 </section>
@@ -188,17 +197,18 @@ return RedirectHelper::afterUpdate('service', $model->id);
 <section id="naming-conventions">
 ## Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Entity | PascalCase singular | `Service`, `Equipment` |
-| Table | snake_case plural with prefix | `srvc_services`, `srvc_equipment` |
-| Model | PascalCase singular | `Service.php` |
-| Controller | PascalCase + Controller | `ServiceController.php` |
-| Policy | PascalCase + Policy | `ServicePolicy.php` |
-| Fields | PascalCase + Fields | `ServiceFields.php` |
-| View folder | lowercase singular | `service/` |
-| Resource file | lowercase singular | `service.php` |
-| REST endpoint | lowercase plural | `/tr-api/rest/services/` |
+| Type          | Convention                    | Example                           |
+| ------------- | ----------------------------- | --------------------------------- |
+| Entity        | PascalCase singular           | `Service`, `Equipment`            |
+| Table         | snake_case plural with prefix | `prfx_services`, `prfx_equipment` |
+| Model         | PascalCase singular           | `Service.php`                     |
+| Controller    | PascalCase + Controller       | `ServiceController.php`           |
+| Policy        | PascalCase + Policy           | `ServicePolicy.php`               |
+| Fields        | PascalCase + Fields           | `ServiceFields.php`               |
+| View folder   | lowercase singular            | `service/`                        |
+| Resource file | lowercase singular            | `service.php`                     |
+| REST endpoint | lowercase plural              | `/tr-api/rest/services/`          |
+
 </section>
 
 <section id="rest-api-pattern">
@@ -215,6 +225,7 @@ DELETE /tr-api/rest/{entities}/{id}       # Delete
 ```
 
 **Query parameters:**
+
 - `?search=term` - Full-text search
 - `?field=value` - Filter by field
 - `?orderby=field&order=asc|desc` - Sorting

@@ -1,31 +1,31 @@
 # Table Naming
 
 ## Pattern
-All custom tables: `{!!prefix!!}srvc_{entity_plural}`
+All custom tables: `{!!prefix!!}{entity_plural}`
 
 ## Examples
 
 | Entity | Plural | Table Name |
 |--------|--------|------------|
-| Service | services | `{!!prefix!!}srvc_services` |
-| ServiceType | service_types | `{!!prefix!!}srvc_service_types` |
-| Equipment | equipment | `{!!prefix!!}srvc_equipment` |
-| ServicePrice | service_prices | `{!!prefix!!}srvc_service_prices` |
+| Service | services | `{!!prefix!!}services` |
+| ServiceType | service_types | `{!!prefix!!}service_types` |
+| Equipment | equipment | `{!!prefix!!}equipment` |
+| ServicePrice | service_prices | `{!!prefix!!}service_prices` |
 
 ## Junction Tables (N:N)
-Pattern: `{!!prefix!!}srvc_{entity1}_{entity2}`
+Pattern: `{!!prefix!!}{entity1}_{entity2}`
 
 | Relationship | Table Name |
 |--------------|------------|
-| Service ↔ Equipment | `{!!prefix!!}srvc_service_equipment` |
-| Service ↔ Deliverable | `{!!prefix!!}srvc_service_deliverables` |
+| Service ↔ Equipment | `{!!prefix!!}service_equipment` |
+| Service ↔ Deliverable | `{!!prefix!!}service_deliverables` |
 
 ## Important
 
 **Always use `{!!prefix!!}`** - never hard-code prefix.
 
 The placeholder is replaced at runtime:
-- `{!!prefix!!}` → `srvc_` (in production)
+- `{!!prefix!!}` → `` (in production)
 
 ## WordPress Tables
 

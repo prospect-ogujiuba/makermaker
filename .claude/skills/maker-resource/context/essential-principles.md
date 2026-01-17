@@ -15,16 +15,16 @@ A block may query MakerMaker data via REST API but never contains business logic
 
 Standard locations within MakerMaker plugin:
 
-| Component | Path | Purpose |
-|-----------|------|---------|
-| Migrations | `database/migrations/` | DATA TRUTH - SQL schema definitions |
-| Models | `app/Models/` | Eloquent-style models with relationships |
-| Controllers | `app/Controllers/` | CRUD + REST endpoints |
-| Policies | `app/Auth/` | Authorization capabilities |
-| Fields | `app/Http/Fields/` | Validation rules and field definitions |
-| Forms | `resources/views/{entity}/form.php` | Admin form views |
-| Index | `resources/views/{entity}/index.php` | Admin list views |
-| Registration | `inc/resources/{entity}.php` | Resource registration |
+| Component    | Path                                 | Purpose                                  |
+| ------------ | ------------------------------------ | ---------------------------------------- |
+| Migrations   | `database/migrations/`               | DATA TRUTH - SQL schema definitions      |
+| Models       | `app/Models/`                        | Eloquent-style models with relationships |
+| Controllers  | `app/Controllers/`                   | CRUD + REST endpoints                    |
+| Policies     | `app/Auth/`                          | Authorization capabilities               |
+| Fields       | `app/Http/Fields/`                   | Validation rules and field definitions   |
+| Forms        | `resources/views/{entity}/form.php`  | Admin form views                         |
+| Index        | `resources/views/{entity}/index.php` | Admin list views                         |
+| Registration | `inc/resources/{entity}.php`         | Resource registration                    |
 
 ## Handoff Chain
 
@@ -35,20 +35,21 @@ migration → model → policy+fields (parallel) → controller → form+index (
 ```
 
 Never skip steps. Each handoff contains:
+
 - Schema decisions
 - Rationale for choices
 - Constraints for downstream agents
 
 ## Table Naming Conventions
 
-- **Prefix**: `srvc_` (required for all custom tables)
-- **Pattern**: `srvc_{plural_entity}`
+- **Prefix**: `prfx_` (required for all custom tables)
+- **Pattern**: `prfx_{plural_entity}`
 - **Examples**:
-  - Entity "Service" → table `srvc_services`
-  - Entity "Equipment" → table `srvc_equipment`
-  - Entity "ServiceType" → table `srvc_service_types`
+  - Entity "Service" → table `prfx_services`
+  - Entity "Equipment" → table `prfx_equipment`
+  - Entity "ServiceType" → table `prfx_service_types`
 
-Junction tables for belongsToMany: `srvc_{entity1}_{entity2}` (alphabetical order)
+Junction tables for belongsToMany: `prfx_{entity1}_{entity2}` (alphabetical order)
 
 ## Standard Audit Fields
 
@@ -73,43 +74,55 @@ version INT UNSIGNED DEFAULT 1
 Use these helpers in controllers for consistent behavior:
 
 ### AuthorizationHelper
+
 ```php
 AuthorizationHelper::authorize($model, 'action', $response)
 ```
+
 Checks user capability for action on model instance.
 
 ### AuditTrailHelper
+
 ```php
 AuditTrailHelper::setCreateAuditFields($model, $user)
 AuditTrailHelper::setUpdateAuditFields($model, $user)
 ```
+
 Sets created_by/updated_by automatically.
 
 ### RestHelper
+
 ```php
 RestHelper::isRestRequest()
 RestHelper::successResponse($data, $message, $code)
 RestHelper::errorResponse($message, $code, $errors)
 ```
+
 Handles REST API request detection and response formatting.
 
 ### AutoCodeHelper
+
 ```php
 AutoCodeHelper::generateSlug($model, 'name', 'slug')
 AutoCodeHelper::generateSkuAndSlug($model, 'name', 'sku', 'slug', 'PREFIX')
 ```
+
 Auto-generates slugs and SKUs from name field.
 
 ### DeleteHelper
+
 ```php
 DeleteHelper::checkDependencies($model, ['relationship1', 'relationship2'])
 DeleteHelper::executeDelete($model, $response, $softDelete = true)
 ```
+
 Checks for dependent records before deletion; handles soft delete.
 
 ### RedirectHelper
+
 ```php
 RedirectHelper::afterCreate($model, 'success message')
 RedirectHelper::afterUpdate($model, 'success message')
 ```
+
 Handles post-action redirects with flash messages.

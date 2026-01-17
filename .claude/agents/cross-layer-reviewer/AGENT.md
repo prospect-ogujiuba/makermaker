@@ -1,7 +1,7 @@
 ---
 name: cross-layer-reviewer
 description: Cross-layer review for complete features spanning MVC, blocks, and templates
-tools: Read, Grep, Glob
+tools: Task, Read, Grep, Glob
 model: sonnet
 ---
 

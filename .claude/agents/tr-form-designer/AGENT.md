@@ -4,7 +4,9 @@ description: TypeRocket form designer. Generates admin forms from model and cont
 tools:
   - Read
   - Write
+  - Edit
   - Grep
+  - Glob
 model: sonnet
 ---
 

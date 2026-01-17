@@ -18,6 +18,7 @@ model_handoff.yaml containing:
 ## 1. Identify Field Types
 
 Map each fillable field to validation category:
+
 - String fields → max length from schema
 - Foreign keys → numeric validation
 - Boolean/flags → numeric min:0 max:1
@@ -26,12 +27,14 @@ Map each fillable field to validation category:
 ## 2. Check Nullability
 
 From schema information:
+
 - Non-nullable → required rule
 - Nullable → ? prefix (optional)
 
 ## 3. Extract Uniqueness Constraints
 
 Fields needing unique validation:
+
 - `sku` - typically optional unique
 - `slug` - required unique
 - `name` - often required unique
@@ -40,6 +43,7 @@ Fields needing unique validation:
 ## 4. Identify Relationships
 
 From relationships array:
+
 - belongsTo → FK needs numeric validation
 - Check constraint for nullable vs required
 
@@ -50,7 +54,7 @@ Pass to Phase 2:
 ```yaml
 analysis:
   entity: Equipment
-  table: srvc_equipment
+  table: prfx_equipment
   fields:
     - name: sku
       type: varchar(64)

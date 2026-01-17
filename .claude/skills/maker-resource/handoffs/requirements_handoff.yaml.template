@@ -15,7 +15,7 @@ handoff:
     # ─────────────────────────────────────────────────────────────────────────
     entity_name: ""          # PascalCase (e.g., "Service", "ServiceType")
     entity_plural: ""        # Plural form for routes (e.g., "services", "service-types")
-    table_prefix: "srvc_"    # Standard prefix for this domain
+    table_prefix: "prfx_"    # Standard prefix for this domain
 
     # ─────────────────────────────────────────────────────────────────────────
     # FIELDS

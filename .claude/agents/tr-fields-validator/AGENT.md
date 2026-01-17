@@ -4,7 +4,9 @@ description: Field validation architect for TypeRocket. Creates data validation 
 tools:
   - Read
   - Write
+  - Edit
   - Grep
+  - Glob
 model: sonnet
 ---
 

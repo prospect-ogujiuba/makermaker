@@ -4,9 +4,9 @@ description: Database schema architect for TypeRocket migrations. Creates SQL mi
 tools:
   - Read
   - Write
+  - Edit
   - Grep
   - Glob
-  - AskUserQuestion
 model: opus
 ---
 

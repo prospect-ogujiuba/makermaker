@@ -23,10 +23,10 @@ handoff:
     # Example:
     # validation_rules:
     #   name: "required|string|max:255"
-    #   slug: "required|string|max:255|unique:srvc_services,slug,{id}"
-    #   sku: "nullable|string|max:100|unique:srvc_services,sku,{id}"
+    #   slug: "required|string|max:255|unique:prfx_services,slug,{id}"
+    #   sku: "nullable|string|max:100|unique:prfx_services,sku,{id}"
     #   description: "nullable|string"
-    #   type_id: "required|integer|exists:srvc_service_types,id"
+    #   type_id: "required|integer|exists:prfx_service_types,id"
     #   metadata: "nullable|array"
     #   is_active: "boolean"
 
@@ -90,10 +90,10 @@ handoff:
       # Example:
       # - field: "sku"
       #   condition: "features.has_sku == true"
-      #   rules: "required|string|max:100|unique:srvc_services,sku,{id}"
+      #   rules: "required|string|max:100|unique:prfx_services,sku,{id}"
       # - field: "parent_id"
       #   condition: "features.hierarchical == true"
-      #   rules: "nullable|integer|exists:srvc_services,id"
+      #   rules: "nullable|integer|exists:prfx_services,id"
 
   # ─────────────────────────────────────────────────────────────────────────────
   # DECISIONS: Validation and UI design choices

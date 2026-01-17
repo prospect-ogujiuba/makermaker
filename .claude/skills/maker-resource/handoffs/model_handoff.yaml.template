@@ -60,7 +60,7 @@ handoff:
       # - type: "belongsToMany"
       #   method: "categories"
       #   related_class: "Category"
-      #   pivot_table: "srvc_service_categories"
+      #   pivot_table: "prfx_service_categories"
       #   pivot_fields: ["sort_order"]
 
     # ─────────────────────────────────────────────────────────────────────────

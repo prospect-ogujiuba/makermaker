@@ -1,6 +1,7 @@
 # Phase 1: Parse Requirements
 
 ## Purpose
+
 Extract entity specification from requirements handoff.
 
 ## Input Structure
@@ -8,23 +9,23 @@ Extract entity specification from requirements handoff.
 ```yaml
 handoff:
   schema:
-    entity_name: ""        # PascalCase (Service)
-    entity_plural: ""      # Plural for table (services)
-    table_prefix: "srvc_"
+    entity_name: "" # PascalCase (Service)
+    entity_plural: "" # Plural for table (services)
+    table_prefix: "prfx" # Optional domain namespace; derive only if needed to avoid ambiguity or collisions (use short abbreviation or consonant-reduced form)
 
     fields:
-      - name: ""           # snake_case column
-        type: ""           # string | int | text | json | etc.
+      - name: "" # snake_case column
+        type: "" # string | int | text | json | etc.
         nullable: false
         default: null
         unique: false
         indexed: false
 
     relationships:
-      - type: ""           # belongsTo | hasMany | belongsToMany
-        target: ""         # Target entity
-        foreign_key: ""    # FK column
-        cascade: ""        # restrict | cascade | set_null
+      - type: "" # belongsTo | hasMany | belongsToMany
+        target: "" # Target entity
+        foreign_key: "" # FK column
+        cascade: "" # restrict | cascade | set_null
 
     features:
       has_sku: false
@@ -60,15 +61,17 @@ handoff:
 ## Output
 
 Parsed specification:
+
 ```yaml
 parsed:
-  table_name: srvc_services
+  table_name: prfx_services
   entity: Service
-  columns: []        # Mapped to SQL types
-  relationships: []  # FK requirements
-  indexes: []        # Required indexes
-  features: {}       # Active features
+  columns: [] # Mapped to SQL types
+  relationships: [] # FK requirements
+  indexes: [] # Required indexes
+  features: {} # Active features
 ```
 
 ## Next Phase
+
 Proceed to Phase 2: Design Schema.

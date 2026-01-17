@@ -4,8 +4,10 @@ description: PHPUnit/Pest test writer for TypeRocket. Creates unit and integrati
 tools:
   - Read
   - Write
+  - Edit
   - Grep
   - Glob
+  - AskUserQuestion
 model: opus
 ---
 

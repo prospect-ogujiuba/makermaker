@@ -7,11 +7,6 @@
 `id` bigint(20) NOT NULL AUTO_INCREMENT,
 ```
 
-### Optimistic Locking
-```sql
-`version` int(11) NOT NULL DEFAULT 1 COMMENT 'Optimistic locking version',
-```
-
 ### Timestamps
 ```sql
 `created_at` datetime NOT NULL DEFAULT current_timestamp(),
@@ -36,10 +31,8 @@ KEY `idx_{table}__updated_by` (`updated_by`),
 ## Standard Foreign Keys
 
 ```sql
-CONSTRAINT `fk_{table}__created_by` FOREIGN KEY (`created_by`)
-  REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
-CONSTRAINT `fk_{table}__updated_by` FOREIGN KEY (`updated_by`)
-  REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
+CONSTRAINT `fk_{table}__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE,
+CONSTRAINT `fk_{table}__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE
 ```
 
 ## Complete Template

@@ -14,7 +14,7 @@ handoff:
     # ENTITY IDENTIFICATION
     # ─────────────────────────────────────────────────────────────────────────
     entity: ""               # PascalCase (e.g., "Service")
-    table: ""                # Full table name with prefix (e.g., "srvc_services")
+    table: ""                # Full table name with prefix (e.g., "prfx_services")
 
     # ─────────────────────────────────────────────────────────────────────────
     # COLUMNS
@@ -28,7 +28,7 @@ handoff:
         nullable: false
         unique: false
         default: null        # Default value if any
-        foreign_key: null    # Reference if FK (e.g., "srvc_service_types.id")
+        foreign_key: null    # Reference if FK (e.g., "prfx_service_types.id")
       # Example columns for Service entity:
       # - name: "id"
       #   type: "BIGINT UNSIGNED"
@@ -51,7 +51,7 @@ handoff:
       # - name: "type_id"
       #   type: "BIGINT UNSIGNED"
       #   nullable: false
-      #   foreign_key: "srvc_service_types.id"
+      #   foreign_key: "prfx_service_types.id"
       # - name: "metadata"
       #   type: "JSON"
       #   nullable: true
@@ -81,12 +81,12 @@ handoff:
     # ─────────────────────────────────────────────────────────────────────────
     foreign_keys:
       - column: ""           # FK column (e.g., "type_id")
-        references: ""       # Target table.column (e.g., "srvc_service_types.id")
+        references: ""       # Target table.column (e.g., "prfx_service_types.id")
         on_delete: ""        # RESTRICT | CASCADE | SET NULL
         rationale: ""        # Why this cascade behavior
       # Example:
       # - column: "type_id"
-      #   references: "srvc_service_types.id"
+      #   references: "prfx_service_types.id"
       #   on_delete: "RESTRICT"
       #   rationale: "Prevent orphaned services, require reassignment before type deletion"
 

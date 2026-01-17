@@ -1,6 +1,7 @@
 # Select Field Types
 
 ## ENUM Select
+
 For ENUM columns, status fields.
 
 ```php
@@ -9,16 +10,18 @@ $form->select('status')
     ->setHelp('Current status')
     ->setOptions(array_merge(
         ['Select Status' => NULL],
-        DatabaseHelper::getEnumValues('srvc_table', 'status')
+        DatabaseHelper::getEnumValues('prfx_table', 'status')
     ))
     ->markLabelRequired()
 ```
 
 **Always:**
+
 - Merge with NULL default option
 - Use DatabaseHelper::getEnumValues()
 
 ## Static Options Select
+
 For predefined option lists.
 
 ```php
@@ -33,6 +36,7 @@ $form->select('priority')
 ```
 
 ## Radio Buttons
+
 For small option sets (2-4 choices).
 
 ```php
@@ -45,6 +49,7 @@ $form->radio('type')
 ```
 
 ## Checkbox
+
 For multiple selections.
 
 ```php

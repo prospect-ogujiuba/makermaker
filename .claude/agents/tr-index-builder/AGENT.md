@@ -4,7 +4,9 @@ description: Generate TypeRocket index view files with table configurations, sor
 tools:
   - Read
   - Write
+  - Edit
   - Grep
+  - Glob
 model: sonnet
 ---
 

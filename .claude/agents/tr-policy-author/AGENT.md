@@ -4,7 +4,9 @@ description: Authorization policy author for TypeRocket. Creates capability-base
 tools:
   - Read
   - Write
+  - Edit
   - Grep
+  - Glob
 model: sonnet
 ---
 

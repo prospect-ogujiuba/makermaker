@@ -7,7 +7,6 @@ tools:
   - Edit
   - Grep
   - Glob
-  - AskUserQuestion
 model: opus
 ---
 

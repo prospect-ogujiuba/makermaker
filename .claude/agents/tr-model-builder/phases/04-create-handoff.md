@@ -1,6 +1,7 @@
 # Phase 4: Create Output Handoff
 
 ## Purpose
+
 Produce model_handoff.yaml for downstream agents.
 
 ## Handoff Structure
@@ -15,7 +16,7 @@ handoff:
   model:
     class_name: "{EntityName}"
     namespace: "MakerMaker\\Models"
-    table_name: "srvc_{entity_plural}"
+    table_name: "prfx_{entity_plural}"
     file_path: "app/Models/{EntityName}.php"
 
   properties:
@@ -56,7 +57,12 @@ handoff:
     unique_fields: []
 
   authorization_hints:
-    capabilities: ["manage_{entity_plural}", "edit_{entity_plural}", "delete_{entity_plural}"]
+    capabilities:
+      [
+        "manage_{entity_plural}",
+        "edit_{entity_plural}",
+        "delete_{entity_plural}",
+      ]
 
   discovery_hints:
     - hint: "{pattern suggestion}"
@@ -66,6 +72,7 @@ handoff:
 ## Decision Documentation
 
 Document all model-specific decisions:
+
 - Eager loading choices
 - Cast type selections
 - Accessor/mutator additions
@@ -73,11 +80,11 @@ Document all model-specific decisions:
 
 ## Downstream Agent Usage
 
-| Agent | Uses From Handoff |
-|-------|-------------------|
-| tr-policy-author | model.class_name, authorization_hints |
-| tr-fields-validator | properties.fillable, properties.cast, validation_hints |
-| tr-controller-engineer | model.*, properties.*, relationships.* |
+| Agent                  | Uses From Handoff                                      |
+| ---------------------- | ------------------------------------------------------ |
+| tr-policy-author       | model.class_name, authorization_hints                  |
+| tr-fields-validator    | properties.fillable, properties.cast, validation_hints |
+| tr-controller-engineer | model._, properties._, relationships.\*                |
 
 ## File Output
 
