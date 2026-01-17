@@ -50,6 +50,7 @@ Sequential workflow with handoffs:
 ```
 Phase 1: maker-coordinator
 ├── Input: Feature requirements
+├── Register (inc/resources) - With capabilities, admin pages (mm)
 ├── Creates: Migration, Model, Policy, Fields, Controller, Views
 └── Output: resource_handoff.yaml (REST endpoints, data shape)
          ↓
