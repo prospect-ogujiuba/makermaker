@@ -1,202 +1,192 @@
 # Codebase Structure
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## Directory Layout
 
 ```
 makermaker/
+├── app/                    # Application source (PSR-4: MakerMaker\)
+│   ├── Auth/              # Authorization policies
+│   ├── Controllers/       # HTTP controllers
+│   │   ├── Api/V1/       # REST API controllers
+│   │   └── Web/          # Admin form controllers
+│   ├── Http/             # HTTP utilities
+│   │   └── Fields/       # Field validation classes
+│   ├── Models/           # Data models
+│   ├── MakermakerTypeRocketPlugin.php
+│   └── View.php
+├── config/                 # TypeRocket configuration
+├── database/
+│   └── migrations/        # Schema migrations (DATA TRUTH)
+├── galaxy/                 # Galaxy CLI scaffolding
+├── inc/
+│   ├── resources/         # Dynamic resource registration
+│   └── routes/            # Route definitions
+├── public/                 # Compiled assets (output)
+├── resources/              # Source assets
+│   ├── js/
+│   ├── sass/
+│   └── views/
+├── tests/                  # Pest test files
+├── .claude/                # Claude Code agents/skills
+├── .planning/              # Project documentation
 ├── makermaker.php          # Plugin entry point
-├── uninstall.php           # Cleanup hook
-├── index.php               # Direct access blocker
-├── app/                    # Business logic layer
-│   ├── Auth/              # Authorization policies (23)
-│   ├── Controllers/       # HTTP handlers (23)
-│   ├── Helpers/           # Cross-cutting utilities
-│   ├── Http/Fields/       # Validation rules (26)
-│   └── Models/            # Data entities (24)
-├── inc/                    # Infrastructure
-│   ├── resources/         # Resource registration
-│   └── routes/            # Endpoint definitions
-├── database/               # Data persistence
-│   ├── migrations/        # SQL schema files (18)
-│   └── docs/              # Schema documentation
-├── resources/              # Asset source
-│   ├── js/               # JavaScript source
-│   ├── sass/             # SCSS source
-│   └── views/            # Blade templates (24 dirs)
-├── public/                 # Compiled assets
-│   ├── admin/            # Admin JS/CSS
-│   └── front/            # Frontend JS/CSS
-├── tests/                  # Test suites
-│   ├── Unit/             # Unit tests
-│   ├── Integration/      # Integration tests
-│   ├── Feature/          # Feature tests
-│   ├── Acceptance/       # Acceptance tests
-│   └── Factories/        # Test data factories
-├── config/                 # Configuration files
-├── vendor/                 # Composer dependencies
-└── galaxy/                 # Galaxy CLI helpers
+└── uninstall.php           # Uninstall handler
 ```
 
 ## Directory Purposes
 
 **app/**
-- Purpose: Core business logic
-- Contains: PHP classes (models, controllers, policies, fields, helpers)
-- Key files: `MakermakerTypeRocketPlugin.php` (main plugin class), `View.php` (view wrapper)
-- Subdirectories: `Auth/`, `Controllers/`, `Helpers/`, `Http/Fields/`, `Models/`
-
-**app/Auth/**
-- Purpose: Authorization policies
-- Contains: 23 `*Policy.php` files
-- Key files: `ServicePolicy.php`, `ContactSubmissionPolicy.php`
-- Pattern: `{Model}Policy` → `Models\{Model}`
-
-**app/Controllers/**
-- Purpose: HTTP request handlers
-- Contains: 23 `*Controller.php` files
-- Key files: `ServiceController.php`, `ContactSubmissionController.php`
-- Pattern: CRUD methods + REST endpoints
-
-**app/Models/**
-- Purpose: Data entities with relationships
-- Contains: 24 model classes
-- Key files: `Service.php`, `ServicePrice.php`, `Equipment.php`, `ContactSubmission.php`
-- Pattern: Eloquent-style ORM
-
-**app/Http/Fields/**
-- Purpose: Form validation rules
-- Contains: 26 `*Fields.php` files
-- Key files: `ServiceFields.php`, `ServicePriceFields.php`
-- Pattern: `rules()` method returns validation array
-
-**app/Helpers/**
-- Purpose: Utility functions
-- Contains: `ServiceCatalogHelper.php` (2183 lines), `TeamHelper.php`
-- Pattern: Static methods for cross-model operations
-
-**inc/resources/**
-- Purpose: WordPress admin menu registration
-- Contains: `service.php`, `contact_submission.php`, `team.php`
-- Pattern: `mm_create_custom_resource()` calls
-
-**inc/routes/**
-- Purpose: HTTP endpoint definitions
-- Contains: `api.php`, `public.php`
-- Pattern: TypeRocket route collection
-
-**database/migrations/**
-- Purpose: SQL schema definitions
-- Contains: 18 SQL files
-- Naming: `{timestamp}.{description}.sql`
-- Prefix convention: `srvc_` for all tables
-
-**resources/views/**
-- Purpose: Blade-style templates
-- Contains: 24 directories (one per entity)
-- Structure: `{entity}/index.php`, `{entity}/form.php`
-
-**tests/**
-- Purpose: Test suites
-- Contains: Unit, Integration, Feature, Acceptance directories
-- Key files: `Pest.php` (config), `bootstrap.php` (setup), `Factories/ServiceFactory.php`
+- Purpose: Application source code
+- Contains: PHP classes with PSR-4 autoloading
+- Key files: `MakermakerTypeRocketPlugin.php` (main plugin class)
+- Subdirectories: `Auth/`, `Controllers/`, `Http/`, `Models/`
 
 **config/**
-- Purpose: Configuration files
-- Contains: `mail.php`, `logging.php`
-- Pattern: Return arrays for TypeRocket config
+- Purpose: TypeRocket framework configuration
+- Contains: PHP config files returning arrays
+- Key files: `app.php`, `database.php`, `paths.php`, `mail.php`
+- Pattern: `config/{feature}.php`
+
+**database/migrations/**
+- Purpose: Schema definitions (source of truth for data structure)
+- Contains: Migration PHP files
+- Pattern: `{YYYY}_{MM}_{DD}_{action}_{table}.php`
+- Run via: `php galaxy migrate`
+
+**inc/routes/**
+- Purpose: HTTP route definitions
+- Contains: `api.php` (REST), `public.php` (web)
+- Loaded by: `MakermakerTypeRocketPlugin::routes()`
+
+**inc/resources/**
+- Purpose: Dynamic resource registration files
+- Contains: PHP files auto-loaded on init
+- Pattern: `{ResourceName}.php` with `mm_create_custom_resource()`
+
+**public/**
+- Purpose: Compiled assets (build output)
+- Contains: `admin/`, `front/` with CSS/JS
+- Generated by: `npm run prod`
+- Manifest: `mix-manifest.json`
+
+**resources/**
+- Purpose: Source assets for compilation
+- Contains: `js/`, `sass/`, `views/`
+- Compiled to: `public/`
+
+**tests/**
+- Purpose: Pest framework tests
+- Contains: `Unit/`, `Integration/`, `Feature/`, `Acceptance/`
+- Config: `Pest.php`, `bootstrap.php`
+
+**.claude/**
+- Purpose: Claude Code agent configurations
+- Contains: `agents/`, `skills/`
+- Usage: MVC resource scaffolding via specialized agents
 
 ## Key File Locations
 
 **Entry Points:**
-- `makermaker.php` - Plugin bootstrap
-- `app/MakermakerTypeRocketPlugin.php` - Main plugin class
+- `makermaker.php` - WordPress plugin header, hooks `typerocket_loaded`
+- `app/MakermakerTypeRocketPlugin.php` - Plugin initialization class
+- `uninstall.php` - Clean uninstall handler
 
 **Configuration:**
-- `composer.json` - PHP dependencies
-- `package.json` - npm dependencies
-- `webpack.mix.js` - Asset compilation
-- `phpunit.xml` - Test configuration
-- `config/mail.php` - Email configuration
-- `config/logging.php` - Logging configuration
+- `config/app.php` - Extensions, services, debug settings
+- `config/database.php` - Database driver configuration
+- `config/paths.php` - Path constants (storage, cache, logs)
+- `composer.json` - PHP dependencies, PSR-4 autoload
+- `webpack.mix.js` - Asset build configuration
 
 **Core Logic:**
-- `app/Models/Service.php` - Main service entity
-- `app/Controllers/ServiceController.php` - Service CRUD
-- `app/Helpers/ServiceCatalogHelper.php` - Business utilities
+- `app/Controllers/Api/V1/*.php` - REST endpoint handlers
+- `app/Controllers/Web/*.php` - Admin form handlers
+- `app/Models/*.php` - Data models with relationships
+- `app/Auth/*Policy.php` - Authorization policies
 
 **Testing:**
-- `tests/Pest.php` - Test setup and custom expectations
-- `tests/bootstrap.php` - WordPress/DB initialization
-- `tests/Factories/ServiceFactory.php` - Test data factory
+- `tests/Unit/` - Unit tests
+- `tests/Feature/` - Feature tests
+- `tests/Pest.php` - Pest config, Brain Monkey setup
+- `phpunit.xml` - PHPUnit/Pest configuration
 
 **Documentation:**
-- `CLAUDE.md` - Architecture guide
+- `CLAUDE.md` - Claude Code guidance
+- `.planning/codebase/` - Architecture documentation
 
 ## Naming Conventions
 
 **Files:**
-- PascalCase.php: PHP classes (`Service.php`, `ServiceController.php`)
-- kebab-case.sql: Migrations (`1758895156.create_services_table.sql`)
-- kebab-case.php: Views, resources (`service.php`, `form.php`)
+- PascalCase.php: Classes (`MakermakerTypeRocketPlugin.php`, `Service.php`)
+- kebab-case.php: Config files (`app.php`, `database.php`)
+- *Test.php: Test files (`BasicUnitTest.php`)
+- *Policy.php: Authorization policies (`ServicePolicy.php`)
+- *Controller.php: Controllers (`ServiceController.php`)
 
 **Directories:**
-- PascalCase: Class directories (`Controllers/`, `Models/`)
-- lowercase: Asset directories (`js/`, `sass/`, `views/`)
-- snake_case: View subdirectories (`service_prices/`, `coverage_areas/`)
+- PascalCase: Namespace segments (`Controllers/`, `Models/`)
+- kebab-case: Non-code directories (`resources/`, `public/`)
+- lowercase: Standard directories (`config/`, `tests/`)
 
 **Special Patterns:**
-- `*Controller.php`: Controller classes
-- `*Policy.php`: Authorization policies
-- `*Fields.php`: Validation classes
-- `*Helper.php`: Utility classes
-- `*.test.php` or `*Test.php`: Test files
+- `*Policy.php` → Auto-discovered for authorization
+- `inc/resources/*.php` → Auto-loaded on init
+- `database/migrations/*.php` → Run by migrate command
 
 ## Where to Add New Code
 
-**New Feature (Model/CRUD):**
-- Model: `app/Models/{Entity}.php`
-- Controller: `app/Controllers/{Entity}Controller.php`
-- Policy: `app/Auth/{Entity}Policy.php`
-- Fields: `app/Http/Fields/{Entity}Fields.php`
-- Views: `resources/views/{entity}/index.php`, `form.php`
-- Resource: `inc/resources/{entity}.php`
-- Migration: `database/migrations/{timestamp}.create_{entity}_table.sql`
-- Tests: `tests/Unit/{Entity}Test.php`, `tests/Integration/`
+**New Model:**
+- Primary: `app/Models/{ModelName}.php`
+- Migration: `database/migrations/{date}_create_{table}_table.php`
+- Tests: `tests/Unit/Models/{ModelName}Test.php`
 
-**New Helper Method:**
-- Location: `app/Helpers/ServiceCatalogHelper.php` (or new helper class)
-- Tests: `tests/Unit/Helpers/`
+**New Controller:**
+- REST: `app/Controllers/Api/V1/{Resource}Controller.php`
+- Web: `app/Controllers/Web/{Resource}Controller.php`
+- Tests: `tests/Feature/Controllers/{Resource}ControllerTest.php`
 
-**New Route:**
-- API: `inc/routes/api.php`
-- Public: `inc/routes/public.php`
+**New Policy:**
+- Implementation: `app/Auth/{Model}Policy.php`
+- Auto-discovered: Naming convention `{Model}Policy` required
+- Tests: `tests/Unit/Auth/{Model}PolicyTest.php`
+
+**New Route/Endpoint:**
+- REST routes: `inc/routes/api.php`
+- Web routes: `inc/routes/public.php`
+- Or: Use `mm_create_custom_resource()` in `inc/resources/`
+
+**New Validation Fields:**
+- Implementation: `app/Http/Fields/{Resource}Fields.php`
+- Pattern: Extend TypeRocket Fields class
 
 **Utilities:**
-- Shared helpers: `app/Helpers/`
-- Type definitions: Within model files
+- Shared helpers: `app/Utilities/` (create if needed)
+- Type definitions: Within class files (PHP 8.2+ typed)
 
 ## Special Directories
 
 **vendor/**
 - Purpose: Composer dependencies
 - Source: Auto-generated by `composer install`
-- Key package: `vendor/mxcro/makermaker-core/`
-- Committed: No (gitignored)
+- Committed: No (in `.gitignore`)
 
 **public/**
 - Purpose: Compiled assets
-- Source: Generated by `npm run dev/prod`
-- Contains: `mix-manifest.json` for cache-busting
-- Committed: Yes (compiled output)
+- Source: Generated by Laravel Mix
+- Committed: Yes (for deployment without build step)
 
 **node_modules/**
 - Purpose: npm dependencies
 - Source: Auto-generated by `npm install`
-- Committed: No (gitignored)
+- Committed: No (in `.gitignore`)
+
+**.planning/**
+- Purpose: Project documentation and planning
+- Committed: Yes (project context)
 
 ---
 
-*Structure analysis: 2026-01-07*
+*Structure analysis: 2026-01-18*
 *Update when directory structure changes*

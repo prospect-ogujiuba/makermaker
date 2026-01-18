@@ -1,165 +1,176 @@
 # Architecture
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## Pattern Overview
 
-**Overall:** Thin Client MVC Plugin (TypeRocket Pro v6 dependent)
+**Overall:** TypeRocket Pro v6 WordPress Plugin with MVC + Reflective REST API
 
 **Key Characteristics:**
-- Domain-specific implementation on framework foundation
-- Dependency injection from mu-plugin (ORM, routing, auth)
+- Single entry point via `typerocket_loaded` action (priority 9)
+- Plugin-based initialization extending TypeRocket's BasePlugin
+- Zero-config REST API via ReflectiveRestWrapper
 - Policy-based authorization with auto-discovery
-- Dual-mode endpoints (REST JSON + HTML forms)
-- Zero-config reflective REST API
+- Migrations as schema source of truth
 
 ## Layers
 
-**Presentation Layer:**
-- Purpose: Render admin UI templates
-- Contains: Blade-style templates (`resources/views/`)
-- Depends on: TypeRocket form helpers
-- Used by: Controller view methods
+**HTTP/Routing Layer:**
+- Purpose: Request routing and endpoint registration
+- Contains: Route files, TypeRocket global route collection
+- Location: `inc/routes/api.php`, `inc/routes/public.php`
+- Depends on: Controllers, TypeRocket Router
+- Used by: WordPress request lifecycle
 
 **Controller Layer:**
-- Purpose: Handle HTTP requests, orchestrate responses
-- Contains: CRUD handlers, REST endpoints (`app/Controllers/`)
-- Depends on: Models, Fields, Policies, Helpers
-- Used by: TypeRocket routes
-
-**Validation Layer:**
-- Purpose: Validate incoming form data
-- Contains: Field rule definitions (`app/Http/Fields/`)
-- Depends on: TypeRocket validation engine
-- Used by: Controllers via dependency injection
+- Purpose: HTTP request handling, input validation, response formatting
+- Contains: API controllers (REST), Web controllers (forms)
+- Location: `app/Controllers/Api/V1/*.php`, `app/Controllers/Web/*.php`
+- Depends on: Models, Policies, TypeRocket Response
+- Used by: Routes
 
 **Model Layer:**
-- Purpose: Data access and business entities
-- Contains: Eloquent-style models (`app/Models/`)
-- Depends on: TypeRocket ORM
-- Used by: Controllers, Helpers
+- Purpose: Data persistence, relationships, validation rules
+- Contains: Active Record models extending TypeRocket Model
+- Location: `app/Models/*.php`
+- Depends on: Database (TypeRocket Query Builder)
+- Used by: Controllers, REST API Wrapper
 
 **Authorization Layer:**
-- Purpose: Permission checking
-- Contains: Policy classes (`app/Auth/`)
-- Depends on: TypeRocket AuthUser
-- Used by: Controllers via AuthorizationHelper
+- Purpose: Access control for CRUD operations
+- Contains: Policy classes with capability methods
+- Location: `app/Auth/*Policy.php`
+- Depends on: AuthUser, Models
+- Used by: Controllers, ReflectiveRestWrapper
 
-**Helper Layer:**
-- Purpose: Cross-cutting utilities
-- Contains: Static utility classes (`app/Helpers/`)
-- Depends on: Models
-- Used by: Controllers, Views
-
-**Resource Layer:**
-- Purpose: WordPress admin menu registration
-- Contains: Resource definitions (`inc/resources/`)
-- Depends on: makermaker-core helpers
-- Used by: Plugin initialization
-
-**Route Layer:**
-- Purpose: HTTP endpoint definitions
-- Contains: Route collections (`inc/routes/`)
-- Depends on: TypeRocket routing
-- Used by: Plugin initialization
+**Data Layer:**
+- Purpose: Schema definitions and migrations
+- Contains: Migration files (source of truth)
+- Location: `database/migrations/*.php`
+- Depends on: TypeRocket Migration system
+- Used by: Plugin activation/deactivation
 
 ## Data Flow
 
-**HTTP Request Lifecycle:**
+**REST API Request:**
+1. HTTP Request → `/tr-api/rest/{resource}/{id}?search=term`
+2. WordPress parse_request → TypeRocket route matching
+3. ReflectiveRestWrapper intercepts (configured in plugin init)
+4. Model introspection: searchable/filterable fields detected
+5. Query building: search + filtering + sorting + pagination
+6. Authorization check: Policy::index($user)
+7. Response: JSON via TypeRocket\Http\Response
 
-1. Request arrives at WordPress
-2. TypeRocket route matching (`inc/routes/api.php` or `public.php`)
-3. Controller action invoked (`app/Controllers/{Entity}Controller.php`)
-4. Field validation auto-executed (`app/Http/Fields/{Entity}Fields.php`)
-5. Authorization check (`AuthorizationHelper` → `app/Auth/{Entity}Policy.php`)
-6. Model operation (`app/Models/{Entity}.php`)
-7. Database query (tables prefixed `srvc_`)
-8. Audit trail set (`AuditTrailHelper`: created_by, updated_by, timestamps)
-9. Response formatting (`RestHelper` for JSON, Blade for HTML)
-10. HTTP Response
+**Admin CRUD Request:**
+1. WordPress admin page hook
+2. Form rendering via `Helper::form()->setGroup()`
+3. POST submission → Controller::create/update/destroy
+4. Model validation via Fields class
+5. Model save with fillable/guard protection
+6. Redirect response with flash messages
+
+**Plugin Lifecycle:**
+1. `register_activation_hook` → `$plugin->activate()` → `migrateUp()`
+2. `typerocket_loaded` (priority 9) → `$plugin->init()`
+3. `deactivate_{plugin}` → flush_rewrite_rules
+4. `uninstall.php` → `$plugin->uninstall()` → `migrateDown()`
 
 **State Management:**
-- Database-backed: All state in MySQL via TypeRocket ORM
-- Audit trail: `created_by`, `updated_by`, `created_at`, `updated_at`
-- Soft deletes: `deleted_at` field on all models
-- Optimistic locking: `version` field auto-incremented
+- Database-backed via WordPress + custom tables
+- No in-memory session state
+- Each request is stateless
 
 ## Key Abstractions
 
-**Model:**
-- Purpose: Domain entity representation
-- Examples: `app/Models/Service.php`, `app/Models/Equipment.php`, `app/Models/ServicePrice.php`
-- Pattern: Eloquent-style ORM with eager loading, soft deletes, casting
+**BasePlugin Extension:**
+- Purpose: Plugin initialization and lifecycle management
+- Examples: `MakermakerTypeRocketPlugin`
+- Pattern: Template Method (init, routes, policies, activate, uninstall)
+- Location: `app/MakermakerTypeRocketPlugin.php`
 
-**Controller:**
-- Purpose: HTTP request handling
-- Examples: `app/Controllers/ServiceController.php`, `app/Controllers/ContactSubmissionController.php`
-- Pattern: CRUD methods with dual REST/HTML response
+**Model (Active Record):**
+- Purpose: Data access with relationships and casting
+- Examples: Models in `app/Models/`
+- Pattern: Active Record with Query Builder
+- Properties: `$fillable`, `$guard`, `$cast`, `$format`, `$with`
 
-**Policy:**
-- Purpose: Authorization rules
-- Examples: `app/Auth/ServicePolicy.php`, `app/Auth/EquipmentPolicy.php`
-- Pattern: Capability-based (`$auth->isCapable('manage_services')`)
+**Policy (Authorization):**
+- Purpose: Define access rules per model action
+- Examples: Policies in `app/Auth/*Policy.php`
+- Pattern: Policy object with capability methods
+- Methods: `index()`, `view()`, `create()`, `update()`, `delete()`
 
-**Fields:**
-- Purpose: Input validation rules
-- Examples: `app/Http/Fields/ServiceFields.php`, `app/Http/Fields/ServicePriceFields.php`
-- Pattern: TypeRocket ValidatorFields with `rules()` method
+**ReflectiveRestWrapper:**
+- Purpose: Zero-config REST API enhancement
+- Examples: Auto-registered at `/tr-api/rest/{resource}`
+- Pattern: Decorator wrapping TypeRocket resources
+- Source: `vendor/mxcro/makermaker-core`
 
-**Helper:**
-- Purpose: Utility functions
-- Examples: `app/Helpers/ServiceCatalogHelper.php`, `app/Helpers/TeamHelper.php`
-- Pattern: Static methods for cross-cutting concerns
+**Fields (Validation):**
+- Purpose: Define validation rules and field configuration
+- Examples: Fields in `app/Http/Fields/*.php`
+- Pattern: Fluent builder for validation chains
+- Location: `app/Http/Fields/`
 
 ## Entry Points
 
-**Plugin Activation:**
+**Plugin Bootstrap:**
 - Location: `makermaker.php`
-- Triggers: Plugin activation in WordPress
-- Responsibilities: Define constants, setup autoloading, hook TypeRocket
+- Triggers: WordPress plugin activation
+- Responsibilities: Define constants, register autoloader, hook `typerocket_loaded`
 
-**Main Plugin Class:**
+**Plugin Class:**
 - Location: `app/MakermakerTypeRocketPlugin.php`
 - Triggers: `typerocket_loaded` action (priority 9)
-- Responsibilities: Load resources, routes, policies; init REST API; register assets
+- Responsibilities: Load config, resources, routes, policies, REST wrapper
 
-**Asset Entry Points:**
-- Frontend: `resources/js/front.js` → `public/front/front.js`
-- Admin: `resources/js/admin.js` → `public/admin/admin.js`
+**Routes:**
+- Location: `inc/routes/api.php`, `inc/routes/public.php`
+- Triggers: TypeRocket route registration
+- Responsibilities: Define endpoint mappings
+
+**CLI Entry:**
+- Location: `galaxy/galaxy-makermaker-config.php`
+- Triggers: `php galaxy` command
+- Responsibilities: CRUD scaffolding via Galaxy CLI
 
 ## Error Handling
 
-**Strategy:** Throw exceptions, catch at controller level, format response
+**Strategy:** Exception bubbling with boundary catches
 
 **Patterns:**
-- Models return errors via `$model->getErrors()`
-- Controllers check errors after save operations
-- REST: Return JSON error via `RestHelper::errorResponse()`
-- HTML: Flash message + redirect back with errors
+- Controllers catch and transform exceptions to HTTP responses
+- Models throw validation exceptions
+- Whoops handles uncaught exceptions in development (`WP_DEBUG=true`)
+- Policies return boolean (no exceptions)
+
+**Error Services:**
+- ErrorService configured in `config/app.php`
+- File/Slack/Mail logging via `config/logging.php`
 
 ## Cross-Cutting Concerns
 
 **Logging:**
-- File logging via TypeRocket FileLogger (`config/logging.php`)
-- Optional Slack integration via webhook
-- Debug logging via `error_log()` (should be refactored)
+- TypeRocket Logger service
+- Drivers: File (default), Slack (webhook), Mail
+- Config: `config/logging.php`
 
 **Validation:**
-- TypeRocket Fields at controller level
-- Auto-validated via dependency injection
-- Custom callbacks for enum validation
+- Fields classes in `app/Http/Fields/`
+- Applied at controller level before model save
+- Pipe-delimited rules: `required|string|min:3|max:255`
 
 **Authentication:**
-- WordPress native authentication
-- TypeRocket AuthUser injected into controllers
-- Capability-based authorization via policies
+- WordPress native via AuthUser
+- Checked in policies: `$user->isCapable('manage_options')`
+- No custom auth middleware
 
-**Audit Trail:**
-- `AuditTrailHelper::setCreateAuditFields()` on create
-- `AuditTrailHelper::setUpdateAuditFields()` on update
-- Tracks `created_by`, `updated_by`, timestamps
+**Asset Management:**
+- Laravel Mix compilation
+- Versioned via `mix-manifest.json`
+- Enqueued in plugin init via WordPress hooks
 
 ---
 
-*Architecture analysis: 2026-01-07*
+*Architecture analysis: 2026-01-18*
 *Update when major patterns change*

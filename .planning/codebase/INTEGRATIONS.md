@@ -1,115 +1,117 @@
 # External Integrations
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## APIs & External Services
 
-**Payment Processing:**
-- Not integrated - No Stripe, PayPal, or Square detected
+**Google Maps:**
+- Google Maps JavaScript API - Map embedding
+  - SDK/Client: TypeRocket built-in component
+  - Auth: `TYPEROCKET_GOOGLE_MAPS_API_KEY` env var
+  - Config: `config/external.php`
 
 **Email/SMS:**
-- Mailgun - Transactional emails (optional)
-  - SDK/Client: TypeRocket MailgunMailDriver
-  - Auth: `TYPEROCKET_MAILGUN_*` env vars (`config/mail.php`)
-  - Configuration: API key, domain, region
+- Mailgun - Transactional email driver (optional)
+  - SDK/Client: `TypeRocket\Pro\Utility\Mailers\MailgunMailDriver`
+  - Auth: `TYPEROCKET_MAILGUN_API_KEY`, `TYPEROCKET_MAILGUN_DOMAIN`
+  - Config: `config/mail.php`
+- WordPress Native Mailer - Default email driver
+  - SDK/Client: `TypeRocket\Pro\Utility\Mailers\WordPressMailDriver`
 
-- WordPress Native Mail - Default option
-  - SDK/Client: WordPressMailDriver (`config/mail.php`)
-
-**External APIs:**
-- Not detected - No third-party API clients
+**CDN:**
+- Bootstrap Icons v1.11.3 - Icon library
+  - Loaded from jsdelivr CDN
+  - Enqueued in: `app/MakermakerTypeRocketPlugin.php:136`
 
 ## Data Storage
 
 **Databases:**
-- MySQL/MariaDB - Via WordPress wpdb
-  - Connection: WordPress `wp-config.php`
-  - Client: TypeRocket ORM (Eloquent-style)
-  - Migrations: `database/migrations/*.sql` (18 files)
-  - Table prefix: `srvc_` for all custom tables
+- WordPress Core Database - Primary data store
+  - Connection: Via WordPress `$wpdb` global
+  - Driver: `TypeRocket\Database\Connectors\WordPressCoreDatabaseConnector`
+  - Config: `config/database.php`
+- Alternative Database - Optional secondary connection
+  - Env vars: `TYPEROCKET_ALT_DATABASE_*` (USER, PASSWORD, DATABASE, HOST)
 
 **File Storage:**
-- WordPress media library only
-  - No external file storage (S3, etc.)
+- Storage Drive - Local file system storage
+  - Driver: `TypeRocket\Pro\Utility\Drives\StorageDrive`
+  - Path: `{plugin}/storage/`
+- Uploads Drive - WordPress uploads integration
+  - Driver: `TypeRocket\Pro\Utility\Drives\UploadsDrive`
+- Root Drive - Plugin root access
+  - Driver: `TypeRocket\Pro\Utility\Drives\RootDrive`
+  - Config: `config/storage.php`
 
 **Caching:**
-- Not configured - No Redis or external cache
+- File-based cache - Default
+  - Path: `TYPEROCKET_CACHE_FILE_FOLDER` env var
+  - Config: `config/paths.php`
 
 ## Authentication & Identity
 
 **Auth Provider:**
-- WordPress native authentication
-  - Implementation: TypeRocket AuthUser
-  - Token storage: WordPress session cookies
-  - Capability-based authorization via policies
+- WordPress User System - Native WordPress authentication
+  - Implementation: Via `TypeRocket\Models\AuthUser`
+  - Capabilities: WordPress role-based (`isCapable()`)
+  - Session: WordPress cookies
 
-**OAuth Integrations:**
-- Not detected
+**Authorization:**
+- Policy-based - Custom policies in `app/Auth/*Policy.php`
+  - Auto-discovered by `discoverPolicies()` in plugin init
+  - Pattern: `{Model}Policy.php` maps to `{Model}.php`
 
 ## Monitoring & Observability
 
-**Error Tracking:**
-- Not configured - No Sentry or similar
-
 **Logging:**
-- Slack Integration - Optional (`config/logging.php`)
-  - Webhook: `TYPEROCKET_LOG_SLACK_WEBHOOK_URL`
-  - Uses SlackLogger class
+- File Logger - Primary logging
+  - Driver: `TypeRocket\Pro\Utility\Loggers\FileLogger`
+  - Path: `TYPEROCKET_LOG_FILE_FOLDER` env var
+  - Config: `config/logging.php`
+- Slack Logger - Optional Slack notifications
+  - Driver: `TypeRocket\Pro\Utility\Loggers\SlackLogger`
+  - Webhook: `TYPEROCKET_LOG_SLACK_WEBHOOK_URL` env var
+- Mail Logger - Email error notifications
+  - Driver: `TypeRocket\Pro\Utility\Loggers\MailLogger`
 
-- File Logging - Default (`config/logging.php`)
-  - Uses FileLogger (daily rotation)
-  - Path: WordPress uploads directory
+**Error Tracking:**
+- Whoops - Development error pages
+  - Package: `filp/whoops 2.18.4`
+  - Enabled: When `WP_DEBUG` is true
+  - Config: `config/app.php` ErrorService
 
-**Analytics:**
-- Not detected
+## Queue & Background Jobs
 
-## CI/CD & Deployment
+**Queue System:**
+- WooCommerce Action Scheduler - Job processing
+  - Driver: TypeRocket JobQueueRunner service
+  - Config: `config/queue.php`
+  - Retention: 30 days default
+  - Install: `composer require woocommerce/action-scheduler`
 
-**Hosting:**
-- WordPress standard hosting
-  - No specific platform detected
+## REST API
 
-**CI Pipeline:**
-- Not configured in plugin
-  - Test scripts in `composer.json`
+**Reflective REST Wrapper:**
+- Zero-config CRUD endpoints
+  - Base: `/tr-api/rest/{resource}/{id?}/actions/{action?}`
+  - Features: Full-text search, field filtering, sorting, pagination
+  - Model namespace: `\MakerMaker\Models\`
+  - Config: `app/MakermakerTypeRocketPlugin.php:initReflectiveRestApi()`
+  - Query modifier: User-based filtering via `setListQueryModifier()`
 
 ## Environment Configuration
 
 **Development:**
-- Required env vars: None plugin-specific (inherits WordPress)
-- Secrets location: WordPress `wp-config.php`
-- Local development: Standard LAMP/LEMP stack
-
-**Staging:**
-- Not documented
+- Required: WordPress installation, PHP 8.2+, Composer
+- Env vars: Document via `.env.example` (not present)
+- Debug: `WP_DEBUG=true` enables Whoops error pages
 
 **Production:**
-- Secrets management: WordPress configuration
-- Database: Same as WordPress
-
-## Webhooks & Callbacks
-
-**Incoming:**
-- Not detected
-
-**Outgoing:**
-- Slack logging (optional) - `config/logging.php`
-  - Endpoint: Configured via env var
-  - Verification: None (outgoing only)
-
-## CDN & Static Assets
-
-**Static CDN:**
-- Bootstrap Icons - Admin UI (`app/MakermakerTypeRocketPlugin.php`)
-  - URL: `https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css`
-
-**REST API:**
-- ReflectiveRestWrapper - Zero-config REST
-  - Endpoint: `/tr-api/rest/{resource}/{id?}/actions/{action?}`
-  - Features: Full-text search, field filtering, sorting, pagination
-  - Location: `app/MakermakerTypeRocketPlugin.php` (lines 153-170)
+- Secrets: Via WordPress wp-config.php or server environment
+- Debug: `WP_DEBUG=false` for production
+- Logging: File or Slack based on config
 
 ---
 
-*Integration audit: 2026-01-07*
+*Integration audit: 2026-01-18*
 *Update when adding/removing external services*

@@ -1,202 +1,217 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## Naming Patterns
 
 **Files:**
-- PascalCase for PHP classes: `Service.php`, `ServiceController.php`
-- `*Controller.php` for HTTP handlers
-- `*Policy.php` for authorization
-- `*Fields.php` for validation
-- `*Helper.php` for utilities
-- snake_case for views: `services/index.php`, `coverage_areas/form.php`
+- PascalCase for class files: `MakermakerTypeRocketPlugin.php`, `Service.php`
+- *Test.php suffix for tests: `BasicUnitTest.php`, `BasicFeatureTest.php`
+- *Policy.php suffix for policies: `ServicePolicy.php`
+- *Controller.php suffix for controllers: `ServiceController.php`
+- kebab-case for config: `app.php`, `database.php`
 
 **Functions:**
-- camelCase for all methods: `create()`, `update()`, `getActiveTeamMembers()`
-- Boolean methods: prefix with `is` or `has` (`isActive()`, `hasPrerequisites()`)
-- Getters: prefix with `get` (`getTeamMembersCount()`)
-- REST endpoints: suffix with `Rest` (`indexRest()`, `showRest()`)
+- camelCase for all methods: `init()`, `loadResources()`, `discoverPolicies()`
+- No special prefix for async/private methods
+- Lifecycle methods: `init()`, `activate()`, `deactivate()`, `uninstall()`
+- CRUD methods: `index()`, `create()`, `show()`, `update()`, `edit()`, `destroy()`
 
 **Variables:**
-- camelCase for variables: `$authUser`, `$serviceId`, `$priceMultiplier`
-- snake_case for database columns: `created_at`, `updated_by`, `service_type_id`
-- UPPER_SNAKE_CASE for constants: `GLOBAL_WPDB_PREFIX`, `MAKERMAKER_PLUGIN_DIR`
+- camelCase for variables: `$policies`, `$resourceFiles`, `$modelName`
+- snake_case acceptable in arrays: `$model_class`, `$policy_class`
+- UPPER_SNAKE_CASE for constants: `MAKERMAKER_PLUGIN_DIR`, `GLOBAL_WPDB_PREFIX`
 
 **Types:**
-- PascalCase for interfaces and types
-- No `I` prefix on interfaces
-- Enums: PascalCase name, string values
+- PascalCase for classes: `Service`, `ServiceController`, `ServicePolicy`
+- No I prefix for interfaces
+- Namespace: `MakerMaker\` root, `MakerMaker\Tests\` for tests
 
 ## Code Style
 
 **Formatting:**
-- 4 spaces per indentation level
-- Unix line endings (LF)
-- UTF-8 charset with no BOM
-- No closing PHP tags (`?>` omitted)
-- 120 character line length (observed)
+- 4-space indentation (PHP standard)
+- Opening braces on same line (PSR-12)
+- Single quotes for strings: `'makermaker'`
+- Double quotes for interpolation: `"plugins/{$file}"`
 
 **Linting:**
-- No explicit linter configured
-- Follows PSR-12 style by convention
-- Laravel Pint available via vendor (`vendor/pestphp/pest-plugin-arch/pint.json`)
+- No explicit linter config (`.phpcs.xml` not present)
+- Follow PSR-12 conventions implicitly
+- TypeRocket patterns preferred
 
 ## Import Organization
 
 **Order:**
-1. PHP namespace declaration
-2. `use` statements for classes
-3. Class definition
+1. PHP built-ins (`use Exception`)
+2. Framework classes (`use TypeRocket\...`)
+3. Plugin classes (`use MakerMaker\...`)
 
 **Grouping:**
-- TypeRocket framework classes first
-- Local namespace classes (MakerMaker) second
-- Blank line between groups
+- Group related imports together
+- One `use` statement per line
+- No aliasing unless collision
 
 **Path Aliases:**
-- `MakerMaker\` → `app/`
-- `MakermakerCore\` → `vendor/mxcro/makermaker-core/`
+- PSR-4: `MakerMaker\` → `app/`
+- PSR-4: `MakerMaker\Tests\` → `tests/`
+- No path aliases in TypeRocket imports
 
 ## Error Handling
 
 **Patterns:**
-- Models collect errors via `$model->getErrors()`
-- Controllers check errors after save
-- REST: Return JSON via `RestHelper::errorResponse()`
-- HTML: Flash message via `$response->flashNext()` + redirect
+- Throw exceptions, catch at controller boundaries
+- TypeRocket Response for HTTP error formatting
+- Whoops for development error display (`WP_DEBUG=true`)
 
 **Error Types:**
-- Validation errors: Returned via TypeRocket Fields
-- Authorization errors: Via `AuthorizationHelper::authorize()`
-- Business logic errors: Custom messages in controllers
+- Validation errors: Throw with field-specific messages
+- Authorization errors: Return false from policies
+- System errors: Log and throw
 
 **Logging:**
-- `error_log()` for debug (should be refactored)
-- TypeRocket logging via `config/logging.php`
+- Use TypeRocket Logger service
+- Structured context: `Logger::error('message', ['context' => 'data'])`
 
 ## Logging
 
 **Framework:**
-- TypeRocket logging system
-- Channels: File, Slack (optional)
+- TypeRocket Logger (File/Slack/Mail drivers)
+- Config: `config/logging.php`
 
 **Patterns:**
-- Debug: `error_log()` (legacy, should migrate)
-- Production: TypeRocket FileLogger/SlackLogger
-
-**Where:**
-- Controllers log errors on save failures
-- Helpers log exceptions in critical operations
+- Log at service boundaries
+- Include context data in structured format
+- No console.log equivalent in PHP
 
 ## Comments
 
 **When to Comment:**
-- Explain business logic
-- Document complex algorithms
-- Note edge cases and workarounds
-- Section dividers for large files
+- PHPDoc blocks for public methods
+- Explain complex business logic
+- Document non-obvious TypeRocket patterns
 
-**PHPDoc/TSDoc:**
-- Required for public methods in helpers
-- Optional for controllers (methods are self-documenting)
+**PHPDoc:**
+- Required for public API methods
 - Use `@param`, `@return`, `@throws` tags
+- Type hints preferred over doc types when possible
+
+**Section Headers:**
+```php
+/*
+|--------------------------------------------------------------------------
+| Section Name
+|--------------------------------------------------------------------------
+|
+| Description of the section's purpose.
+|
+*/
+```
 
 **TODO Comments:**
 - Format: `// TODO: description`
-- No username required (use git blame)
-- Avoid leaving stale TODOs
+- No username attribution (use git blame)
 
 ## Function Design
 
 **Size:**
-- Keep under 50 lines when possible
-- Large controllers (~1000 lines) need refactoring
-- Helpers can be longer (utility collections)
+- Keep under 50 lines
+- Extract private helpers for complex logic
+- Single responsibility per method
 
 **Parameters:**
-- Max 3-4 positional parameters
-- Use dependency injection for services
-- TypeRocket injects: `$model`, `$fields`, `$response`, `$user`
+- Max 3-4 parameters
+- Use typed parameters (PHP 8.2+)
+- Dependency injection via constructor or method
 
 **Return Values:**
-- Controllers: Response object or redirect
-- Helpers: Static methods return typed values
-- Models: Return boolean or self for chaining
+- Explicit return types on all public methods
+- Return early for guard clauses
+- Void methods for side effects only
 
 ## Module Design
 
 **Exports:**
 - One class per file
-- Namespace mirrors directory structure
-- No barrel files (direct imports)
+- Class name matches filename
+- No barrel files in PHP (not applicable)
 
-**Barrel Files:**
-- Not used in this codebase
-- Each class imported directly
+**Dependencies:**
+- Inject via constructor
+- Type-hint dependencies
+- Avoid static calls except for helpers
 
-## Controller Pattern
+## Controller Patterns
 
-**Standard CRUD:**
+**REST Controllers:**
 ```php
-public function create(EntityFields $fields, Entity $entity, Response $response, AuthUser $user)
+public function index(Response $response): Response
 {
-    AuthorizationHelper::authorize($entity, 'create', $response);
-    autoGenerateCode($fields, 'slug', 'name', '-');
-    AuditTrailHelper::setCreateAuditFields($entity, $user);
-    $entity->save($fields);
+    $items = Model::findAll()->get();
+    return $response->withData($items);
+}
 
-    if ($entity->getErrors()) {
-        // Handle errors (REST or HTML)
-    }
-
-    // Success response (REST or HTML)
+public function show($id, Response $response): Response
+{
+    $item = Model::findById($id);
+    return $response->withData($item);
 }
 ```
 
-## Model Pattern
-
-**Standard Model:**
+**Web Controllers:**
 ```php
-class Entity extends Model
+public function create(Fields $fields, Response $response): Response
 {
-    protected $resource = 'srvc_entities';
-    protected $private = ['created_at', 'updated_at', 'deleted_at', 'created_by', 'updated_by'];
-    protected $fillable = ['name', 'slug', ...];
-    protected $guard = ['id', 'version', 'created_at', ...];
-    protected $format = ['metadata' => 'json_encode'];
-    protected $cast = ['metadata' => 'array'];
-    protected $with = ['relationship1', 'relationship2'];
+    $data = $fields->getValidated();
+    Model::create($data);
+    return tr_redirect()->toAdmin('page')->withFlash('Created');
 }
 ```
 
-## Policy Pattern
+## Model Patterns
 
-**Standard Policy:**
+**Property Configuration:**
 ```php
-public function create(AuthUser $auth, $object)
+protected $fillable = ['name', 'description', 'price'];
+protected $guard = ['id', 'created_at', 'updated_at'];
+protected $cast = ['price' => 'float', 'active' => 'boolean'];
+protected $format = ['created_at' => 'Y-m-d H:i:s'];
+```
+
+**Relationships:**
+```php
+public function category(): BelongsTo
 {
-    return $auth->isCapable('manage_entities');
+    return $this->belongsTo(Category::class, 'category_id');
+}
+
+public function items(): HasMany
+{
+    return $this->hasMany(Item::class, 'parent_id');
 }
 ```
 
-## Fields Pattern
+## Policy Patterns
 
-**Standard Validation:**
+**Capability Methods:**
 ```php
-class EntityFields extends Fields
+public function index(AuthUser $user): bool
 {
-    protected function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:64',
-            'slug' => 'unique:field:slug@id:' . ($this->id ?? ''),
-        ];
-    }
+    return true; // Everyone can list
+}
+
+public function view(AuthUser $user, Model $model): bool
+{
+    return $user->ID === $model->created_by || $user->isCapable('manage_options');
+}
+
+public function create(AuthUser $user): bool
+{
+    return $user->isCapable('create_resources');
 }
 ```
 
 ---
 
-*Convention analysis: 2026-01-07*
+*Convention analysis: 2026-01-18*
 *Update when patterns change*

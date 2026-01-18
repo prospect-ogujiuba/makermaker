@@ -1,245 +1,258 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## Test Framework
 
 **Runner:**
-- Pest 2.34+ (`composer.json`)
+- Pest v2.36.0 (expressive test framework)
+- PHPUnit 10.5.36 (underlying engine)
 - Config: `phpunit.xml` in project root
 
 **Assertion Library:**
-- Pest built-in `expect()` fluent API
-- PHPUnit assertions also available
-- Custom expectations via Brain Monkey
+- Pest built-in expectations: `expect($value)->toBe()`
+- PHPUnit assertions available: `$this->assertTrue()`
 
 **Run Commands:**
 ```bash
-composer test              # Run all tests with Pest
-composer test:unit         # Unit tests only (@group unit)
-composer test:quick        # Unit + smoke tests with --testdox
-composer test:ci           # With coverage (minimum 85%)
-composer test:all          # All test suites explicitly
-composer test:affected     # Exclude slow,quarantine groups
+composer test                    # Run all tests
+composer test:unit               # Unit tests only (--group=unit)
+composer test:quick              # Unit + smoke tests with --testdox
+composer test:ci                 # All tests with 85% coverage minimum
+composer test:all                # All suites: Unit,Integration,Feature,Acceptance
+composer test:affected           # Exclude slow/quarantine groups
 ```
 
 ## Test File Organization
 
 **Location:**
-- All tests in `tests/` directory
-- Organized by test type (Unit, Integration, Feature, Acceptance)
-- Factories in `tests/Factories/`
+- `tests/Unit/` - Isolated unit tests
+- `tests/Integration/` - Module integration tests
+- `tests/Feature/` - Business logic tests
+- `tests/Acceptance/` - End-to-end tests
 
 **Naming:**
-- `*Test.php` suffix for test classes
-- Descriptive names: `BasicUnitTest.php`, `ReflectiveRestApiTest.php`
-- Auto-grouped by directory location
+- `*Test.php` suffix for all test files
+- PascalCase matching tested class: `ServiceTest.php`
+- Group by functionality: `BasicUnitTest.php`
 
 **Structure:**
 ```
 tests/
-├── Pest.php                # Global setup, custom expectations
-├── bootstrap.php           # WordPress/DB initialization
-├── Factories/
-│   └── ServiceFactory.php  # Test data factories
 ├── Unit/
 │   └── BasicUnitTest.php
 ├── Integration/
-│   ├── BasicIntegrationTest.php
-│   ├── ReflectiveRestApiTest.php
-│   └── ServiceStackTest.php
+│   └── BasicIntegrationTest.php
 ├── Feature/
 │   └── BasicFeatureTest.php
-└── Acceptance/
-    └── BasicAcceptanceTest.php
+├── Acceptance/
+│   └── BasicAcceptanceTest.php
+├── Pest.php              # Global config and helpers
+└── bootstrap.php         # Test environment setup
 ```
 
 ## Test Structure
 
 **Suite Organization:**
 ```php
-// Pest syntax (tests/Unit/BasicUnitTest.php)
-it('works', function () {
-    expect(true)->toBeTrue();
+<?php
+
+it('describes expected behavior', function () {
+    // arrange
+    $input = createTestData();
+
+    // act
+    $result = performAction($input);
+
+    // assert
+    expect($result)->toBe($expected);
 });
 
-// PHPUnit compatibility (tests/Integration/ReflectiveRestApiTest.php)
-class ReflectiveRestApiTest extends \PHPUnit\Framework\TestCase {
-    public function test_something() {
-        expect($result)->toBeInstanceOf(Service::class);
-    }
-}
+it('handles error case', function () {
+    expect(fn() => failingAction())->toThrow(Exception::class);
+});
 ```
 
 **Patterns:**
-- Brain Monkey setup/teardown in `tests/Pest.php`
-- Database transactions for integration tests
-- Factory pattern for test data creation
-- Reflection testing for internal method verification
+- Use `beforeEach` for per-test setup (configured globally in `Pest.php`)
+- Use `afterEach` for cleanup (Brain Monkey teardown)
+- Arrange/Act/Assert pattern encouraged
+- One assertion focus per test
 
 ## Mocking
 
 **Framework:**
-- Brain Monkey 2.6 - WordPress function mocking
-- Mockery 1.6 - Object mocking
+- Brain Monkey 2.6.2 - WordPress function mocking
+- Mockery 1.6.12 - Object mocking
+- Integration via `MockeryPHPUnitIntegration` trait
 
 **Patterns:**
 ```php
-// WordPress function mocking (tests/Pest.php)
-uses()
-    ->beforeEach(function () {
-        Monkey\setUp();
-    })
-    ->afterEach(function () {
-        Monkey\tearDown();
-        Mockery::close();
-    })
-    ->in('Unit', 'Feature', 'Acceptance');
+use Brain\Monkey;
+use Brain\Monkey\Functions;
+use Mockery;
 
-// Object mocking (tests/Integration/ReflectiveRestApiTest.php)
-$request = $this->createMock(Request::class);
-$request->method('getQuery')->willReturn(null);
+// Mock WordPress function
+Functions\expect('get_option')
+    ->once()
+    ->with('my_option')
+    ->andReturn('value');
+
+// Mock object
+$mock = Mockery::mock(Service::class);
+$mock->shouldReceive('method')->andReturn('result');
 ```
 
 **What to Mock:**
 - WordPress functions (via Brain Monkey)
-- External service calls
-- Database for unit tests
+- External API calls
+- Database interactions in unit tests
+- File system operations
 
 **What NOT to Mock:**
-- Models in integration tests
-- Pure utility functions
-- Internal class dependencies (use real implementations)
+- Pure functions without side effects
+- Simple data transformations
+- The class under test
 
 ## Fixtures and Factories
 
 **Test Data:**
 ```php
-// Factory pattern (tests/Factories/ServiceFactory.php)
-class ServiceFactory {
-    public static function create(array $overrides = []): Service {
-        // Create prerequisites
-        // Merge defaults with overrides
-        // Save and return
-    }
-
-    public static function createScenario(string $scenario, array $overrides = []) {
-        // Create specific test scenarios
-    }
-
-    public static function createMany(int $count, array $overrides = []): array {
-        // Bulk creation
-    }
+// Factory function pattern
+function createTestService(array $overrides = []): array
+{
+    return array_merge([
+        'id' => 1,
+        'name' => 'Test Service',
+        'price' => 99.99,
+        'active' => true,
+    ], $overrides);
 }
+
+// Usage
+it('calculates total correctly', function () {
+    $service = createTestService(['price' => 50.00]);
+    expect($service['price'])->toBe(50.00);
+});
 ```
 
 **Location:**
-- Factory classes: `tests/Factories/`
-- Inline fixtures for simple cases
+- Factory functions: Define in test file or `tests/Factories/`
+- Fixtures: `tests/Fixtures/` for static data files
 
 ## Coverage
 
 **Requirements:**
-- Minimum: 85% (enforced by `composer test:ci`)
-- Source includes: `app/` directory only
+- CI minimum: 85% line coverage
+- Command: `composer test:ci` runs `pest --coverage --min=85`
 
 **Configuration:**
-- Configured in `phpunit.xml`
-- Excludes: test files, vendor
+- Coverage source: `./app` directory only
+- Excludes: test files, config files, vendor
 
 **View Coverage:**
 ```bash
-composer test:ci
-# Coverage report generated
+composer test:ci                  # Run with coverage check
+# HTML report: coverage/index.html (if configured)
 ```
 
 ## Test Types
 
 **Unit Tests:**
 - Scope: Single function/class in isolation
-- Mocking: All WordPress functions via Brain Monkey
-- Location: `tests/Unit/`
-- Speed: Fast (<100ms per test)
+- Mocking: All external dependencies
+- Speed: Fast (<100ms each)
+- Directory: `tests/Unit/`
 
 **Integration Tests:**
-- Scope: Multiple components with database
-- Mocking: External boundaries only
-- Location: `tests/Integration/`
-- Isolation: Database transactions (START TRANSACTION / ROLLBACK)
+- Scope: Multiple modules together
+- Mocking: Only external services
+- Setup: May require WordPress environment
+- Directory: `tests/Integration/`
 
 **Feature Tests:**
-- Scope: Full feature behavior
-- Mocking: Minimal (real implementations)
-- Location: `tests/Feature/`
+- Scope: Business logic flows
+- Mocking: External boundaries only
+- Setup: Plugin loaded, may use test database
+- Directory: `tests/Feature/`
 
 **Acceptance Tests:**
-- Scope: End-to-end user flows
-- Location: `tests/Acceptance/`
-- Status: Basic structure in place
+- Scope: Full user flows
+- Mocking: None (real system)
+- Setup: Full WordPress environment
+- Directory: `tests/Acceptance/`
 
 ## Common Patterns
 
 **Async Testing:**
 ```php
-it('should handle async operation', function () {
-    $result = asyncFunction();
-    expect($result)->toBe('expected');
+it('handles async operation', function () {
+    // Not applicable - PHP is synchronous
+    // Use promises/generators if needed
 });
 ```
 
 **Error Testing:**
 ```php
-it('should throw on invalid input', function () {
-    expect(fn() => invalidCall())->toThrow(\InvalidArgumentException::class);
+it('throws on invalid input', function () {
+    expect(fn() => validateInput(null))->toThrow(InvalidArgumentException::class);
+});
+
+it('throws with specific message', function () {
+    expect(fn() => process([]))->toThrow('Input cannot be empty');
 });
 ```
 
-**Database Testing:**
+**WordPress Function Mocking:**
 ```php
-// Transaction-based isolation (tests/Pest.php)
-uses()
-    ->beforeEach(function () {
-        global $wpdb;
-        $wpdb->query('START TRANSACTION');
-    })
-    ->afterEach(function () {
-        global $wpdb;
-        $wpdb->query('ROLLBACK');
-    })
-    ->in('Integration');
+use Brain\Monkey\Functions;
+
+it('uses WordPress option', function () {
+    Functions\expect('get_option')
+        ->once()
+        ->with('my_setting', 'default')
+        ->andReturn('custom_value');
+
+    $result = getMyOption();
+
+    expect($result)->toBe('custom_value');
+});
 ```
 
 **Custom Expectations:**
 ```php
-// tests/Pest.php
-expect()->extend('toCallWordPressFunction', function (string $function) {
-    Brain\Monkey\Functions\expect($function);
-    return $this;
-});
-
-expect()->extend('toHaveWordPressAction', function (string $action) {
-    Brain\Monkey\Actions\expectAdded($action);
-    return $this;
-});
+// Defined in tests/Pest.php
+expect($value)->toCallWordPressFunction('add_action');
+expect($value)->toHaveWordPressAction('init');
+expect($value)->toHaveWordPressFilter('the_content');
 ```
 
-**Snapshot Testing:**
-- Not currently used
+## Test Bootstrap
 
-## Database Testing
+**Setup File:** `tests/bootstrap.php`
+```php
+// Load Composer autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
 
-**Migration Execution:**
-- Runs once per test session (not per-test)
-- Parses SQL files in chronological order
-- Replaces `{!!prefix!!}` with WordPress table prefix
-- Handled in `tests/bootstrap.php`
+// Load WordPress (for integration tests)
+if (file_exists(__DIR__ . '/../../../../wp-config.php')) {
+    require_once __DIR__ . '/../../../../wp-config.php';
+}
 
-**Test Database:**
-- Same database as WordPress (uses transactions for isolation)
-- Environment variables: `TEST_DB_NAME`, `TEST_DB_USER`, `TEST_DB_PASSWORD`, `TEST_DB_HOST`
-- Defaults to local development database
+// Initialize Brain Monkey
+Brain\Monkey\setUp();
+
+// Define test constant
+define('MAKERMAKER_PLUGIN_TESTS', true);
+```
+
+**Pest Config:** `tests/Pest.php`
+- Applies MockeryPHPUnitIntegration to all test directories
+- Sets up Brain Monkey before/after each test
+- Auto-assigns PHPUnit groups by directory
+- Defines custom expect() extensions
 
 ---
 
-*Testing analysis: 2026-01-07*
+*Testing analysis: 2026-01-18*
 *Update when test patterns change*

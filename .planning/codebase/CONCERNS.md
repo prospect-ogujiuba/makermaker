@@ -1,168 +1,144 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-01-07
+**Analysis Date:** 2026-01-18
 
 ## Tech Debt
 
-**God-Class Helper:**
-- Issue: `app/Helpers/ServiceCatalogHelper.php` (2183 lines) handles multiple unrelated concerns
-- Why: Rapid development without refactoring
-- Impact: Hard to test, maintain, and understand; high cognitive load
-- Fix approach: Split into focused helpers: `PricingHelper`, `EquipmentHelper`, `DeliveryHelper`, `BundleHelper`
+**Missing dependency lock files:**
+- Issue: No `composer.lock` or `package-lock.json` committed
+- Files: `composer.json`, `package.json` (both lockfiles in `.gitignore`)
+- Why: Possibly intentional for flexibility, but creates reproducibility issues
+- Impact: Non-reproducible builds, CI may get different versions, security vulnerabilities untracked
+- Fix approach: Remove lock files from `.gitignore`, commit after `composer install` and `npm install`
 
-**Large Controller:**
-- Issue: `app/Controllers/ContactSubmissionController.php` (1125 lines) with 15+ methods
-- Why: Single controller handling complex workflow
-- Impact: Methods exceed 150 lines, hard to navigate
-- Fix approach: Extract workflow methods to service classes
+**Core dependency on dev-master:**
+- Issue: `mxcro/makermaker-core` pinned to `dev-master`
+- File: `composer.json`
+- Why: Rapid development of core library
+- Impact: Breaking changes can silently appear, builds non-deterministic
+- Fix approach: Tag stable releases, pin to specific version `^1.0` or `dev-master#hash`
 
-**Outdated Frontend Dependencies:**
-- Issue: `package.json` dependencies from 2019
-- Files: `laravel-mix@4.0.7`, `typescript@3.6.4`, `sass-loader@7.1.0`, `ts-loader@6.2.0`
-- Why: Not prioritized during development
-- Impact: Security vulnerabilities, deprecated APIs
-- Fix approach: Update all devDependencies to current versions
-
-**dev-master Dependency:**
-- Issue: `composer.json` uses `"mxcro/makermaker-core": "dev-master"`
-- Why: Internal package, no versioning setup
-- Impact: Non-deterministic builds
-- Fix approach: Tag stable versions, pin to specific version
+**Old npm dependencies:**
+- Issue: Laravel Mix v4, TypeScript 3.6, ts-loader v6 (all from 2019)
+- File: `package.json`
+- Why: Initial scaffolding, never upgraded
+- Impact: Potential security vulnerabilities, missing features, build tool deprecation
+- Fix approach: Upgrade to Laravel Mix 6+, TypeScript 5.x
 
 ## Known Bugs
 
-**Debug Logging in Production:**
-- Symptoms: `error_log()` scattered throughout controllers
-- Trigger: Any controller action
-- Files: `app/Controllers/ContactSubmissionController.php` (12+ locations)
-- Workaround: None (logs written to PHP error log)
-- Root cause: Debug code not removed
-- Fix: Replace with structured logging via TypeRocket
+**Test bootstrap references wrong file:**
+- Symptoms: Integration tests may not load plugin correctly
+- Trigger: Run integration tests requiring plugin
+- File: `tests/bootstrap.php:12` - references `plugin.php` but actual file is `makermaker.php`
+- Workaround: Tests still pass due to Brain Monkey mocking
+- Root cause: Template copy/paste error
+- Fix: Change `'/../plugin.php'` to `'/../makermaker.php'`
 
 ## Security Considerations
 
-**Unvalidated Query Parameters:**
-- Risk: Direct `$_GET` access without sanitization before database queries
-- Files: `app/Controllers/ContactSubmissionController.php` (lines 169-174, 903-907)
-- Current mitigation: TypeRocket ORM parameter binding
-- Recommendations: Add explicit validation/sanitization via `intval()`, `sanitize_text_field()`
-
-**Unvalidated POST Parameters:**
-- Risk: Direct `$_POST` access without validation
-- Files: `app/Controllers/ContactSubmissionController.php` (lines 370, 959-960)
+**Hardcoded security seed:**
+- Risk: Static seed value shared across all deployments
+- File: `config/app.php:74` - `'seed' => 'seed_5f85f2eedfdfb'`
 - Current mitigation: None
-- Recommendations: Validate all POST data through TypeRocket Fields or WordPress sanitization functions
+- Recommendations: Move to environment variable `typerocket_env('TYPEROCKET_SEED')`
 
-**Missing Rate Limiting:**
-- Risk: Comment says "3 per hour" but code has different limit
-- File: `app/Controllers/ContactSubmissionController.php` (line 625)
-- Current mitigation: Some rate limiting in place
-- Recommendations: Centralize rate limit configuration, add consistent enforcement
+**CDN asset without SRI:**
+- Risk: Supply chain attack via compromised CDN
+- File: `app/MakermakerTypeRocketPlugin.php:136`
+- Current mitigation: None (trusting jsdelivr CDN)
+- Recommendations: Add integrity hash to `wp_enqueue_style()` call
+
+**Missing .env.example:**
+- Risk: Developers may hardcode secrets or miss required configuration
+- Current mitigation: Config files document env vars in comments
+- Recommendations: Create `.env.example` with all `typerocket_env()` variables
 
 ## Performance Bottlenecks
 
-**Aggressive Eager Loading:**
-- Problem: `$with` loads 10+ relationships by default
-- File: `app/Models/Service.php` (lines 62-74)
-- Measurement: Every query loads all relationships even for index views
-- Cause: Convenience over performance
-- Improvement path: Remove default `$with`, selectively load in controllers
+No significant performance issues detected. Codebase is minimal scaffolding.
 
-**Missing Pagination:**
-- Problem: REST endpoints return all results without pagination
-- Files: `app/Controllers/*Controller.php` (indexRest methods)
-- Measurement: Large tables will return unbounded result sets
-- Cause: Not implemented during initial development
-- Improvement path: Add limit/offset parameters to REST queries
+**Potential concern - Policy discovery on every request:**
+- File: `app/MakermakerTypeRocketPlugin.php:75-102`
+- Problem: `glob()` and `class_exists()` calls on each request
+- Measurement: Not measured, likely <1ms with few policies
+- Cause: Dynamic discovery pattern
+- Improvement path: Cache discovered policies in transient or static property
 
 ## Fragile Areas
 
-**Large Helper Class:**
-- File: `app/Helpers/ServiceCatalogHelper.php`
-- Why fragile: 70+ methods with interrelated logic, no tests
-- Common failures: Changes to one method affect others unexpectedly
-- Safe modification: Write tests first, then refactor
-- Test coverage: No unit tests currently
+**Policy auto-discovery:**
+- File: `app/MakermakerTypeRocketPlugin.php:75-102`
+- Why fragile: Relies on naming conventions (`{Model}Policy.php` ↔ `{Model}.php`)
+- Common failures: Typos in filenames, missing model, orphaned policy
+- Safe modification: Add validation logging for skipped policies
+- Test coverage: None
 
-**Contact Submission Workflow:**
-- File: `app/Controllers/ContactSubmissionController.php`
-- Why fragile: Complex state machine, many conditional paths
-- Common failures: Status transitions, bulk operations
-- Safe modification: Add integration tests before changes
-- Test coverage: Minimal
+**Dynamic resource loading:**
+- File: `app/MakermakerTypeRocketPlugin.php:54-73`
+- Why fragile: `glob()` returns `false` on error, not empty array
+- Common failures: Permission issues, broken symlinks
+- Safe modification: Add explicit `!== false` check
+- Test coverage: None
 
 ## Scaling Limits
 
-**No Identified Hard Limits:**
-- Plugin follows standard WordPress/TypeRocket patterns
-- Database queries use standard ORM
-- No obvious bottlenecks beyond eager loading issue
+Not applicable at current development stage.
 
 ## Dependencies at Risk
 
-**Frontend Build Chain:**
-- Risk: Laravel Mix 4.x is outdated (current is v6.x)
-- File: `package.json`
-- Impact: Webpack vulnerabilities, deprecated plugins
-- Migration plan: Update to Laravel Mix 6.x or switch to Vite
+**mxcro/makermaker-core:**
+- Risk: Internal dev-master dependency, no public releases
+- Impact: Breaking changes, versioning issues
+- Migration plan: Tag stable releases, use semantic versioning
 
-**TypeScript Version:**
-- Risk: TypeScript 3.6.4 (current is 5.x)
-- File: `package.json`
-- Impact: Missing modern TS features, potential compatibility issues
-- Migration plan: Update to TypeScript 5.x with loader updates
+**laravel-mix v4:**
+- Risk: Deprecated, v6 is current
+- Impact: Build issues on newer Node.js versions
+- Migration plan: Upgrade to Laravel Mix 6 or switch to Vite
 
 ## Missing Critical Features
 
-**README Documentation:**
-- Problem: No `README.md` for project overview
-- Current workaround: `CLAUDE.md` provides architecture info
-- Blocks: New developer onboarding
-- Implementation complexity: Low
+**No actual tests:**
+- Problem: Only trivial placeholder tests exist (`expect(true)->toBeTrue()`)
+- Files: All `tests/*/*.php` files contain single placeholder test
+- Current workaround: None
+- Blocks: CI/CD pipeline provides false confidence
+- Implementation: Add tests for plugin init, policy discovery, REST wrapper
 
-**Test Coverage for Helpers:**
-- Problem: `ServiceCatalogHelper.php` (2183 lines) has no tests
-- Current workaround: Manual testing
-- Blocks: Confident refactoring
-- Implementation complexity: Medium-High (many methods to test)
-
-**Structured Logging:**
-- Problem: Using `error_log()` instead of proper logging
-- Current workaround: Check PHP error log
-- Blocks: Log aggregation, filtering, monitoring
-- Implementation complexity: Low (TypeRocket logging exists)
+**No .env.example:**
+- Problem: Required environment variables undocumented
+- Current workaround: Read config files to discover env vars
+- Blocks: Developer onboarding, deployment documentation
+- Implementation: Create `.env.example` from config file analysis
 
 ## Test Coverage Gaps
 
-**ServiceCatalogHelper:**
-- What's not tested: 70+ utility methods for pricing, equipment, delivery
-- Files: `app/Helpers/ServiceCatalogHelper.php`
-- Risk: Core business logic changes break silently
+**Plugin initialization:**
+- What's not tested: `MakermakerTypeRocketPlugin::init()` and all private methods
+- Risk: Silent failures during plugin activation
 - Priority: High
-- Difficulty to test: Medium (many static methods)
+- Difficulty: Requires Brain Monkey setup for WordPress hooks
 
-**Controller Authorization:**
-- What's not tested: Policy checks in controller methods
-- Files: `app/Controllers/*.php`
-- Risk: Authorization bypass
-- Priority: High
-- Difficulty to test: Medium (need mock AuthUser)
-
-**REST API Endpoints:**
-- What's not tested: Full request/response cycle
-- Files: `app/Controllers/*Controller.php` (indexRest, showRest methods)
-- Risk: API breaks without detection
+**Policy discovery:**
+- What's not tested: `discoverPolicies()` with various directory states
+- Risk: Policies not registered, authorization failures
 - Priority: Medium
-- Difficulty to test: Low-Medium (REST test utilities exist)
+- Difficulty: File system mocking needed
 
-**Pricing Calculations:**
-- What's not tested: Complex pricing logic
-- File: `app/Helpers/ServiceCatalogHelper.php`
-- Risk: Financial calculation errors
+**REST API wrapper:**
+- What's not tested: `initReflectiveRestApi()` and query modifier
+- Risk: REST endpoints return wrong data or fail authorization
 - Priority: High
-- Difficulty to test: Medium
+- Difficulty: Requires integration test with WordPress
+
+**Asset registration:**
+- What's not tested: `registerAssets()` with missing manifest
+- Risk: Assets not loaded, broken admin UI
+- Priority: Low
+- Difficulty: Requires mocking `file_get_contents`
 
 ---
 
-*Concerns audit: 2026-01-07*
+*Concerns audit: 2026-01-18*
 *Update as issues are fixed or new ones discovered*
