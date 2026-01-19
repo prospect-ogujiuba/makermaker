@@ -1,144 +1,132 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-01-18
+**Analysis Date:** 2026-01-19
 
 ## Tech Debt
 
-**Missing dependency lock files:**
-- Issue: No `composer.lock` or `package-lock.json` committed
-- Files: `composer.json`, `package.json` (both lockfiles in `.gitignore`)
-- Why: Possibly intentional for flexibility, but creates reproducibility issues
-- Impact: Non-reproducible builds, CI may get different versions, security vulnerabilities untracked
-- Fix approach: Remove lock files from `.gitignore`, commit after `composer install` and `npm install`
+**Empty Application Layer:**
+- Issue: No models, controllers, policies, or migrations exist. Empty scaffold directories.
+- Files: `app/Models/`, `app/Controllers/`, `app/Auth/`, `database/migrations/`
+- Impact: Plugin provides no domain functionality; purely scaffolding
+- Fix approach: Implement domain models, controllers, and migrations using Galaxy CLI
 
-**Core dependency on dev-master:**
-- Issue: `mxcro/makermaker-core` pinned to `dev-master`
-- File: `composer.json`
-- Why: Rapid development of core library
-- Impact: Breaking changes can silently appear, builds non-deterministic
-- Fix approach: Tag stable releases, pin to specific version `^1.0` or `dev-master#hash`
+**Unused Route Imports:**
+- Issue: Route files import controllers that don't exist
+- Files: `inc/routes/api.php` (imports `MakerMaker\Controllers\Api\V1\ServiceController`), `inc/routes/public.php` (imports `MakerMaker\Controllers\Web\ServiceController`)
+- Impact: Potential autoload errors if routes are actually defined
+- Fix approach: Either create referenced controllers or remove imports
 
-**Old npm dependencies:**
-- Issue: Laravel Mix v4, TypeScript 3.6, ts-loader v6 (all from 2019)
-- File: `package.json`
-- Why: Initial scaffolding, never upgraded
-- Impact: Potential security vulnerabilities, missing features, build tool deprecation
-- Fix approach: Upgrade to Laravel Mix 6+, TypeScript 5.x
+**Bootstrap References Wrong Plugin File:**
+- Issue: Test bootstrap tries to load `plugin.php` but main file is `makermaker.php`
+- Files: `tests/bootstrap.php:12`
+- Impact: Plugin may not load correctly during integration tests
+- Fix approach: Change `plugin.php` to `makermaker.php` in bootstrap
+
+**Empty Resources Directory:**
+- Issue: `inc/resources/` directory exists but is empty; loadResources() scans it
+- Files: `app/MakermakerTypeRocketPlugin.php:54-73`, `inc/resources/`
+- Impact: Unnecessary filesystem operations on every request
+- Fix approach: Add resources or remove directory and loader code
+
+**Missing Storage Directory:**
+- Issue: Config references storage paths that don't exist
+- Files: `config/paths.php:21` references `storage/`, `config/paths.php:31` references `storage/logs`, `config/paths.php:41` references `storage/cache`
+- Impact: File logging/caching will fail without these directories
+- Fix approach: Create `storage/`, `storage/logs/`, `storage/cache/` directories with appropriate permissions
 
 ## Known Bugs
 
-**Test bootstrap references wrong file:**
-- Symptoms: Integration tests may not load plugin correctly
-- Trigger: Run integration tests requiring plugin
-- File: `tests/bootstrap.php:12` - references `plugin.php` but actual file is `makermaker.php`
-- Workaround: Tests still pass due to Brain Monkey mocking
-- Root cause: Template copy/paste error
-- Fix: Change `'/../plugin.php'` to `'/../makermaker.php'`
+**No functional bugs detected** - codebase is minimal scaffold with no business logic.
 
 ## Security Considerations
 
-**Hardcoded security seed:**
-- Risk: Static seed value shared across all deployments
-- File: `config/app.php:74` - `'seed' => 'seed_5f85f2eedfdfb'`
+**No Input Sanitization/Escaping Visible:**
+- Risk: Plugin code contains no explicit calls to `esc_*`, `sanitize_*`, or `wp_nonce` functions
+- Files: All PHP files in plugin (excluding vendor)
+- Current mitigation: TypeRocket framework likely handles this internally
+- Recommendations: When adding custom code, explicitly use WordPress sanitization/escaping functions
+
+**CDN Bootstrap Icons:**
+- Risk: External CDN dependency loads from `cdn.jsdelivr.net`
+- Files: `app/MakermakerTypeRocketPlugin.php:136`
 - Current mitigation: None
-- Recommendations: Move to environment variable `typerocket_env('TYPEROCKET_SEED')`
+- Recommendations: Consider self-hosting Bootstrap Icons or using Subresource Integrity (SRI)
 
-**CDN asset without SRI:**
-- Risk: Supply chain attack via compromised CDN
-- File: `app/MakermakerTypeRocketPlugin.php:136`
-- Current mitigation: None (trusting jsdelivr CDN)
-- Recommendations: Add integrity hash to `wp_enqueue_style()` call
-
-**Missing .env.example:**
-- Risk: Developers may hardcode secrets or miss required configuration
-- Current mitigation: Config files document env vars in comments
-- Recommendations: Create `.env.example` with all `typerocket_env()` variables
+**Static Security Seed:**
+- Risk: Hardcoded seed value in config
+- Files: `config/app.php:74` - `'seed' => 'seed_5f85f2eedfdfb'`
+- Current mitigation: None
+- Recommendations: Move to environment variable for production
 
 ## Performance Bottlenecks
 
-No significant performance issues detected. Codebase is minimal scaffolding.
+**No significant performance concerns** - codebase is minimal scaffold.
 
-**Potential concern - Policy discovery on every request:**
-- File: `app/MakermakerTypeRocketPlugin.php:75-102`
-- Problem: `glob()` and `class_exists()` calls on each request
-- Measurement: Not measured, likely <1ms with few policies
-- Cause: Dynamic discovery pattern
-- Improvement path: Cache discovered policies in transient or static property
+**Potential Future Concern - ReflectiveRestWrapper:**
+- Problem: Automatic REST API for all models via reflection
+- Files: `app/MakermakerTypeRocketPlugin.php:153-170`
+- Cause: Reflection and dynamic routing can be slower than explicit routes
+- Improvement path: Monitor performance as models are added; consider explicit routes for high-traffic endpoints
 
 ## Fragile Areas
 
-**Policy auto-discovery:**
-- File: `app/MakermakerTypeRocketPlugin.php:75-102`
-- Why fragile: Relies on naming conventions (`{Model}Policy.php` ↔ `{Model}.php`)
-- Common failures: Typos in filenames, missing model, orphaned policy
-- Safe modification: Add validation logging for skipped policies
+**TypeRocket Core Dependency:**
+- Files: `makermaker.php:54` - hooks into `typerocket_loaded` (priority 9)
+- Why fragile: Plugin entirely depends on TypeRocket Pro being loaded first; no fallback
+- Safe modification: Test with TypeRocket updates; maintain compatible versions
 - Test coverage: None
 
-**Dynamic resource loading:**
-- File: `app/MakermakerTypeRocketPlugin.php:54-73`
-- Why fragile: `glob()` returns `false` on error, not empty array
-- Common failures: Permission issues, broken symlinks
-- Safe modification: Add explicit `!== false` check
+**MakermakerCore External Dependency:**
+- Files: `composer.json:8` - `"mxcro/makermaker-core": "dev-master"`
+- Why fragile: Depends on `dev-master` branch which can change unexpectedly
+- Safe modification: Pin to specific version or commit hash for production
 - Test coverage: None
 
 ## Scaling Limits
 
-Not applicable at current development stage.
+**No scaling concerns** - plugin is scaffold without data storage patterns.
 
 ## Dependencies at Risk
 
-**mxcro/makermaker-core:**
-- Risk: Internal dev-master dependency, no public releases
-- Impact: Breaking changes, versioning issues
-- Migration plan: Tag stable releases, use semantic versioning
+**dev-master Core Dependency:**
+- Risk: `mxcro/makermaker-core` pinned to `dev-master` - unstable
+- Impact: Breaking changes can occur without warning
+- Migration plan: Pin to stable version tag when available
 
-**laravel-mix v4:**
-- Risk: Deprecated, v6 is current
-- Impact: Build issues on newer Node.js versions
-- Migration plan: Upgrade to Laravel Mix 6 or switch to Vite
+**TypeRocket Pro License:**
+- Risk: Commercial dependency on TypeRocket Pro
+- Impact: License renewal required; vendor lock-in
+- Migration plan: None - tightly coupled to TypeRocket architecture
 
 ## Missing Critical Features
 
-**No actual tests:**
-- Problem: Only trivial placeholder tests exist (`expect(true)->toBeTrue()`)
-- Files: All `tests/*/*.php` files contain single placeholder test
-- Current workaround: None
-- Blocks: CI/CD pipeline provides false confidence
-- Implementation: Add tests for plugin init, policy discovery, REST wrapper
+**No Domain Logic:**
+- Problem: No models, migrations, controllers, or business logic
+- Blocks: All application functionality
 
-**No .env.example:**
-- Problem: Required environment variables undocumented
-- Current workaround: Read config files to discover env vars
-- Blocks: Developer onboarding, deployment documentation
-- Implementation: Create `.env.example` from config file analysis
+**No Real Tests:**
+- Problem: Only placeholder tests exist (`expect(true)->toBeTrue()`)
+- Files: `tests/Unit/BasicUnitTest.php`, `tests/Feature/BasicFeatureTest.php`, `tests/Integration/BasicIntegrationTest.php`, `tests/Acceptance/BasicAcceptanceTest.php`
+- Blocks: Test coverage requirements (85% CI target will fail)
+
+**No Storage Directories:**
+- Problem: Required directories for logging and caching don't exist
+- Blocks: File logging, caching functionality
 
 ## Test Coverage Gaps
 
-**Plugin initialization:**
-- What's not tested: `MakermakerTypeRocketPlugin::init()` and all private methods
-- Risk: Silent failures during plugin activation
+**100% Coverage Gap:**
+- What's not tested: Entire application - only placeholder tests
+- Files: All `app/`, `config/`, `inc/` files
+- Risk: Any added functionality has zero test safety net
+- Priority: High - blocks CI pipeline (85% coverage requirement)
+
+**MakermakerTypeRocketPlugin Class:**
+- What's not tested: Plugin initialization, activation, deactivation, routes, policies
+- Files: `app/MakermakerTypeRocketPlugin.php`
+- Risk: Plugin lifecycle issues undetected
 - Priority: High
-- Difficulty: Requires Brain Monkey setup for WordPress hooks
-
-**Policy discovery:**
-- What's not tested: `discoverPolicies()` with various directory states
-- Risk: Policies not registered, authorization failures
-- Priority: Medium
-- Difficulty: File system mocking needed
-
-**REST API wrapper:**
-- What's not tested: `initReflectiveRestApi()` and query modifier
-- Risk: REST endpoints return wrong data or fail authorization
-- Priority: High
-- Difficulty: Requires integration test with WordPress
-
-**Asset registration:**
-- What's not tested: `registerAssets()` with missing manifest
-- Risk: Assets not loaded, broken admin UI
-- Priority: Low
-- Difficulty: Requires mocking `file_get_contents`
 
 ---
 
-*Concerns audit: 2026-01-18*
-*Update as issues are fixed or new ones discovered*
+*Concerns audit: 2026-01-19*

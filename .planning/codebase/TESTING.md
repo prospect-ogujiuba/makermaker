@@ -1,258 +1,178 @@
-# Testing Patterns
+# Testing
 
-**Analysis Date:** 2026-01-18
+**Analysis Date:** 2026-01-19
 
-## Test Framework
+## Framework
 
-**Runner:**
-- Pest v2.36.0 (expressive test framework)
-- PHPUnit 10.5.36 (underlying engine)
-- Config: `phpunit.xml` in project root
+**Primary:** Pest 2.34 (built on PHPUnit 10.5)
 
-**Assertion Library:**
-- Pest built-in expectations: `expect($value)->toBe()`
-- PHPUnit assertions available: `$this->assertTrue()`
+**Mocking:**
+- Brain\Monkey 2.6 - WordPress function mocking
+- Mockery 1.6 - PHP mocking
 
-**Run Commands:**
-```bash
-composer test                    # Run all tests
-composer test:unit               # Unit tests only (--group=unit)
-composer test:quick              # Unit + smoke tests with --testdox
-composer test:ci                 # All tests with 85% coverage minimum
-composer test:all                # All suites: Unit,Integration,Feature,Acceptance
-composer test:affected           # Exclude slow/quarantine groups
-```
+## Configuration
 
-## Test File Organization
+**phpunit.xml:**
+- Bootstrap: `tests/bootstrap.php`
+- Coverage source: `./app`
+- Test suites: Unit, Integration, Feature, Acceptance
 
-**Location:**
-- `tests/Unit/` - Isolated unit tests
-- `tests/Integration/` - Module integration tests
-- `tests/Feature/` - Business logic tests
-- `tests/Acceptance/` - End-to-end tests
-
-**Naming:**
-- `*Test.php` suffix for all test files
-- PascalCase matching tested class: `ServiceTest.php`
-- Group by functionality: `BasicUnitTest.php`
-
-**Structure:**
-```
-tests/
-├── Unit/
-│   └── BasicUnitTest.php
-├── Integration/
-│   └── BasicIntegrationTest.php
-├── Feature/
-│   └── BasicFeatureTest.php
-├── Acceptance/
-│   └── BasicAcceptanceTest.php
-├── Pest.php              # Global config and helpers
-└── bootstrap.php         # Test environment setup
-```
+**tests/Pest.php:**
+- MockeryPHPUnitIntegration for all suites
+- Brain\Monkey setUp/tearDown for all suites
+- Auto-assign PHPUnit groups based on directory
+- Custom expectations for WordPress functions
 
 ## Test Structure
 
-**Suite Organization:**
-```php
-<?php
-
-it('describes expected behavior', function () {
-    // arrange
-    $input = createTestData();
-
-    // act
-    $result = performAction($input);
-
-    // assert
-    expect($result)->toBe($expected);
-});
-
-it('handles error case', function () {
-    expect(fn() => failingAction())->toThrow(Exception::class);
-});
+```
+tests/
+├── Acceptance/              # End-to-end tests
+│   └── BasicAcceptanceTest.php
+├── Feature/                 # Feature tests
+│   └── BasicFeatureTest.php
+├── Integration/             # Integration tests
+│   └── BasicIntegrationTest.php
+├── Unit/                    # Unit tests
+│   └── BasicUnitTest.php
+├── Pest.php                 # Pest configuration
+└── bootstrap.php            # Test bootstrap
 ```
 
-**Patterns:**
-- Use `beforeEach` for per-test setup (configured globally in `Pest.php`)
-- Use `afterEach` for cleanup (Brain Monkey teardown)
-- Arrange/Act/Assert pattern encouraged
-- One assertion focus per test
+## Running Tests
 
-## Mocking
+```bash
+# All tests
+composer test
 
-**Framework:**
-- Brain Monkey 2.6.2 - WordPress function mocking
-- Mockery 1.6.12 - Object mocking
-- Integration via `MockeryPHPUnitIntegration` trait
+# Unit tests only
+composer test:unit
 
-**Patterns:**
+# With coverage (85% requirement)
+composer test:ci
+
+# Via Pest directly
+./vendor/bin/pest
+
+# Specific suite
+./vendor/bin/pest --group=unit
+./vendor/bin/pest --group=integration
+./vendor/bin/pest --group=feature
+./vendor/bin/pest --group=acceptance
+```
+
+## Mocking Patterns
+
+**WordPress Functions (Brain\Monkey):**
 ```php
-use Brain\Monkey;
 use Brain\Monkey\Functions;
-use Mockery;
 
-// Mock WordPress function
-Functions\expect('get_option')
-    ->once()
-    ->with('my_option')
-    ->andReturn('value');
+it('calls add_action', function () {
+    Functions\expect('add_action')
+        ->once()
+        ->with('init', \Mockery::type('callable'));
 
-// Mock object
-$mock = Mockery::mock(Service::class);
-$mock->shouldReceive('method')->andReturn('result');
-```
-
-**What to Mock:**
-- WordPress functions (via Brain Monkey)
-- External API calls
-- Database interactions in unit tests
-- File system operations
-
-**What NOT to Mock:**
-- Pure functions without side effects
-- Simple data transformations
-- The class under test
-
-## Fixtures and Factories
-
-**Test Data:**
-```php
-// Factory function pattern
-function createTestService(array $overrides = []): array
-{
-    return array_merge([
-        'id' => 1,
-        'name' => 'Test Service',
-        'price' => 99.99,
-        'active' => true,
-    ], $overrides);
-}
-
-// Usage
-it('calculates total correctly', function () {
-    $service = createTestService(['price' => 50.00]);
-    expect($service['price'])->toBe(50.00);
+    // Code that calls add_action
 });
 ```
 
-**Location:**
-- Factory functions: Define in test file or `tests/Factories/`
-- Fixtures: `tests/Fixtures/` for static data files
+**WordPress Actions:**
+```php
+use Brain\Monkey\Actions;
+
+it('adds the init action', function () {
+    Actions\expectAdded('init')->once();
+
+    // Code that adds action
+});
+```
+
+**WordPress Filters:**
+```php
+use Brain\Monkey\Filters;
+
+it('adds the content filter', function () {
+    Filters\expectAdded('the_content')->once();
+
+    // Code that adds filter
+});
+```
+
+**Custom Pest Expectations (from tests/Pest.php):**
+```php
+expect($subject)->toCallWordPressFunction('add_action');
+expect($subject)->toHaveWordPressAction('init');
+expect($subject)->toHaveWordPressFilter('the_content');
+```
 
 ## Coverage
 
-**Requirements:**
-- CI minimum: 85% line coverage
-- Command: `composer test:ci` runs `pest --coverage --min=85`
+**Target:** 85% (CI requirement)
 
-**Configuration:**
-- Coverage source: `./app` directory only
-- Excludes: test files, config files, vendor
+**Coverage Source:** `./app` directory
 
-**View Coverage:**
+**Run with coverage:**
 ```bash
-composer test:ci                  # Run with coverage check
-# HTML report: coverage/index.html (if configured)
+composer test:ci
 ```
 
-## Test Types
+## Test Examples
 
-**Unit Tests:**
-- Scope: Single function/class in isolation
-- Mocking: All external dependencies
-- Speed: Fast (<100ms each)
-- Directory: `tests/Unit/`
-
-**Integration Tests:**
-- Scope: Multiple modules together
-- Mocking: Only external services
-- Setup: May require WordPress environment
-- Directory: `tests/Integration/`
-
-**Feature Tests:**
-- Scope: Business logic flows
-- Mocking: External boundaries only
-- Setup: Plugin loaded, may use test database
-- Directory: `tests/Feature/`
-
-**Acceptance Tests:**
-- Scope: Full user flows
-- Mocking: None (real system)
-- Setup: Full WordPress environment
-- Directory: `tests/Acceptance/`
-
-## Common Patterns
-
-**Async Testing:**
+**Unit Test (Pure PHP):**
 ```php
-it('handles async operation', function () {
-    // Not applicable - PHP is synchronous
-    // Use promises/generators if needed
+<?php
+
+it('formats price correctly', function () {
+    $product = new Product(['price' => 1999]);
+
+    expect($product->formattedPrice())->toBe('$19.99');
 });
 ```
 
-**Error Testing:**
+**Integration Test (With WordPress Mocks):**
 ```php
-it('throws on invalid input', function () {
-    expect(fn() => validateInput(null))->toThrow(InvalidArgumentException::class);
-});
+<?php
 
-it('throws with specific message', function () {
-    expect(fn() => process([]))->toThrow('Input cannot be empty');
-});
-```
-
-**WordPress Function Mocking:**
-```php
 use Brain\Monkey\Functions;
 
-it('uses WordPress option', function () {
-    Functions\expect('get_option')
-        ->once()
-        ->with('my_setting', 'default')
-        ->andReturn('custom_value');
+it('saves product to database', function () {
+    Functions\when('current_user_can')->justReturn(true);
 
-    $result = getMyOption();
+    $product = new Product(['title' => 'Test']);
+    $product->save();
 
-    expect($result)->toBe('custom_value');
+    expect($product->id)->not->toBeNull();
 });
 ```
 
-**Custom Expectations:**
+**Feature Test (Full Request):**
 ```php
-// Defined in tests/Pest.php
-expect($value)->toCallWordPressFunction('add_action');
-expect($value)->toHaveWordPressAction('init');
-expect($value)->toHaveWordPressFilter('the_content');
+<?php
+
+use Brain\Monkey\Functions;
+
+it('creates product via controller', function () {
+    Functions\when('current_user_can')->justReturn(true);
+    Functions\when('wp_redirect')->justReturn(true);
+
+    $controller = new ProductController();
+    $response = $controller->create(/* mock fields */);
+
+    expect($response)->toBeRedirect();
+});
 ```
 
-## Test Bootstrap
+## Current State
 
-**Setup File:** `tests/bootstrap.php`
+**Note:** Current tests are placeholders only:
 ```php
-// Load Composer autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
-
-// Load WordPress (for integration tests)
-if (file_exists(__DIR__ . '/../../../../wp-config.php')) {
-    require_once __DIR__ . '/../../../../wp-config.php';
-}
-
-// Initialize Brain Monkey
-Brain\Monkey\setUp();
-
-// Define test constant
-define('MAKERMAKER_PLUGIN_TESTS', true);
+it('works', function () {
+    expect(true)->toBeTrue();
+});
 ```
 
-**Pest Config:** `tests/Pest.php`
-- Applies MockeryPHPUnitIntegration to all test directories
-- Sets up Brain Monkey before/after each test
-- Auto-assigns PHPUnit groups by directory
-- Defines custom expect() extensions
+Real tests need to be implemented for actual coverage.
 
 ---
 
-*Testing analysis: 2026-01-18*
-*Update when test patterns change*
+*Testing analysis: 2026-01-19*

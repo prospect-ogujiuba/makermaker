@@ -1,117 +1,159 @@
 # External Integrations
 
-**Analysis Date:** 2026-01-18
+**Analysis Date:** 2026-01-19
 
-## APIs & External Services
+## Database
 
-**Google Maps:**
-- Google Maps JavaScript API - Map embedding
-  - SDK/Client: TypeRocket built-in component
-  - Auth: `TYPEROCKET_GOOGLE_MAPS_API_KEY` env var
-  - Config: `config/external.php`
+**Primary:** WordPress Database via TypeRocket ORM
 
-**Email/SMS:**
-- Mailgun - Transactional email driver (optional)
-  - SDK/Client: `TypeRocket\Pro\Utility\Mailers\MailgunMailDriver`
-  - Auth: `TYPEROCKET_MAILGUN_API_KEY`, `TYPEROCKET_MAILGUN_DOMAIN`
-  - Config: `config/mail.php`
-- WordPress Native Mailer - Default email driver
-  - SDK/Client: `TypeRocket\Pro\Utility\Mailers\WordPressMailDriver`
+**Connection:**
+- Driver: `TypeRocket\Database\Connectors\WordPressCoreDatabaseConnector`
+- Uses WordPress `$wpdb` global
+- Table prefix: `GLOBAL_WPDB_PREFIX` constant
 
-**CDN:**
-- Bootstrap Icons v1.11.3 - Icon library
-  - Loaded from jsdelivr CDN
-  - Enqueued in: `app/MakermakerTypeRocketPlugin.php:136`
+**Configuration:** `config/database.php`
+```php
+'default' => typerocket_env('TYPEROCKET_DATABASE_DEFAULT', 'wp'),
+'drivers' => [
+    'wp' => [
+        'driver' => '\TypeRocket\Database\Connectors\WordPressCoreDatabaseConnector',
+    ],
+]
+```
 
-## Data Storage
-
-**Databases:**
-- WordPress Core Database - Primary data store
-  - Connection: Via WordPress `$wpdb` global
-  - Driver: `TypeRocket\Database\Connectors\WordPressCoreDatabaseConnector`
-  - Config: `config/database.php`
-- Alternative Database - Optional secondary connection
-  - Env vars: `TYPEROCKET_ALT_DATABASE_*` (USER, PASSWORD, DATABASE, HOST)
-
-**File Storage:**
-- Storage Drive - Local file system storage
-  - Driver: `TypeRocket\Pro\Utility\Drives\StorageDrive`
-  - Path: `{plugin}/storage/`
-- Uploads Drive - WordPress uploads integration
-  - Driver: `TypeRocket\Pro\Utility\Drives\UploadsDrive`
-- Root Drive - Plugin root access
-  - Driver: `TypeRocket\Pro\Utility\Drives\RootDrive`
-  - Config: `config/storage.php`
-
-**Caching:**
-- File-based cache - Default
-  - Path: `TYPEROCKET_CACHE_FILE_FOLDER` env var
-  - Config: `config/paths.php`
-
-## Authentication & Identity
-
-**Auth Provider:**
-- WordPress User System - Native WordPress authentication
-  - Implementation: Via `TypeRocket\Models\AuthUser`
-  - Capabilities: WordPress role-based (`isCapable()`)
-  - Session: WordPress cookies
-
-**Authorization:**
-- Policy-based - Custom policies in `app/Auth/*Policy.php`
-  - Auto-discovered by `discoverPolicies()` in plugin init
-  - Pattern: `{Model}Policy.php` maps to `{Model}.php`
-
-## Monitoring & Observability
-
-**Logging:**
-- File Logger - Primary logging
-  - Driver: `TypeRocket\Pro\Utility\Loggers\FileLogger`
-  - Path: `TYPEROCKET_LOG_FILE_FOLDER` env var
-  - Config: `config/logging.php`
-- Slack Logger - Optional Slack notifications
-  - Driver: `TypeRocket\Pro\Utility\Loggers\SlackLogger`
-  - Webhook: `TYPEROCKET_LOG_SLACK_WEBHOOK_URL` env var
-- Mail Logger - Email error notifications
-  - Driver: `TypeRocket\Pro\Utility\Loggers\MailLogger`
-
-**Error Tracking:**
-- Whoops - Development error pages
-  - Package: `filp/whoops 2.18.4`
-  - Enabled: When `WP_DEBUG` is true
-  - Config: `config/app.php` ErrorService
-
-## Queue & Background Jobs
-
-**Queue System:**
-- WooCommerce Action Scheduler - Job processing
-  - Driver: TypeRocket JobQueueRunner service
-  - Config: `config/queue.php`
-  - Retention: 30 days default
-  - Install: `composer require woocommerce/action-scheduler`
+**Alternate Connection (optional):**
+```php
+'alt' => [
+    'driver' => '\TypeRocket\Database\Connectors\CoreDatabaseConnector',
+    'username' => typerocket_env('TYPEROCKET_ALT_DATABASE_USER'),
+    'password' => typerocket_env('TYPEROCKET_ALT_DATABASE_PASSWORD'),
+    'database' => typerocket_env('TYPEROCKET_ALT_DATABASE_DATABASE'),
+    'host' => typerocket_env('TYPEROCKET_ALT_DATABASE_HOST'),
+]
+```
 
 ## REST API
 
-**Reflective REST Wrapper:**
-- Zero-config CRUD endpoints
-  - Base: `/tr-api/rest/{resource}/{id?}/actions/{action?}`
-  - Features: Full-text search, field filtering, sorting, pagination
-  - Model namespace: `\MakerMaker\Models\`
-  - Config: `app/MakermakerTypeRocketPlugin.php:initReflectiveRestApi()`
-  - Query modifier: User-based filtering via `setListQueryModifier()`
+**TypeRocket REST API:**
+- Base: `/tr-api/rest/{resource}/{id?}/actions/{action?}`
+- Authentication: WordPress nonce + capabilities
+- Format: JSON
 
-## Environment Configuration
+**ReflectiveRestWrapper Enhancements:**
+- Zero-config for all custom resources
+- Full-text search: `?search=term`
+- Field filtering: `?field=value`
+- Sorting: `?orderby=field&order=asc|desc`
+- Pagination: `?page=1&per_page=10`
+- Custom actions: `/actions/{action}`
 
-**Development:**
-- Required: WordPress installation, PHP 8.2+, Composer
-- Env vars: Document via `.env.example` (not present)
-- Debug: `WP_DEBUG=true` enables Whoops error pages
+**Configuration:** `app/MakermakerTypeRocketPlugin.php:153-170`
+```php
+ReflectiveRestWrapper::setModelNamespace('\\MakerMaker\\Models\\');
+ReflectiveRestWrapper::setListQueryModifier(function ($model, $resource, $user) {
+    // Custom filtering per resource
+});
+ReflectiveRestWrapper::init();
+```
 
-**Production:**
-- Secrets: Via WordPress wp-config.php or server environment
-- Debug: `WP_DEBUG=false` for production
-- Logging: File or Slack based on config
+## Mail
+
+**Configuration:** `config/mail.php`
+
+**Drivers:**
+- `wp` - WordPress `wp_mail()` (default)
+- `log` - File logging (debug)
+- `mailgun` - Mailgun API
+
+**Environment Variables:**
+```
+TYPEROCKET_MAIL_DEFAULT=wp
+TYPEROCKET_MAILGUN_SECRET=
+TYPEROCKET_MAILGUN_DOMAIN=
+TYPEROCKET_MAILGUN_ENDPOINT=api.mailgun.net
+```
+
+## Logging
+
+**Configuration:** `config/logging.php`
+
+**Channels:**
+- `file` - File logs in `storage/logs/`
+- `slack` - Slack webhook
+- `mail` - Email alerts
+- `stack` - Multiple channels (default)
+
+**Environment Variables:**
+```
+TYPEROCKET_LOG_DEFAULT=stack
+TYPEROCKET_LOG_SLACK_WEBHOOK_URL=
+TYPEROCKET_LOG_CHANNEL=
+```
+
+## Queue/Jobs
+
+**Configuration:** `config/queue.php`
+
+**Driver:** WordPress Action Scheduler
+- Default queue: `typerocket`
+- Single/recurring job support
+
+## Storage
+
+**Configuration:** `config/storage.php`
+
+**Drivers:**
+- `local` - Local filesystem (default)
+- `s3` - Amazon S3 (not configured)
+
+**Paths:**
+```
+storage/           # Base storage
+storage/logs/      # Log files
+storage/cache/     # Cache files
+```
+
+## External APIs
+
+**Google Maps (Optional):**
+- Configuration: `config/external.php`
+- Environment: `TYPEROCKET_GOOGLE_MAPS_API_KEY`
+
+**Bootstrap Icons CDN:**
+- URL: `https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css`
+- Location: `app/MakermakerTypeRocketPlugin.php:136`
+
+## WordPress Integration
+
+**Hooks:**
+- `typerocket_loaded` (priority 9) - Plugin initialization
+- `parse_request` (priority 5) - REST API interception
+- `wp_enqueue_scripts` - Frontend assets
+- `admin_enqueue_scripts` - Admin assets
+- `register_activation_hook` - Plugin activation
+- `delete_plugin` - Plugin deletion
+
+**Capabilities:**
+- Custom capabilities per resource: `manage_{resource}`
+- WordPress user roles integration via `AuthUser::isCapable()`
+
+**Admin Pages:**
+- Plugin settings page via `BasePlugin::pluginSettingsPage()`
+- Custom resource pages via TypeRocket Registry
+
+## Authentication
+
+**Method:** WordPress Capabilities
+
+**Implementation:**
+- Policies check `AuthUser::isCapable('{capability}')`
+- REST API validates via WordPress nonce
+- Admin pages use standard WordPress capability checks
+
+**Custom Query Filtering:**
+- `ReflectiveRestWrapper::setListQueryModifier()` for user-based data filtering
+- Example: Non-admins only see their own submissions
 
 ---
 
-*Integration audit: 2026-01-18*
-*Update when adding/removing external services*
+*Integrations analysis: 2026-01-19*
