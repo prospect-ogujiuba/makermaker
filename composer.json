@@ -1,0 +1,18 @@
+{
+  "name": "prospect-ogujiuba/makermaker",
+  "description": "Generate structured custom WordPress plugins from an installed TypeRocket Pro v6 scaffold.",
+  "type": "wordpress-muplugin",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Maker\\MakerMaker\\": "app/"
+    }
+  },
+  "scripts": {
+    "test": "php tests/run.php",
+    "lint": "find app tests -name '*.php' -print0 | xargs -0 -n1 php -l && php -l makermaker.php"
+  }
+}
