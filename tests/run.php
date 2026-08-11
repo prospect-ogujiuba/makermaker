@@ -53,8 +53,10 @@ $test( 'generates and substitutes the official-shaped scaffold', static function
         $assert( is_file( $result->directory . '/app/ClientPortalTypeRocketPlugin.php' ) );
         $entry = file_get_contents( $result->entryFile );
         $composer = file_get_contents( $result->directory . '/composer.json' );
+        $composerData = json_decode( $composer, true, 512, JSON_THROW_ON_ERROR );
         $assert( str_contains( $entry, 'Client Portal' ) && str_contains( $entry, 'Maker\\ClientPortal' ) );
-        $assert( str_contains( $composer, 'prospect/client-portal' ) );
+        $assert( $composerData['name'] === 'prospect/client-portal' );
+        $assert( isset( $composerData['autoload']['psr-4']['Maker\\ClientPortal\\'] ) );
         $assert( ! str_contains( $entry . $composer, 'MyNamespace' ) );
     } finally {
         $remove( $root );

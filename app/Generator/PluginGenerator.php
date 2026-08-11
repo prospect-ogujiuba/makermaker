@@ -100,7 +100,11 @@ final class PluginGenerator
                 throw new GeneratorException( 'The official template is missing ' . $relative . '.' );
             }
             $contents = file_get_contents( $file );
-            if ( $contents === false || file_put_contents( $file, str_replace( $tokens, $values, $contents ) ) === false ) {
+            $fileValues = $values;
+            if ( $relative === 'composer.json' ) {
+                $fileValues[2] = str_replace( '\\', '\\\\', $definition->namespace );
+            }
+            if ( $contents === false || file_put_contents( $file, str_replace( $tokens, $fileValues, $contents ) ) === false ) {
                 throw new GeneratorException( 'Unable to customize ' . $relative . '.' );
             }
         }

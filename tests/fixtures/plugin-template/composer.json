@@ -1,1 +1,1 @@
-{"name":"{{package}}","autoload":{"psr-4":{"MyNamespace\\\\":"app/"}}}
+{"name":"{{package}}","autoload":{"psr-4":{"MyNamespace\\":"app/"}}}
