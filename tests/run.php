@@ -71,6 +71,10 @@ $test( 'rejects collisions and cleans partial output', static function () use ( 
         $generator = new PluginGenerator( __DIR__ . '/fixtures/plugin-template', $root );
         $expectFailure( static fn() => $generator->generate( new PluginDefinition( 'Existing', 'existing-plugin', 'Maker\\Existing' ) ) );
 
+        if ( function_exists( 'symlink' ) && @symlink( sys_get_temp_dir(), $root . '/linked-plugin' ) ) {
+            $expectFailure( static fn() => $generator->generate( new PluginDefinition( 'Linked', 'linked-plugin', 'Maker\\Linked' ) ) );
+        }
+
         $broken = $root . '/broken-template';
         mkdir( $broken );
         copy( __DIR__ . '/fixtures/plugin-template/plugin.php', $broken . '/plugin.php' );
