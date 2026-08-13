@@ -9,6 +9,10 @@ final class GeneratorFactory
             throw new GeneratorException( 'WordPress plugin directory is not defined.' );
         }
 
-        return new PluginGenerator( ( new TemplateLocator() )->locate(), (string) WP_PLUGIN_DIR );
+        if ( ! defined( 'ABSPATH' ) ) {
+            throw new GeneratorException( 'WordPress root is not defined.' );
+        }
+
+        return new PluginGenerator( ( new TemplateLocator() )->locate(), (string) WP_PLUGIN_DIR, rtrim( (string) ABSPATH, '/\\' ) );
     }
 }

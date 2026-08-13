@@ -17,8 +17,11 @@ final class PluginGenerator
         'uninstall.php',
     ];
 
-    public function __construct( private readonly string $templateDirectory, private readonly string $pluginDirectory )
+    private readonly string $wordpressRoot;
+
+    public function __construct( private readonly string $templateDirectory, private readonly string $pluginDirectory, ?string $wordpressRoot = null )
     {
+        $this->wordpressRoot = $wordpressRoot ?? dirname( $pluginDirectory, 2 );
     }
 
     public function generate( PluginDefinition $definition ): GenerationResult
@@ -32,13 +35,31 @@ final class PluginGenerator
             throw new GeneratorException( 'WordPress plugin directory is unavailable or not writable.' );
         }
 
+        $wordpressRoot = realpath( $this->wordpressRoot );
+        if ( $wordpressRoot === false || ! is_dir( $wordpressRoot ) || ! is_writable( $wordpressRoot ) ) {
+            throw new GeneratorException( 'WordPress root is unavailable or not writable.' );
+        }
         $destination = $root . DIRECTORY_SEPARATOR . $definition->slug;
-        if ( file_exists( $destination ) || is_link( $destination ) ) {
-            throw new GeneratorException( 'A plugin with this slug already exists.' );
+        $launcher = $wordpressRoot . DIRECTORY_SEPARATOR . GalaxyContext::launcherName( $definition );
+        $config = $wordpressRoot . DIRECTORY_SEPARATOR . GalaxyContext::configName( $definition );
+        $lockPath = $wordpressRoot . DIRECTORY_SEPARATOR . '.makermaker-plugin.lock';
+        $lock = fopen( $lockPath, 'c+' );
+        if ( $lock === false ) {
+            throw new GeneratorException( 'Unable to create the plugin generation lock.' );
         }
 
         $staging = $root . DIRECTORY_SEPARATOR . '.' . $definition->slug . '.makermaker-' . bin2hex( random_bytes( 6 ) );
+        $rootStaging = $wordpressRoot . DIRECTORY_SEPARATOR . '.makermaker-galaxy-' . bin2hex( random_bytes( 6 ) );
+        $published = [];
         try {
+            if ( ! flock( $lock, LOCK_EX ) ) {
+                throw new GeneratorException( 'Unable to lock the WordPress root for generation.' );
+            }
+            foreach ( [ $destination, $launcher, $config ] as $target ) {
+                if ( file_exists( $target ) || is_link( $target ) ) {
+                    throw new GeneratorException( 'Generated plugin or Galaxy target already exists: ' . basename( $target ) );
+                }
+            }
             $this->copyTree( $source, $staging );
             $this->replaceTokens( $staging, $definition );
             $entry = $staging . DIRECTORY_SEPARATOR . 'plugin.php';
@@ -49,17 +70,40 @@ final class PluginGenerator
             if ( ! rename( $entry, $renamedEntry ) || ! rename( $class, $renamedClass ) ) {
                 throw new GeneratorException( 'Unable to finalize generated plugin filenames.' );
             }
-            if ( ! rename( $staging, $destination ) ) {
-                throw new GeneratorException( 'Unable to atomically publish the generated plugin.' );
+            if ( ! mkdir( $rootStaging, 0700 ) ) {
+                throw new GeneratorException( 'Unable to stage plugin Galaxy context.' );
+            }
+            $stagedLauncher = $rootStaging . DIRECTORY_SEPARATOR . basename( $launcher );
+            $stagedConfig = $rootStaging . DIRECTORY_SEPARATOR . basename( $config );
+            if ( file_put_contents( $stagedLauncher, GalaxyContext::launcher( $definition ), LOCK_EX ) === false
+                || ! chmod( $stagedLauncher, 0755 )
+                || file_put_contents( $stagedConfig, GalaxyContext::config( $definition ), LOCK_EX ) === false ) {
+                throw new GeneratorException( 'Unable to stage plugin Galaxy files.' );
             }
 
-            return new GenerationResult( $destination, $destination . DIRECTORY_SEPARATOR . $definition->slug . '.php', $definition );
+            foreach ( [ $stagedLauncher => $launcher, $stagedConfig => $config, $staging => $destination ] as $sourcePath => $targetPath ) {
+                if ( file_exists( $targetPath ) || is_link( $targetPath ) || ! rename( $sourcePath, $targetPath ) ) {
+                    throw new GeneratorException( 'Unable to atomically publish generated target: ' . basename( $targetPath ) );
+                }
+                $published[] = $targetPath;
+            }
+            @rmdir( $rootStaging );
+
+            return new GenerationResult( $destination, $destination . DIRECTORY_SEPARATOR . $definition->slug . '.php', $definition, $launcher, $config );
         } catch ( Throwable $error ) {
+            foreach ( array_reverse( $published ) as $target ) {
+                $this->removeTree( $target );
+            }
             $this->removeTree( $staging );
+            $this->removeTree( $rootStaging );
             if ( $error instanceof GeneratorException ) {
                 throw $error;
             }
             throw new GeneratorException( 'Plugin generation failed: ' . $error->getMessage(), 0, $error );
+        } finally {
+            flock( $lock, LOCK_UN );
+            fclose( $lock );
+            @unlink( $lockPath );
         }
     }
 
