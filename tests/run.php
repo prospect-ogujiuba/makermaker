@@ -195,7 +195,15 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $migration = file_get_contents( $migrations[0] );
         $assert( str_contains( $migration, '-- >>> Up >>>' ) );
         $assert( str_contains( $migration, '`{!!prefix!!}products`' ) );
+        foreach ( [ '`description` text DEFAULT NULL', '`is_active` tinyint(1) unsigned NOT NULL DEFAULT 1', '`sort_order` int unsigned NOT NULL DEFAULT 0', '`deleted_at` datetime DEFAULT NULL', '`created_by` bigint(20) unsigned DEFAULT NULL', '`updated_by` bigint(20) unsigned DEFAULT NULL' ] as $commonColumn ) {
+            $assert( str_contains( $migration, $commonColumn ), 'Missing common migration column: ' . $commonColumn );
+        }
+        $assert( str_contains( $migration, 'FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`)' ) );
+        $assert( str_contains( $migration, 'FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`)' ) );
         $assert( str_contains( $migration, '-- >>> Down >>>' ) );
+        $model = file_get_contents( $root . '/app/Models/Product.php' );
+        $assert( str_contains( $model, "'description', 'is_active', 'sort_order'") );
+        $assert( str_contains( $model, "'deleted_at', 'created_by', 'updated_by'") );
         $controller = file_get_contents( $root . '/app/Controllers/ProductController.php' );
         $assert( str_contains( $controller, "View::new('products.index')") );
         $assert( str_contains( $controller, 'tr_form(Product::class)->useErrors()->useOld()->useConfirm()' ) );
@@ -203,9 +211,13 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $index = file_get_contents( $root . '/resources/views/products/index.php' );
         $assert( str_contains( $index, 'tr_table(Product::class)' ) );
         $assert( str_contains( $index, '->setColumns(' ) && str_contains( $index, '->render()' ) );
+        $assert( str_contains( $index, "'is_active' => [") && str_contains( $index, "'sort_order' => [") );
         $form = file_get_contents( $root . '/resources/views/products/form.php' );
         $assert( str_contains( $form, '$form->open()' ) );
         $assert( str_contains( $form, 'tr_tabs()' ) && str_contains( $form, "\$form->text('name')" ) );
+        $assert( str_contains( $form, "\$form->textarea('description')" ) );
+        $assert( str_contains( $form, "\$form->toggle('is_active')" ) );
+        $assert( str_contains( $form, "\$form->number('sort_order')" ) );
         $assert( str_contains( $form, '$form->close()' ) );
     } finally {
         $remove( $root );

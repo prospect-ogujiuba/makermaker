@@ -124,8 +124,8 @@ use TypeRocket\Models\Model;
 final class {{name}} extends Model
 {
     protected $resource = '{{plural}}';
-    protected $fillable = [ 'name' ];
-    protected $guard = [ 'id', 'created_at', 'updated_at' ];
+    protected $fillable = [ 'name', 'description', 'is_active', 'sort_order' ];
+    protected $guard = [ 'id', 'created_at', 'updated_at', 'deleted_at', 'created_by', 'updated_by' ];
 }
 PHP, $tokens ),
             "app/Controllers/{$name}Controller.php" => $this->render( <<<'PHP'
@@ -211,12 +211,17 @@ final class {{name}}Fields extends Fields
 
     protected function fillable(): array
     {
-        return [];
+        return [ 'name', 'description', 'is_active', 'sort_order' ];
     }
 
     protected function rules(): array
     {
-        return [ 'name' => 'required|max:255' ];
+        return [
+            'name' => 'required|max:255',
+            'description' => '?max:65535',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ];
     }
 }
 PHP, $tokens ),
@@ -231,10 +236,22 @@ PHP, $tokens ),
 CREATE TABLE IF NOT EXISTS `{!!prefix!!}{{plural}}` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int unsigned NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  `created_by` bigint(20) unsigned DEFAULT NULL,
+  `updated_by` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_{{plural}}__name` (`name`)
+  KEY `idx_{{plural}}__name` (`name`),
+  KEY `idx_{{plural}}__active_order` (`is_active`, `sort_order`),
+  KEY `idx_{{plural}}__deleted_at` (`deleted_at`),
+  KEY `idx_{{plural}}__created_by` (`created_by`),
+  KEY `idx_{{plural}}__updated_by` (`updated_by`),
+  CONSTRAINT `fk_{{plural}}__created_by` FOREIGN KEY (`created_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT `fk_{{plural}}__updated_by` FOREIGN KEY (`updated_by`) REFERENCES `{!!prefix!!}users` (`ID`) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='{{title}}';
 
 -- >>> Down >>>
@@ -254,6 +271,14 @@ $table->setColumns([
         'label' => 'Name',
         'sort' => true,
         'actions' => ['edit', 'view', 'delete'],
+    ],
+    'is_active' => [
+        'label' => 'Active',
+        'sort' => true,
+    ],
+    'sort_order' => [
+        'label' => 'Sort Order',
+        'sort' => true,
     ],
     'created_at' => [
         'label' => 'Created At',
@@ -288,6 +313,19 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->setHelp('Enter the {{singular_title}} name')
                 ->setAttribute('maxlength', '255')
                 ->markLabelRequired(),
+            $form->textarea('description')
+                ->setLabel('Description')
+                ->setHelp('Describe this {{singular_title}}')
+                ->setAttribute('rows', '4'),
+            $form->toggle('is_active')
+                ->setLabel('Active')
+                ->setHelp('Whether this {{singular_title}} is active'),
+            $form->number('sort_order')
+                ->setLabel('Sort Order')
+                ->setHelp('Lower numbers appear first')
+                ->setAttribute('min', '0')
+                ->setAttribute('step', '1')
+                ->setDefault('0'),
         ]
     ),
 ])->setDescription('{{singular_title}}');
