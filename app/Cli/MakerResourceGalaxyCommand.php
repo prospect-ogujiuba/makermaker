@@ -45,7 +45,12 @@ final class MakerResourceGalaxyCommand extends Command
                 (string) $this->getOption( 'plural' )
             );
             $result = $factory->create( $context['slug'] )->generate( $definition );
-            $this->success( 'Generated ' . $definition->name . ' resource (' . count( $result->files ) . ' files).' );
+            $message = 'Generated ' . $definition->name . ' resource (' . count( $result->files ) . ' files).';
+            if ( $definition->enabled( 'migration' ) ) {
+                $launcher = 'galaxy_' . str_replace( '-', '_', $context['slug'] );
+                $message .= ' Migration generated but not applied. Run: php ' . $launcher . ' migrate up';
+            }
+            $this->success( $message );
         } catch ( Throwable $error ) {
             $this->error( $error->getMessage() );
             $this->success = 1;

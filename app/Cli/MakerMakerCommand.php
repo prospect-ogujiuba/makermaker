@@ -58,10 +58,16 @@ final class MakerMakerCommand
                 $options,
                 (string) ( $assocArgs['plural'] ?? '' )
             );
+            $pluginSlug = (string) ( $assocArgs['plugin'] ?? '' );
             $result = ( new ResourceGeneratorFactory() )
-                ->create( (string) ( $assocArgs['plugin'] ?? '' ) )
+                ->create( $pluginSlug )
                 ->generate( $definition );
-            WP_CLI::success( 'Generated ' . $definition->name . ' resource (' . count( $result->files ) . ' files) in ' . $result->pluginDirectory );
+            $message = 'Generated ' . $definition->name . ' resource (' . count( $result->files ) . ' files) in ' . $result->pluginDirectory . '.';
+            if ( $definition->enabled( 'migration' ) ) {
+                $launcher = 'galaxy_' . str_replace( '-', '_', $pluginSlug );
+                $message .= ' Migration generated but not applied. Run from the WordPress root: php ' . $launcher . ' migrate up';
+            }
+            WP_CLI::success( $message );
         } catch ( Throwable $error ) {
             WP_CLI::error( $error->getMessage() );
         }

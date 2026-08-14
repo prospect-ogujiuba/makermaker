@@ -137,6 +137,7 @@ use {{namespace}}\Models\{{name}};
 use {{namespace}}\View;
 use TypeRocket\Controllers\Controller;
 use TypeRocket\Http\Response;
+use TypeRocket\Models\AuthUser;
 
 final class {{name}}Controller extends Controller
 {
@@ -151,13 +152,20 @@ final class {{name}}Controller extends Controller
         return View::new('{{plural}}.form', compact('form'));
     }
 
-    public function create({{name}}Fields $fields, {{name}} ${{variable}}, Response $response)
+    public function create({{name}}Fields $fields, {{name}} ${{variable}}, Response $response, AuthUser $user)
     {
-        ${{variable}}->save($fields);
-        if (${{variable}}->getErrors()) {
-            $response->flashNext('{{singular_title}} creation failed', 'error');
-            return tr_redirect()->back()->withErrors(${{variable}}->getErrors());
+        ${{variable}}->created_by = $user->getID();
+        ${{variable}}->updated_by = $user->getID();
+
+        if (! ${{variable}}->save($fields)) {
+            global $wpdb;
+            if ($wpdb->last_error !== '') {
+                error_log('MakerMaker {{name}} create failed: ' . $wpdb->last_error);
+            }
+            $response->flashNext('{{singular_title}} creation failed. Confirm TypeRocket migrations have been run.', 'error');
+            return tr_redirect()->back()->withOldFields();
         }
+
         $response->flashNext('{{singular_title}} created', 'success');
         return tr_redirect()->toPage('{{key}}', 'index');
     }
@@ -169,13 +177,11 @@ final class {{name}}Controller extends Controller
         return View::new('{{plural}}.form', compact('form', 'current_id'));
     }
 
-    public function update({{name}} ${{variable}}, {{name}}Fields $fields, Response $response)
+    public function update({{name}} ${{variable}}, {{name}}Fields $fields, Response $response, AuthUser $user)
     {
+        ${{variable}}->updated_by = $user->getID();
         ${{variable}}->save($fields);
-        if (${{variable}}->getErrors()) {
-            $response->flashNext('{{singular_title}} update failed', 'error');
-            return tr_redirect()->back()->withErrors(${{variable}}->getErrors());
-        }
+
         $response->flashNext('{{singular_title}} updated', 'success');
         return tr_redirect()->toPage('{{key}}', 'edit', ${{variable}}->getID());
     }
@@ -220,8 +226,8 @@ final class {{name}}Fields extends Fields
         return [
             'name' => 'required|max:255',
             'description' => '?max:65535',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer|min:0',
+            'is_active' => 'numeric',
+            'sort_order' => 'numeric',
         ];
     }
 }
@@ -320,7 +326,8 @@ $tabs->tab('Overview', 'admin-settings', [
                 ->setAttribute('rows', '4'),
             $form->toggle('is_active')
                 ->setLabel('Active')
-                ->setHelp('Whether this {{singular_title}} is active'),
+                ->setHelp('Whether this {{singular_title}} is active')
+                ->setDefault(true),
             $form->number('sort_order')
                 ->setLabel('Sort Order')
                 ->setHelp('Lower numbers appear first')

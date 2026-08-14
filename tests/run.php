@@ -204,12 +204,22 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $model = file_get_contents( $root . '/app/Models/Product.php' );
         $assert( str_contains( $model, "'description', 'is_active', 'sort_order'") );
         $assert( str_contains( $model, "'deleted_at', 'created_by', 'updated_by'") );
+        $fields = file_get_contents( $root . '/app/Http/Fields/ProductFields.php' );
+        $assert( str_contains( $fields, "'is_active' => 'numeric'") );
+        $assert( str_contains( $fields, "'sort_order' => 'numeric'") );
+        $assert( ! str_contains( $fields, "'boolean'") && ! str_contains( $fields, "'integer") && ! str_contains( $fields, "'min:"), 'Generated fields must use validators supported by TypeRocket v6.' );
         $controller = file_get_contents( $root . '/app/Controllers/ProductController.php' );
         $assert( str_contains( $controller, "View::new('products.index')") );
         $assert( str_contains( $controller, 'tr_form(Product::class)->useErrors()->useOld()->useConfirm()' ) );
         $assert( str_contains( $controller, '$current_id = $product->getID();' ) );
         $assert( str_contains( $controller, "compact('form', 'current_id')" ) );
-        $assert( str_contains( $controller, 'public function create(' ) );
+        $assert( str_contains( $controller, 'use TypeRocket\\Models\\AuthUser;' ) );
+        $assert( str_contains( $controller, 'public function create(ProductFields $fields, Product $product, Response $response, AuthUser $user)' ) );
+        $assert( str_contains( $controller, '$product->created_by = $user->getID();' ) );
+        $assert( substr_count( $controller, '$product->updated_by = $user->getID();' ) === 2 );
+        $assert( str_contains( $controller, '$product->save($fields);' ) );
+        $assert( str_contains( $controller, 'Confirm TypeRocket migrations have been run.' ) );
+        $assert( str_contains( $controller, '$wpdb->last_error' ) );
         $index = file_get_contents( $root . '/resources/views/products/index.php' );
         $assert( str_contains( $index, 'tr_table(Product::class)' ) );
         $assert( str_contains( $index, '->setColumns(' ) && str_contains( $index, '->render()' ) );
@@ -219,6 +229,7 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $assert( str_contains( $form, 'tr_tabs()' ) && str_contains( $form, "\$form->text('name')" ) );
         $assert( str_contains( $form, "\$form->textarea('description')" ) );
         $assert( str_contains( $form, "\$form->toggle('is_active')" ) );
+        $assert( str_contains( $form, "->setDefault(true)" ) );
         $assert( str_contains( $form, "\$form->number('sort_order')" ) );
         $assert( str_contains( $form, "\$tabs->tab('System', 'info'" ) );
         $assert( str_contains( $form, 'if (isset($current_id))' ) );
@@ -365,11 +376,15 @@ $test( 'resource context retains explicit global arguments', static function () 
     $assert( $context === [ 'slug' => 'inventory-tools', 'namespace' => 'Maker\\InventoryTools' ] );
 } );
 
-$test( 'Galaxy command normalizes slash-separated namespaces', static function () use ( $assert ): void {
-    $source = file_get_contents( __DIR__ . '/../app/Cli/MakerResourceGalaxyCommand.php' );
-    $assert( str_contains( $source, "str_replace( '/', '\\\\'" ) );
-    $assert( str_contains( $source, "getOption( 'namespace' )" ) );
-    $assert( str_contains( $source, "getOption( 'plural' )" ) );
+$test( 'resource commands normalize namespaces and surface the migration step', static function () use ( $assert ): void {
+    $galaxy = file_get_contents( __DIR__ . '/../app/Cli/MakerResourceGalaxyCommand.php' );
+    $assert( str_contains( $galaxy, "str_replace( '/', '\\\\'" ) );
+    $assert( str_contains( $galaxy, "getOption( 'namespace' )" ) );
+    $assert( str_contains( $galaxy, "getOption( 'plural' )" ) );
+    $assert( str_contains( $galaxy, 'galaxy_' ) && str_contains( $galaxy, 'migrate up' ) );
+
+    $wpCli = file_get_contents( __DIR__ . '/../app/Cli/MakerMakerCommand.php' );
+    $assert( str_contains( $wpCli, 'galaxy_' ) && str_contains( $wpCli, 'migrate up' ) );
 } );
 
 $test( 'appends resources without overwrite and cleans failed staging', static function () use ( $assert, $expectFailure, $remove ): void {
