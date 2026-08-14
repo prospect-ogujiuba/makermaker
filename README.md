@@ -114,8 +114,11 @@ Every resource includes:
 - `app/Http/Fields/<Name>Fields.php`
 - `app/Auth/<Name>Policy.php` (deny-by-default)
 - an entry in the generated `config/makermaker-resources.php` registry
+- an immediately registered TypeRocket admin resource menu with editable title, icon, position, and administrator capabilities
 
-`--migration`, `--views`, `--factory`, and `--tests` add only their named layers. Common `-y` and sibilant plurals are inferred (`categories`, `addresses`); use `--plural=<lowercase_snake_case>` for irregular or contract-sensitive resource/table names. The registry is an explicit class map: loading or consuming it is the target plugin's responsibility. MakerMaker does not use glob discovery, reflection, inferred domains, or implicit API exposure.
+New MakerMaker-generated plugins include a namespace-local `ResourceRegistrar` and explicitly load the registry after TypeRocket initializes. Existing plugins must add the same explicit registrar call once; MakerMaker itself provides the reference integration in `MakermakerTypeRocketPlugin::init()`.
+
+`--migration` creates a timestamped TypeRocket SQL migration with explicit Up/Down sections and `{!!prefix!!}` table tokens. `--views` creates a working `tr_table()` index plus a `tr_tabs()`/fieldset form, while the generated controller provides the matching index/add/create/edit/update/show/delete/destroy actions and namespace-local `View`. `--factory` and `--tests` add their named test layers. Common `-y` and sibilant plurals are inferred (`categories`, `addresses`); use `--plural=<lowercase_snake_case>` for irregular or contract-sensitive resource/table names. MakerMaker does not use glob discovery, reflection, inferred domains, or implicit API exposure.
 
 ## Development
 

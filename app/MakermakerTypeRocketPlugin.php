@@ -11,10 +11,12 @@ final class MakermakerTypeRocketPlugin extends BasePlugin
     protected $title = 'MakerMaker';
     protected $slug = 'makermaker';
     protected $migrationKey = 'makermaker_migrations';
-    protected $migrations = false;
+    protected $migrations = true;
 
     public function init(): void
     {
+        ResourceRegistrar::register( dirname( __DIR__ ) . '/config/makermaker-resources.php' );
+
         $factory = new GeneratorFactory();
         ( new GeneratorPage( $factory ) )->register();
 
@@ -34,6 +36,7 @@ final class MakermakerTypeRocketPlugin extends BasePlugin
 
     public function activate(): void
     {
+        $this->migrateUp();
     }
 
     public function deactivate(): void
@@ -42,5 +45,6 @@ final class MakermakerTypeRocketPlugin extends BasePlugin
 
     public function uninstall(): void
     {
+        $this->migrateDown();
     }
 }

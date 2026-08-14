@@ -66,6 +66,7 @@ $test( 'generates and substitutes the official-shaped scaffold', static function
         $result = ( new PluginGenerator( __DIR__ . '/fixtures/plugin-template', $plugins, $root ) )->generate( $definition );
         $assert( is_file( $result->entryFile ) );
         $assert( is_file( $result->directory . '/app/ClientPortalTypeRocketPlugin.php' ) );
+        $assert( is_file( $result->directory . '/app/ResourceRegistrar.php' ) );
         $entry = file_get_contents( $result->entryFile );
         $composer = file_get_contents( $result->directory . '/composer.json' );
         $composerData = json_decode( $composer, true, 512, JSON_THROW_ON_ERROR );
@@ -73,6 +74,10 @@ $test( 'generates and substitutes the official-shaped scaffold', static function
         $assert( $composerData['name'] === 'prospect/client-portal' );
         $assert( isset( $composerData['autoload']['psr-4']['Maker\\ClientPortal\\'] ) );
         $assert( ! str_contains( $entry . $composer, 'MyNamespace' ) );
+        $assert( str_contains( $entry, 'ResourceRegistrar::register' ) );
+        $registrar = file_get_contents( $result->directory . '/app/ResourceRegistrar.php' );
+        $assert( str_contains( $registrar, 'namespace Maker\\ClientPortal;' ) );
+        $assert( str_contains( $registrar, 'tr_resource_pages' ) );
         $assert( is_file( $result->galaxyLauncher ) && is_executable( $result->galaxyLauncher ) );
         $assert( is_file( $result->galaxyConfig ) );
         $launcher = file_get_contents( $result->galaxyLauncher );
@@ -152,12 +157,15 @@ $test( 'generates a complete resource and explicit registry entry', static funct
             'tests' => true,
         ] );
         $result = ( new ResourceGenerator( $root ) )->generate( $definition );
+        $migrations = glob( $root . '/database/migrations/*.create_products_table.sql' );
+        $assert( is_array( $migrations ) && count( $migrations ) === 1, 'Expected one timestamped SQL migration.' );
+        $migrationRelative = substr( $migrations[0], strlen( $root ) + 1 );
         $expected = [
             'app/Models/Product.php',
             'app/Controllers/ProductController.php',
             'app/Http/Fields/ProductFields.php',
             'app/Auth/ProductPolicy.php',
-            'database/migrations/create_products_table.php',
+            $migrationRelative,
             'resources/views/products/index.php',
             'resources/views/products/form.php',
             'tests/Factories/ProductFactory.php',
@@ -176,10 +184,29 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $assert( $result->files === $expected, 'Generated file manifest did not match.' );
         $registry = file_get_contents( $root . '/config/makermaker-resources.php' );
         $assert( str_contains( $registry, "'product' => [") );
+        $assert( str_contains( $registry, "'name' => 'Product'") );
+        $assert( str_contains( $registry, "'title' => 'Products'") );
+        $assert( str_contains( $registry, "'icon' => 'admin-generic'") );
+        $assert( str_contains( $registry, "'manage_products'") );
         $assert( str_contains( $registry, '\\Maker\\Inventory\\Models\\Product::class' ) );
         $assert( ! str_contains( $registry, 'glob(' ) && ! str_contains( $registry, 'Reflection' ) );
         $policy = file_get_contents( $root . '/app/Auth/ProductPolicy.php' );
         $assert( substr_count( $policy, 'return false;' ) === 4, 'Generated policy must deny by default.' );
+        $migration = file_get_contents( $migrations[0] );
+        $assert( str_contains( $migration, '-- >>> Up >>>' ) );
+        $assert( str_contains( $migration, '`{!!prefix!!}products`' ) );
+        $assert( str_contains( $migration, '-- >>> Down >>>' ) );
+        $controller = file_get_contents( $root . '/app/Controllers/ProductController.php' );
+        $assert( str_contains( $controller, "View::new('products.index')") );
+        $assert( str_contains( $controller, 'tr_form(Product::class)->useErrors()->useOld()->useConfirm()' ) );
+        $assert( str_contains( $controller, 'public function create(' ) );
+        $index = file_get_contents( $root . '/resources/views/products/index.php' );
+        $assert( str_contains( $index, 'tr_table(Product::class)' ) );
+        $assert( str_contains( $index, '->setColumns(' ) && str_contains( $index, '->render()' ) );
+        $form = file_get_contents( $root . '/resources/views/products/form.php' );
+        $assert( str_contains( $form, '$form->open()' ) );
+        $assert( str_contains( $form, 'tr_tabs()' ) && str_contains( $form, "\$form->text('name')" ) );
+        $assert( str_contains( $form, '$form->close()' ) );
     } finally {
         $remove( $root );
     }

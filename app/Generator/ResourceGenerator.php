@@ -105,19 +105,197 @@ final class ResourceGenerator
         $namespace = $definition->namespace;
         $key = $definition->key();
         $plural = $definition->pluralKey();
+        $tokens = [
+            '{{namespace}}' => $namespace,
+            '{{name}}' => $name,
+            '{{key}}' => $key,
+            '{{plural}}' => $plural,
+            '{{title}}' => ucwords( str_replace( '_', ' ', $plural ) ),
+            '{{singular_title}}' => ucwords( str_replace( '_', ' ', $key ) ),
+            '{{variable}}' => lcfirst( $name ),
+        ];
         $files = [
-            "app/Models/{$name}.php" => "<?php\nnamespace {$namespace}\\Models;\n\nuse TypeRocket\\Models\\Model;\n\nfinal class {$name} extends Model\n{\n    protected \$resource = '{$plural}';\n}\n",
-            "app/Controllers/{$name}Controller.php" => "<?php\nnamespace {$namespace}\\Controllers;\n\nuse TypeRocket\\Controllers\\Controller;\n\nfinal class {$name}Controller extends Controller\n{\n}\n",
-            "app/Http/Fields/{$name}Fields.php" => "<?php\nnamespace {$namespace}\\Http\\Fields;\n\nuse TypeRocket\\Http\\Fields;\n\nfinal class {$name}Fields extends Fields\n{\n    protected function fillable(): array\n    {\n        return [];\n    }\n\n    protected function rules(): array\n    {\n        return [];\n    }\n}\n",
+            "app/Models/{$name}.php" => $this->render( <<<'PHP'
+<?php
+namespace {{namespace}}\Models;
+
+use TypeRocket\Models\Model;
+
+final class {{name}} extends Model
+{
+    protected $resource = '{{plural}}';
+    protected $fillable = [ 'name' ];
+    protected $guard = [ 'id', 'created_at', 'updated_at' ];
+}
+PHP, $tokens ),
+            "app/Controllers/{$name}Controller.php" => $this->render( <<<'PHP'
+<?php
+namespace {{namespace}}\Controllers;
+
+use {{namespace}}\Http\Fields\{{name}}Fields;
+use {{namespace}}\Models\{{name}};
+use {{namespace}}\View;
+use TypeRocket\Controllers\Controller;
+use TypeRocket\Http\Response;
+
+final class {{name}}Controller extends Controller
+{
+    public function index()
+    {
+        return View::new('{{plural}}.index');
+    }
+
+    public function add()
+    {
+        $form = tr_form({{name}}::class)->useErrors()->useOld()->useConfirm();
+        return View::new('{{plural}}.form', compact('form'));
+    }
+
+    public function create({{name}}Fields $fields, {{name}} ${{variable}}, Response $response)
+    {
+        ${{variable}}->save($fields);
+        if (${{variable}}->getErrors()) {
+            $response->flashNext('{{singular_title}} creation failed', 'error');
+            return tr_redirect()->back()->withErrors(${{variable}}->getErrors());
+        }
+        $response->flashNext('{{singular_title}} created', 'success');
+        return tr_redirect()->toPage('{{key}}', 'index');
+    }
+
+    public function edit({{name}} ${{variable}})
+    {
+        $form = tr_form(${{variable}})->useErrors()->useOld()->useConfirm();
+        return View::new('{{plural}}.form', compact('form'));
+    }
+
+    public function update({{name}} ${{variable}}, {{name}}Fields $fields, Response $response)
+    {
+        ${{variable}}->save($fields);
+        if (${{variable}}->getErrors()) {
+            $response->flashNext('{{singular_title}} update failed', 'error');
+            return tr_redirect()->back()->withErrors(${{variable}}->getErrors());
+        }
+        $response->flashNext('{{singular_title}} updated', 'success');
+        return tr_redirect()->toPage('{{key}}', 'edit', ${{variable}}->getID());
+    }
+
+    public function show({{name}} ${{variable}})
+    {
+        return ${{variable}};
+    }
+
+    public function delete({{name}} ${{variable}})
+    {
+        return ${{variable}};
+    }
+
+    public function destroy({{name}} ${{variable}}, Response $response)
+    {
+        if (${{variable}}->delete() === false) {
+            return $response->error('{{singular_title}} deletion failed')->setStatus(500);
+        }
+        $response->flashNext('{{singular_title}} deleted', 'success');
+        return tr_redirect()->toPage('{{key}}', 'index');
+    }
+}
+PHP, $tokens ),
+            "app/Http/Fields/{$name}Fields.php" => $this->render( <<<'PHP'
+<?php
+namespace {{namespace}}\Http\Fields;
+
+use TypeRocket\Http\Fields;
+
+final class {{name}}Fields extends Fields
+{
+    protected $run = true;
+
+    protected function fillable(): array
+    {
+        return [];
+    }
+
+    protected function rules(): array
+    {
+        return [ 'name' => 'required|max:255' ];
+    }
+}
+PHP, $tokens ),
             "app/Auth/{$name}Policy.php" => "<?php\nnamespace {$namespace}\\Auth;\n\nuse TypeRocket\\Auth\\Policy;\nuse TypeRocket\\Models\\AuthUser;\n\nfinal class {$name}Policy extends Policy\n{\n    public function create(AuthUser \$auth, \$object): bool { return false; }\n    public function read(AuthUser \$auth, \$object): bool { return false; }\n    public function update(AuthUser \$auth, \$object): bool { return false; }\n    public function destroy(AuthUser \$auth, \$object): bool { return false; }\n}\n",
         ];
 
         if ( $definition->enabled( 'migration' ) ) {
-            $files["database/migrations/create_{$plural}_table.php"] = "<?php\nuse TypeRocket\\Database\\Migration;\n\nreturn new class(\$wpdb) extends Migration\n{\n    public function up(): void\n    {\n        // Define the {$plural} table explicitly.\n    }\n\n    public function down(): void\n    {\n    }\n};\n";
+            $timestamp = time();
+            $files["database/migrations/{$timestamp}.create_{$plural}_table.sql"] = $this->render( <<<'SQL'
+-- Description: Create {{plural}} table
+-- >>> Up >>>
+CREATE TABLE IF NOT EXISTS `{!!prefix!!}{{plural}}` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_{{plural}}__name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='{{title}}';
+
+-- >>> Down >>>
+DROP TABLE IF EXISTS `{!!prefix!!}{{plural}}`;
+SQL, $tokens );
         }
         if ( $definition->enabled( 'views' ) ) {
-            $files["resources/views/{$plural}/index.php"] = "<?php defined( 'ABSPATH' ) || exit; ?>\n<div class=\"maker-resource maker-resource--{$key}\"></div>\n";
-            $files["resources/views/{$plural}/form.php"] = "<?php defined( 'ABSPATH' ) || exit; ?>\n<div class=\"maker-resource-form maker-resource-form--{$key}\"></div>\n";
+            $files["resources/views/{$plural}/index.php"] = $this->render( <<<'PHP'
+<?php
+
+use {{namespace}}\Models\{{name}};
+
+$table = tr_table({{name}}::class);
+$table->setBulkActions(tr_form()->useConfirm(), []);
+$table->setColumns([
+    'name' => [
+        'label' => 'Name',
+        'sort' => true,
+        'actions' => ['edit', 'view', 'delete'],
+    ],
+    'created_at' => [
+        'label' => 'Created At',
+        'sort' => true,
+    ],
+    'updated_at' => [
+        'label' => 'Updated At',
+        'sort' => true,
+    ],
+    'id' => [
+        'label' => 'ID',
+        'sort' => true,
+    ],
+], 'name')->setOrder('id', 'DESC')->render();
+PHP, $tokens );
+            $files["resources/views/{$plural}/form.php"] = $this->render( <<<'PHP'
+<?php
+
+echo $form->open();
+
+$tabs = tr_tabs()
+    ->setFooter($form->save('Save {{singular_title}}'))
+    ->layoutLeft();
+
+$tabs->tab('Overview', 'admin-settings', [
+    $form->fieldset(
+        '{{singular_title}} Details',
+        'Core {{singular_title}} information',
+        [
+            $form->text('name')
+                ->setLabel('Name')
+                ->setHelp('Enter the {{singular_title}} name')
+                ->setAttribute('maxlength', '255')
+                ->markLabelRequired(),
+        ]
+    ),
+])->setDescription('{{singular_title}}');
+
+$tabs->render();
+
+echo $form->close();
+PHP, $tokens );
         }
         if ( $definition->enabled( 'factory' ) ) {
             $files["tests/Factories/{$name}Factory.php"] = "<?php\nnamespace {$namespace}\\Tests\\Factories;\n\nfinal class {$name}Factory\n{\n    /** @return array<string, mixed> */\n    public static function attributes(array \$overrides = []): array\n    {\n        return array_replace([], \$overrides);\n    }\n}\n";
@@ -127,6 +305,12 @@ final class ResourceGenerator
         }
 
         return $files;
+    }
+
+    /** @param array<string, string> $tokens */
+    private function render( string $template, array $tokens ): string
+    {
+        return str_replace( array_keys( $tokens ), array_values( $tokens ), $template ) . "\n";
     }
 
     private function registryContents( string $path, ResourceDefinition $definition ): string
@@ -144,8 +328,19 @@ final class ResourceGenerator
 
         $namespace = '\\' . $definition->namespace;
         $name = $definition->name;
+        $plural = $definition->pluralKey();
+        $title = ucwords( str_replace( '_', ' ', $plural ) );
+        $capabilities = '';
+        foreach ( [ 'manage', 'edit', 'delete', 'view', 'publish' ] as $action ) {
+            $capabilities .= "            '{$action}_{$plural}',\n";
+        }
         $entry = "    // Resource: {$definition->key()}\n"
             . "    '{$definition->key()}' => [\n"
+            . "        'name' => '{$name}',\n"
+            . "        'title' => '{$title}',\n"
+            . "        'icon' => 'admin-generic',\n"
+            . "        'position' => 25,\n"
+            . "        'capabilities' => [\n{$capabilities}        ],\n"
             . "        'model' => {$namespace}\\Models\\{$name}::class,\n"
             . "        'controller' => {$namespace}\\Controllers\\{$name}Controller::class,\n"
             . "        'fields' => {$namespace}\\Http\\Fields\\{$name}Fields::class,\n"

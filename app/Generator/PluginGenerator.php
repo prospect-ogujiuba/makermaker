@@ -61,6 +61,7 @@ final class PluginGenerator
                 }
             }
             $this->copyTree( $source, $staging );
+            $this->installResourceRegistrar( $staging, $definition );
             $this->replaceTokens( $staging, $definition );
             $entry = $staging . DIRECTORY_SEPARATOR . 'plugin.php';
             $class = $staging . DIRECTORY_SEPARATOR . 'app/MyClassTypeRocketPlugin.php';
@@ -148,9 +149,37 @@ final class PluginGenerator
             if ( $relative === 'composer.json' ) {
                 $fileValues[2] = str_replace( '\\', '\\\\', $definition->namespace );
             }
-            if ( $contents === false || file_put_contents( $file, str_replace( $tokens, $fileValues, $contents ) ) === false ) {
+            if ( $contents === false ) {
+                throw new GeneratorException( 'Unable to read ' . $relative . '.' );
+            }
+            $contents = str_replace( $tokens, $fileValues, $contents );
+            if ( $relative === 'plugin.php' ) {
+                $contents .= "\nadd_action( 'typerocket_loaded', static function (): void {\n"
+                    . "    \\{$definition->namespace}\\ResourceRegistrar::register( __DIR__ . '/config/makermaker-resources.php' );\n"
+                    . "}, 10 );\n";
+            }
+            if ( file_put_contents( $file, $contents ) === false ) {
                 throw new GeneratorException( 'Unable to customize ' . $relative . '.' );
             }
+        }
+    }
+
+    private function installResourceRegistrar( string $staging, PluginDefinition $definition ): void
+    {
+        $source = dirname( __DIR__ ) . '/ResourceRegistrar.php';
+        $contents = is_file( $source ) ? file_get_contents( $source ) : false;
+        if ( ! is_string( $contents ) ) {
+            throw new GeneratorException( 'MakerMaker resource registrar template is unavailable.' );
+        }
+
+        $contents = str_replace(
+            'namespace Maker\\MakerMaker;',
+            'namespace ' . $definition->namespace . ';',
+            $contents
+        );
+        $destination = $staging . '/app/ResourceRegistrar.php';
+        if ( file_exists( $destination ) || file_put_contents( $destination, $contents ) === false ) {
+            throw new GeneratorException( 'Unable to install the MakerMaker resource registrar.' );
         }
     }
 
