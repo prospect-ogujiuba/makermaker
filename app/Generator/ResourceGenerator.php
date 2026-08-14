@@ -165,7 +165,8 @@ final class {{name}}Controller extends Controller
     public function edit({{name}} ${{variable}})
     {
         $form = tr_form(${{variable}})->useErrors()->useOld()->useConfirm();
-        return View::new('{{plural}}.form', compact('form'));
+        $current_id = ${{variable}}->getID();
+        return View::new('{{plural}}.form', compact('form', 'current_id'));
     }
 
     public function update({{name}} ${{variable}}, {{name}}Fields $fields, Response $response)
@@ -329,6 +330,62 @@ $tabs->tab('Overview', 'admin-settings', [
         ]
     ),
 ])->setDescription('{{singular_title}}');
+
+if (isset($current_id)) {
+    $tabs->tab('System', 'info', [
+        $form->fieldset(
+            'System Information',
+            'Read-only record and audit metadata',
+            [
+                $form->row()
+                    ->withColumn(
+                        $form->text('id')
+                            ->setLabel('ID')
+                            ->setHelp('System-generated record ID')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(
+                        $form->text('deleted_at')
+                            ->setLabel('Deleted At')
+                            ->setHelp('Soft-deletion timestamp, when applicable')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    ),
+                $form->row()
+                    ->withColumn(
+                        $form->text('created_at')
+                            ->setLabel('Created At')
+                            ->setHelp('Record creation timestamp')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(
+                        $form->text('updated_at')
+                            ->setLabel('Updated At')
+                            ->setHelp('Last update timestamp')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    ),
+                $form->row()
+                    ->withColumn(
+                        $form->text('created_by')
+                            ->setLabel('Created By')
+                            ->setHelp('WordPress user ID that created this record')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    )
+                    ->withColumn(
+                        $form->text('updated_by')
+                            ->setLabel('Last Updated By')
+                            ->setHelp('WordPress user ID that last updated this record')
+                            ->setAttribute('readonly', true)
+                            ->setAttribute('name', false)
+                    ),
+            ]
+        ),
+    ])->setDescription('System Information');
+}
 
 $tabs->render();
 

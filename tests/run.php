@@ -207,6 +207,8 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $controller = file_get_contents( $root . '/app/Controllers/ProductController.php' );
         $assert( str_contains( $controller, "View::new('products.index')") );
         $assert( str_contains( $controller, 'tr_form(Product::class)->useErrors()->useOld()->useConfirm()' ) );
+        $assert( str_contains( $controller, '$current_id = $product->getID();' ) );
+        $assert( str_contains( $controller, "compact('form', 'current_id')" ) );
         $assert( str_contains( $controller, 'public function create(' ) );
         $index = file_get_contents( $root . '/resources/views/products/index.php' );
         $assert( str_contains( $index, 'tr_table(Product::class)' ) );
@@ -218,6 +220,11 @@ $test( 'generates a complete resource and explicit registry entry', static funct
         $assert( str_contains( $form, "\$form->textarea('description')" ) );
         $assert( str_contains( $form, "\$form->toggle('is_active')" ) );
         $assert( str_contains( $form, "\$form->number('sort_order')" ) );
+        $assert( str_contains( $form, "\$tabs->tab('System', 'info'" ) );
+        $assert( str_contains( $form, 'if (isset($current_id))' ) );
+        foreach ( [ 'id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at' ] as $systemField ) {
+            $assert( str_contains( $form, "\$form->text('{$systemField}')" ), 'Missing system form field: ' . $systemField );
+        }
         $assert( str_contains( $form, '$form->close()' ) );
     } finally {
         $remove( $root );
