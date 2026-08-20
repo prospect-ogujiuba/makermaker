@@ -26,6 +26,29 @@ Treat `wp-content/plugins/makermaker/` as replaceable core. Generate project dom
 
 MakerMaker may improve future scaffolds but never rewrites an existing generated plugin. Existing generated plugins remain separate and continue to boot when MakerMaker is disabled, subject to their own TypeRocket dependency. Do not put project code or a `custom/` directory in this checkout. See [CORE-BOUNDARY.md](CORE-BOUNDARY.md) for ownership and compatibility policy.
 
+## Git worktree workflow
+
+The playground checkout is this repository's clean **primary worktree** and stays on `main`. For parallel generator work, create a linked feature worktree outside WordPress:
+
+```bash
+git worktree add "$HOME/projects/worktrees/makermaker/generator-change" \
+  -b feat/generator-change
+```
+
+Develop, lint, test, and commit there. Then merge from the playground primary worktree and remove the temporary checkout:
+
+```bash
+git switch main
+git pull --ff-only
+git merge feat/generator-change
+composer lint
+composer test
+git worktree remove "$HOME/projects/worktrees/makermaker/generator-change"
+git branch -d feat/generator-change
+```
+
+A branch can be checked out in only one worktree. Use `git worktree list` to inspect active checkouts. Generated site/domain code belongs in sibling plugins, not a core feature worktree. Merge reviewed generator changes to primary `main` before the Maker release flow.
+
 ## Installation
 
 Install MakerMaker as a regular plugin and activate it after TypeRocket Pro is available:
