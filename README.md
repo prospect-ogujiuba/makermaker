@@ -20,6 +20,12 @@ MakerMaker resolves infrastructure dynamically:
 
 No absolute site, container, MU-plugin, or TypeRocket repository path is embedded.
 
+## Project workspace
+
+Treat `wp-content/plugins/makermaker/` as replaceable core. Generate project domain code into a sibling plugin, normally `wp-content/plugins/<site>-app/`; additional bounded-domain sibling plugins are allowed. Generated plugins own their models, controllers, fields, policies, resources, views, routes, migrations, assets, and tests.
+
+MakerMaker may improve future scaffolds but never rewrites an existing generated plugin. Existing generated plugins remain separate and continue to boot when MakerMaker is disabled, subject to their own TypeRocket dependency. Do not put project code or a `custom/` directory in this checkout. See [CORE-BOUNDARY.md](CORE-BOUNDARY.md) for ownership and compatibility policy.
+
 ## Installation
 
 Install MakerMaker as a regular plugin and activate it after TypeRocket Pro is available:
@@ -120,7 +126,7 @@ New MakerMaker-generated plugins include a namespace-local `ResourceRegistrar` a
 
 `--migration` creates a timestamped TypeRocket SQL migration with explicit Up/Down sections and `{!!prefix!!}` table tokens. Generation does not modify the database: run `php galaxy_<plugin_key> migrate up` from the WordPress root before using the resource. Both resource commands print this required next step. `--views` creates a working `tr_table()` index plus a `tr_tabs()`/fieldset form, while the generated controller provides the matching index/add/create/edit/update/show/delete/destroy actions and namespace-local `View`. `--factory` and `--tests` add their named test layers. Common `-y` and sibilant plurals are inferred (`categories`, `addresses`); use `--plural=<lowercase_snake_case>` for irregular or contract-sensitive resource/table names. MakerMaker does not use glob discovery, reflection, inferred domains, or implicit API exposure.
 
-## Development
+## Core development
 
 ```bash
 composer test

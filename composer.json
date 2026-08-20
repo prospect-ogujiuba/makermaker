@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "test": "php tests/run.php",
+    "test": "php tests/run.php && php tests/contract.php",
     "lint": "find app tests -name '*.php' -print0 | xargs -0 -n1 php -l && php -l makermaker.php"
   }
 }

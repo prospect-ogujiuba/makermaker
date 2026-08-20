@@ -40,10 +40,21 @@ spl_autoload_register( static function ( string $class ): void {
     }
 } );
 
+function makermaker_dependency_error(): ?string
+{
+    if ( ! defined( 'TYPEROCKET_PATH' ) ) {
+        return __( 'MakerMaker requires TypeRocket Pro v6 to be installed and loaded. Install and activate TypeRocket Pro before using MakerMaker.', 'makermaker' );
+    }
+    if ( ! class_exists( 'TypeRocket\\Pro\\Register\\BasePlugin' ) ) {
+        return __( 'MakerMaker could not find the TypeRocket Pro v6 plugin API. Verify the installed TypeRocket Pro version and reload WordPress.', 'makermaker' );
+    }
+    return null;
+}
+
 function typerocket_plugin_makermaker(): void
 {
     static $plugin = null;
-    if ( $plugin !== null || ! class_exists( 'TypeRocket\\Pro\\Register\\BasePlugin' ) ) {
+    if ( $plugin !== null || makermaker_dependency_error() !== null ) {
         return;
     }
     $plugin = \Maker\MakerMaker\MakermakerTypeRocketPlugin::new( __FILE__, MAKERMAKER_PATH );
@@ -53,7 +64,21 @@ add_action( 'typerocket_loaded', 'typerocket_plugin_makermaker', 9 );
 register_activation_hook( __FILE__, 'typerocket_plugin_makermaker' );
 
 add_action( 'admin_notices', static function (): void {
-    if ( current_user_can( 'activate_plugins' ) && ! defined( 'TYPEROCKET_PATH' ) ) {
-        echo '<div class="notice notice-error"><p>' . esc_html__( 'MakerMaker requires TypeRocket Pro v6 to be installed and loaded.', 'makermaker' ) . '</p></div>';
+    $message = makermaker_dependency_error();
+    if ( current_user_can( 'activate_plugins' ) && $message !== null ) {
+        echo '<div class="notice notice-error"><p>' . esc_html( $message ) . '</p></div>';
     }
 } );
+
+function makermaker_register_dependency_cli(): void
+{
+    if ( ! defined( 'WP_CLI' ) || ! WP_CLI || ! class_exists( 'WP_CLI' ) || makermaker_dependency_error() === null ) {
+        return;
+    }
+
+    \WP_CLI::add_command( 'makermaker', static function ( array $args, array $assocArgs ): void {
+        unset( $args, $assocArgs );
+        \WP_CLI::error( makermaker_dependency_error() ?? __( 'MakerMaker failed to initialize TypeRocket Pro v6.', 'makermaker' ) );
+    } );
+}
+add_action( 'plugins_loaded', 'makermaker_register_dependency_cli', 100 );
