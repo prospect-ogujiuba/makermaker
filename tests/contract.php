@@ -85,6 +85,7 @@ try {
 $boundary = file_get_contents( __DIR__ . '/../CORE-BOUNDARY.md' );
 $readme = file_get_contents( __DIR__ . '/../README.md' );
 $entry = file_get_contents( __DIR__ . '/../makermaker.php' );
+$assert( str_contains( $boundary, 'FRAMEWORK CORE — DO NOT EDIT; update from playground releases' ), 'Core edit marker is missing.' );
 $assert( str_contains( $boundary, 'Every tracked file beneath `wp-content/plugins/makermaker/` is core-owned' ), 'Core ownership is not documented.' );
 $assert( str_contains( $boundary, '`plugins/<site>-app/`' ), 'Site application workspace is not documented.' );
 $assert( str_contains( $readme, 'Existing generated plugins remain separate and continue to boot when MakerMaker is disabled' ), 'Independent generated-plugin boot is not documented.' );

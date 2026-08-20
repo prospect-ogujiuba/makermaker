@@ -1,5 +1,7 @@
 # MakerMaker core boundary
 
+**FRAMEWORK CORE — DO NOT EDIT; update from playground releases.**
+
 MakerMaker is a replaceable generator package. Every tracked file beneath `wp-content/plugins/makermaker/` is core-owned, including its generator, CLI commands, Galaxy integration, templates, runtime integration, package metadata, and tests.
 
 ## Ownership
