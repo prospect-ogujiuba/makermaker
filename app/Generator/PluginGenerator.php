@@ -154,6 +154,7 @@ final class PluginGenerator
             }
             $contents = str_replace( $tokens, $fileValues, $contents );
             if ( $relative === 'plugin.php' ) {
+                $contents = $this->professionalizePluginHeader( $contents, $definition );
                 $contents .= "\nadd_action( 'typerocket_loaded', static function (): void {\n"
                     . "    \\{$definition->namespace}\\ResourceRegistrar::register( __DIR__ . '/config/makermaker-resources.php' );\n"
                     . "}, 10 );\n";
@@ -162,6 +163,29 @@ final class PluginGenerator
                 throw new GeneratorException( 'Unable to customize ' . $relative . '.' );
             }
         }
+    }
+
+    private function professionalizePluginHeader( string $contents, PluginDefinition $definition ): string
+    {
+        $header = "/**\n"
+            . " * Plugin Name:       {$definition->name}\n"
+            . " * Description:       Project-owned application services and content workflows for {$definition->name}, powered by TypeRocket Pro.\n"
+            . " * Version:           0.1.0\n"
+            . " * Requires at least: 6.5\n"
+            . " * Requires PHP:      8.2\n"
+            . " * Author:            Maker\n"
+            . " * Author URI:        https://github.com/prospect-ogujiuba\n"
+            . " * License:           GPL-2.0-or-later\n"
+            . " * License URI:       https://www.gnu.org/licenses/gpl-2.0.html\n"
+            . " * Text Domain:       {$definition->slug}\n"
+            . " */";
+
+        $updated = preg_replace( '/\/\*\*?\s*(?:(?!\*\/).)*Plugin Name:(?:(?!\*\/).)*\*\//s', $header, $contents, 1, $count );
+        if ( ! is_string( $updated ) || $count !== 1 ) {
+            throw new GeneratorException( 'The official template plugin header is unavailable.' );
+        }
+
+        return $updated;
     }
 
     private function installResourceRegistrar( string $staging, PluginDefinition $definition ): void

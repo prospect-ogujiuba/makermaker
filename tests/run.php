@@ -71,6 +71,10 @@ $test( 'generates and substitutes the official-shaped scaffold', static function
         $composer = file_get_contents( $result->directory . '/composer.json' );
         $composerData = json_decode( $composer, true, 512, JSON_THROW_ON_ERROR );
         $assert( str_contains( $entry, 'Client Portal' ) && str_contains( $entry, 'Maker\\ClientPortal' ) );
+        $assert( str_contains( $entry, 'Project-owned application services and content workflows for Client Portal' ) );
+        $assert( str_contains( $entry, 'Author URI:        https://github.com/prospect-ogujiuba' ) );
+        $assert( str_contains( $entry, 'Text Domain:       client-portal' ) );
+        $assert( ! str_contains( $entry, 'Boilerplate TypeRocket Plugin' ) && ! str_contains( $entry, 'TypeRocket Galaxy CLI' ) );
         $assert( $composerData['name'] === 'prospect/client-portal' );
         $assert( isset( $composerData['autoload']['psr-4']['Maker\\ClientPortal\\'] ) );
         $assert( ! str_contains( $entry . $composer, 'MyNamespace' ) );

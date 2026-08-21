@@ -2,12 +2,14 @@
 /**
  * Plugin Name:       MakerMaker
  * Plugin URI:        https://github.com/prospect-ogujiuba/makermaker
- * Description:       Generate structured custom plugins from the installed TypeRocket Pro v6 scaffold.
+ * Description:       A professional WordPress plugin generator for project-owned TypeRocket Pro applications and resources.
  * Version:           0.1.0
  * Requires at least: 6.5
  * Requires PHP:      8.2
  * Author:            Maker
+ * Author URI:        https://github.com/prospect-ogujiuba
  * License:           GPL-3.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       makermaker
  */
 
