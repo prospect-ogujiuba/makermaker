@@ -42,6 +42,17 @@ spl_autoload_register( static function ( string $class ): void {
     }
 } );
 
+function makermaker_register_galaxy_command( array $commands ): array
+{
+    $command = \Maker\MakerMaker\Cli\MakerResourceGalaxyCommand::class;
+    if ( ! in_array( $command, $commands, true ) ) {
+        $commands[] = $command;
+    }
+
+    return $commands;
+}
+add_filter( 'typerocket_galaxy_commands', 'makermaker_register_galaxy_command' );
+
 function makermaker_dependency_error(): ?string
 {
     if ( ! defined( 'TYPEROCKET_PATH' ) ) {

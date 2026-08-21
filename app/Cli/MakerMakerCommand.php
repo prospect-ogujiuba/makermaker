@@ -2,7 +2,6 @@
 namespace Maker\MakerMaker\Cli;
 
 use Maker\MakerMaker\Generator\GeneratorFactory;
-use Maker\MakerMaker\Cli\GalaxyRegistrar;
 use Maker\MakerMaker\Generator\GalaxyContextInstaller;
 use Maker\MakerMaker\Generator\PluginDefinition;
 use Maker\MakerMaker\Generator\ResourceDefinition;
@@ -93,27 +92,6 @@ final class MakerMakerCommand
      * [--activate]
      * : Activate after generation.
      */
-    /**
-     * Register MakerMaker's Galaxy command idempotently.
-     *
-     * ## OPTIONS
-     *
-     * [--typerocket-path=<path>]
-     * : TypeRocket root. Defaults to TYPEROCKET_PATH.
-     *
-     * @subcommand register-galaxy
-     */
-    public function register_galaxy( array $args, array $assocArgs ): void
-    {
-        try {
-            $path = (string) ( $assocArgs['typerocket-path'] ?? ( defined( 'TYPEROCKET_PATH' ) ? TYPEROCKET_PATH : '' ) );
-            $changed = ( new GalaxyRegistrar() )->register( $path );
-            WP_CLI::success( $changed ? 'Registered MakerMaker Galaxy command.' : 'MakerMaker Galaxy command is already registered.' );
-        } catch ( Throwable $error ) {
-            WP_CLI::error( $error->getMessage() );
-        }
-    }
-
     /**
      * Backfill a plugin-specific Galaxy launcher for an existing plugin.
      *

@@ -104,7 +104,7 @@ wp makermaker register-plugin-galaxy \
   --plugin=makermaker --namespace=Maker/MakerMaker
 ```
 
-Identical launcher/config files are treated as already registered. Partial, symbolic, or different destinations are refused and never overwritten. DevArch profiles backfill MakerMaker automatically after registering its global Galaxy command.
+Identical launcher/config files are treated as already registered. Partial, symbolic, or different destinations are refused and never overwritten. DevArch profiles backfill MakerMaker's plugin-specific launcher automatically.
 
 ## MVC resource generation
 
@@ -128,13 +128,7 @@ php galaxy make:maker-resource Product \
   --migration --views --factory --tests
 ```
 
-Galaxy accepts slash-separated namespaces to avoid console escaping and normalizes them to PHP namespace separators. Register Galaxy repeatably after installation:
-
-```bash
-wp makermaker register-galaxy
-```
-
-The registrar updates TypeRocket's `config/galaxy.php` atomically and idempotently; DevArch profiles run it automatically after installing TypeRocket and MakerMaker. This explicit installation-time seam avoids runtime glob discovery while ensuring fresh projects receive the command.
+Galaxy accepts slash-separated namespaces to avoid console escaping and normalizes them to PHP namespace separators. MakerMaker registers `make:maker-resource` at runtime through TypeRocket's `typerocket_galaxy_commands` filter. No TypeRocket configuration mutation or separate registration command is required.
 
 Galaxy must load WordPress (the TypeRocket default), so MakerMaker and `WP_PLUGIN_DIR` are available. Both commands accept a plugin **slug**, never an absolute path. The namespace is always explicit.
 

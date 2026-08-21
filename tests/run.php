@@ -4,7 +4,6 @@ use Maker\MakerMaker\Generator\PluginDefinition;
 use Maker\MakerMaker\Generator\PluginGenerator;
 use Maker\MakerMaker\Generator\ResourceDefinition;
 use Maker\MakerMaker\Generator\ResourceGenerator;
-use Maker\MakerMaker\Cli\GalaxyRegistrar;
 use Maker\MakerMaker\Generator\ResourceGeneratorFactory;
 use Maker\MakerMaker\Generator\GalaxyContextInstaller;
 use Maker\MakerMaker\Generator\GalaxyContext;
@@ -19,7 +18,6 @@ require __DIR__ . '/../app/Generator/ResourceDefinition.php';
 require __DIR__ . '/../app/Generator/ResourceGenerationResult.php';
 require __DIR__ . '/../app/Generator/ResourceGenerator.php';
 require __DIR__ . '/../app/Generator/ResourceGeneratorFactory.php';
-require __DIR__ . '/../app/Cli/GalaxyRegistrar.php';
 
 $tests = [];
 $test = static function ( string $name, callable $callback ) use ( &$tests ): void { $tests[] = [ $name, $callback ]; };
@@ -341,37 +339,6 @@ $test( 'backfills existing plugin Galaxy context safely and idempotently', stati
         }
     } finally {
         $remove( $root );
-    }
-} );
-
-$test( 'registers Galaxy command compositionally and idempotently', static function () use ( $assert, $remove ): void {
-    foreach ( [
-        "<?php\nreturn [\n    'commands' => [\n    ]\n];\n",
-        "<?php\nreturn [\n    'commands' => [\n        // Keep this command and comment.\n        Existing\\Command::class,\n    ]\n];\n",
-        "<?php\nreturn [\n    'commands' => [Existing\\Command::class]\n];\n",
-    ] as $fixture ) {
-        $root = sys_get_temp_dir() . '/makermaker-galaxy-' . bin2hex( random_bytes( 5 ) );
-        mkdir( $root . '/config', 0755, true );
-        $config = $root . '/config/galaxy.php';
-        file_put_contents( $config, $fixture );
-        try {
-            $registrar = new GalaxyRegistrar();
-            $assert( $registrar->register( $root ) === true );
-            $first = file_get_contents( $config );
-            $assert( substr_count( $first, 'MakerResourceGalaxyCommand::class' ) === 1 );
-            if ( str_contains( $fixture, 'Existing' ) ) {
-                $assert( str_contains( $first, 'Existing\\Command::class' ), 'Existing Galaxy command was not preserved.' );
-            }
-            if ( str_contains( $fixture, 'Keep this' ) ) {
-                $assert( str_contains( $first, '// Keep this command and comment.' ), 'Existing Galaxy comment was not preserved.' );
-            }
-            $assert( $registrar->register( $root ) === false );
-            $assert( file_get_contents( $config ) === $first, 'Idempotent registration changed config.' );
-            exec( escapeshellarg( PHP_BINARY ) . ' -l ' . escapeshellarg( $config ) . ' 2>&1', $output, $status );
-            $assert( $status === 0, 'Registered Galaxy config failed lint.' );
-        } finally {
-            $remove( $root );
-        }
     }
 } );
 
