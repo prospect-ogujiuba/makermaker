@@ -1,5 +1,7 @@
 # MakerMaker
 
+![MakerMaker WordPress MVC plugin](assets/makermaker-cover.png)
+
 MakerMaker is a GPL-3.0-or-later WordPress plugin that generates structured custom plugins from the **official scaffold in an installed TypeRocket Pro v6 package**.
 
 It does not bundle TypeRocket Pro, license keys, Galaxy executables, or copied global `app`, `config`, `resources`, and `routes` trees. TypeRocket Pro v6 remains a separately installed private dependency.
